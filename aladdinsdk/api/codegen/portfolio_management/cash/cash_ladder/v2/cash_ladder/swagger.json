@@ -1,0 +1,1086 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Cash Ladder provides a settlement date based ladder of cash balances for all the exposure currencies for a given portfolio group and cash date.",
+        "title": "Cash Ladder",
+        "version": "2.0.0",
+        "x-aladdin-api-id": "agraph.portfolio_management.cash.cash_ladder.CashLadderAPI",
+        "x-aladdin-api-stability": "stable",
+        "x-aladdin-spec-id": "agraph.portfolio_management.cash.cash_ladder.v2.CashLadderAPI"
+    },
+    "basePath": "/api/portfolio-management/cash/cash-ladder/v2/",
+    "paths": {
+        "/ladders": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "portfolio_management.cash.cash_ladder.v2.CashLadder:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "portfolio_management.cash.cash_ladder.v2.CashLadder:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This endpoint is provided solely for backward compatibility and should no longer be used. The POST FilterCashLadder endpoint is the preferred method for cash ladder retrieval.\n(-- api-linter: core::0131::http-uri-id=disabled\n    aip.dev/not-precedent: We need to do this to ensure we have backward compatibility while users shift from GET to POST. --)",
+                "summary": "Gets Cash Ladder",
+                "operationId": "CashLadderAPI_GetCashLadder",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name of the portfolioGroup for which cash balances are requested\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "portfolioGroupTicker",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "cash date for which cash balances are requested in YYYY-MM-DD format\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "cashDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include stored cash. Stored cash refers to sod cash, which is yet to be fully reconciled between bank (acting as a custodian) and Aladdin.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeStoredCash",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include principal and interest in sod balances. \n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includePni",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include the cash impact from trades posted intraday.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeIntradayTradesCashImpact",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include the cash impact from orders posted intraday, which are either in the active or authorized status.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeIntradayAuthAndActiveOrdersCashImpact",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include the cash impact from Open Orders posted intraday.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeIntradayOpenOrdersCashImpact",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include new cash entries in the confirmed status posted intraday.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeIntradayConfirmedNewCash",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include new cash entries in the authorized status posted intraday.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeIntradayAuthNewCash",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include new cash entries in the open status posted intraday.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeIntradayOpenNewCash",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include the trade date impact of stif or ich cash positions.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeStifIch",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "CASH_BALANCE_VIEW_CURRENCY_UNSPECIFIED",
+                            "CASH_BALANCE_VIEW_CURRENCY_LOCAL",
+                            "CASH_BALANCE_VIEW_CURRENCY_BASE",
+                            "CASH_BALANCE_VIEW_CURRENCY_OPERATING",
+                            "CASH_BALANCE_VIEW_CURRENCY_PERCENT_NAV"
+                        ],
+                        "type": "string",
+                        "default": "CASH_BALANCE_VIEW_CURRENCY_UNSPECIFIED",
+                        "description": "This  represents currency in which cash balances are going to be returned. \n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).\n\n - CASH_BALANCE_VIEW_CURRENCY_UNSPECIFIED: UNSPECIFIED is LOCAL which is security local currency and is the default setting.\n - CASH_BALANCE_VIEW_CURRENCY_LOCAL: LOCAL is security local currency and is the default setting.\n - CASH_BALANCE_VIEW_CURRENCY_BASE: Base refer to portfolio's base currency.\n - CASH_BALANCE_VIEW_CURRENCY_OPERATING: Operating refer to portfolio's operating currency.\n - CASH_BALANCE_VIEW_CURRENCY_PERCENT_NAV: With %NAV, cash balances are going to be returned as percentage of portfolio's intraday NAV.",
+                        "name": "cashBalanceViewCurrencySetting",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include the collateral pledged impact of sod trades and intraday activities.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeCollateralPledged",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "This flag indicates if cash balances include the collateral held impact of sod trades and intraday activities.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "includeCollateralHeld",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Default calendar to be used for calculating the ladder and activity settle dates. Use the decodes API to look up valid default calendars using MKT_CALENDARS.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).",
+                        "name": "defaultCalendar",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "TRADE_DATE_UNSPECIFIED",
+                            "TRADE_DATE_T",
+                            "TRADE_DATE_UP_TO_T1",
+                            "TRADE_DATE_UP_TO_T2",
+                            "TRADE_DATE_UP_TO_T3",
+                            "TRADE_DATE_ALL"
+                        ],
+                        "type": "string",
+                        "default": "TRADE_DATE_UNSPECIFIED",
+                        "description": "This field represents the future trade date up to which trade activity is to be retrieved.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).\n\n - TRADE_DATE_UNSPECIFIED: Get cash impact of trades having trade date today (T)\n - TRADE_DATE_T: Get cash impact of trades having trade date today (T)\n - TRADE_DATE_UP_TO_T1: Get cash impact of trades having trade date up to tomorrow (T+1)\n - TRADE_DATE_UP_TO_T2: Get cash impact of trades having trade date up to 2 days from today (T+2)\n - TRADE_DATE_UP_TO_T3: Get cash impact of trades having trade date up to 3 days from today (T+3)\n - TRADE_DATE_ALL: Get cash impact of all trades having trade date greater than or equal to today (T)",
+                        "name": "cashBalanceTradeDateScope",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "OPEN_DATE_UNSPECIFIED",
+                            "OPEN_DATE_T",
+                            "OPEN_DATE_UP_TO_T1",
+                            "OPEN_DATE_UP_TO_T2",
+                            "OPEN_DATE_UP_TO_T3",
+                            "OPEN_DATE_ALL"
+                        ],
+                        "type": "string",
+                        "default": "OPEN_DATE_UNSPECIFIED",
+                        "description": "This field represents the future date up to which order activity is to be retrieved.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).\n\n - OPEN_DATE_UNSPECIFIED: Default setting. Get cash impact of orders having open date today (T)\n - OPEN_DATE_T: Get cash impact of orders having open date today (T)\n - OPEN_DATE_UP_TO_T1: Get cash impact of orders having open date up to tomorrow (T+1)\n - OPEN_DATE_UP_TO_T2: Get cash impact of orders having open date up to 2 days from today (T+2)\n - OPEN_DATE_UP_TO_T3: Get cash impact of orders having open date up to 3 days from today (T+3)\n - OPEN_DATE_ALL: Get cash impact of all orders having open date greater than or equal to today (T)",
+                        "name": "cashBalanceOpenDateScope",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "NEW_CASH_TRADE_DATE_UNSPECIFIED",
+                            "NEW_CASH_TRADE_DATE_T",
+                            "NEW_CASH_TRADE_DATE_UP_TO_T1",
+                            "NEW_CASH_TRADE_DATE_UP_TO_T2",
+                            "NEW_CASH_TRADE_DATE_UP_TO_T3",
+                            "NEW_CASH_TRADE_DATE_ALL"
+                        ],
+                        "type": "string",
+                        "default": "NEW_CASH_TRADE_DATE_UNSPECIFIED",
+                        "description": "This field represents the future date up to which new cash activity is to be retrieved.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).\n\n - NEW_CASH_TRADE_DATE_UNSPECIFIED: Default setting. Get cash impact of new cash having trade date today (T)\n - NEW_CASH_TRADE_DATE_T: Get cash impact of new cash having trade date today (T)\n - NEW_CASH_TRADE_DATE_UP_TO_T1: Get cash impact of new cash having trade date up to tomorrow (T+1)\n - NEW_CASH_TRADE_DATE_UP_TO_T2: Get cash impact of new cash having trade date up to 2 days from today (T+2)\n - NEW_CASH_TRADE_DATE_UP_TO_T3: Get cash impact of new cash having trade date up to 3 days from today (T+3)\n - NEW_CASH_TRADE_DATE_ALL: Get cash impact of all new cash having trade date greater than or equal to today (T)",
+                        "name": "cashBalanceNewCashTradeDateScope",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "ORDER_TYPE_UNSPECIFIED",
+                            "ORDER_TYPE_MARKET_ON_OPEN_ONLY",
+                            "ORDER_TYPE_ALL"
+                        ],
+                        "type": "string",
+                        "default": "ORDER_TYPE_UNSPECIFIED",
+                        "description": "This field represents the order type for orders and new cash. \n(-- api-linter: core::0131::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field to ensure the API is backward compatible while users shift from GET to POST. --).\n\n - ORDER_TYPE_UNSPECIFIED: default setting. Get All order and new cash types\n - ORDER_TYPE_MARKET_ON_OPEN_ONLY: Get Market on open only orders and new cash\n - ORDER_TYPE_ALL: default setting. Get All order and new cash types",
+                        "name": "cashBalanceOrderTypeScope",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v2CashLadder"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 100
+            }
+        },
+        "/ladders:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "portfolio_management.cash.cash_ladder.v2.CashLadder:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "portfolio_management.cash.cash_ladder.v2.CashLadder:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieves cash projections based on filtering criteria.\n(-- api-linter: aladdin::9016::query-custom-method-http=disabled\n    aip.dev/not-precedent: We need to do this because we have already hooked up this call in our consumers. --)",
+                "summary": "Filter Cash Ladder",
+                "operationId": "CashLadderAPI_FilterCashLadder",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v2FilterCashLadderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v2CashLadder"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 100
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "enumsCashBalanceViewCurrency": {
+            "description": "This  represents currency in which cash balances are going to be returned.\n\n - CASH_BALANCE_VIEW_CURRENCY_UNSPECIFIED: UNSPECIFIED is LOCAL which is security local currency and is the default setting.\n - CASH_BALANCE_VIEW_CURRENCY_LOCAL: LOCAL is security local currency and is the default setting.\n - CASH_BALANCE_VIEW_CURRENCY_BASE: Base refer to portfolio's base currency.\n - CASH_BALANCE_VIEW_CURRENCY_OPERATING: Operating refer to portfolio's operating currency.\n - CASH_BALANCE_VIEW_CURRENCY_PERCENT_NAV: With %NAV, cash balances are going to be returned as percentage of portfolio's intraday NAV.",
+            "type": "string",
+            "default": "CASH_BALANCE_VIEW_CURRENCY_UNSPECIFIED",
+            "enum": [
+                "CASH_BALANCE_VIEW_CURRENCY_UNSPECIFIED",
+                "CASH_BALANCE_VIEW_CURRENCY_LOCAL",
+                "CASH_BALANCE_VIEW_CURRENCY_BASE",
+                "CASH_BALANCE_VIEW_CURRENCY_OPERATING",
+                "CASH_BALANCE_VIEW_CURRENCY_PERCENT_NAV"
+            ]
+        },
+        "enumsCurrencyPublishedStatus": {
+            "description": "- CURRENCY_PUBLISHED_STATUS_UNSPECIFIED: Unspecified means the projected cash balance is in error state.\n - CURRENCY_PUBLISHED_STATUS_PUBLISHED: Published means the projected cash balances is QC completed for trading since all the sod balances are fully reconciled between Aladdin and Bank (custodian).\n - CURRENCY_PUBLISHED_STATUS_STORED: Stored means cash reconciliation is underway not fully completed yet.\n - CURRENCY_PUBLISHED_STATUS_UNAVAILABLE: Unavailable means cash reconciliation is yet to take place.",
+            "type": "string",
+            "title": "The publish status of the projected cash for the currency in the portfolio. The status can either be Published, Stored or Unavailable. Cash publishing is done using an Aladdin application called CashMaster. \n(-- api-linter: core::0216::synonyms=disabled\n    aip.dev/not-precedent: We need to do this because we are retrospectively fixing build issues. --)",
+            "default": "CURRENCY_PUBLISHED_STATUS_UNSPECIFIED",
+            "enum": [
+                "CURRENCY_PUBLISHED_STATUS_UNSPECIFIED",
+                "CURRENCY_PUBLISHED_STATUS_PUBLISHED",
+                "CURRENCY_PUBLISHED_STATUS_STORED",
+                "CURRENCY_PUBLISHED_STATUS_UNAVAILABLE"
+            ]
+        },
+        "enumsnew_cash_trade_date": {
+            "description": "This field represents the future date up to which new cash activity is to be retrieved.\n\n - NEW_CASH_TRADE_DATE_UNSPECIFIED: Default setting. Get cash impact of new cash having trade date today (T)\n - NEW_CASH_TRADE_DATE_T: Get cash impact of new cash having trade date today (T)\n - NEW_CASH_TRADE_DATE_UP_TO_T1: Get cash impact of new cash having trade date up to tomorrow (T+1)\n - NEW_CASH_TRADE_DATE_UP_TO_T2: Get cash impact of new cash having trade date up to 2 days from today (T+2)\n - NEW_CASH_TRADE_DATE_UP_TO_T3: Get cash impact of new cash having trade date up to 3 days from today (T+3)\n - NEW_CASH_TRADE_DATE_ALL: Get cash impact of all new cash having trade date greater than or equal to today (T)",
+            "type": "string",
+            "default": "NEW_CASH_TRADE_DATE_UNSPECIFIED",
+            "enum": [
+                "NEW_CASH_TRADE_DATE_UNSPECIFIED",
+                "NEW_CASH_TRADE_DATE_T",
+                "NEW_CASH_TRADE_DATE_UP_TO_T1",
+                "NEW_CASH_TRADE_DATE_UP_TO_T2",
+                "NEW_CASH_TRADE_DATE_UP_TO_T3",
+                "NEW_CASH_TRADE_DATE_ALL"
+            ]
+        },
+        "enumsopen_date": {
+            "description": "This field represents the future date up to which order activity is to be retrieved.\n\n - OPEN_DATE_UNSPECIFIED: Default setting. Get cash impact of orders having open date today (T)\n - OPEN_DATE_T: Get cash impact of orders having open date today (T)\n - OPEN_DATE_UP_TO_T1: Get cash impact of orders having open date up to tomorrow (T+1)\n - OPEN_DATE_UP_TO_T2: Get cash impact of orders having open date up to 2 days from today (T+2)\n - OPEN_DATE_UP_TO_T3: Get cash impact of orders having open date up to 3 days from today (T+3)\n - OPEN_DATE_ALL: Get cash impact of all orders having open date greater than or equal to today (T)",
+            "type": "string",
+            "default": "OPEN_DATE_UNSPECIFIED",
+            "enum": [
+                "OPEN_DATE_UNSPECIFIED",
+                "OPEN_DATE_T",
+                "OPEN_DATE_UP_TO_T1",
+                "OPEN_DATE_UP_TO_T2",
+                "OPEN_DATE_UP_TO_T3",
+                "OPEN_DATE_ALL"
+            ]
+        },
+        "enumsorder_type": {
+            "description": "This field represents the order type for orders and new cash.\n\n - ORDER_TYPE_UNSPECIFIED: default setting. Get All order and new cash types\n - ORDER_TYPE_MARKET_ON_OPEN_ONLY: Get Market on open only orders and new cash\n - ORDER_TYPE_ALL: default setting. Get All order and new cash types",
+            "type": "string",
+            "default": "ORDER_TYPE_UNSPECIFIED",
+            "enum": [
+                "ORDER_TYPE_UNSPECIFIED",
+                "ORDER_TYPE_MARKET_ON_OPEN_ONLY",
+                "ORDER_TYPE_ALL"
+            ]
+        },
+        "enumstrade_date": {
+            "description": "This field represents the future trade date up to which trade activity is to be retrieved.\n\n - TRADE_DATE_UNSPECIFIED: Get cash impact of trades having trade date today (T)\n - TRADE_DATE_T: Get cash impact of trades having trade date today (T)\n - TRADE_DATE_UP_TO_T1: Get cash impact of trades having trade date up to tomorrow (T+1)\n - TRADE_DATE_UP_TO_T2: Get cash impact of trades having trade date up to 2 days from today (T+2)\n - TRADE_DATE_UP_TO_T3: Get cash impact of trades having trade date up to 3 days from today (T+3)\n - TRADE_DATE_ALL: Get cash impact of all trades having trade date greater than or equal to today (T)",
+            "type": "string",
+            "default": "TRADE_DATE_UNSPECIFIED",
+            "enum": [
+                "TRADE_DATE_UNSPECIFIED",
+                "TRADE_DATE_T",
+                "TRADE_DATE_UP_TO_T1",
+                "TRADE_DATE_UP_TO_T2",
+                "TRADE_DATE_UP_TO_T3",
+                "TRADE_DATE_ALL"
+            ]
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "typeDateTime": {
+            "description": "* When utc_offset is set and time_zone is unset: a civil time on a calendar\n   day with a particular offset from UTC.\n * When time_zone is set and utc_offset is unset: a civil time on a calendar\n   day in a particular time zone.\n * When neither time_zone nor utc_offset is set: a civil time on a calendar\n   day in local time.\n\nThe date is relative to the Proleptic Gregorian Calendar.\n\nIf year is 0, the DateTime is considered not to have a specific year. month\nand day must have valid, non-zero values.\n\nThis type is more flexible than some applications may want. Make sure to\ndocument and validate your application's limitations.",
+            "type": "object",
+            "title": "Represents civil time in one of a few possible ways:",
+            "properties": {
+                "year": {
+                    "description": "Optional. Year of date. Must be from 1 to 9999, or 0 if specifying a\ndatetime without a year.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "month": {
+                    "description": "Required. Month of year. Must be from 1 to 12.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "day": {
+                    "description": "Required. Day of month. Must be from 1 to 31 and valid for the year and\nmonth.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "hours": {
+                    "description": "Required. Hours of day in 24 hour format. Should be from 0 to 23. An API\nmay choose to allow the value \"24:00:00\" for scenarios like business\nclosing time.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "minutes": {
+                    "description": "Required. Minutes of hour of day. Must be from 0 to 59.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "seconds": {
+                    "description": "Required. Seconds of minutes of the time. Must normally be from 0 to 59. An\nAPI may allow the value 60 if it allows leap-seconds.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "nanos": {
+                    "description": "Required. Fractions of seconds in nanoseconds. Must be from 0 to\n999,999,999.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "utcOffset": {
+                    "description": "UTC offset. Must be whole seconds, between -18 hours and +18 hours.\nFor example, a UTC offset of -4:00 would be represented as\n{ seconds: -14400 }.",
+                    "type": "string"
+                },
+                "timeZone": {
+                    "description": "Time zone.",
+                    "$ref": "#/definitions/typeTimeZone"
+                }
+            }
+        },
+        "typeTimeZone": {
+            "description": "Represents a time zone from the\n[IANA Time Zone Database](https://www.iana.org/time-zones).",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "IANA Time Zone Database time zone, e.g. \"America/New_York\".",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Optional. IANA Time Zone Database version number, e.g. \"2019a\".",
+                    "type": "string"
+                }
+            }
+        },
+        "v2CashLadder": {
+            "type": "object",
+            "title": "The CashLadder Response Message encapsulating all the portfolio currency ladders",
+            "properties": {
+                "portfolioCurrencyLadders": {
+                    "type": "array",
+                    "title": "The portfolio currency ladders",
+                    "items": {
+                        "$ref": "#/definitions/v2PortfolioCurrencyLadder"
+                    }
+                }
+            }
+        },
+        "v2CashLadderQuery": {
+            "type": "object",
+            "title": "The query parameters to be used for retrieving cash projections",
+            "required": [
+                "portfolioGroupTickers",
+                "cashDate"
+            ],
+            "properties": {
+                "portfolioGroupTickers": {
+                    "description": "Name or a list of names of the portfolios or portfolioGroups (maximum 100) for which cash balances are requested.",
+                    "type": "array",
+                    "required": [
+                        "portfolio_group_tickers"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "cashDate": {
+                    "description": "Cash date for which cash balances are requested.",
+                    "type": "string",
+                    "format": "date",
+                    "required": [
+                        "cash_date"
+                    ]
+                },
+                "includeStoredCash": {
+                    "description": "This flag indicates if cash balances include stored cash. Stored cash refers to sod cash, which is yet to be fully reconciled between bank (acting as a custodian) and Aladdin.",
+                    "type": "boolean"
+                },
+                "includePni": {
+                    "description": "This flag indicates if cash balances include principal and interest in sod balances.",
+                    "type": "boolean"
+                },
+                "includeIntradayTradesCashImpact": {
+                    "description": "This flag indicates if cash balances include the cash impact from trades posted intraday.",
+                    "type": "boolean"
+                },
+                "includeIntradayAuthAndActiveOrdersCashImpact": {
+                    "description": "This flag indicates if cash balances include the cash impact from orders posted intraday, which are either in the active or authorized status.",
+                    "type": "boolean"
+                },
+                "includeIntradayOpenOrdersCashImpact": {
+                    "description": "This flag indicates if cash balances include the cash impact from Open Orders posted intraday.",
+                    "type": "boolean"
+                },
+                "includeIntradayConfirmedNewCash": {
+                    "description": "This flag indicates if cash balances include new cash entries in the confirmed status posted intraday.",
+                    "type": "boolean"
+                },
+                "includeIntradayAuthNewCash": {
+                    "description": "This flag indicates if cash balances include new cash entries in the authorized status posted intraday.",
+                    "type": "boolean"
+                },
+                "includeIntradayOpenNewCash": {
+                    "description": "This flag indicates if cash balances include new cash entries in the open status posted intraday.",
+                    "type": "boolean"
+                },
+                "includeStifIch": {
+                    "description": "This flag indicates if cash balances include the trade date impact of stif or ich cash positions.",
+                    "type": "boolean"
+                },
+                "cashBalanceViewCurrencySetting": {
+                    "description": "This  represents currency in which cash balances are going to be returned.",
+                    "$ref": "#/definitions/enumsCashBalanceViewCurrency"
+                },
+                "includeCollateralPledged": {
+                    "description": "This flag indicates if cash balances include the collateral pledged impact of sod trades and intraday activities.",
+                    "type": "boolean"
+                },
+                "includeCollateralHeld": {
+                    "description": "This flag indicates if cash balances include the collateral held impact of sod trades and intraday activities.",
+                    "type": "boolean"
+                },
+                "defaultCalendar": {
+                    "description": "Default calendar to be used for calculating the ladder and activity settle dates. Use the decodes API to look up valid default calendars using MKT_CALENDARS.",
+                    "type": "string"
+                },
+                "cashBalanceTradeDateScope": {
+                    "description": "This field represents the future trade date up to which trade activity is to be retrieved.",
+                    "$ref": "#/definitions/enumstrade_date"
+                },
+                "cashBalanceOpenDateScope": {
+                    "description": "This field represents the future date up to which order activity is to be retrieved.",
+                    "$ref": "#/definitions/enumsopen_date"
+                },
+                "cashBalanceNewCashTradeDateScope": {
+                    "description": "This field represents the future date up to which new cash activity is to be retrieved.",
+                    "$ref": "#/definitions/enumsnew_cash_trade_date"
+                },
+                "cashBalanceOrderTypeScope": {
+                    "description": "This field represents the order type for orders and new cash.",
+                    "$ref": "#/definitions/enumsorder_type"
+                },
+                "enablePrefunding": {
+                    "description": "This flag indicates if settle dates need to be adjusted on the cash ladder based on the prefunding rules.",
+                    "type": "boolean"
+                },
+                "includeCollateralProjectedHeld": {
+                    "description": "This flag indicates if cash balances should include the impact of projected held collateral.",
+                    "type": "boolean"
+                },
+                "includeCollateralProjectedPledged": {
+                    "description": "This flag indicates if cash balances should include the impact of projected pledged collateral.",
+                    "type": "boolean"
+                },
+                "includeUnfundedCommitment": {
+                    "description": "This flag indicates if cash balances should include the impact of unfunded commitments in private equity markets.",
+                    "type": "boolean"
+                },
+                "specificSettleDateProjections": {
+                    "description": "This field can be used to enter settle dates in S format (like S, S+1...S+45...S+90 etc.) to retrieve specific cash projections. The field respects CashLadder_maxHorizon token at a client and can return any specific settle date projections up to that date. If left empty, API would return S to S+7, S+30, S+60, S+90 projections in the default mode.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "includeIntradayMiscCash": {
+                    "description": "This field decides whether cash impact of intraday misc. cash transactions is going to be included in the cash ladder or not.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "v2FilterCashLadderRequest": {
+            "type": "object",
+            "title": "Cash Ladder Request Message",
+            "properties": {
+                "cashLadderQuery": {
+                    "description": "Query used to filter against the criterions, such as portfolio group ticker, cash date, etc.",
+                    "$ref": "#/definitions/v2CashLadderQuery"
+                }
+            }
+        },
+        "v2PortfolioCurrencyLadder": {
+            "type": "object",
+            "title": "the individual portfolio currency ladder",
+            "properties": {
+                "portfolioTicker": {
+                    "type": "string",
+                    "title": "Aladdin Portfolio"
+                },
+                "portfolioName": {
+                    "type": "string",
+                    "title": "The full name of the Aladdin portfolio"
+                },
+                "cashBalanceSecurityCurrencyCode": {
+                    "type": "string",
+                    "title": "Security Currency in ISO format"
+                },
+                "portfolioBaseCurrencyCode": {
+                    "type": "string",
+                    "title": "Base currency of the portfolio in ISO format"
+                },
+                "portfolioOperatingCurrencyCode": {
+                    "type": "string",
+                    "title": "Operating currency of the portfolio in ISO format"
+                },
+                "currencyPublishStatus": {
+                    "description": "The publish status of the projected cash for the currency in the portfolio.",
+                    "$ref": "#/definitions/enumsCurrencyPublishedStatus"
+                },
+                "currencyPublishedTime": {
+                    "title": "The date and time when the currency was published from Aladdin CashMaster",
+                    "$ref": "#/definitions/typeDateTime"
+                },
+                "sodNav": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "The start of day NAV represented in the base currency of the portfolio"
+                },
+                "intradayNav": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "The intraday NAV represented in the base currency of the portfolio is the SOD NAV overlaid with the impact from Intraday New Cash entries and Intraday Asset-In and Asset-Out trades"
+                },
+                "standingInstructionCounterCurrencyCode": {
+                    "type": "string",
+                    "title": "Counter currency for standing instruction in ISO format"
+                },
+                "fxCorpAction": {
+                    "type": "string",
+                    "title": "Responsible party for corporate actions: (B)ank, (S)imulate FX trades, (O)rders in Aladdin, or (P)M"
+                },
+                "fxIncome": {
+                    "type": "string",
+                    "title": "Responsible party for income: (B)ank, (S)imulate FX trades, (O)rders in Aladdin, or (P)M"
+                },
+                "fxNewCash": {
+                    "type": "string",
+                    "title": "Responsible party for new cash: (B)ank, (S)imulate FX trades, (O)rders in Aladdin, or (P)M"
+                },
+                "fxTrade": {
+                    "type": "string",
+                    "title": "Responsible party for trades: (B)ank, (S)imulate FX trades, (O)rders in Aladdin, or (P)M"
+                },
+                "settleDateBalances": {
+                    "type": "array",
+                    "title": "Settle Date Balance",
+                    "items": {
+                        "$ref": "#/definitions/v2SettleDateBalance"
+                    }
+                },
+                "sodSwiftBalance": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "This field is added to pass the start of day swift balance in the API response"
+                }
+            }
+        },
+        "v2SettleDateBalance": {
+            "type": "object",
+            "title": "Settle Date Balance Message",
+            "properties": {
+                "settlementDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "settlement date for a given cash balance in YYYY-MM-DD format"
+                },
+                "cashBalance": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "actual cash balance on a given settle date"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "offline_access": "This keeps you signed in to the app, even when you are not using it.",
+                "portfolio_management.cash.cash_ladder.v2.CashLadder:read": "non-sensitive read"
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "offline_access": "This keeps you signed in to the app, even when you are not using it.",
+                "portfolio_management.cash.cash_ladder.v2.CashLadder:read": "non-sensitive read"
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "offline_access",
+                "portfolio_management.cash.cash_ladder.v2.CashLadder:read"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "offline_access",
+                "portfolio_management.cash.cash_ladder.v2.CashLadder:read"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

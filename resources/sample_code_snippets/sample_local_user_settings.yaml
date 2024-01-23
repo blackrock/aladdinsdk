@@ -1,0 +1,19 @@
+RUN_MODE: local
+
+defaultWebServer: https://webster.bfm.com
+
+API:
+  AUTH_TYPE: Basic Auth
+  TOKEN: "<API TOKEN registered via Studio UI>"
+
+ADC: # Optional - only needed to connect to ADC
+  CONN:
+    ROLE: BLK_DEV_ROLE
+    WAREHOUSE: CLI_STUDIO_WH
+    DATABASE: ALADDINDB
+    SCHEMA: INVESTMENTS
+
+USER_CREDENTIALS:
+  # PASSWORD: # when not set, in local mode SDK will use Keychain Access entry as described in README
+  # PASSWORD_FILEPATH: # Alternatively point to key.enc file which contains base64 encoded password, in compute this is /secrets/key.enc
+  USERNAME: uname

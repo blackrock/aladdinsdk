@@ -1,0 +1,1628 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "As a part of the timeseries metadata, timeseries Measure offers the capability to handle timeseries measure (ex. price, volume) metadata information.",
+        "title": "Timeseries Measure",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.investment_research.data_services.timeseries.TimeseriesMeasureAPI",
+        "x-aladdin-api-stability": "alpha",
+        "x-aladdin-spec-id": "agraph.investment_research.data_services.timeseries.v1.TimeseriesMeasureAPI"
+    },
+    "basePath": "/api/investment-research/data-services/timeseries/v1/",
+    "paths": {
+        "/measure/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Get the metadata of a measure",
+                "summary": "Get TimeseriesMeasure",
+                "operationId": "TimeseriesMeasureAPI_GetTimeseriesMeasure",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "timeseries_measure id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1TimeseriesMeasure"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 3500
+            },
+            "delete": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Delete the metadata of a measure",
+                "summary": "Delete TimeseriesMeasure",
+                "operationId": "TimeseriesMeasureAPI_DeleteTimeseriesMeasure",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "TimeseriesMeasure id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 3500
+            }
+        },
+        "/measure/{timeseriesMeasure.id}": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Create the metadata of a measure",
+                "summary": "Create TimeseriesMeasure",
+                "operationId": "TimeseriesMeasureAPI_CreateTimeseriesMeasure",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Measure ID\n\nExample: `PX_LAST`",
+                        "name": "timeseriesMeasure.id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "TimeseriesMeasure object to create",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1TimeseriesMeasure"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1TimeseriesMeasure"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 3500
+            },
+            "patch": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Update the metadata of a measure",
+                "summary": "Update TimeseriesMeasure",
+                "operationId": "TimeseriesMeasureAPI_UpdateTimeseriesMeasure",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Measure ID\n\nExample: `PX_LAST`",
+                        "name": "timeseriesMeasure.id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "TimeseriesMetadataMeasure object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1TimeseriesMeasure"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "List of fields to be updated.",
+                        "name": "updateMask",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1TimeseriesMeasure"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 3500
+            }
+        },
+        "/measures": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "List the metadata of all the measure",
+                "summary": "List TimeseriesMeasure",
+                "operationId": "TimeseriesMeasureAPI_ListTimeseriesMeasures",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "The maximum value is 500. If unspecified, the default value is 200.",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Default page token.",
+                        "name": "pageToken",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1ListTimeseriesMeasuresResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 3500
+            }
+        },
+        "/measures:filter": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.timeseries.v1.TimeseriesMeasure"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Filter the metadata of all the measures\n(-- api-linter: aladdin::9016::query-custom-method-http=disabled\n aip.dev/not-precedent: We need to do this to be consistent with other rpc endpoint names ... --)",
+                "summary": "Filter TimeseriesMeasure",
+                "operationId": "TimeseriesMeasureAPI_FilterTimeseriesMeasures",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Measure Code.",
+                        "name": "query.id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Measure Description. (-- api-linter: core::0124::required-reference=disabled\naip.dev/not-precedent: We need to do this because description is a field to\ndescribe a measure --)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\naip.dev/not-precedent: We need to do this because this resource conflicts\nwith another that is not in our domain --)",
+                        "name": "query.description",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Standard measure category.",
+                        "name": "query.timeseriesCategory.id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Standard measure category.",
+                        "name": "query.subCategory1.id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Standard measure category.",
+                        "name": "query.subCategory2.id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Standard measure category.",
+                        "name": "query.subCategory3.id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "The maximum value is 500. If unspecified, the default value is 200.",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Default page token.",
+                        "name": "pageToken",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterTimeseriesMeasuresResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 3500
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1FilterTimeseriesMeasuresResponse": {
+            "description": "(-- api-linter: aladdin::9016::response-message=disabled\n aip.dev/not-precedent: We need to be consistent with the returned entity collection name --)",
+            "type": "object",
+            "title": "The Response message for Filter TimeseriesMeasures",
+            "required": [
+                "measures"
+            ],
+            "properties": {
+                "measures": {
+                    "type": "array",
+                    "title": "List of TimeseriesMeasure objects returned",
+                    "required": [
+                        "measures"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1TimeseriesMeasure"
+                    }
+                },
+                "nextPageToken": {
+                    "type": "string",
+                    "title": "next page token for result list"
+                }
+            }
+        },
+        "v1ListTimeseriesMeasuresResponse": {
+            "type": "object",
+            "title": "The Response body for List TimeseriesMeasures",
+            "required": [
+                "measures"
+            ],
+            "properties": {
+                "measures": {
+                    "type": "array",
+                    "title": "List of TimeseriesMeasure objects returned",
+                    "required": [
+                        "measures"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1TimeseriesMeasure"
+                    }
+                },
+                "nextPageToken": {
+                    "type": "string",
+                    "title": "next page token for result list"
+                }
+            }
+        },
+        "v1TimeseriesCategory": {
+            "description": "Category of measure.\n\n(-- api-linter: core::0123::resource-annotation=disabled\n aip.dev/not-precedent: We need to do this because Category is not a resource\n that will have an API, it is just a message --)",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Standard measure category"
+                }
+            }
+        },
+        "v1TimeseriesMeasure": {
+            "type": "object",
+            "title": "Resource for Measure related to a Timeseries Object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "description": "Example: `PX_LAST`",
+                    "type": "string",
+                    "title": "Measure ID",
+                    "required": [
+                        "id"
+                    ]
+                },
+                "description": {
+                    "description": "Description of measure.\n\nExample: `Price of a security`\n\n(-- api-linter: core::0124::required-reference=disabled\naip.dev/not-precedent: We need to do this because description is a field to\ndescribe a measure --)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\naip.dev/not-precedent: We need to do this because this resource conflicts\nwith another that is not in our domain --) Measure Description",
+                    "type": "string"
+                },
+                "timeseriesCategory": {
+                    "description": "Example: `Accounting`, `Analytics and Risk`",
+                    "title": "Category of measure",
+                    "$ref": "#/definitions/v1TimeseriesCategory"
+                },
+                "subCategory1": {
+                    "description": "Example: `Investment Accounting`, `Security Models`",
+                    "title": "Measure sub-category level 1",
+                    "$ref": "#/definitions/v1TimeseriesCategory"
+                },
+                "subCategory2": {
+                    "description": "Example: `Balance Sheet`, `Income Statement`",
+                    "title": "Measure sub-category level 2",
+                    "$ref": "#/definitions/v1TimeseriesCategory"
+                },
+                "subCategory3": {
+                    "description": "Example: `Statement of Net Assets`, `Security Level Performance`",
+                    "title": "Measure sub-category level 3",
+                    "$ref": "#/definitions/v1TimeseriesCategory"
+                }
+            }
+        },
+        "v1TimeseriesMeasureQuery": {
+            "description": "The query required to perform a search query.\n\n(-- api-linter: core::0123::resource-annotation=disabled\n aip.dev/not-precedent: This is a query structure ... --)",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Measure Code"
+                },
+                "description": {
+                    "description": "(-- api-linter: core::0124::required-reference=disabled\naip.dev/not-precedent: We need to do this because description is a field to\ndescribe a measure --)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\naip.dev/not-precedent: We need to do this because this resource conflicts\nwith another that is not in our domain --)",
+                    "type": "string",
+                    "title": "Measure Description"
+                },
+                "timeseriesCategory": {
+                    "title": "Measure category",
+                    "$ref": "#/definitions/v1TimeseriesCategory"
+                },
+                "subCategory1": {
+                    "title": "Measure sub-category",
+                    "$ref": "#/definitions/v1TimeseriesCategory"
+                },
+                "subCategory2": {
+                    "title": "Measure sub-category",
+                    "$ref": "#/definitions/v1TimeseriesCategory"
+                },
+                "subCategory3": {
+                    "title": "Measure sub-category",
+                    "$ref": "#/definitions/v1TimeseriesCategory"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_research.data_services.timeseries.v1.TimeseriesMeasure": "This grants access to all endpoints in the investment_research.data_services.timeseries.v1.TimeseriesMeasure API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_research.data_services.timeseries.v1.TimeseriesMeasure": "This grants access to all endpoints in the investment_research.data_services.timeseries.v1.TimeseriesMeasure API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "investment_research.data_services.timeseries.v1.TimeseriesMeasure",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "investment_research.data_services.timeseries.v1.TimeseriesMeasure",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Internal"
+}

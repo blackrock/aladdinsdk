@@ -1,0 +1,2628 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "API contains operations on Counter Party Settlement Instruction resource.",
+        "title": "Counter Party Settlement Instruction",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.investment_operations.reference_data.broker.CounterPartySettlementInstructionAPI",
+        "x-aladdin-api-stability": "alpha",
+        "x-aladdin-spec-id": "agraph.investment_operations.reference_data.broker.v1.CounterPartySettlementInstructionAPI"
+    },
+    "basePath": "/api/investment-operations/reference-data/broker/v1/",
+    "paths": {
+        "/counterPartySettlementInstructions/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Gets a Counter Party Settlement Instructions by settle code.",
+                "summary": "Get Counter Party Settlement Instruction",
+                "operationId": "CounterPartySettlementInstructionAPI_GetCounterPartySettlementInstruction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the Counterparty Settlement instruction.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            },
+            "delete": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "It is a soft delete by setting settlement instruction entity value to -9999.",
+                "summary": "Deletes a Counter Party Settlement Instruction",
+                "operationId": "CounterPartySettlementInstructionAPI_DeleteCounterPartySettlementInstruction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the counter party settlement instruction to be soft deleted.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Aladdin Broker Identifier (Numeric) (Not supported currently).\n(-- api-linter: core::0135::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this refers to id of parent ... --).",
+                        "name": "brokerId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Broker ticker.\n(-- api-linter: core::0135::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because ticker is a part of the parent... --).",
+                        "name": "brokerTicker",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/counterPartySettlementInstructions:batchCreate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Create one or more Counter Party Settlement Instructions to a maximum of 100 per request.\nRequired fields:- brokerTicker,deliveryName,settlementParties.\n Users needs to have permissions under permType='brkrSettlm' for using this API.",
+                "summary": "Batch Create Counter Party Settlement Instructions",
+                "operationId": "CounterPartySettlementInstructionAPI_BatchCreateCounterPartySettlementInstructions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchCreateCounterPartySettlementInstructionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchCreateCounterPartySettlementInstructionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/counterPartySettlementInstructions:batchUpdate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Batch Update Counter Party Settlement Instructions.\nRequired fields:- id,brokerTicker,deliveryName,settlementParties.\nUsers needs to have permissions under permType='brkrSettlm' for using this API.",
+                "summary": "Batch Update Counter Party Settlement Instructions",
+                "operationId": "CounterPartySettlementInstructionAPI_BatchUpdateCounterPartySettlementInstructions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchUpdateCounterPartySettlementInstructionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchUpdateCounterPartySettlementInstructionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/counterPartySettlementInstructions:batchUpdateStatuses": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Updates status for multiple Counter Party Settlement Instructions.\n(-- api-linter: core::0136::http-uri-suffix=disabled\n aip.dev/not-precedent: We need to do this because we are updating a particular column across counterparty settlement instructions, and not the entire object --)\n(-- api-linter: aladdin::9048::rpc-name=disabled\n aip.dev/not-precedent: We need to do this because we are updating a particular column across counterparty settlement instructions, and not the entire object --)\n(-- api-linter: core::0234::http-uri-suffix=disabled\n aip.dev/not-precedent: We need to do this because this api only updates status for a given list of settle codes, and is not a standard batch update API -)",
+                "summary": "Batch Update Counter Party Settlement Instructions Status",
+                "operationId": "CounterPartySettlementInstructionAPI_BatchUpdateCounterPartySettlementInstructionsStatuses",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchUpdateCounterPartySettlementInstructionsStatusesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchUpdateCounterPartySettlementInstructionsStatusesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/counterPartySettlementInstructions:batchValidate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Validates multiple Counter Party Settlement Instruction Requests for create and update API calls.",
+                "summary": "Batch Validate Counter Party Settlement Instructions",
+                "operationId": "CounterPartySettlementInstructionAPI_BatchValidateCounterPartySettlementInstructions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchValidateCounterPartySettlementInstructionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchValidateCounterPartySettlementInstructionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/counterPartySettlementInstructions:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Filters Counter Party Settlement Instructions based on a single broker ticker(for basic filtering) or any combination of the following filters : \nList of broker tickers, broker type, delivery name, settlement instruction state and settlement instruction entity (for advance filtering).",
+                "summary": "Filter Counter Party Settlement Instructions",
+                "operationId": "CounterPartySettlementInstructionAPI_FilterCounterPartySettlementInstructions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterCounterPartySettlementInstructionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterCounterPartySettlementInstructionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/counterPartySettlementInstructions:search": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Searches Counter Party Settlement Instructions based on the input query.",
+                "summary": "Search Counter Party Settlement Instructions",
+                "operationId": "CounterPartySettlementInstructionAPI_SearchCounterPartySettlementInstructions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search string (atleast two characters).",
+                        "name": "search",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_UNSPECIFIED",
+                            "COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_BIC"
+                        ],
+                        "type": "string",
+                        "default": "COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_UNSPECIFIED",
+                        "description": "Represents search type.\n\n - COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_UNSPECIFIED: The API will default to the BIC type\n - COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_BIC: This is the default value\nFields searched - BIC.",
+                        "name": "counterPartySettlementInstructionsSearchType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "The maximum value is 100; values above 100 will be coerced to 100\nIf unspecified, the default value to return is 100\nThe maximum number of CounterPartySettlementInstructions to return(Pagination is not supported currently).",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "A page token, received from a previous call(Pagination is not supported currently).",
+                        "name": "pageToken",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1SearchCounterPartySettlementInstructionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/counterPartySettlementInstructions:undelete": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "It reverses the soft delete by setting settlement instruction entity value to 9999.",
+                "summary": "Undeletes a Counter Party Settlement Instruction",
+                "operationId": "CounterPartySettlementInstructionAPI_UndeleteCounterPartySettlementInstruction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1UndeleteCounterPartySettlementInstructionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "enumsActionType": {
+            "description": "Represents type of validation being performed.\n\n - ACTION_TYPE_UNSPECIFIED: Reserved value.\n - ACTION_TYPE_CREATE: Validation for create request.\n - ACTION_TYPE_UPDATE: Validation for update request.",
+            "type": "string",
+            "default": "ACTION_TYPE_UNSPECIFIED",
+            "enum": [
+                "ACTION_TYPE_UNSPECIFIED",
+                "ACTION_TYPE_CREATE",
+                "ACTION_TYPE_UPDATE"
+            ]
+        },
+        "enumsFilterType": {
+            "description": "Represents type of filter being performed.\n\n - FILTER_TYPE_UNSPECIFIED: Reserved value.\n - FILTER_TYPE_BASIC: Option for Basic filter- Filters Data on the basis of a single ticker and/or loadDefunct flag.\n - FILTER_TYPE_ADVANCE: Option for Advance filter - Filters data on the basis of advanced filters like list of tickers, BrokerType, entity , etc.\n - FILTER_TYPE_ID: Option for filter on list of id's- Filters data on the basis of list of id's.",
+            "type": "string",
+            "default": "FILTER_TYPE_UNSPECIFIED",
+            "enum": [
+                "FILTER_TYPE_UNSPECIFIED",
+                "FILTER_TYPE_BASIC",
+                "FILTER_TYPE_ADVANCE",
+                "FILTER_TYPE_ID"
+            ]
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1BatchCreateCounterPartySettlementInstructionsRequest": {
+            "description": "The request message for\nCounterPartySettlementInstructionAPI.BatchCreateCounterPartySettlementInstructions.",
+            "type": "object",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "brokerId": {
+                    "description": "Aladdin Broker Identifier (Numeric) (Not supported currently).",
+                    "type": "string"
+                },
+                "brokerTicker": {
+                    "description": "Broker ticker.",
+                    "type": "string"
+                },
+                "requests": {
+                    "description": "A maximum of 100 Counter party settlement instructions can be created in\na batch.\nBroker Id, Delivery Instruction and  Settlement Instructions are mandatory\nfields.",
+                    "type": "array",
+                    "title": "Create counterparty settlement instructions request",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1CreateCounterPartySettlementInstructionRequest"
+                    }
+                },
+                "skipBqlValidation": {
+                    "type": "boolean",
+                    "title": "Skip BQL Validation flag - to skip the bql validation for the request.\n(-- api-linter: core::0233::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this flag is common to all request objects which determines whether to skip bql validation or not --)"
+                },
+                "isGenericTemplate": {
+                    "description": "This is a flag which should only be set as true if you want to create settlement instructions without passing the actual template definitions in the settlement parties map, i.e. If you wish to pass settlement parties as  [VALUE1, VALUE2,... VALUE30].\n(-- api-linter: core::0233::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this flag is common to all POST request objects which determines the format in which settlement parties will be considered --)",
+                    "type": "boolean",
+                    "title": "Is Generic Template flag"
+                }
+            }
+        },
+        "v1BatchCreateCounterPartySettlementInstructionsResponse": {
+            "description": "The response message for\nCounterPartySettlementInstructionAPI.BatchCreateCounterPartySettlementInstructions.",
+            "type": "object",
+            "properties": {
+                "counterpartySettlementInstructions": {
+                    "description": "Counterparty settlement instructions to be returned.",
+                    "type": "array",
+                    "title": "Counterparty settlement instructions",
+                    "items": {
+                        "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                    }
+                }
+            }
+        },
+        "v1BatchUpdateCounterPartySettlementInstructionsRequest": {
+            "description": "The request message for\nCounterPartySettlementInstructionAPI.BatchUpdateCounterPartySettlementInstructions.",
+            "type": "object",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "brokerId": {
+                    "description": "Aladdin Broker Identifier (Numeric) (Not supported currently).",
+                    "type": "string"
+                },
+                "brokerTicker": {
+                    "description": "Broker ticker.",
+                    "type": "string"
+                },
+                "requests": {
+                    "description": "A maximum of 100 Counter party settlement instructions can be updated in a\nbatch.\nId, Broker Id, Delivery Instruction and  Settlement Instructions are\nmandatory fields.",
+                    "type": "array",
+                    "title": "Update counterparty settlement instructions request",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1UpdateCounterPartySettlementInstructionRequest"
+                    }
+                },
+                "skipBqlValidation": {
+                    "type": "boolean",
+                    "title": "Skip BQL Validation flag - to skip the bql validation for the request.\n(-- api-linter: core::0234::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this flag is common to all request objects which determines whether to skip bql validation or not --)"
+                },
+                "isGenericTemplate": {
+                    "description": "This is a flag which should only be set as true if you want to update settlement instructions without passing the actual template definitions in the settlement parties map, i.e. If you wish to pass settlement parties as  [VALUE1, VALUE2,... VALUE30].\n(-- api-linter: core::0234::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this flag is common to all POST request objects which determines the format in which settlement parties will be considered --)",
+                    "type": "boolean",
+                    "title": "Is Generic Template flag"
+                }
+            }
+        },
+        "v1BatchUpdateCounterPartySettlementInstructionsResponse": {
+            "description": "The response message for\nCounterPartySettlementInstructionAPI.BatchUpdateCounterPartySettlementInstructions.",
+            "type": "object",
+            "properties": {
+                "counterpartySettlementInstructions": {
+                    "description": "Counterparty settlement instructions to be returned.",
+                    "type": "array",
+                    "title": "Counterparty settlement instructions",
+                    "items": {
+                        "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                    }
+                }
+            }
+        },
+        "v1BatchUpdateCounterPartySettlementInstructionsStatusesRequest": {
+            "description": "The request message for CounterPartySettlementInstructionAPI.BatchUpdateCounterPartySettlementInstructionsStatuses.",
+            "type": "object",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "settlementInstructionState": {
+                    "title": "The status to be updated for all counterparty settlement instructions with the specified settle code.\n(-- api-linter: core::0234::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because we are not using the id field of the resource as a parent  --)",
+                    "$ref": "#/definitions/v1SettlementInstructionState"
+                },
+                "requests": {
+                    "description": "Id of the Counterparty Settlement instruction.",
+                    "type": "array",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1UpdateCounterPartySettlementInstructionsStatusRequest"
+                    }
+                }
+            }
+        },
+        "v1BatchUpdateCounterPartySettlementInstructionsStatusesResponse": {
+            "type": "object",
+            "title": "The response message for\nCounterPartySettlementInstructionAPI.BatchUpdateCounterPartySettlementInstructionsStatuses.\n(-- api-linter: aladdin::9048::response-results-field=disabled\n aip.dev/not-precedent: We need to do this because  we are returning only a list of CounterPartySettlementInstructions--)",
+            "properties": {
+                "results": {
+                    "description": "Counterparty settlement instructions to be returned.",
+                    "type": "array",
+                    "title": "Counterparty settlement instructions",
+                    "items": {
+                        "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                    }
+                }
+            }
+        },
+        "v1BatchValidateCounterPartySettlementInstructionsRequest": {
+            "description": "The request message for CounterPartySettlementInstructionAPI.BatchValidateCounterPartySettlementInstructions.",
+            "type": "object",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "brokerId": {
+                    "type": "string",
+                    "title": "Aladdin Broker Identifier (Numeric) (Not supported currently).\n(-- api-linter: aladdin::9050::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this refers to the id of the broker which is part of the oneof parent --)"
+                },
+                "brokerTicker": {
+                    "type": "string",
+                    "title": "Broker ticker.\n(-- api-linter: aladdin::9050::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this refers to the broker ticker which is part of the oneof parent --)"
+                },
+                "requests": {
+                    "description": "A maximum of 100 broker counterparty settlement instructions can be validated in a batch.",
+                    "type": "array",
+                    "title": "Validate Counter Party Settlement Instructions Request",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1ValidateCounterPartySettlementInstructionRequest"
+                    }
+                },
+                "actionType": {
+                    "description": "Enum that determines whether the request is a create request or an update request, top perform validation accordingly.",
+                    "title": "ActionType enum",
+                    "$ref": "#/definitions/enumsActionType"
+                },
+                "skipBqlValidation": {
+                    "type": "boolean",
+                    "title": "Skip BQL Validation flag - to skip the bql validation for the request.\n(-- api-linter: core::9050::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this flag is common to all request objects which determines whether to skip bql validation or not --)"
+                },
+                "isGenericTemplate": {
+                    "description": "This is a flag which should only be set as true if you want to validate settlement instructions without passing the actual template definitions in the settlement parties map, i.e. If you wish to pass settlement parties as  [VALUE1, VALUE2,... VALUE30].\n(-- api-linter: aladdin::9050::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because this flag is common to all POST request objects which determines the format in which settlement parties will be considered ... --)",
+                    "type": "boolean",
+                    "title": "Is Generic Template flag"
+                }
+            }
+        },
+        "v1BatchValidateCounterPartySettlementInstructionsResponse": {
+            "description": "The response message for BatchValidateCounterPartySettlementInstructions.",
+            "type": "object",
+            "properties": {
+                "status": {
+                    "description": "The status of the operation in case of failure/success.",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "counterpartySettlementInstructionValidation": {
+                    "description": "Represents the validation associated with the counterparty settlement instruction records.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1CounterPartySettlementInstruction": {
+            "description": "CounterPartySettlementInstruction describes information about settlement instructions for a broker or account.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Resources must have a 'id' field.\n\nName describes the computer or human assigned resource identifier.\nRepresents Settle Code.",
+                    "type": "string"
+                },
+                "brokerId": {
+                    "description": "Represents Aladdin Broker Identifier (Numeric), commonly referred to as broker code.",
+                    "type": "string"
+                },
+                "accountName": {
+                    "description": "Represents account name of the settlement instruction.",
+                    "type": "string"
+                },
+                "deliveryName": {
+                    "description": "Represents delivery name for the settlement instruction.",
+                    "type": "string"
+                },
+                "settlementInstructionRule": {
+                    "description": "Represents rule like bql, which if evaluated to true, selects given instruction.",
+                    "type": "string"
+                },
+                "settlementInstructionState": {
+                    "description": "Represents settlement instruction state.",
+                    "$ref": "#/definitions/v1SettlementInstructionState"
+                },
+                "settlementInstructionModifier": {
+                    "description": "Represents modifier of the settlement instruction record.",
+                    "type": "string"
+                },
+                "settlementInstructionModifyDate": {
+                    "description": "Represents modified date of the settlement instruction record.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "settlementInstructionReviewer": {
+                    "description": "Represents reviewer of the settlement instruction record.",
+                    "type": "string"
+                },
+                "settlementInstructionReviewDate": {
+                    "description": "Represents reviewed date of the settlement instruction record.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "settlementParties": {
+                    "description": "Represents the settlement parties associated with settlement instruction record.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "settlementInstructionEntity": {
+                    "description": "Represents broker entity based on the decode BROKER_ENTITY.",
+                    "type": "string"
+                },
+                "templateDefinitionMaps": {
+                    "description": "Template definition Map.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1CounterPartySettlementInstructionExtendedQuery": {
+            "description": "The query required to perform a filter query.",
+            "type": "object",
+            "properties": {
+                "brokerTickers": {
+                    "description": "Broker ticker for which broker desk data is to be retrieved.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "brokerType": {
+                    "description": "Broker Type.",
+                    "type": "string"
+                },
+                "deliveryName": {
+                    "description": "Represents delivery name for the settlement instruction.",
+                    "type": "string"
+                },
+                "settlementInstructionEntity": {
+                    "description": "Entity.",
+                    "type": "string"
+                },
+                "settlementInstructionState": {
+                    "description": "Represents settlement instruction state.",
+                    "$ref": "#/definitions/v1SettlementInstructionState"
+                },
+                "ids": {
+                    "description": "List of Ids of the Counterparty Settlement instruction.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1CounterPartySettlementInstructionQuery": {
+            "type": "object",
+            "title": "The query required to perform a filter query.\n(-- api-linter: core::0203::optional-consistency=disabled\n aip.dev/not-precedent: We need to do this because only one non-parent field behaviour needs to be set  --)",
+            "properties": {
+                "brokerId": {
+                    "description": "Aladdin Broker Identifier (Numeric) (Not supported currently).",
+                    "type": "string"
+                },
+                "brokerTicker": {
+                    "description": "Broker ticker.",
+                    "type": "string"
+                },
+                "placeOfSettlement": {
+                    "type": "string",
+                    "title": "(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We need to do this because place_of_settlement refers to pset --)\nPlace Of Settlement (Attribute of settlement_parties)"
+                },
+                "loadDefunct": {
+                    "description": "Load Defunct Flag - If true , will load all (including defuncts) , else will only load non defunct data.",
+                    "type": "boolean"
+                },
+                "counterPartySettlementInstructionExtendedQuery": {
+                    "description": "Counterparty settlement instructions Extended Query containing additional filters on desk data.",
+                    "$ref": "#/definitions/v1CounterPartySettlementInstructionExtendedQuery"
+                },
+                "filterType": {
+                    "description": "Enum to determine the type of filter being performed - Basic/ Advanced.",
+                    "$ref": "#/definitions/enumsFilterType"
+                }
+            }
+        },
+        "v1CounterPartySettlementInstructionsSearchType": {
+            "description": "Represents type of search being performed.\n\n - COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_UNSPECIFIED: The API will default to the BIC type\n - COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_BIC: This is the default value\nFields searched - BIC.",
+            "type": "string",
+            "default": "COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_UNSPECIFIED",
+            "enum": [
+                "COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_UNSPECIFIED",
+                "COUNTER_PARTY_SETTLEMENT_INSTRUCTIONS_SEARCH_TYPE_BIC"
+            ]
+        },
+        "v1CreateCounterPartySettlementInstructionRequest": {
+            "type": "object",
+            "title": "The request message for\nCounterPartySettlementInstructionAPI.CreateCounterPartySettlementInstructions.\n(-- api-linter: core::0133::request-parent-required=disabled\n aip.dev/not-precedent: We need to do this because this is a top-level\n resource --)",
+            "properties": {
+                "counterPartySettlementInstruction": {
+                    "description": "Counter party settlement instruction to create.",
+                    "title": "Counterparty settlement instructions",
+                    "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                },
+                "autoApproved": {
+                    "type": "boolean",
+                    "title": "Counter party settlement instruction to create is auto approved or not.\n(-- api-linter: core::0133::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field because creation\n    supports two\n ways - unapproved and approved. --)"
+                }
+            }
+        },
+        "v1FilterCounterPartySettlementInstructionsRequest": {
+            "description": "The request message for\nCounterPartySettlementInstructionAPI.FilterCounterPartySettlementInstructions.",
+            "type": "object",
+            "properties": {
+                "counterpartySettlementInstructionQuery": {
+                    "description": "Query used to filter Counterparty Settlement instructions, such as broker ticker.",
+                    "title": "Filter Broker Counterparty Settlement instructions Query",
+                    "$ref": "#/definitions/v1CounterPartySettlementInstructionQuery"
+                },
+                "pageSize": {
+                    "description": "The maximum number of CounterPartySettlementInstructions to return. The\nservice may\nreturn fewer than this value. If unspecified i.e 0, then complete list of\nCounterPartySettlementInstructions will be returned.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "pageToken": {
+                    "description": "A page token, received from a previous\n'FilterCounterPartySettlementInstructions' call.\nProvide this to retrieve the subsequent page.\n\nWhen paginating, all other parameters provided to\n'FilterCounterPartySettlementInstructions' must match the call that provided\nthe page token.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1FilterCounterPartySettlementInstructionsResponse": {
+            "description": "The response message for\nCounterPartySettlementInstructionAPI.FilterCounterPartySettlementInstructions.",
+            "type": "object",
+            "properties": {
+                "counterpartySettlementInstructions": {
+                    "description": "Counterparty settlement instructions to be returned.",
+                    "type": "array",
+                    "title": "Counterparty settlement instructions",
+                    "items": {
+                        "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "A token, which can be sent as 'page_token' to retrieve the next page.\nIf this field is omitted, there are no subsequent pages.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1SearchCounterPartySettlementInstructionsResponse": {
+            "description": "The response message for CounterPartySettlementInstructionAPI.SearchCounterPartySettlementInstructions.",
+            "type": "object",
+            "properties": {
+                "counterPartySettlementInstructions": {
+                    "description": "Counter party settlement instruction to be returned.",
+                    "type": "array",
+                    "title": "Counterparty settlement instructions",
+                    "items": {
+                        "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "A token, which can be sent as 'page_token' to retrieve the next page(Pagination is not supported currently).",
+                    "type": "string"
+                }
+            }
+        },
+        "v1SettlementInstructionState": {
+            "description": "Enumeration of possible states of Counter Party Settlement Instructions.\n\n - SETTLEMENT_INSTRUCTION_STATE_UNSPECIFIED: Reserved value.\n - SETTLEMENT_INSTRUCTION_STATE_APPROVED: Approved cde=0.\n - SETTLEMENT_INSTRUCTION_STATE_DELETED: Deleted cde=1.\n - SETTLEMENT_INSTRUCTION_STATE_UNAPPROVED: Unapproved cde=3.\n - SETTLEMENT_INSTRUCTION_STATE_REJECTED: Rejected cde=4.",
+            "type": "string",
+            "default": "SETTLEMENT_INSTRUCTION_STATE_UNSPECIFIED",
+            "enum": [
+                "SETTLEMENT_INSTRUCTION_STATE_UNSPECIFIED",
+                "SETTLEMENT_INSTRUCTION_STATE_APPROVED",
+                "SETTLEMENT_INSTRUCTION_STATE_DELETED",
+                "SETTLEMENT_INSTRUCTION_STATE_UNAPPROVED",
+                "SETTLEMENT_INSTRUCTION_STATE_REJECTED"
+            ]
+        },
+        "v1UndeleteCounterPartySettlementInstructionRequest": {
+            "description": "The request message for\nCounterPartySettlementInstructionAPI.UndeleteCounterPartySettlementInstruction.",
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "brokerId": {
+                    "description": "Aladdin Broker Identifier (Numeric) (Not supported currently).",
+                    "type": "string"
+                },
+                "brokerTicker": {
+                    "description": "Broker ticker.",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "Id of the counter party settlement instruction to be un deleted.",
+                    "type": "string",
+                    "required": [
+                        "id"
+                    ]
+                }
+            }
+        },
+        "v1UpdateCounterPartySettlementInstructionRequest": {
+            "type": "object",
+            "title": "The request message for\nCounterPartySettlementInstructionAPI.UpdateCounterPartySettlementInstruction.\n(-- api-linter: core::0134::request-mask-required=disabled\naip.dev/not-precedent: Update masks are not being used --)",
+            "properties": {
+                "counterPartySettlementInstruction": {
+                    "description": "Counter party settlement instruction to update.",
+                    "title": "Counterparty settlement instructions",
+                    "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                }
+            }
+        },
+        "v1UpdateCounterPartySettlementInstructionsStatusRequest": {
+            "type": "object",
+            "title": "The request message for CounterPartySettlementInstructionAPI.UpdateCounterPartySettlementInstructionsStatus.\n(-- api-linter: core::0134::request-resource-required=disabled\n aip.dev/not-precedent: We need to do this because we are passing a list of id's as a parameter instead of the whole resource object --)",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Id of the Counterparty Settlement instruction.\n(-- api-linter: core::0134::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because we are passing a list of id's as a parameter instead of the whole resource object --)"
+                }
+            }
+        },
+        "v1ValidateCounterPartySettlementInstructionRequest": {
+            "description": "The request message for CounterPartySettlementInstructionAPI.ValidateCounterPartySettlementInstruction.",
+            "type": "object",
+            "properties": {
+                "counterPartySettlementInstruction": {
+                    "description": "Counter party settlement instruction to update.",
+                    "title": "Counterparty settlement instructions",
+                    "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction": "This grants access to all endpoints in the investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction": "This grants access to all endpoints in the investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "investment_operations.reference_data.broker.v1.CounterPartySettlementInstruction",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

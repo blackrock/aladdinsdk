@@ -1,0 +1,1418 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Upload or Retreive Custom Evaluation Metric to be used for Rule evaluation in Risk Radar.",
+        "title": "Risk Governance - Custom Evaluation Metric",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.analytics.oversight.governance.RiskCustomEvaluationMetricAPI",
+        "x-aladdin-api-stability": "beta",
+        "x-aladdin-spec-id": "agraph.analytics.oversight.governance.v1.RiskCustomEvaluationMetricAPI"
+    },
+    "basePath": "/api/analytics/oversight/governance/v1/",
+    "paths": {
+        "/customEvaluationMetric": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieve custom evaluation metric matching the parameters provided.",
+                "summary": "List custom evaluation metrics",
+                "operationId": "RiskCustomEvaluationMetricAPI_ListRiskCustomEvaluationMetric",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "When provided, retrieves custom evaluation metric as they appeared at the specified point in time, expressed in UTC.  \nIf absent, the current UTC server time will be used instead and custom evaluation metric will be returned on an as-is rather than as-was basis.",
+                        "name": "reportTime",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "When provided, retrieves historical custom evaluation metric records with business validity after the specified date (exclusive). \nThis parameter is used in conjunction with the endRangeDate parameter, typically to retrieve a time series of custom evaluation metric records.  \nThis time series is uses as-is Metric - combining date range parameters with the reportTime parameter is not supported.",
+                        "name": "beginRangeDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "When provided, retrieves historical custom evaluation metric records with business validity up to and including the specified date (inclusive).\nThis parameter is used in conjunction with the beginRangeDate parameter, typically to retrieve a time series of custom evaluation metric records.\nThis time series is uses as-is Metric - combining date range parameters with the reportTime parameter is not supported.",
+                        "name": "endRangeDate",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "A field mask to restrict which fields on the custom evaluation metric are returned. \nBy default, all fields of the custom evaluation metric are returned. \nField names should be specified in camelCase. \nIn addition to the fields specified, the response will contain scopeId, scopeType, entityId, entityType.",
+                        "name": "readMask",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "The offset value used to set the starting point into the result set found at the repository.",
+                        "name": "pageToken",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "The number of entries to be returned as a response\nThe maximum value is 1000. If unspecified, the default value is 5.",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Used to provide with https://google.aip.dev/160 filtering capabilities.",
+                        "name": "filter",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Used to provide with ordering to the returned entries. The supported syntax (for now):\n[target field]:asc or [target field]:desc.",
+                        "name": "orderBy",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1ListRiskCustomEvaluationMetricResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 300
+            }
+        },
+        "/customEvaluationMetric/longrunningoperations/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Get the latest state of a long-running operation for custom evaluation metrics bulk request",
+                "summary": "Get latest state of a long-running operation",
+                "operationId": "RiskCustomEvaluationMetricAPI_GetLongrunningOperation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the LongrunningOperation",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {
+                            "meta-data-type": {
+                                "$ref": "#/definitions/v1UploadRiskCustomEvaluationMetricsMetaData"
+                            },
+                            "response-type": {
+                                "$ref": "#/definitions/v1UploadRiskCustomEvaluationMetricsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 300
+            }
+        },
+        "/customEvaluationMetric:batchQuery": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Bulk retrieve custom evaluation metric matching the query parameters provided.",
+                "summary": "Bulk query custom evaluation metrics",
+                "operationId": "RiskCustomEvaluationMetricAPI_BatchQueryRiskCustomEvaluationMetrics",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchQueryRiskCustomEvaluationMetricsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {
+                            "meta-data-type": {
+                                "$ref": "#/definitions/v1BatchQueryRiskCustomEvaluationMetricsMetaData"
+                            },
+                            "response-type": {
+                                "$ref": "#/definitions/v1BatchQueryRiskCustomEvaluationMetricsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 300
+            }
+        },
+        "/customEvaluationMetric:uploadCustomEvaluationMetrics": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Upload new or update existing custom evaluation metrics required for Rule evaluation.",
+                "summary": "Bulk upload custom evaluation metrics",
+                "operationId": "RiskCustomEvaluationMetricAPI_UploadCustomEvaluationMetrics",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1UploadRiskCustomEvaluationMetricsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {
+                            "meta-data-type": {
+                                "$ref": "#/definitions/v1UploadRiskCustomEvaluationMetricsMetaData"
+                            },
+                            "response-type": {
+                                "$ref": "#/definitions/v1UploadRiskCustomEvaluationMetricsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 300
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1BatchQueryRiskCustomEvaluationMetricsMetaData": {
+            "type": "object",
+            "title": "Metadata for latest custom evaluation metric request"
+        },
+        "v1BatchQueryRiskCustomEvaluationMetricsRequest": {
+            "type": "object",
+            "title": "Request for the latest custom evaluation metric",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "requests": {
+                    "type": "array",
+                    "title": "Bulk query requests",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1QueryRiskCustomEvaluationMetricRequest"
+                    }
+                }
+            }
+        },
+        "v1BatchQueryRiskCustomEvaluationMetricsResponse": {
+            "type": "object",
+            "title": "Response for the latest custom evaluation metric request",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "title": "Custom metric query result for requested search query",
+                    "items": {
+                        "$ref": "#/definitions/v1QueryRiskCustomEvaluationMetricResult"
+                    }
+                }
+            }
+        },
+        "v1CreateRiskCustomEvaluationMetricRequest": {
+            "type": "object",
+            "title": "Submit custom evaluation metric API payload",
+            "required": [
+                "asOfDate"
+            ],
+            "properties": {
+                "asOfDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "The effective date for the custom evaluation metric record being submitted. The expected format is yyyy-MM-dd\n(-- api-linter: core::0133::request-unknown-fields=disabled aip.dev/not-precedent: We need to do this because this information defines the point in time where the risk was identified --)",
+                    "required": [
+                        "as_of_date"
+                    ]
+                },
+                "riskCustomEvaluationMetric": {
+                    "description": "The custom evaluation metric record being submitted to create or update an existing custom evaluation metric.",
+                    "$ref": "#/definitions/v1RiskCustomEvaluationMetric"
+                }
+            }
+        },
+        "v1CreateRiskCustomEvaluationMetricResult": {
+            "type": "object",
+            "title": "Risk custom evaluation metric create result",
+            "properties": {
+                "error": {
+                    "description": "The error result of the operation in case of failure or cancellation.",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "output": {
+                    "description": "The normal response of the operation in case of success.",
+                    "$ref": "#/definitions/v1RiskCustomEvaluationMetric"
+                }
+            }
+        },
+        "v1ListRiskCustomEvaluationMetricResponse": {
+            "type": "object",
+            "title": "Response for the List custom evaluation metric requests",
+            "properties": {
+                "riskCustomEvaluationMetrics": {
+                    "type": "array",
+                    "title": "Custom metric search result for requested search criteria",
+                    "items": {
+                        "$ref": "#/definitions/v1RiskCustomEvaluationMetric"
+                    }
+                },
+                "total": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "The total number of metric records matching the requested criteria"
+                },
+                "nextPageToken": {
+                    "description": "A token that can be sent as `page_token` to retrieve the next page.\nIf this field is omitted, there are no subsequent pages.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1LongrunningOperation": {
+            "description": "LongrunningOperation represents a long-running operation that is the result\nof a network API call.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The server-assigned id, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`id` should have the format of `operations/some/unique/id`.",
+                    "type": "string"
+                },
+                "meta": {
+                    "description": "Service-specific metadata associated with the operation.  It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata.  Any method that returns a\nlong-running operation should document the metadata type, if any.",
+                    "$ref": "#/definitions/Any"
+                },
+                "done": {
+                    "description": "If the value is `false`, it means the operation is still in progress.\nIf true, the operation is completed, and either `error` or `response` is\navailable.",
+                    "type": "boolean"
+                },
+                "error": {
+                    "description": "The error result of the operation in case of failure or cancellation.",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "response": {
+                    "description": "The normal response of the operation in case of success.  If the original\nmethod returns no data on success, such as `Delete`, the response is\n`google.protobuf.Empty`.  If the original method is standard\n`Get`/`Create`/`Update`, the response should be the resource.  For other\nmethods, the response should have the type `XxxResponse`, where `Xxx`\nis the original method name.  For example, if the original method name\nis `TakeSnapshot()`, the inferred response type is\n`TakeSnapshotResponse`.",
+                    "$ref": "#/definitions/Any"
+                }
+            }
+        },
+        "v1MetricValue": {
+            "type": "object",
+            "title": "Metric value is one of Integer or Double value",
+            "properties": {
+                "metricValueInteger": {
+                    "type": "string",
+                    "format": "int64",
+                    "title": "Integer value of the metric"
+                },
+                "metricValueDouble": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Double value of metric"
+                }
+            }
+        },
+        "v1QueryRiskCustomEvaluationMetricRequest": {
+            "type": "object",
+            "title": "Message for querying latest custom evaluation metric",
+            "required": [
+                "scopeId",
+                "scopeType",
+                "entityId",
+                "entityType",
+                "metric",
+                "asOfDate"
+            ],
+            "properties": {
+                "scopeId": {
+                    "type": "string",
+                    "title": "(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because this is inline with risk exception api --)\nThe unique identifier of the scope of the custom evaluation metric. E.g. for a portfolio, this should be the portoflio code",
+                    "required": [
+                        "scope_id"
+                    ]
+                },
+                "scopeType": {
+                    "type": "string",
+                    "title": "(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n    aip.dev/not-precedent: We need to do this because this is inline with risk exception api within same domain. --)\nThe scope of the custom evaluation metric e.g. one of 'GLOBAL', 'PORTFOLIO_GROUP', 'PORTFOLIO', 'OTHER'",
+                    "required": [
+                        "scope_type"
+                    ]
+                },
+                "entityId": {
+                    "type": "string",
+                    "title": "(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because this is inline with risk exception api --)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n    aip.dev/not-precedent: We need to do this because this is inline with risk exception api within same domain. --)\nThe unique identifier of the entity the custom evaluation metric refers to. E.g. for an issuer, this should be the issuer code",
+                    "required": [
+                        "entity_id"
+                    ]
+                },
+                "entityType": {
+                    "type": "string",
+                    "title": "(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n    aip.dev/not-precedent: We need to do this because this is inline with risk exception api within same domain. --)\nUsed to determine the type of entity the custom evaluation metric refers to, e.g. one of \n'PORTFOLIO_GROUP', 'PORTFOLIO', 'SECTOR', 'FACTOR', 'ISSUER', 'SECURITY', 'OTHER'",
+                    "required": [
+                        "entity_type"
+                    ]
+                },
+                "metric": {
+                    "type": "string",
+                    "title": "name for the custom evaluation metric, metric referencing to onboarded custom metric config",
+                    "required": [
+                        "metric"
+                    ]
+                },
+                "asOfDate": {
+                    "description": "The effective date for the custom evaluation metric record being pulled.",
+                    "type": "string",
+                    "format": "date",
+                    "required": [
+                        "as_of_date"
+                    ]
+                }
+            }
+        },
+        "v1QueryRiskCustomEvaluationMetricResult": {
+            "type": "object",
+            "title": "Risk custom evaluation metric result",
+            "properties": {
+                "error": {
+                    "description": "The error result of the operation in case of failure or cancellation.",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "output": {
+                    "description": "The normal response of the operation in case of success.",
+                    "$ref": "#/definitions/v1RiskCustomEvaluationMetric"
+                }
+            }
+        },
+        "v1RiskCustomEvaluationMetric": {
+            "description": "(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because all analytics oversight gevernance apis are following this standard only --)\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because this is inline with risk exception api --)\nRepresentation of Risk custom evaluation metric, its available fields  to store more specific details.",
+            "type": "object",
+            "required": [
+                "scopeId",
+                "scopeType",
+                "entityId",
+                "entityType",
+                "metric"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Unique identifier for the data record",
+                    "readOnly": true
+                },
+                "validBeginDate": {
+                    "description": "The date on which the custom evaluation metric record is valid.",
+                    "type": "string",
+                    "format": "date",
+                    "readOnly": true
+                },
+                "validEndDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "The date at which the custom evaluation metric record stops being valid, e.g. it is superseded by a new record on the following day",
+                    "readOnly": true
+                },
+                "entryTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The timestamp when the record entered the system",
+                    "readOnly": true
+                },
+                "expiryTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The INTERNAL timestamp when the record expires",
+                    "readOnly": true
+                },
+                "modifier": {
+                    "type": "string",
+                    "title": "Identifies the modifier of the custom evaluation metric"
+                },
+                "scopeId": {
+                    "type": "string",
+                    "title": "The unique identifier of the scope of the custom evaluation metric. E.g. for a portfolio, this should be the portoflio code\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because this is inline with risk exception api --)",
+                    "required": [
+                        "scope_id"
+                    ]
+                },
+                "scopeType": {
+                    "type": "string",
+                    "title": "The scope of the custom evaluation metric e.g. one of 'GLOBAL', 'PORTFOLIO_GROUP', 'PORTFOLIO', 'OTHER'",
+                    "required": [
+                        "scope_type"
+                    ]
+                },
+                "scope": {
+                    "type": "string",
+                    "title": "The name of the scope, e.g. the porfolio name"
+                },
+                "entityId": {
+                    "type": "string",
+                    "title": "The unique identifier of the entity the custom evaluation metric refers to. E.g. for an issuer, this should be the issuer code",
+                    "required": [
+                        "entity_id"
+                    ]
+                },
+                "entityType": {
+                    "type": "string",
+                    "title": "Used to determine the type of entity the custom evaluation metric refers to, e.g. one of \n'PORTFOLIO_GROUP', 'PORTFOLIO', 'SECTOR', 'FACTOR', 'ISSUER', 'SECURITY', 'OTHER'",
+                    "required": [
+                        "entity_type"
+                    ]
+                },
+                "entity": {
+                    "type": "string",
+                    "title": "The name of the entity that the custom evaluation metric is concerned with"
+                },
+                "metricCategory": {
+                    "type": "string",
+                    "title": "category for the custom evaluation metric",
+                    "readOnly": true
+                },
+                "metric": {
+                    "type": "string",
+                    "title": "name for the custom evaluation metric, metric referencing to onboarded custom metric config",
+                    "required": [
+                        "metric"
+                    ]
+                },
+                "riskMetricValue": {
+                    "title": "value for the custom evaluation metric",
+                    "$ref": "#/definitions/v1MetricValue"
+                }
+            }
+        },
+        "v1UploadRiskCustomEvaluationMetricsMetaData": {
+            "type": "object",
+            "title": "MetaMetric for longrunning operation on create risk custom evaluation metric\nCurrently it is not possible to determine progress, but it may be possible in the future"
+        },
+        "v1UploadRiskCustomEvaluationMetricsRequest": {
+            "type": "object",
+            "title": "Bulk Create custom evaluation metric API payload",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "requests": {
+                    "description": "Risk custom evaluation metric record being submitted to create or update an existing custom evaluation metric.",
+                    "type": "array",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1CreateRiskCustomEvaluationMetricRequest"
+                    }
+                }
+            }
+        },
+        "v1UploadRiskCustomEvaluationMetricsResponse": {
+            "type": "object",
+            "title": "Bulk Create custom evaluation metric results",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "title": "Bulk Create custom evaluation metric results",
+                    "items": {
+                        "$ref": "#/definitions/v1CreateRiskCustomEvaluationMetricResult"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read": "non-sensitive read",
+                "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read": "non-sensitive read",
+                "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read",
+                "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:read",
+                "analytics.oversight.governance.v1.RiskCustomEvaluationMetric:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

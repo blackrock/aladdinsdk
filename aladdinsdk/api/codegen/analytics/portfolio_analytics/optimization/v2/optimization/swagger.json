@@ -1,0 +1,2873 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Optimize portfolio positions to maximize expected returns and minimize risk and transaction costs.",
+        "title": "Portfolio Optimization 2.0",
+        "version": "2.0.0",
+        "x-aladdin-api-id": "agraph.analytics.portfolio_analytics.optimization.OptimizationAPI",
+        "x-aladdin-api-stability": "alpha",
+        "x-aladdin-spec-id": "agraph.analytics.portfolio_analytics.optimization.v2.OptimizationAPI"
+    },
+    "basePath": "/api/analytics/portfolio-analytics/optimization/v2/",
+    "paths": {
+        "/longRunningOptimizationCases": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.portfolio_analytics.optimization.v2.Optimization"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.portfolio_analytics.optimization.v2.Optimization"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "(-- api-linter: core::0133::response-message-name=disabled aip.dev/not-precedent: We are using commonly defined long running operation resource --)\n(-- api-linter: core::0133::http-body=disabled aip.dev/not-precedent: We need custom component in create request--)",
+                "summary": "Post a long-running operation optimization request",
+                "operationId": "OptimizationAPI_CreateLongRunningOptimizationCaseGroup",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v2CreateLongRunningOptimizationCaseGroupRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {
+                            "response-type": {
+                                "$ref": "#/definitions/v2OptimizationSolutions"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 600
+            }
+        },
+        "/longRunningOptimizationCases/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.portfolio_analytics.optimization.v2.Optimization"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.portfolio_analytics.optimization.v2.Optimization"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "(-- api-linter: core::0131::response-message-name=disabled aip.dev/not-precedent: Make sense to reuse. --)",
+                "summary": "Retrieves long running request",
+                "operationId": "OptimizationAPI_GetLongrunningOperationOptimizationCaseGroup",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the longrunning optimization case to be fetched",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {}
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 600
+            }
+        },
+        "/longRunningOptimizationCases/{id}:cancel": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.portfolio_analytics.optimization.v2.Optimization"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.portfolio_analytics.optimization.v2.Optimization"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "summary": "Starts optimization cancellation",
+                "operationId": "OptimizationAPI_CancelLongrunningOperationOptimizationCaseGroup",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the longrunning optimization case to be fetched",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "title": "CancelLongrunningOperationOptimizationCaseGroupRequest is the request to cancel an optimization in progress"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 600
+            }
+        }
+    },
+    "definitions": {
+        "AdditionalFactorSourceAttributeFactorSource": {
+            "description": "An attribute factor can be deducted from known asset sttributes in Aladdin.\nFor example, With source_attribute_name=\"COUNTRY\" and filter_attribute_values=[\"United States\", \"Mexico\"]\nwe create a new factor which U.S. and Mexican assets will have exposure of 1 and others will have exposure of 0.",
+            "type": "object",
+            "properties": {
+                "attributeName": {
+                    "type": "string",
+                    "title": "attribute name"
+                },
+                "filterAttributeValues": {
+                    "type": "array",
+                    "title": "values to filter out",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "factorType": {
+                    "type": "string",
+                    "title": "type of the factor"
+                }
+            }
+        },
+        "AdditionalFactorSourceBreakdownFactorSource": {
+            "type": "object",
+            "title": "Breakdown factors can be deducted from defined breakdowns in Aladdin.\nThis object specifies how to expand a breakdown into multiple binary factors\nSuppose we are creating factors out of breakdown \"GICS_ALL\"\nExample 1: with sector_path_regex = \"*\" and expand_level = -1,\nWe create one binary factor for every leaf node sector in the breakdown tree\nExample 2: with sector_path_regex = \"*\" and expand_level = 2,\nwe create one binary factor for every 2nd level sector in the breakdown tree\nExample 3: with sector_path_regex = \"GICS_S_CDC\" and expand_level = -1,\nwe create one binary foactor for every leaf node sector that has \"GICS_S_CDC\" in its sector path",
+            "properties": {
+                "breakdownName": {
+                    "type": "string",
+                    "title": "breakdown name"
+                },
+                "sectorPathRegex": {
+                    "description": "only create factors out of sector paths that match certain pattern. \nIf empty, match everything.",
+                    "type": "string"
+                },
+                "expandLevel": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "the level of expansion. 0 or -1 means expand all the way to leaf node"
+                },
+                "factorType": {
+                    "type": "string",
+                    "title": "factor type"
+                }
+            }
+        },
+        "AdditionalFactorSourceStressScenarioSource": {
+            "type": "object",
+            "title": "Sources a stress scenario using a name and purpose",
+            "properties": {
+                "stressScenarioName": {
+                    "type": "string",
+                    "title": "stress scenario name"
+                },
+                "stressScenarioPurpose": {
+                    "type": "string",
+                    "title": "stress scenario purpose"
+                }
+            }
+        },
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "AssetUniverseHoldingsUnit": {
+            "description": "- HOLDINGS_UNIT_UNSPECIFIED: value when holdings_unit is not specified. Will default to shares and dollars\n - HOLDINGS_UNIT_SHARES_AND_PRICES: in shares and prices\n - HOLDINGS_UNIT_WEIGHT_IN_PERCENTAGE: in weights",
+            "type": "string",
+            "title": "unit to specify portfolio holdings in optmizer",
+            "default": "HOLDINGS_UNIT_UNSPECIFIED",
+            "enum": [
+                "HOLDINGS_UNIT_UNSPECIFIED",
+                "HOLDINGS_UNIT_SHARES_AND_PRICES",
+                "HOLDINGS_UNIT_WEIGHT_IN_PERCENTAGE"
+            ]
+        },
+        "BoundBoundStyle": {
+            "description": "- BOUND_STYLE_UNSPECIFIED: value if bound_style is not specified. Will default to hard bound\n - BOUND_STYLE_HARD: hard bound\n - BOUND_STYLE_SOFT: soft bounds\n - BOUND_STYLE_RELAXABLE: relaxable bounds",
+            "type": "string",
+            "title": "Bound style",
+            "default": "BOUND_STYLE_UNSPECIFIED",
+            "enum": [
+                "BOUND_STYLE_UNSPECIFIED",
+                "BOUND_STYLE_HARD",
+                "BOUND_STYLE_SOFT",
+                "BOUND_STYLE_RELAXABLE"
+            ]
+        },
+        "BoundBoundType": {
+            "description": "- BOUND_TYPE_UNSPECIFIED: value if bound_type is not specified. Will default to absolute bound\n - BOUND_TYPE_ABSOLUTE: absolute bound\n - BOUND_TYPE_ACTIVE: active bound\n - BOUND_TYPE_RELATIVE: relative bound",
+            "type": "string",
+            "title": "Bound types",
+            "default": "BOUND_TYPE_UNSPECIFIED",
+            "enum": [
+                "BOUND_TYPE_UNSPECIFIED",
+                "BOUND_TYPE_ABSOLUTE",
+                "BOUND_TYPE_ACTIVE",
+                "BOUND_TYPE_RELATIVE"
+            ]
+        },
+        "GroupBoundBound": {
+            "type": "object",
+            "title": "a bound on an entity (factor or asset)",
+            "properties": {
+                "boundType": {
+                    "title": "type of the bound",
+                    "$ref": "#/definitions/BoundBoundType"
+                },
+                "assetIds": {
+                    "type": "array",
+                    "title": "ids of assets to which the bound applies (only applicable for asset_constraint, asset_buy_constraint, and asset_sell_constraint)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "factorId": {
+                    "type": "string",
+                    "title": "id of the factor to which the bound applies (only applicable for factor_exposure_constraint and additional_factor_exposure_constraint)"
+                },
+                "lowerBound": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "value of the lower bound. If omitted, no lower bound will be set"
+                },
+                "upperBound": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "value of the upper bound. If omitted, no upper bound will be set"
+                },
+                "boundStyle": {
+                    "title": "style of the bound",
+                    "$ref": "#/definitions/BoundBoundStyle"
+                }
+            }
+        },
+        "RiskModelAdditionalFactorSource": {
+            "type": "object",
+            "title": "risk or additional factor configuration",
+            "properties": {
+                "attributeFactorSources": {
+                    "type": "array",
+                    "title": "attribute factors",
+                    "items": {
+                        "$ref": "#/definitions/AdditionalFactorSourceAttributeFactorSource"
+                    }
+                },
+                "breakdownFactorSources": {
+                    "type": "array",
+                    "title": "breakdown factors",
+                    "items": {
+                        "$ref": "#/definitions/AdditionalFactorSourceBreakdownFactorSource"
+                    }
+                },
+                "stressScenarioSources": {
+                    "type": "array",
+                    "title": "stress scenario factors",
+                    "items": {
+                        "$ref": "#/definitions/AdditionalFactorSourceStressScenarioSource"
+                    }
+                }
+            }
+        },
+        "SoftBoundObjectiveSoftBoundType": {
+            "description": "- SOFT_BOUND_TYPE_UNSPECIFIED: value if soft_bound_type is not specified. Will default to linear\n - SOFT_BOUND_TYPE_LINEAR: linear\n - SOFT_BOUND_TYPE_QUADRATIC: quandratic\n - SOFT_BOUND_TYPE_RISK: risk",
+            "type": "string",
+            "title": "soft bound types",
+            "default": "SOFT_BOUND_TYPE_UNSPECIFIED",
+            "enum": [
+                "SOFT_BOUND_TYPE_UNSPECIFIED",
+                "SOFT_BOUND_TYPE_LINEAR",
+                "SOFT_BOUND_TYPE_QUADRATIC",
+                "SOFT_BOUND_TYPE_RISK"
+            ]
+        },
+        "TaxModelAssetWashSale": {
+            "type": "object",
+            "title": "Wash Sale record for one asset",
+            "required": [
+                "soldDate"
+            ],
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "id of the asset"
+                },
+                "soldDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "date of transaction",
+                    "required": [
+                        "sold_date"
+                    ]
+                },
+                "lossPerShare": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "loss per share"
+                },
+                "transactionQuantity": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "number of shares sold"
+                }
+            }
+        },
+        "TaxModelTaxLot": {
+            "type": "object",
+            "title": "Tax Lot record for one asset",
+            "required": [
+                "bookDate"
+            ],
+            "properties": {
+                "taxLotId": {
+                    "type": "string",
+                    "title": "(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We do this for consistency with the blkops optimizer fields --)\nunique identifier of this tax lot"
+                },
+                "assetId": {
+                    "type": "string",
+                    "title": "asset name associated with this tax lot"
+                },
+                "bookDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "date when this tax lot is created",
+                    "required": [
+                        "book_date"
+                    ]
+                },
+                "shareQuantity": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "number of shares in this tax lot"
+                },
+                "bookPrice": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "number of shares sold"
+                }
+            }
+        },
+        "TaxModelTaxRate": {
+            "type": "object",
+            "title": "Tax Rate for a period",
+            "properties": {
+                "taxRateValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "the value or tax rate"
+                },
+                "taxRateLag": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "lag of the tax rate in years"
+                },
+                "taxRateType": {
+                    "title": "type",
+                    "$ref": "#/definitions/TaxRateTaxRateType"
+                }
+            }
+        },
+        "TaxModelTaxableOptimizationType": {
+            "description": "- TAXABLE_OPTIMIZATION_TYPE_UNSPECIFIED: value if taxable_optimization_type is not specified. Will default to HCFO\n - TAXABLE_OPTIMIZATION_TYPE_HCFO: HCFO\n - TAXABLE_OPTIMIZATION_TYPE_LCFO: LCFO\n - TAXABLE_OPTIMIZATION_TYPE_FIFO: First in first out\n - TAXABLE_OPTIMIZATION_TYPE_LIFO: Last in first out",
+            "type": "string",
+            "title": "type of tax optimization",
+            "default": "TAXABLE_OPTIMIZATION_TYPE_UNSPECIFIED",
+            "enum": [
+                "TAXABLE_OPTIMIZATION_TYPE_UNSPECIFIED",
+                "TAXABLE_OPTIMIZATION_TYPE_HCFO",
+                "TAXABLE_OPTIMIZATION_TYPE_LCFO",
+                "TAXABLE_OPTIMIZATION_TYPE_FIFO",
+                "TAXABLE_OPTIMIZATION_TYPE_LIFO"
+            ]
+        },
+        "TaxRateTaxRateType": {
+            "description": "- TAX_RATE_TYPE_UNSPECIFIED: value if tax_rate_type is not specified. Will default to flat\n - TAX_RATE_TYPE_LONGTERM: unspecified type\n - TAX_RATE_TYPE_SHORTTERM: unspecified type\n - TAX_RATE_TYPE_FLAT: unspecified type",
+            "type": "string",
+            "title": "type of tax rate",
+            "default": "TAX_RATE_TYPE_UNSPECIFIED",
+            "enum": [
+                "TAX_RATE_TYPE_UNSPECIFIED",
+                "TAX_RATE_TYPE_LONGTERM",
+                "TAX_RATE_TYPE_SHORTTERM",
+                "TAX_RATE_TYPE_FLAT"
+            ]
+        },
+        "TransactionCostModelAssetTransactionCostParameter": {
+            "type": "object",
+            "title": "transaction cost parameters for one asset",
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "id of the asset"
+                },
+                "fixedCost": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "fixed cost"
+                },
+                "marketImpactCoeff": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "market impact coefficient"
+                },
+                "averageDailyVolumn": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "daily average volumn"
+                },
+                "fixedCostSell": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "sell fixed cost"
+                },
+                "marketImpactCoeffSell": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "sell market impact coefficient"
+                },
+                "marketImpactExponent": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "market impact exponent - Note: feature in testing, not yet available for general use"
+                }
+            }
+        },
+        "TreeTableDataTreeTableColumn": {
+            "type": "object",
+            "title": "column in tree table data",
+            "properties": {
+                "tag": {
+                    "type": "string",
+                    "title": "tag of column"
+                },
+                "displayName": {
+                    "type": "string",
+                    "title": "display name of column"
+                },
+                "extensionDataObject": {
+                    "title": "additional data for this column",
+                    "$ref": "#/definitions/TreeTableDataTreeTableGenericData"
+                }
+            }
+        },
+        "TreeTableDataTreeTableDataNode": {
+            "type": "object",
+            "title": "row in tree table data",
+            "properties": {
+                "cellValues": {
+                    "type": "array",
+                    "title": "data in row",
+                    "items": {
+                        "type": "object"
+                    }
+                },
+                "childNodes": {
+                    "type": "array",
+                    "title": "child rows",
+                    "items": {
+                        "$ref": "#/definitions/TreeTableDataTreeTableDataNode"
+                    }
+                },
+                "extensionDataObject": {
+                    "title": "additional data for this row",
+                    "$ref": "#/definitions/TreeTableDataTreeTableGenericData"
+                }
+            }
+        },
+        "TreeTableDataTreeTableGenericData": {
+            "type": "object",
+            "title": "generic serialized data",
+            "properties": {
+                "genericDataValue": {
+                    "title": "generic data value",
+                    "$ref": "#/definitions/Any"
+                }
+            }
+        },
+        "protobufNullValue": {
+            "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value.",
+            "type": "string",
+            "default": "NULL_VALUE",
+            "enum": [
+                "NULL_VALUE"
+            ]
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "tablev1SparseDataTable": {
+            "type": "object",
+            "title": "general data structure for a sparse table",
+            "properties": {
+                "rowIds": {
+                    "type": "array",
+                    "title": "row identifiers",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "columnIds": {
+                    "type": "array",
+                    "title": "column identifiers",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sparseDataTableContents": {
+                    "type": "array",
+                    "title": "data contents",
+                    "items": {
+                        "$ref": "#/definitions/tablev1SparseDataTableSparseTableNumberElement"
+                    }
+                }
+            }
+        },
+        "tablev1SparseDataTableSparseTableNumberElement": {
+            "type": "object",
+            "title": "each data point is represented by a sparse element",
+            "required": [
+                "rowIndex",
+                "columnIndex",
+                "elementValue"
+            ],
+            "properties": {
+                "rowIndex": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "row index",
+                    "required": [
+                        "row_index"
+                    ]
+                },
+                "columnIndex": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "column index",
+                    "required": [
+                        "column_index"
+                    ]
+                },
+                "elementValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "value",
+                    "required": [
+                        "element_value"
+                    ]
+                }
+            }
+        },
+        "tablev2SparseDataTable": {
+            "type": "object",
+            "title": "general data structure for a sparse table",
+            "properties": {
+                "sparseTableContents": {
+                    "type": "array",
+                    "title": "data contents",
+                    "items": {
+                        "$ref": "#/definitions/tablev2SparseDataTableSparseTableNumberElement"
+                    }
+                }
+            }
+        },
+        "tablev2SparseDataTableSparseTableNumberElement": {
+            "type": "object",
+            "title": "each data point is represented by a sparse element",
+            "required": [
+                "rowId",
+                "columnId"
+            ],
+            "properties": {
+                "rowId": {
+                    "type": "string",
+                    "title": "For all optimization use cases this is asset id\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because this field is not related to the cross-domain description field --)",
+                    "required": [
+                        "row_id"
+                    ]
+                },
+                "columnId": {
+                    "type": "string",
+                    "title": "For exposure elements these are factor ids, for specific covariance these are asset ids\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because this field is not related to the cross-domain description field --)",
+                    "required": [
+                        "column_id"
+                    ]
+                },
+                "elementValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "For exposure elements these are exposure values, for specific covariance these are risk values"
+                }
+            }
+        },
+        "typesAnalyticsPortfolioHolding": {
+            "type": "object",
+            "title": "Input holding - a position in a portfolio\nNote: Either 'position_market_value' and 'position_notional_value'\nor 'notional_weight' should be provided.\n(-- aip.dev/beta-blocker: Check with Domain architects that this implementation is temporary.\n    Will move to BLK standard definition of positions once available. --)",
+            "required": [
+                "assetId"
+            ],
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "Mandatory id of the asset - security CUSIP",
+                    "required": [
+                        "asset_id"
+                    ]
+                },
+                "positionMarketValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Market value of the position"
+                },
+                "positionNotionalValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Notional market value of the position"
+                },
+                "positionQuantity": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Number of shares - trading units - quantity"
+                },
+                "portfolioTicker": {
+                    "type": "string",
+                    "title": "Portfolio ticker"
+                },
+                "strategyId": {
+                    "description": "Strategy ID\nNote: In case of what-if, the strategy id represents the order.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "notionalWeight": {
+                    "description": "Notional value in percentage.",
+                    "type": "number",
+                    "format": "double"
+                },
+                "sectorPaths": {
+                    "description": "Sector path which shows where the actual security belongs in the tree (e.g. under which sector).\nCan be empty list.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "uniqueIdReference": {
+                    "description": "Optional unique identifier. If not provider, then the asset_id will be used.",
+                    "type": "string"
+                }
+            }
+        },
+        "typesAnalyticsPositionType": {
+            "description": "- ANALYTICS_POSITION_TYPE_UNSPECIFIED: unspecified\n - ANALYTICS_POSITION_TYPE_SOD: start of day\n - ANALYTICS_POSITION_TYPE_EOD: end of day\n - ANALYTICS_POSITION_TYPE_SOD_TRADES: start of day plus trades\n - ANALYTICS_POSITION_TYPE_SOD_TRADES_ORDERS: start of day plus trades and orders",
+            "type": "string",
+            "title": "(-- aip.dev/beta-blocker: Check with Domain architects that this implementation is temporary.\n    Will move to BLK standard definition of positions once avaliable. --) \nposition type",
+            "default": "ANALYTICS_POSITION_TYPE_UNSPECIFIED",
+            "enum": [
+                "ANALYTICS_POSITION_TYPE_UNSPECIFIED",
+                "ANALYTICS_POSITION_TYPE_SOD",
+                "ANALYTICS_POSITION_TYPE_EOD",
+                "ANALYTICS_POSITION_TYPE_SOD_TRADES",
+                "ANALYTICS_POSITION_TYPE_SOD_TRADES_ORDERS"
+            ]
+        },
+        "typesExposureParameter": {
+            "type": "object",
+            "title": "parameter used to retrieve exposures",
+            "properties": {
+                "exposureHierarchy": {
+                    "type": "string",
+                    "title": "exposure hierarchy when loading exposures"
+                },
+                "riskHierarchy": {
+                    "type": "string",
+                    "title": "risk hierarchy when loading exposures"
+                },
+                "priceHierarchy": {
+                    "type": "string",
+                    "title": "price hierarchy when loading exposures"
+                },
+                "exposureTolerance": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "model tolerance"
+                },
+                "exposurePurpose": {
+                    "type": "string",
+                    "title": "exposure purpose"
+                },
+                "exposureDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "exposure date"
+                }
+            }
+        },
+        "typesRiskModelParameter": {
+            "type": "object",
+            "title": "collection of risk model parameters",
+            "properties": {
+                "exposureParameter": {
+                    "title": "exposure specific settings",
+                    "$ref": "#/definitions/typesExposureParameter"
+                },
+                "varMatrixParameter": {
+                    "title": "var factor covariance matrix specific settings",
+                    "$ref": "#/definitions/typesVarMatrixParameter"
+                },
+                "parameterReference": {
+                    "title": "default settings",
+                    "$ref": "#/definitions/typesRiskModelParameterReference"
+                }
+            }
+        },
+        "typesRiskModelParameterReference": {
+            "type": "object",
+            "title": "parameters that can be used to retrieve pre-configured default exposure and matrix parameters",
+            "properties": {
+                "usePortDefault": {
+                    "type": "boolean",
+                    "title": "use default settings"
+                },
+                "defaultPortfolioTicker": {
+                    "type": "string",
+                    "title": "use default settings of a specific portfolio"
+                },
+                "varModelName": {
+                    "type": "string",
+                    "title": "var model names (i.e. \"BFRE_WRLD\") are mapped to pre-configured bfre risk model settings"
+                }
+            }
+        },
+        "typesTreeTableData": {
+            "type": "object",
+            "title": "TreeTableData holds rectangular dataset with hierarchical row structure",
+            "properties": {
+                "treeTableColumns": {
+                    "type": "array",
+                    "title": "list of columns in table",
+                    "items": {
+                        "$ref": "#/definitions/TreeTableDataTreeTableColumn"
+                    }
+                },
+                "rootNode": {
+                    "title": "root node of tree table data",
+                    "$ref": "#/definitions/TreeTableDataTreeTableDataNode"
+                }
+            }
+        },
+        "typesVarFiEq": {
+            "description": "- VAR_FI_EQ_UNSPECIFIED: unspecified\n - VAR_FI_EQ_NO: EQ and FI blocks will have zero covariance\n - VAR_FI_EQ_YES: Calculate covariance between EQ and FI blocks based on factor time series\n - VAR_FI_EQ_MIXED: directly mix EQ covaraince matrix from BFRE and FI covariance matrix.\nNot suitable for optimization",
+            "type": "string",
+            "title": "how to handle covariance between EQ and FI factors blocks",
+            "default": "VAR_FI_EQ_UNSPECIFIED",
+            "enum": [
+                "VAR_FI_EQ_UNSPECIFIED",
+                "VAR_FI_EQ_NO",
+                "VAR_FI_EQ_YES",
+                "VAR_FI_EQ_MIXED"
+            ]
+        },
+        "typesVarMatrixParameter": {
+            "type": "object",
+            "title": "parameter used to retrieve covariance matrices",
+            "properties": {
+                "varMatrixType": {
+                    "title": "var matrix type",
+                    "$ref": "#/definitions/typesVarMatrixType"
+                },
+                "varFiEq": {
+                    "title": "how to handle covariance between FI and EQ",
+                    "$ref": "#/definitions/typesVarFiEq"
+                },
+                "calendar": {
+                    "type": "string",
+                    "title": "calendar for risk model"
+                },
+                "varMatrixOverlap": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "var matrix overlap"
+                },
+                "varMatrixHistoryDaily": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "matrix time series length for daily type"
+                },
+                "varMatrixHistoryWeekly": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "matrix time series length for weekly type"
+                },
+                "varMatrixHistoryMonthly": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "matrix time series length for monthly type"
+                },
+                "varMatrixDecay": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "var matrix decay"
+                },
+                "excludeVarBlocks": {
+                    "type": "array",
+                    "title": "exclude factor exposures from var block",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "matrixDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "matrix date"
+                }
+            }
+        },
+        "typesVarMatrixType": {
+            "description": "- VAR_MATRIX_TYPE_UNSPECIFIED: unspecified\n - VAR_MATRIX_TYPE_MARKET: market matrix\n - VAR_MATRIX_TYPE_WEEKLY_SHORT: weekly matrix with short-term half-life\n - VAR_MATRIX_TYPE_WEEKLY_LONG: weekly matrix with long-term half-life\n - VAR_MATRIX_TYPE_WEEKLY_CONSTANT: weekly constant-weighted matrix\n - VAR_MATRIX_TYPE_WEEKLY_CUSTOM: weekly matrix with user defined half-life\n - VAR_MATRIX_TYPE_DAILY_CUSTOM: daily matrix with user defined half-life\n - VAR_MATRIX_TYPE_MONTHLY_CUSTOM: monthly matrix with user defined half-life\n - VAR_MATRIX_TYPE_MONTHLY_CONSTANT: monthly constant-weighted matrix\n - VAR_MATRIX_TYPE_BFRE_FMI: original bfre matrix\n - VAR_MATRIX_TYPE_NEWEY_WEST: newey west marix",
+            "type": "string",
+            "title": "var matrix type",
+            "default": "VAR_MATRIX_TYPE_UNSPECIFIED",
+            "enum": [
+                "VAR_MATRIX_TYPE_UNSPECIFIED",
+                "VAR_MATRIX_TYPE_MARKET",
+                "VAR_MATRIX_TYPE_WEEKLY_SHORT",
+                "VAR_MATRIX_TYPE_WEEKLY_LONG",
+                "VAR_MATRIX_TYPE_WEEKLY_CONSTANT",
+                "VAR_MATRIX_TYPE_WEEKLY_CUSTOM",
+                "VAR_MATRIX_TYPE_DAILY_CUSTOM",
+                "VAR_MATRIX_TYPE_MONTHLY_CUSTOM",
+                "VAR_MATRIX_TYPE_MONTHLY_CONSTANT",
+                "VAR_MATRIX_TYPE_BFRE_FMI",
+                "VAR_MATRIX_TYPE_NEWEY_WEST"
+            ]
+        },
+        "v1LongrunningOperation": {
+            "description": "LongrunningOperation represents a long-running operation that is the result\nof a network API call.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The server-assigned id, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`id` should have the format of `operations/some/unique/id`.",
+                    "type": "string"
+                },
+                "meta": {
+                    "description": "Service-specific metadata associated with the operation.  It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata.  Any method that returns a\nlong-running operation should document the metadata type, if any.",
+                    "$ref": "#/definitions/Any"
+                },
+                "done": {
+                    "description": "If the value is `false`, it means the operation is still in progress.\nIf true, the operation is completed, and either `error` or `response` is\navailable.",
+                    "type": "boolean"
+                },
+                "error": {
+                    "description": "The error result of the operation in case of failure or cancellation.",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "response": {
+                    "description": "The normal response of the operation in case of success.  If the original\nmethod returns no data on success, such as `Delete`, the response is\n`google.protobuf.Empty`.  If the original method is standard\n`Get`/`Create`/`Update`, the response should be the resource.  For other\nmethods, the response should have the type `XxxResponse`, where `Xxx`\nis the original method name.  For example, if the original method name\nis `TakeSnapshot()`, the inferred response type is\n`TakeSnapshotResponse`.",
+                    "$ref": "#/definitions/Any"
+                }
+            }
+        },
+        "v2AllowPurchaseOutsideUniverse": {
+            "description": "- ALLOW_PURCHASE_OUTSIDE_UNIVERSE_UNSPECIFIED: value if allow_purchase_outside_universe is not specified. Will default to force sell\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_ALLOW_PURCHASE: do nothing and allow purchase\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_MOVE_TO_BENCHMARK: try to match the benchmark weights for such assets.\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_NO_PURCHASE: can only sell such assets, but not buy. (For short positions, can only buy.)\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FORCE_SELL: force positions of such assets to zero\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_SOFT_SELL: clear positions such assets to zero if possible (no conflict with other constraint)\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FORCE_TO_BENCHMARK: force to match the benchmark weights for such assets.\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FREEZE_POSITION: do not change positions of such assets\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FREEZE_POSITION_HARD: do not change positions of such assets, and not relaxing this requirement.\n - ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FREEZE_POSITION_SOFT: do not change positions of such assets if possible (no conflict with other constraint)",
+            "type": "string",
+            "title": "possible treatment of assets not in trading universe",
+            "default": "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_UNSPECIFIED",
+            "enum": [
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_UNSPECIFIED",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_ALLOW_PURCHASE",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_MOVE_TO_BENCHMARK",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_NO_PURCHASE",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FORCE_SELL",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_SOFT_SELL",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FORCE_TO_BENCHMARK",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FREEZE_POSITION",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FREEZE_POSITION_HARD",
+                "ALLOW_PURCHASE_OUTSIDE_UNIVERSE_FREEZE_POSITION_SOFT"
+            ]
+        },
+        "v2AllowShortPosition": {
+            "description": "possible treatments for short positions.\n\n - ALLOW_SHORT_POSITION_UNSPECIFIED: value if allow_short_position is not specified. Will default to no\n - ALLOW_SHORT_POSITION_YES: allow short positions\n - ALLOW_SHORT_POSITION_NO: don't allow short positions\n - ALLOW_SHORT_POSITION_FROZEN_RISKY_INITIAL: Risky initial short positions are frozen. No non-cash additional short position is allowed\n - ALLOW_SHORT_POSITION_FROZEN_INITIAL: Initial short positions are frozen. No additional short position is allowed",
+            "type": "string",
+            "default": "ALLOW_SHORT_POSITION_UNSPECIFIED",
+            "enum": [
+                "ALLOW_SHORT_POSITION_UNSPECIFIED",
+                "ALLOW_SHORT_POSITION_YES",
+                "ALLOW_SHORT_POSITION_NO",
+                "ALLOW_SHORT_POSITION_FROZEN_RISKY_INITIAL",
+                "ALLOW_SHORT_POSITION_FROZEN_INITIAL"
+            ]
+        },
+        "v2AlphaModel": {
+            "type": "object",
+            "title": "Alpha data and configurations",
+            "properties": {
+                "assetAlphas": {
+                    "type": "object",
+                    "title": "Alphas of assets specified in a map",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "stressScenarioName": {
+                    "type": "string",
+                    "title": "DEPRECATED FIELD - will continue working for now but please transition to using the field located in RiskModel-\u003eAdditionalFactorSource-\u003eStressScenarioSource"
+                },
+                "stressScenarioPurpose": {
+                    "type": "string",
+                    "title": "DEPRECATED FIELD - will continue working for now but please transition to using the field located in RiskModel-\u003eAdditionalFactorSource-\u003eStressScenarioSource"
+                },
+                "factorExposureAsAlpha": {
+                    "type": "string",
+                    "title": "Name of factor or stress scenario whose exposures will be used as alphas scores for securities. Ignored if asset_alphas is set"
+                }
+            }
+        },
+        "v2AssetUniverse": {
+            "type": "object",
+            "title": "Asset universe contains portfolio compositions and fundamental asset attributes like prices",
+            "properties": {
+                "initialHoldings": {
+                    "type": "array",
+                    "title": "Initial holdings",
+                    "items": {
+                        "$ref": "#/definitions/typesAnalyticsPortfolioHolding"
+                    }
+                },
+                "benchmarkHoldings": {
+                    "type": "array",
+                    "title": "Benchmark holdings",
+                    "items": {
+                        "$ref": "#/definitions/typesAnalyticsPortfolioHolding"
+                    }
+                },
+                "secondaryBenchmarkTicker": {
+                    "type": "string",
+                    "title": "name of the secondary benchmark"
+                },
+                "marketPortfolioTicker": {
+                    "type": "string",
+                    "title": "name of the market portfolio"
+                },
+                "additionalAssetsIds": {
+                    "type": "array",
+                    "title": "additional assets",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "tradeUniverseAssetsIds": {
+                    "type": "array",
+                    "title": "tradeable assets",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "defaultCashAssetId": {
+                    "type": "string",
+                    "title": "default cash key. All trades in optimization will be put under this asset"
+                },
+                "cashAssetsIds": {
+                    "type": "array",
+                    "title": "cash assets. Optimizer will ignore their risks",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "overrideMarketValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "market value override for HOLDINGS_UNIT_WEIGHT_IN_PERCENTAGE cases"
+                },
+                "assetPrices": {
+                    "type": "object",
+                    "title": "override asset prices",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "assetNotionalPrices": {
+                    "type": "object",
+                    "title": "override asset notional prices",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "currencyCode": {
+                    "type": "string",
+                    "title": "currency of the case"
+                },
+                "holdingsUnit": {
+                    "title": "unit of holdings",
+                    "$ref": "#/definitions/AssetUniverseHoldingsUnit"
+                },
+                "positionType": {
+                    "title": "position type (defaults to SOD_TRADES if left blank)",
+                    "$ref": "#/definitions/typesAnalyticsPositionType"
+                },
+                "initialCashInject": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "initial cash inject"
+                },
+                "fxHedgedAssets": {
+                    "type": "array",
+                    "title": "FX-hedged assets. Optimizer will ignore their foreign exchange exposures",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "trades": {
+                    "type": "array",
+                    "title": "trades to be added to initial portfolio",
+                    "items": {
+                        "$ref": "#/definitions/typesAnalyticsPortfolioHolding"
+                    }
+                },
+                "secondaryBenchmarkHoldings": {
+                    "type": "array",
+                    "title": "secondary benchmark holdings",
+                    "items": {
+                        "$ref": "#/definitions/typesAnalyticsPortfolioHolding"
+                    }
+                },
+                "marketPortfolioHoldings": {
+                    "type": "array",
+                    "title": "market portfolio holdings",
+                    "items": {
+                        "$ref": "#/definitions/typesAnalyticsPortfolioHolding"
+                    }
+                },
+                "useDefaultBenchmark": {
+                    "type": "boolean",
+                    "title": "flag to use default aladdin benchmark if one is not specified in the request"
+                },
+                "optimalHoldings": {
+                    "type": "array",
+                    "title": "Optimal holdings - populating this will cause optimization to be skipped",
+                    "items": {
+                        "$ref": "#/definitions/typesAnalyticsPortfolioHolding"
+                    }
+                },
+                "compositeUniverse": {
+                    "title": "Composite universe definitions",
+                    "$ref": "#/definitions/v2CompositeUniverse"
+                }
+            }
+        },
+        "v2BlkOpsEntry": {
+            "type": "object",
+            "title": "one path-thorugh entry to blkops",
+            "properties": {
+                "blkopsFieldName": {
+                    "type": "string",
+                    "title": "field name"
+                },
+                "blkopsFieldValue": {
+                    "type": "string",
+                    "title": "value of a specific field"
+                },
+                "attributes": {
+                    "type": "object",
+                    "title": "attribute map for xml element",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v2BoundRelaxation": {
+            "type": "object",
+            "title": "a pair of bound relaxations",
+            "properties": {
+                "lowerBoundRelaxation": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "relaxation priority (0-1) for lower bounds"
+                },
+                "upperBoundRelaxation": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "relaxation priority (0-1) for upper bounds"
+                }
+            }
+        },
+        "v2BoundUnit": {
+            "description": "- BOUND_UNIT_UNSPECIFIED: value if bound_unit is not specified. The default behavior depends on constraint; currently trade increment defaults to shares but all other per-asset bounds default to portfolio fraction\n - BOUND_UNIT_PORTFOLIO_FRACTION: portfolio fraction\n - BOUND_UNIT_SHARE: number of shares\n - BOUND_UNIT_MONETARY_VALUE: monetary value",
+            "type": "string",
+            "title": "unit for constraints",
+            "default": "BOUND_UNIT_UNSPECIFIED",
+            "enum": [
+                "BOUND_UNIT_UNSPECIFIED",
+                "BOUND_UNIT_PORTFOLIO_FRACTION",
+                "BOUND_UNIT_SHARE",
+                "BOUND_UNIT_MONETARY_VALUE"
+            ]
+        },
+        "v2Composite": {
+            "type": "object",
+            "title": "composite asset definition",
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "composite asset id"
+                },
+                "constituentWeights": {
+                    "type": "object",
+                    "title": "weights of constituent assets within composite",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            }
+        },
+        "v2CompositeUniverse": {
+            "type": "object",
+            "title": "defines composite assets used in optimization",
+            "properties": {
+                "composites": {
+                    "type": "array",
+                    "title": "composite asset list",
+                    "items": {
+                        "$ref": "#/definitions/v2Composite"
+                    }
+                }
+            }
+        },
+        "v2CreateLongRunningOptimizationCaseGroupRequest": {
+            "type": "object",
+            "title": "a request to create long running optimization cases",
+            "properties": {
+                "optimizationCaseGroup": {
+                    "title": "optimization cases",
+                    "$ref": "#/definitions/v2OptimizationCaseGroup"
+                }
+            }
+        },
+        "v2DiversificationRule": {
+            "type": "object",
+            "title": "Constraint to require diversification of assets/factors. For example, the rule ASSET,5,40 means that \nthe sum of the weights of all assets having over 5% of portfolio weight must be below 40% of portfolio weight.\nCan also be imposed on a factor level to constrain exposures instead of weights",
+            "required": [
+                "ruleType"
+            ],
+            "properties": {
+                "ruleType": {
+                    "type": "string",
+                    "title": "(-- api-linter: aladdin::0901::dictionary-message-field=disabled\naip.dev/not-precedent: This field differs from others with the same name --)\ntype (can either be ASSET or a factor type i.e. ISSUER)",
+                    "required": [
+                        "rule_type"
+                    ]
+                },
+                "concentrationThreshold": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Limitation will be placed on all assets/factors whose weights/exposures exceed this threshold (\"concentrated\" assets)"
+                },
+                "basketBound": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Upper bound on the sum of weights/exposures of \"concentrated\" assets"
+                }
+            }
+        },
+        "v2GroupBound": {
+            "type": "object",
+            "title": "group bounds",
+            "properties": {
+                "bounds": {
+                    "type": "array",
+                    "title": "array of bounds",
+                    "items": {
+                        "$ref": "#/definitions/GroupBoundBound"
+                    }
+                },
+                "relaxationPair": {
+                    "title": "pair of relaxation priorities for upper and lower bound",
+                    "$ref": "#/definitions/v2BoundRelaxation"
+                },
+                "softObjective": {
+                    "title": "soft bound objective settings",
+                    "$ref": "#/definitions/v2SoftBoundObjective"
+                }
+            }
+        },
+        "v2HeuristicModel": {
+            "description": "- HEURISTIC_MODEL_UNSPECIFIED: value if heuristic_model is not specified. Will default to INDEX heuristic model\n - HEURISTIC_MODEL_PROD: production settings for active funds\n - HEURISTIC_MODEL_BACKTEST: backtest and fast QP heuristics to reduce CPU and Memory consumption\n - HEURISTIC_MODEL_INDEX: production settings for index funds\n - HEURISTIC_MODEL_INDEX_FAST: production/backtesting settings for index funds\n - HEURISTIC_MODEL_MFPROD: multi-fund heuristics\n - HEURISTIC_MODEL_TAXPROD: tax-aware optimization heuristics",
+            "type": "string",
+            "title": "heuristic models",
+            "default": "HEURISTIC_MODEL_UNSPECIFIED",
+            "enum": [
+                "HEURISTIC_MODEL_UNSPECIFIED",
+                "HEURISTIC_MODEL_PROD",
+                "HEURISTIC_MODEL_BACKTEST",
+                "HEURISTIC_MODEL_INDEX",
+                "HEURISTIC_MODEL_INDEX_FAST",
+                "HEURISTIC_MODEL_MFPROD",
+                "HEURISTIC_MODEL_TAXPROD"
+            ]
+        },
+        "v2OptimizationCase": {
+            "type": "object",
+            "title": "A single-period single-fund optimization request",
+            "required": [
+                "caseDate",
+                "portfolioTicker"
+            ],
+            "properties": {
+                "caseType": {
+                    "title": "type of optimization case",
+                    "$ref": "#/definitions/v2OptimizationCaseType"
+                },
+                "caseDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "date of the optimization case",
+                    "required": [
+                        "case_date"
+                    ]
+                },
+                "portfolioTicker": {
+                    "type": "string",
+                    "title": "name of the portfolio that needs optimization",
+                    "required": [
+                        "portfolio_ticker"
+                    ]
+                },
+                "benchmarkTicker": {
+                    "type": "string",
+                    "title": "name of the benchmark"
+                },
+                "modelPortfolioTickers": {
+                    "type": "array",
+                    "title": "additional portfolios",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "objective": {
+                    "title": "Objective function of the optmization case",
+                    "$ref": "#/definitions/v2OptimizationObjective"
+                },
+                "constraint": {
+                    "title": "Constraints of the optimization case",
+                    "$ref": "#/definitions/v2OptimizationConstraint"
+                },
+                "dataModel": {
+                    "title": "Asset level information",
+                    "$ref": "#/definitions/v2OptimizationDataModel"
+                },
+                "setting": {
+                    "title": "constraints and optimizer settings",
+                    "$ref": "#/definitions/v2OptimizationSetting"
+                }
+            }
+        },
+        "v2OptimizationCaseAdjustment": {
+            "type": "object",
+            "title": "Adjustment to an existing optimization",
+            "properties": {
+                "adjustmentId": {
+                    "type": "string",
+                    "title": "id of this adjustment"
+                },
+                "adjustmentDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "date of the case"
+                },
+                "adjustmentObjective": {
+                    "title": "Objective function of the optmization case",
+                    "$ref": "#/definitions/v2OptimizationObjective"
+                },
+                "adjustmentConstraint": {
+                    "title": "Constraints of the optimization case",
+                    "$ref": "#/definitions/v2OptimizationConstraint"
+                },
+                "adjustmentPassThroughs": {
+                    "type": "array",
+                    "title": "BlkOps pass throughs. Reserved for seasoned BlkOps users",
+                    "items": {
+                        "$ref": "#/definitions/v2BlkOpsEntry"
+                    }
+                }
+            }
+        },
+        "v2OptimizationCaseGroup": {
+            "description": "It is configured as a base case + a collection of modifications\n\nFor Example\nbase case has: portfolio = I-SP500; date = 20200801\nAdjustment 1 has: date = 20200701\nAdjustment 2 has: date = 20200601",
+            "type": "object",
+            "title": "a collection of optimization request",
+            "properties": {
+                "baseCase": {
+                    "title": "base case",
+                    "$ref": "#/definitions/v2OptimizationCase"
+                },
+                "caseAdjustments": {
+                    "type": "array",
+                    "title": "adjustment on template",
+                    "items": {
+                        "$ref": "#/definitions/v2OptimizationCaseAdjustment"
+                    }
+                }
+            }
+        },
+        "v2OptimizationCaseType": {
+            "description": "- OPTIMIZATION_CASE_TYPE_UNSPECIFIED: Value if optimization_case_type is not specified. Will cause an exception to be thrown\n - OPTIMIZATION_CASE_TYPE_OPTIMIZE: Solve the case\n - OPTIMIZATION_CASE_TYPE_EXPORT_MODEL: Export risk models and other case setup\n - OPTIMIZATION_CASE_TYPE_EXPORT_ONLY_RISK_MODEL: Only export risk models\n - OPTIMIZATION_CASE_TYPE_EXPORT_MODEL_AND_OPTIMIZE: Export risk models and other case setup, and then solve the case\n - OPTIMIZATION_CASE_TYPE_OPTIMIZE_AND_VALIDATE_MODEL: Run optimization and then validate risk models\n - OPTIMIZATION_CASE_TYPE_OPTIMIZE_WITH_MACRO_MODEL: Run optimization with Macro models\n - OPTIMIZATION_CASE_TYPE_ABSOLUTE_RISK_BUDGETING: Run optimization using an absolute risk budgeting approach\n - OPTIMIZATION_CASE_TYPE_ACTIVE_RISK_BUDGETING: Run optimization using an active risk budgeting approach",
+            "type": "string",
+            "title": "Optimization type specifies the type of opitmization needed in the case",
+            "default": "OPTIMIZATION_CASE_TYPE_UNSPECIFIED",
+            "enum": [
+                "OPTIMIZATION_CASE_TYPE_UNSPECIFIED",
+                "OPTIMIZATION_CASE_TYPE_OPTIMIZE",
+                "OPTIMIZATION_CASE_TYPE_EXPORT_MODEL",
+                "OPTIMIZATION_CASE_TYPE_EXPORT_ONLY_RISK_MODEL",
+                "OPTIMIZATION_CASE_TYPE_EXPORT_MODEL_AND_OPTIMIZE",
+                "OPTIMIZATION_CASE_TYPE_OPTIMIZE_AND_VALIDATE_MODEL",
+                "OPTIMIZATION_CASE_TYPE_OPTIMIZE_WITH_MACRO_MODEL",
+                "OPTIMIZATION_CASE_TYPE_ABSOLUTE_RISK_BUDGETING",
+                "OPTIMIZATION_CASE_TYPE_ACTIVE_RISK_BUDGETING"
+            ]
+        },
+        "v2OptimizationConstraint": {
+            "type": "object",
+            "title": "constraints",
+            "properties": {
+                "maxTradeNumber": {
+                    "title": "maximum trade number",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minTradeSize": {
+                    "title": "minimum trade size (if traded)",
+                    "$ref": "#/definitions/v2SinglePerAssetBound"
+                },
+                "maxTurnover": {
+                    "title": "maximum turnover",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxAdvTradeSize": {
+                    "title": "maximum ADV trade",
+                    "$ref": "#/definitions/v2SinglePerAssetBound"
+                },
+                "minHoldingSize": {
+                    "title": "minimum holding size",
+                    "$ref": "#/definitions/v2SinglePerAssetBound"
+                },
+                "maxHoldingNumber": {
+                    "description": "Integer greater than zero. User specified maximum number of \nnon-zero positions in optimized portfolio.",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxActiveSysRisk": {
+                    "title": "maximum active systematic (factor) risk",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxActiveIdioRisk": {
+                    "title": "maximum active idiosyncratic (specific) risk",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxActiveRisk": {
+                    "title": "maximum active risk (AKA:maximum tracking error)",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minLongPosition": {
+                    "description": "The minimum value for the sum of the long weights.",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxLongPosition": {
+                    "description": "The maximum value for the sum of the long weights.",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minShortPosition": {
+                    "description": "The minimum value for the sum of the short weights (zero or a negative number).",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxShortPosition": {
+                    "description": "The maximum value for the sum of the short weights (zero or a negative number).",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "additionalFactorExposureConstraint": {
+                    "title": "aditional factor exposure bounds",
+                    "$ref": "#/definitions/v2GroupBound"
+                },
+                "assetConstraint": {
+                    "title": "asset bounds",
+                    "$ref": "#/definitions/v2GroupBound"
+                },
+                "factorExposureConstraint": {
+                    "title": "factor exposure bounds",
+                    "$ref": "#/definitions/v2GroupBound"
+                },
+                "assetBuyConstraint": {
+                    "title": "bounds on buy trades",
+                    "$ref": "#/definitions/v2GroupBound"
+                },
+                "assetSellConstraint": {
+                    "title": "bounds on sell trades",
+                    "$ref": "#/definitions/v2GroupBound"
+                },
+                "tradeIncrement": {
+                    "title": "minimum trade increment. Note that relaxation is not supported for this",
+                    "$ref": "#/definitions/v2SinglePerAssetBound"
+                },
+                "maxNetTaxableGain": {
+                    "title": "maximum net taxable gain",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxNetTaxableGainLiability": {
+                    "title": "maximum net taxable gain liability",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxTaxableGain": {
+                    "title": "maximum taxable gain",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxTaxableGainLiability": {
+                    "title": "maximum taxable gain liability",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxNetTaxableLoss": {
+                    "title": "maximum net taxable loss",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxNetTaxableLossLiability": {
+                    "title": "maximum net taxable loss liability",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxTaxableLoss": {
+                    "title": "maximum taxable loss",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "maxTaxableLossLiability": {
+                    "title": "maximum taxable loss liability",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minNetTaxableGain": {
+                    "title": "minimum net taxable gain",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minNetTaxableGainLiability": {
+                    "title": "minimum net taxable gain liability",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minTaxableGain": {
+                    "title": "minimum taxable gain",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minTaxableGainLiability": {
+                    "title": "minimum taxable gain liability",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minNetTaxableLoss": {
+                    "title": "minimum net taxable loss",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minNetTaxableLossLiability": {
+                    "title": "minimum net taxable loss liability",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minTaxableLoss": {
+                    "title": "minimum taxable loss",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "minTaxableLossLiability": {
+                    "title": "minimum taxable loss liability",
+                    "$ref": "#/definitions/v2SingleBound"
+                },
+                "finalCash": {
+                    "title": "final cash. Not usable with final_cash_dollar constraint",
+                    "$ref": "#/definitions/v2SingleBoundHard"
+                },
+                "finalCashDollar": {
+                    "title": "final cash in dollars. Not usable with final_cash",
+                    "$ref": "#/definitions/v2SingleBoundHard"
+                },
+                "grandfatherUpperBound": {
+                    "type": "boolean",
+                    "title": "if true expands asset upper bounds to the initial holding value"
+                },
+                "grandfatherLowerBound": {
+                    "type": "boolean",
+                    "title": "if true expands asset lower bounds to the initial holding value"
+                },
+                "transactionsAllowed": {
+                    "title": "type of transactions allowed",
+                    "$ref": "#/definitions/v2TransactionType"
+                },
+                "relaxationOverrides": {
+                    "type": "object",
+                    "title": "Relaxation override",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/v2BoundRelaxation"
+                    }
+                },
+                "maxBudget": {
+                    "description": "maximum budget. Equivalent to maximum constraint on total market value of trades.",
+                    "$ref": "#/definitions/v2SingleBoundHard"
+                },
+                "minBudget": {
+                    "description": "minimum budget. Equivalent to minimum constraint on total market value of trades.",
+                    "$ref": "#/definitions/v2SingleBoundHard"
+                },
+                "maxNotionalBudget": {
+                    "description": "maximum notional budget. Equivalent to maximum constraint on total notional value of trades.",
+                    "$ref": "#/definitions/v2SingleBoundHard"
+                },
+                "minNotionalBudget": {
+                    "description": "minimum notional budget. Equivalent to minimum constraint on total notional value of trades.",
+                    "$ref": "#/definitions/v2SingleBoundHard"
+                },
+                "softBoundObjectiveOverrides": {
+                    "type": "object",
+                    "title": "Soft bound penalty overrides map",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/v2SoftBoundObjective"
+                    }
+                },
+                "maxShortPositionSoft": {
+                    "description": "Soft constraint on maximum value for the sum of the short weights (zero or a negative number).",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "minShortPositionSoft": {
+                    "description": "Soft constraint on minimum value for the sum of the short weights (zero or a negative number).",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "maxLongPositionSoft": {
+                    "description": "Soft constraint on maximum value for the sum of the long weights.",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "minLongPositionSoft": {
+                    "description": "Soft constraint on minimum value for the sum of the long weights.",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "maxTurnoverSoft": {
+                    "title": "Soft constaint on maximum turnover",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "maxTradeNumberSoft": {
+                    "title": "Soft constraint on maximum number of trades",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "maxHoldingNumberSoft": {
+                    "title": "Soft constraint on maximum number of holdings",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "maxNotionalBudgetSoft": {
+                    "title": "Soft constraint on maximum notional budget",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "minNotionalBudgetSoft": {
+                    "title": "Soft constraint on minimum notional budget",
+                    "$ref": "#/definitions/v2SingleBoundSoft"
+                },
+                "diversificationRule": {
+                    "title": "Invokes diversification rule constraint",
+                    "$ref": "#/definitions/v2DiversificationRule"
+                },
+                "grandfatherMinHoldingSize": {
+                    "type": "boolean",
+                    "title": "if true expands minimum holding size to the initial holding value"
+                },
+                "grandfatherMinTradeSize": {
+                    "type": "boolean",
+                    "title": "if true expands expands minimum trade size for sell/cover trades towards initial holdings"
+                },
+                "grandfatherTradeIncrement": {
+                    "type": "boolean",
+                    "title": "if true expands expands trade increment size for sell/cover trades towards initial holdings"
+                }
+            }
+        },
+        "v2OptimizationDataModel": {
+            "type": "object",
+            "title": "Data component of an optimization reqeust",
+            "properties": {
+                "assetUniverse": {
+                    "title": "Asset universe",
+                    "$ref": "#/definitions/v2AssetUniverse"
+                },
+                "riskModel": {
+                    "title": "Risk Model",
+                    "$ref": "#/definitions/v2RiskModel"
+                },
+                "tcostModel": {
+                    "title": "Transaction cost model",
+                    "$ref": "#/definitions/v2TransactionCostModel"
+                },
+                "alphaModel": {
+                    "title": "Alpha model",
+                    "$ref": "#/definitions/v2AlphaModel"
+                },
+                "taxModel": {
+                    "title": "Tax model",
+                    "$ref": "#/definitions/v2TaxModel"
+                },
+                "riskBudgeting": {
+                    "title": "Input for risk budgeting optimization",
+                    "$ref": "#/definitions/v2RiskBudgeting"
+                },
+                "bypassCaching": {
+                    "type": "boolean",
+                    "title": "Switch to bypass caching for this request"
+                }
+            }
+        },
+        "v2OptimizationObjective": {
+            "type": "object",
+            "title": "Objective function configuration",
+            "properties": {
+                "alphaWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "impact of active alpha"
+                },
+                "sysRiskWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "penalty on active systematic risk"
+                },
+                "idioRiskWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "penalty on active idiosyncratic risk"
+                },
+                "tcostWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "penalty on transaction cost"
+                },
+                "secondSysRiskWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "penalty on active systematic risk against secondary benchmark"
+                },
+                "secondIdioRiskWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "penalty on active idiosyncratic risk against secondary benchmark"
+                },
+                "shortTermTaxGainWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "impact of short term tax gain"
+                },
+                "shortTermTaxLossWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "impact of short term tax loss"
+                },
+                "shortTermTaxNetGainWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "impact of short term net tax gain, which is max{0, short_term_gain - short_term_loss}"
+                },
+                "longTermTaxGainWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "impact of long term tax gain"
+                },
+                "longTermTaxLossWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "impact of long term tax loss"
+                },
+                "longTermTaxNetGainWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "impact of long term tax net gain, which is max{0, long_term_gain - long_term_loss}"
+                },
+                "taxNetGainWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "impact of tax net gain, which is max{0, gain - loss}"
+                },
+                "additionalSysRiskWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "penalty on active systematic risk from additional factors"
+                },
+                "fixedCostWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "penalty on fixed transaction cost"
+                },
+                "missingRiskPenalty": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "missing risk penalty. Only applicable when Treat Assets Without Risk is set to Move to Benchmark Soft"
+                },
+                "riskBudgetLambda": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "lambda for risk budget"
+                },
+                "riskBudgetPenaltyLambda": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "lambda for risk budget penalty"
+                },
+                "riskBudgetConeLambda": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "lambda for risk budget cone"
+                },
+                "riskBudgetPositiveConeLambda": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "lambda for risk budget positive cone"
+                },
+                "riskBudgetNegativeConeLambda": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "lambda for risk budget negative cone"
+                }
+            }
+        },
+        "v2OptimizationSetting": {
+            "type": "object",
+            "title": "objectives, constraints and optimizer settings",
+            "required": [
+                "requestedReports"
+            ],
+            "properties": {
+                "optimizerParameter": {
+                    "title": "optimizer control parameter",
+                    "$ref": "#/definitions/v2OptimizerControlParameter"
+                },
+                "requestedReports": {
+                    "type": "array",
+                    "title": "required reports",
+                    "required": [
+                        "requested_reports"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v2ReportRequestEntry"
+                    }
+                },
+                "blkopsPathThroughs": {
+                    "type": "array",
+                    "title": "DEPRECATED FIELD - will continue working for now but please transition to using the field called blkops_pass_throughs",
+                    "items": {
+                        "$ref": "#/definitions/v2BlkOpsEntry"
+                    }
+                },
+                "customComponent": {
+                    "type": "string",
+                    "title": "BlkOps custom component. Reserved for seasoned BlkOps users"
+                },
+                "debugSettings": {
+                    "description": "Additional settings to test temporary features. For developers only.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "blkopsPassThroughs": {
+                    "type": "array",
+                    "title": "BlkOps pass throughs. Reserved for seasoned BlkOps users",
+                    "items": {
+                        "$ref": "#/definitions/v2BlkOpsEntry"
+                    }
+                }
+            }
+        },
+        "v2OptimizationSolution": {
+            "type": "object",
+            "title": "Result of an optimization request",
+            "properties": {
+                "solutionType": {
+                    "title": "whether the optimizer can solve the case",
+                    "$ref": "#/definitions/v2OptimizationSolutionType"
+                },
+                "objectiveScore": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "final objective score"
+                },
+                "reports": {
+                    "type": "object",
+                    "title": "reports from optimization",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/typesTreeTableData"
+                    }
+                }
+            }
+        },
+        "v2OptimizationSolutionType": {
+            "description": "- OPTIMIZATION_SOLUTION_TYPE_UNSPECIFIED: OptimizerStatus has not been specified\n - OPTIMIZATION_SOLUTION_TYPE_OPTIMAL: Optimizer found the optimal solution\n - OPTIMIZATION_SOLUTION_TYPE_FEASIBLE: Optimizer found a feasible solution\n - OPTIMIZATION_SOLUTION_TYPE_INFEASIBLE: Optimizer cannot find a feasible solution\n - OPTIMIZATION_SOLUTION_TYPE_ERROR: Optimizer failed with error\n - OPTIMIZATION_SOLUTION_TYPE_RELAXED: Optimizer relaxed some constraints and then found a solution\n - OPTIMIZATION_SOLUTION_TYPE_BOUNDED: The problem is bounded, but the optimizer has not found a solution.\n - OPTIMIZATION_SOLUTION_TYPE_UNBOUNDED: The problem is unbounded. The objective value may go to infinity.\n - OPTIMIZATION_SOLUTION_TYPE_UNKNOWN: The results of optimization are unknown. This could be due to a variety of different causes",
+            "type": "string",
+            "title": "Possible outcomes from the optimizer after processing a case",
+            "default": "OPTIMIZATION_SOLUTION_TYPE_UNSPECIFIED",
+            "enum": [
+                "OPTIMIZATION_SOLUTION_TYPE_UNSPECIFIED",
+                "OPTIMIZATION_SOLUTION_TYPE_OPTIMAL",
+                "OPTIMIZATION_SOLUTION_TYPE_FEASIBLE",
+                "OPTIMIZATION_SOLUTION_TYPE_INFEASIBLE",
+                "OPTIMIZATION_SOLUTION_TYPE_ERROR",
+                "OPTIMIZATION_SOLUTION_TYPE_RELAXED",
+                "OPTIMIZATION_SOLUTION_TYPE_BOUNDED",
+                "OPTIMIZATION_SOLUTION_TYPE_UNBOUNDED",
+                "OPTIMIZATION_SOLUTION_TYPE_UNKNOWN"
+            ]
+        },
+        "v2OptimizationSolutions": {
+            "type": "object",
+            "title": "a response to a collection of optimization requests",
+            "properties": {
+                "solutions": {
+                    "type": "array",
+                    "title": "list of responses",
+                    "items": {
+                        "$ref": "#/definitions/v2OptimizationSolution"
+                    }
+                },
+                "modelExport": {
+                    "type": "string",
+                    "title": "model export"
+                }
+            }
+        },
+        "v2OptimizerControlParameter": {
+            "type": "object",
+            "title": "an control parameter that dictates optimizer behavior",
+            "properties": {
+                "allowShortPosition": {
+                    "title": "whether to allow short positions",
+                    "$ref": "#/definitions/v2AllowShortPosition"
+                },
+                "ignoreMissingTcost": {
+                    "type": "boolean",
+                    "title": "how to treat missing transaction cost"
+                },
+                "mipTimeLimit": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "time limit inseconds for Mixed-Integer heuristics"
+                },
+                "heuristicModel": {
+                    "title": "heuristic type",
+                    "$ref": "#/definitions/v2HeuristicModel"
+                },
+                "cplexParamBarqcpepcomp": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "cplex param BarQCPEpComp"
+                },
+                "allowPurchaseOutsideUniverse": {
+                    "title": "whether to allow purchase of assets not in trading universe",
+                    "$ref": "#/definitions/v2AllowPurchaseOutsideUniverse"
+                },
+                "fullyInvested": {
+                    "type": "boolean",
+                    "title": "setting controlling if optimal portfolio can (if false) or cannot (if true) contain cash"
+                },
+                "treatAssetsWithoutRisk": {
+                    "title": "setting controlling treatment for assets without risk data\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We need to do this because this is the name of the blkops field--)",
+                    "$ref": "#/definitions/v2TreatAssetsWithoutRisk"
+                }
+            }
+        },
+        "v2ReportRequestEntry": {
+            "type": "object",
+            "title": "request entry for one report",
+            "properties": {
+                "reportType": {
+                    "type": "string",
+                    "title": "report type"
+                },
+                "requestedColumns": {
+                    "type": "array",
+                    "title": "columns",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v2RiskBudgeting": {
+            "type": "object",
+            "title": "Input files and configurations for risk budgeting",
+            "properties": {
+                "riskBudgets": {
+                    "type": "object",
+                    "title": "map of assets to desired risk allocation for risk budgeting optimization",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "riskBudgetActiveWeights": {
+                    "type": "object",
+                    "title": "map of assets to active weights for active risk budgeting",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "riskBudgetMarginalRisks": {
+                    "type": "object",
+                    "title": "map of assets to marginal risks for active risk budgeting",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "riskBudgetTierType": {
+                    "type": "string",
+                    "title": "tiers can formed by either top number of \"name\" or top \"percentile\""
+                },
+                "riskBudgetTierOneThreshold": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "the number X of assets or top X percentile of assets that will go in the first tier"
+                },
+                "riskBudgetTierTwoThreshold": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "the number X of assets or top X percentile of assets that will go in the second tier or above"
+                },
+                "riskBudgetTierRatio": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "the ratio of risk contribution allocated to assets in the second tier compared to the first tier"
+                },
+                "riskBudgetFixedAssetRatio": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "the ratio of risk contribution allocated to assets who should stay fixed compared to the first tier"
+                }
+            }
+        },
+        "v2RiskModel": {
+            "type": "object",
+            "title": "Risk model data and configurations",
+            "properties": {
+                "modelParameter": {
+                    "title": "risk model parameters",
+                    "$ref": "#/definitions/typesRiskModelParameter"
+                },
+                "additionalFactorSource": {
+                    "title": "additional factor configurations",
+                    "$ref": "#/definitions/RiskModelAdditionalFactorSource"
+                },
+                "riskFactorExposure": {
+                    "title": "DEPRECATED FIELD -  will continue working for now but please transition to using the field named risk_factor_exposure_list instead",
+                    "$ref": "#/definitions/tablev1SparseDataTable"
+                },
+                "additionalFactorExposure": {
+                    "title": "DEPRECATED FIELD -  will continue working for now but please transition to using the field named additional_factor_exposure_list instead",
+                    "$ref": "#/definitions/tablev1SparseDataTable"
+                },
+                "factorCovarianceMatrix": {
+                    "title": "factor covariance matrix",
+                    "$ref": "#/definitions/typesTreeTableData"
+                },
+                "specificCovarianceMatrix": {
+                    "title": "DEPRECATED FIELD -  will continue working for now but please transition to using the field named specific_covariance_list instead\n(-- api-linter: aladdin::9027::dictionary-conflicting-types-existing=disabled aip.dev/not-precedent: This is the right name --)",
+                    "$ref": "#/definitions/tablev1SparseDataTable"
+                },
+                "alddinBlocks": {
+                    "type": "array",
+                    "title": "DEPRECATED FIELD - will continue working for now but please transition to using the field named factor_groupings instead",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "fxScalingFactor": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "factor to scale all FX factor covariances"
+                },
+                "factorTypeOverrides": {
+                    "description": "override types of risk and aditional factors.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "factorGroupings": {
+                    "type": "array",
+                    "title": "factor groupings aka aladdin blocks",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "riskFactorExposureList": {
+                    "title": "security exposures to common risk factors",
+                    "$ref": "#/definitions/tablev2SparseDataTable"
+                },
+                "additionalFactorExposureList": {
+                    "title": "security exposures to non-risk factors",
+                    "$ref": "#/definitions/tablev2SparseDataTable"
+                },
+                "specificCovarianceList": {
+                    "title": "specific risk covariance matrix elements",
+                    "$ref": "#/definitions/tablev2SparseDataTable"
+                }
+            }
+        },
+        "v2SingleBound": {
+            "type": "object",
+            "title": "constraint value with relaxation",
+            "required": [
+                "boundValue"
+            ],
+            "properties": {
+                "boundValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "value of the bound",
+                    "required": [
+                        "bound_value"
+                    ]
+                },
+                "relaxation": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "relaxation priority for given constraint"
+                }
+            }
+        },
+        "v2SingleBoundHard": {
+            "type": "object",
+            "title": "constraint value without relaxation",
+            "required": [
+                "boundValue"
+            ],
+            "properties": {
+                "boundValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "value of the bound",
+                    "required": [
+                        "bound_value"
+                    ]
+                }
+            }
+        },
+        "v2SingleBoundSoft": {
+            "type": "object",
+            "title": "constraint value with soft bound objective",
+            "required": [
+                "boundValue"
+            ],
+            "properties": {
+                "boundValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "value of the bound",
+                    "required": [
+                        "bound_value"
+                    ]
+                },
+                "softObjective": {
+                    "title": "penalty for the soft bound (default is 1000, LINEAR)",
+                    "$ref": "#/definitions/v2SoftBoundObjective"
+                }
+            }
+        },
+        "v2SinglePerAssetBound": {
+            "type": "object",
+            "title": "constraint value with relaxation",
+            "properties": {
+                "defaultValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "default value of the bound"
+                },
+                "perAssetValues": {
+                    "type": "object",
+                    "title": "per-asset values",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                },
+                "relaxation": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "priority of relaxation for given constraint"
+                },
+                "boundUnit": {
+                    "title": "unit of the bound",
+                    "$ref": "#/definitions/v2BoundUnit"
+                }
+            }
+        },
+        "v2SoftBoundObjective": {
+            "type": "object",
+            "title": "configuration of a soft bound",
+            "required": [
+                "penaltySlope"
+            ],
+            "properties": {
+                "penaltySlope": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "soft bound penalty slope",
+                    "required": [
+                        "penalty_slope"
+                    ]
+                },
+                "softBoundType": {
+                    "title": "soft bound type",
+                    "$ref": "#/definitions/SoftBoundObjectiveSoftBoundType"
+                }
+            }
+        },
+        "v2TaxModel": {
+            "type": "object",
+            "title": "Tax data and configurations",
+            "properties": {
+                "washSales": {
+                    "type": "array",
+                    "title": "Wash Sales records of assets",
+                    "items": {
+                        "$ref": "#/definitions/TaxModelAssetWashSale"
+                    }
+                },
+                "taxLotReason": {
+                    "type": "string",
+                    "title": "tax lot reason"
+                },
+                "taxableOptimizationType": {
+                    "title": "tax optimization type",
+                    "$ref": "#/definitions/TaxModelTaxableOptimizationType"
+                },
+                "lookBackDay": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "look back days"
+                },
+                "taxRates": {
+                    "type": "array",
+                    "title": "tax rates",
+                    "items": {
+                        "$ref": "#/definitions/TaxModelTaxRate"
+                    }
+                },
+                "useHeuristic": {
+                    "type": "boolean",
+                    "title": "use heuristics or not"
+                },
+                "taxLots": {
+                    "type": "array",
+                    "title": "Tax lot records of assets",
+                    "items": {
+                        "$ref": "#/definitions/TaxModelTaxLot"
+                    }
+                }
+            }
+        },
+        "v2TransactionCostModel": {
+            "type": "object",
+            "title": "Transaction cost data and configurations",
+            "properties": {
+                "transactionCostParams": {
+                    "type": "array",
+                    "title": "transaction cost parameters",
+                    "items": {
+                        "$ref": "#/definitions/TransactionCostModelAssetTransactionCostParameter"
+                    }
+                }
+            }
+        },
+        "v2TransactionType": {
+            "description": "- TRANSACTION_TYPE_UNSPECIFIED: value if transaction_type is not specified. All types of transactions are allowed\n - TRANSACTION_TYPE_BUY_ONLY: only buys are allowed\n - TRANSACTION_TYPE_SELL_ONLY: only sells are allowed\n - TRANSACTION_TYPE_BUY_AND_SELL_ONLY: only buys and sells are allowed\n - TRANSACTION_TYPE_BUY_AND_SHORT_ONLY: only buys and shorts are allowed\n - TRANSACTION_TYPE_SELL_AND_COVER_ONLY: only sells and covers are allowed",
+            "type": "string",
+            "title": "transaction types",
+            "default": "TRANSACTION_TYPE_UNSPECIFIED",
+            "enum": [
+                "TRANSACTION_TYPE_UNSPECIFIED",
+                "TRANSACTION_TYPE_BUY_ONLY",
+                "TRANSACTION_TYPE_SELL_ONLY",
+                "TRANSACTION_TYPE_BUY_AND_SELL_ONLY",
+                "TRANSACTION_TYPE_BUY_AND_SHORT_ONLY",
+                "TRANSACTION_TYPE_SELL_AND_COVER_ONLY"
+            ]
+        },
+        "v2TreatAssetsWithoutRisk": {
+            "description": "possible treatments for short positions.\n\n - TREAT_ASSETS_WITHOUT_RISK_UNSPECIFIED: value if treat_assets_without_risk is not specified. Will default to no action\n - TREAT_ASSETS_WITHOUT_RISK_NO_ACTION: no special handling is done for assets without risk\n - TREAT_ASSETS_WITHOUT_RISK_NO_TRADE: trades are prohibited for assets without risk\n - TREAT_ASSETS_WITHOUT_RISK_CLOSE_POSITION: assets without risk have their positions closed\n - TREAT_ASSETS_WITHOUT_RISK_MOVE_TO_BENCHMARK: assets without risk are moved to benchmark\n - TREAT_ASSETS_WITHOUT_RISK_MOVE_TO_BENCHMARK_SOFT: assets without risk are moved to benchmark softly. Missing Risk Penalty can be specified in the objective",
+            "type": "string",
+            "default": "TREAT_ASSETS_WITHOUT_RISK_UNSPECIFIED",
+            "enum": [
+                "TREAT_ASSETS_WITHOUT_RISK_UNSPECIFIED",
+                "TREAT_ASSETS_WITHOUT_RISK_NO_ACTION",
+                "TREAT_ASSETS_WITHOUT_RISK_NO_TRADE",
+                "TREAT_ASSETS_WITHOUT_RISK_CLOSE_POSITION",
+                "TREAT_ASSETS_WITHOUT_RISK_MOVE_TO_BENCHMARK",
+                "TREAT_ASSETS_WITHOUT_RISK_MOVE_TO_BENCHMARK_SOFT"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.portfolio_analytics.optimization.v2.Optimization": "This grants access to all endpoints in the analytics.portfolio_analytics.optimization.v2.Optimization API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.portfolio_analytics.optimization.v2.Optimization": "This grants access to all endpoints in the analytics.portfolio_analytics.optimization.v2.Optimization API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "analytics.portfolio_analytics.optimization.v2.Optimization",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "analytics.portfolio_analytics.optimization.v2.Optimization",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}
