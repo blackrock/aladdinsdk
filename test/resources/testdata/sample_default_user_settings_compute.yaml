@@ -1,0 +1,9 @@
+RUN_MODE: aladdin-compute
+USER_CREDENTIALS:
+ USERNAME: test_user
+API:
+ AUTH_TYPE: OAuth
+ OAUTH:
+  CLIENT_DETAILS_FILEPATH: /secrets/api-oauth-app-client-details.yaml
+  REFRESH_TOKEN_FILEPATH: /secrets/api-oauth-app-user-refresh-token.yaml
+ TOKEN: token_value

@@ -1,0 +1,16 @@
+# This file allows unit test coverage to include scripts in the
+# project root directory without also including various modules
+# that can get loaded during testing / build time.
+[run]
+omit =
+    build/*
+    docs/*
+    test/*
+    venv/*
+    aladdinsdk/api/codegen/*
+    devutils/*
+    resources/*
+    *.yaml
+    setup.py
+    */version.py
+    */__init__.py

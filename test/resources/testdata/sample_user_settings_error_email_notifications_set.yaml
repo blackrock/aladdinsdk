@@ -1,0 +1,45 @@
+RUN_MODE: test
+
+defaultWebServer: http://dummy.dws.com
+
+API:
+  AUTH_TYPE: Basic Auth
+  TOKEN: "hippopotomonstrosesquippedaliophobia"
+
+user_credentials:
+  password: am_db9
+  username: jbond
+  password_filepath: "test/resources/testdata/sample_encrypted_password.txt"
+  encryption_filepath: "test/resources/testdata/sample_encryption_key.txt"
+
+ADC:
+  CONN:
+    ACCOUNT: "mi6-uke2sf.privatelink"
+    ROLE: SPY
+    WAREHOUSE: SPECTRE
+    DATABASE: MI_6_EMPS
+    SCHEMA: AGENTS
+
+retry:
+  API:
+    stop_after_attempt: 5
+    wait_fixed: 2
+    stop_after_delay: 10
+  ADC:
+    stop_after_attempt: 5
+    wait_fixed: 2
+    stop_after_delay: 10
+
+EXPORT:
+  OVERWRITE_DATA: True
+
+NOTIFICATIONS:
+    EMAIL:
+        EMAIL_HOST: test.host.com
+        EMAIL_PASSWORD: test_pwd
+
+ERROR_HANDLING:
+    EMAIL_NOTIFICATIONS:
+        ENABLED: True
+        TO: [test1, test2]
+        ON_EXCEPTION_TYPES: [AsdkApiException, AsdkEmailNotificationException]
