@@ -53,6 +53,7 @@ def _run_command(command_array, message):
     if result is not None and hasattr(result, "returncode") and result.returncode == 0:
         return True
     else:
+        print(result)
         return False
 
 
@@ -193,7 +194,7 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
                                                        message=f"[API: {api_name}-{api_ver}] - Rsync python client code into sdk repo's "
                                                        "codegen package under newly created target directory")
 
-    print(f"[API: {api_name}-{api_ver}] - Openapi codegen steps done. Proceeding with ASDK updates...")
+    print(f"[API: {api_name}-{api_ver}] - {is_successful} - Openapi codegen steps done. Proceeding with ASDK updates...")
     _update_asdk_repo_codegen_section(api_name=api_name, api_version=api_ver,
                                       api_module_path=api_module_path, api_swagger_target_location=api_swagger_target_location)
 

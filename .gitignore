@@ -196,3 +196,4 @@ dist/
 sdist/
 *.egg-info/
 *.egg
+resources/openapi-generator-cli.jar
