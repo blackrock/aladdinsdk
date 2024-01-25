@@ -12,7 +12,6 @@ def reload_modules():
     from aladdinsdk.common.authentication.basicauth import basicauthutil  # noqa: F811, F401
     from aladdinsdk.config import asdkconf, user_settings, internal_settings  # noqa: F811, F401
     from aladdinsdk.common.blkutils import blkutils  # noqa: F811, F401
-    from aladdinsdk.common.datatransformation import conversion, conversion_options  # noqa: F811, F401
 
     from aladdinsdk.config import asdkconf, user_settings  # noqa: F811, F401
     from aladdinsdk.common.secrets import fsutil, keyringutil  # noqa: F811, F401
@@ -22,8 +21,6 @@ def reload_modules():
     reload(aladdinsdk.common.authentication.api)
     reload(aladdinsdk.common.authentication.basicauth.basicauthutil)
     reload(aladdinsdk.common.blkutils.blkutils)
-    reload(aladdinsdk.common.datatransformation.conversion)
-    reload(aladdinsdk.common.datatransformation.conversion_options)
     reload(aladdinsdk.config.asdkconf)
     reload(aladdinsdk.config.user_settings)
     reload(aladdinsdk.config.internal_settings)

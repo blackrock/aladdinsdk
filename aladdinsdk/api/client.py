@@ -13,7 +13,7 @@ from aladdinsdk.common.error.handler import asdk_exception_handler
 from aladdinsdk.common.error.asdkerrors import AsdkApiException
 from aladdinsdk.config import user_settings
 from aladdinsdk.config.asdkconf import dynamic_asdk_config_reload
-from aladdinsdk.common.datatransformation.conversion import json_to_pandas
+from aladdinsdk.common.datatransformation import json_to_pandas
 from aladdinsdk.common.retry.api_retry import api_retry
 import logging
 
