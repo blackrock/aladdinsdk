@@ -1,0 +1,772 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Auto invest target cache.",
+        "title": "Auto Invest Target Cache",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.cash.auto_invest.target.AutoInvestInternalTargetAPI",
+        "x-aladdin-api-stability": "alpha",
+        "x-aladdin-spec-id": "agraph.cash.auto_invest.target.v1.AutoInvestInternalTargetAPI"
+    },
+    "basePath": "/api/cash/auto-invest/target/v1/",
+    "paths": {
+        "/autoInvestInternalTargets:filter": {
+            "post": {
+                "description": "Query the auto invest internal targets by the specified filter",
+                "summary": "FilterAutoInvestInternalTargets",
+                "operationId": "AutoInvestInternalTargetAPI_FilterAutoInvestInternalTargets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterAutoInvestInternalTargetsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterAutoInvestInternalTargetsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 100
+            }
+        },
+        "/autoInvestInternalTargets:query": {
+            "post": {
+                "description": "Batch retrieve the auto invest internal targets by identifiers",
+                "summary": "QueryAutoInvestInternalTargets",
+                "operationId": "AutoInvestInternalTargetAPI_QueryAutoInvestInternalTargets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1QueryAutoInvestInternalTargetsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1QueryAutoInvestInternalTargetsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 100
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1AutoInvestAllocationRule": {
+            "description": "Describes the allocation rule in an auto invest target.",
+            "type": "object",
+            "properties": {
+                "clientTargetId": {
+                    "type": "string",
+                    "title": "Investment target identifier of the child client portfolio target"
+                },
+                "clientPortfolioId": {
+                    "type": "string",
+                    "title": "Allocated client portfolio identifier"
+                },
+                "clientPortfolioTicker": {
+                    "type": "string",
+                    "title": "Allocated client portfolio ticker"
+                },
+                "assetId": {
+                    "type": "string",
+                    "title": "Allocated asset identifier"
+                },
+                "accountName": {
+                    "type": "string",
+                    "title": "Client account name"
+                },
+                "allocation": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Allocation percentage"
+                }
+            }
+        },
+        "v1AutoInvestInternalTarget": {
+            "description": "(internal use only) Describes the cash balance target for automated investment.",
+            "type": "object",
+            "properties": {
+                "cashTargetId": {
+                    "type": "string",
+                    "title": "Investment target identifier of the master cash source target"
+                },
+                "cashBankAccount": {
+                    "title": "Cash bank account for the cash balance source",
+                    "$ref": "#/definitions/v1CashBankAccount"
+                },
+                "targetName": {
+                    "type": "string",
+                    "title": "Unique target name"
+                },
+                "targetBalance": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Target balance amount to maintain"
+                },
+                "allocationRules": {
+                    "type": "array",
+                    "title": "List of allocation rules",
+                    "items": {
+                        "$ref": "#/definitions/v1AutoInvestAllocationRule"
+                    }
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Target start date"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Target end date"
+                },
+                "effectiveTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Target execution effective time in UTC timezone"
+                },
+                "targetStatus": {
+                    "type": "string",
+                    "title": "Target status"
+                },
+                "subscriptionStatus": {
+                    "type": "string",
+                    "title": "Subscription status"
+                },
+                "modifyUser": {
+                    "type": "string",
+                    "title": "Target last modify user identifier"
+                },
+                "modifyTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Target last modify time"
+                },
+                "approveUser": {
+                    "type": "string",
+                    "title": "Target approve user identifier"
+                },
+                "approveTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Target approve time"
+                }
+            }
+        },
+        "v1AutoInvestInternalTargetQuery": {
+            "type": "object",
+            "title": "Auto invest internal targets query",
+            "required": [
+                "targetStatuses",
+                "subscriptionStatuses"
+            ],
+            "properties": {
+                "cashPortfolioIds": {
+                    "type": "array",
+                    "title": "List of cash bank account portfolio codes",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "targetStatuses": {
+                    "type": "array",
+                    "title": "List of target statuses",
+                    "required": [
+                        "target_statuses"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "subscriptionStatuses": {
+                    "type": "array",
+                    "title": "List of subscription statuses",
+                    "required": [
+                        "subscription_statuses"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1CashBankAccount": {
+            "description": "Describes the cash bank account for the balance source.",
+            "type": "object",
+            "properties": {
+                "portfolioId": {
+                    "type": "string",
+                    "title": "Cash portfolio identifier"
+                },
+                "portfolioTicker": {
+                    "type": "string",
+                    "title": "Cash portfolio ticker"
+                },
+                "portalId": {
+                    "type": "string",
+                    "title": "The entity identifier for the portal associated with the cash portfolio"
+                },
+                "accountIdentity": {
+                    "type": "string",
+                    "title": "Cash account identity"
+                },
+                "currencyCode": {
+                    "type": "string",
+                    "title": "Cash portfolio currency"
+                },
+                "brokerId": {
+                    "type": "string",
+                    "title": "Cash account broker identifier"
+                },
+                "brokerTicker": {
+                    "type": "string",
+                    "title": "Cash account broker ticker"
+                },
+                "brokerShortname": {
+                    "type": "string",
+                    "title": "Cash account broker short name"
+                },
+                "brokerTimezone": {
+                    "type": "string",
+                    "title": "Cash account broker timezone"
+                },
+                "clientPortfolioIds": {
+                    "type": "array",
+                    "title": "List of available client portfolio codes",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "activeScheduleOffset": {
+                    "type": "string",
+                    "title": "Target execution active schedule offset"
+                },
+                "targetScheduleOffsets": {
+                    "type": "array",
+                    "title": "Target specific execution schedule offsets",
+                    "items": {
+                        "$ref": "#/definitions/v1ScheduleOffset"
+                    }
+                }
+            }
+        },
+        "v1FilterAutoInvestInternalTargetsRequest": {
+            "type": "object",
+            "title": "Auto invest internal targets filter request",
+            "properties": {
+                "query": {
+                    "title": "The auto invest internal target query",
+                    "$ref": "#/definitions/v1AutoInvestInternalTargetQuery"
+                },
+                "pageToken": {
+                    "type": "string",
+                    "title": "The starting point of a query result"
+                },
+                "pageSize": {
+                    "description": "The maximum number of auto invest internal targets to be returned per page of results.\nThe maximum allowed page size is 1000.  Default is 100 if empty or a number \u003c 1 is specified.",
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "v1FilterAutoInvestInternalTargetsResponse": {
+            "type": "object",
+            "title": "Auto invest internal targets filter response",
+            "properties": {
+                "autoInvestInternalTargets": {
+                    "type": "array",
+                    "title": "List of auto invest internal targets",
+                    "items": {
+                        "$ref": "#/definitions/v1AutoInvestInternalTarget"
+                    }
+                },
+                "nextPageToken": {
+                    "type": "string",
+                    "title": "Indicates the next page to retrieve"
+                }
+            }
+        },
+        "v1QueryAutoInvestInternalTargetsRequest": {
+            "type": "object",
+            "title": "Auto invest internal targets batch retrieval request",
+            "properties": {
+                "cashTargetIds": {
+                    "type": "array",
+                    "title": "Auto invest internal target unique identifiers",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "targetStatuses": {
+                    "type": "array",
+                    "title": "List of target statuses",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "subscriptionStatuses": {
+                    "type": "array",
+                    "title": "List of subscription statuses",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1QueryAutoInvestInternalTargetsResponse": {
+            "type": "object",
+            "title": "Auto invest internal targets batch retrieval response",
+            "properties": {
+                "autoInvestInternalTargets": {
+                    "type": "array",
+                    "title": "List of auto invest internal targets",
+                    "items": {
+                        "$ref": "#/definitions/v1AutoInvestInternalTarget"
+                    }
+                }
+            }
+        },
+        "v1ScheduleOffset": {
+            "description": "Describes the target execution schedule offset.",
+            "type": "object",
+            "properties": {
+                "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Schedule offset start date"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Schedule offset end date"
+                },
+                "source": {
+                    "type": "string",
+                    "title": "Schedule offset source - auto invest cash target id"
+                },
+                "offset": {
+                    "type": "string",
+                    "title": "Schedule offset value"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Internal"
+}

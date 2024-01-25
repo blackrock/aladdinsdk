@@ -1,0 +1,873 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Operations to retrieve audit data for broker entities.",
+        "title": "Broker Entities - Audit",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.investment_operations.reference_data.broker.AuditAPI",
+        "x-aladdin-api-stability": "alpha",
+        "x-aladdin-spec-id": "agraph.investment_operations.reference_data.broker.v1.AuditAPI"
+    },
+    "basePath": "/api/investment-operations/reference-data/broker/v1/",
+    "paths": {
+        "/entityRevisions:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.reference_data.broker.v1.Audit"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.reference_data.broker.v1.Audit"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Filter audit data based on the request.",
+                "summary": "Filter audit data for broker entities",
+                "operationId": "AuditAPI_FilterEntityRevisions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterEntityRevisionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterEntityRevisionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 100
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "typeDateTime": {
+            "description": "* When utc_offset is set and time_zone is unset: a civil time on a calendar\n   day with a particular offset from UTC.\n * When time_zone is set and utc_offset is unset: a civil time on a calendar\n   day in a particular time zone.\n * When neither time_zone nor utc_offset is set: a civil time on a calendar\n   day in local time.\n\nThe date is relative to the Proleptic Gregorian Calendar.\n\nIf year is 0, the DateTime is considered not to have a specific year. month\nand day must have valid, non-zero values.\n\nThis type is more flexible than some applications may want. Make sure to\ndocument and validate your application's limitations.",
+            "type": "object",
+            "title": "Represents civil time in one of a few possible ways:",
+            "properties": {
+                "year": {
+                    "description": "Optional. Year of date. Must be from 1 to 9999, or 0 if specifying a\ndatetime without a year.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "month": {
+                    "description": "Required. Month of year. Must be from 1 to 12.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "day": {
+                    "description": "Required. Day of month. Must be from 1 to 31 and valid for the year and\nmonth.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "hours": {
+                    "description": "Required. Hours of day in 24 hour format. Should be from 0 to 23. An API\nmay choose to allow the value \"24:00:00\" for scenarios like business\nclosing time.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "minutes": {
+                    "description": "Required. Minutes of hour of day. Must be from 0 to 59.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "seconds": {
+                    "description": "Required. Seconds of minutes of the time. Must normally be from 0 to 59. An\nAPI may allow the value 60 if it allows leap-seconds.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "nanos": {
+                    "description": "Required. Fractions of seconds in nanoseconds. Must be from 0 to\n999,999,999.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "utcOffset": {
+                    "description": "UTC offset. Must be whole seconds, between -18 hours and +18 hours.\nFor example, a UTC offset of -4:00 would be represented as\n{ seconds: -14400 }.",
+                    "type": "string"
+                },
+                "timeZone": {
+                    "description": "Time zone.",
+                    "$ref": "#/definitions/typeTimeZone"
+                }
+            }
+        },
+        "typeTimeZone": {
+            "description": "Represents a time zone from the\n[IANA Time Zone Database](https://www.iana.org/time-zones).",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "IANA Time Zone Database time zone, e.g. \"America/New_York\".",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Optional. IANA Time Zone Database version number, e.g. \"2019a\".",
+                    "type": "string"
+                }
+            }
+        },
+        "v1AuditEntityDefinition": {
+            "description": "Audit entity definition specifies entities that can be returned by the audit entity API.\n\n - AUDIT_ENTITY_DEFINITION_UNSPECIFIED: The API will default to the Broker entity.\n - AUDIT_ENTITY_DEFINITION_BROKER: This is the default value\nDescribes the broker entity.\n - AUDIT_ENTITY_DEFINITION_BROKER_DESK: Describes the broker desk entity.\n - AUDIT_ENTITY_DEFINITION_BROKER_CONFIRM_ROUTING: Describes the broker confirm routing entity.\n - AUDIT_ENTITY_DEFINITION_BROKER_EXTERNAL_ALIAS: Describes the broker external alias entity.\n - AUDIT_ENTITY_DEFINITION_COUNTER_PARTY_SETTLEMENT_INSTRUCTION: Describes the counter party settlement instruction entity.",
+            "type": "string",
+            "default": "AUDIT_ENTITY_DEFINITION_UNSPECIFIED",
+            "enum": [
+                "AUDIT_ENTITY_DEFINITION_UNSPECIFIED",
+                "AUDIT_ENTITY_DEFINITION_BROKER",
+                "AUDIT_ENTITY_DEFINITION_BROKER_DESK",
+                "AUDIT_ENTITY_DEFINITION_BROKER_CONFIRM_ROUTING",
+                "AUDIT_ENTITY_DEFINITION_BROKER_EXTERNAL_ALIAS",
+                "AUDIT_ENTITY_DEFINITION_COUNTER_PARTY_SETTLEMENT_INSTRUCTION"
+            ]
+        },
+        "v1AuditEntityQuery": {
+            "description": "Query to filter audit records.",
+            "type": "object",
+            "properties": {
+                "brokerAuditCriterion": {
+                    "description": "Request params for retrieving broker audit data.",
+                    "$ref": "#/definitions/v1BrokerAuditCriterion"
+                },
+                "brokerDeskAuditCriterion": {
+                    "description": "Request params for retrieving broker desk audit data.",
+                    "$ref": "#/definitions/v1BrokerDeskAuditCriterion"
+                },
+                "brokerExternalAliasAuditCriterion": {
+                    "description": "Request params for retrieving broker external alias audit data.",
+                    "$ref": "#/definitions/v1BrokerExternalAliasAuditCriterion"
+                },
+                "brokerConfirmRoutingAuditCriterion": {
+                    "description": "Request params for retrieving broker confirm routing audit data.",
+                    "$ref": "#/definitions/v1BrokerConfirmRoutingAuditCriterion"
+                },
+                "counterPartySettlementInstructionAuditCriterion": {
+                    "description": "Request params for retrieving counterparty settlement instructions audit data.",
+                    "$ref": "#/definitions/v1CounterpartySettlementInstructionAuditCriterion"
+                },
+                "entityDefinition": {
+                    "description": "The audit entity definition to return - Filter Audit data based on the defined broker entity.",
+                    "$ref": "#/definitions/v1AuditEntityDefinition"
+                },
+                "startDate": {
+                    "description": "Start of date range within which audit records need to be retrieved.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "endDate": {
+                    "description": "End of date range within which audit records need to be retrieved.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "defunct": {
+                    "description": "Defunct flag - to load only defunct counterparties and associated data.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "v1Broker": {
+            "description": "A trade executed through Aladdin is a transaction that occurred between a portfolio and 'other' party. \nBroker represents the 'other' participant in a trade.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Resources must have a 'id' field.\nName describes the computer or human assigned resource identifier.\nBroker code.",
+                    "type": "string"
+                },
+                "brokerTicker": {
+                    "description": "Broker short name.",
+                    "type": "string"
+                },
+                "brokerName": {
+                    "description": "Broker name.",
+                    "type": "string"
+                },
+                "brokerType": {
+                    "description": "Broker type.",
+                    "type": "string"
+                },
+                "brokerIssuerId": {
+                    "description": "Issuer id.",
+                    "type": "string"
+                },
+                "brokerExternalOrganisationId": {
+                    "type": "string",
+                    "title": "External organisation.\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because the resource it should reference has not been created. --)"
+                },
+                "brokerPortfolioId": {
+                    "description": "Broker portfolio code.",
+                    "type": "string"
+                },
+                "legalEntityId": {
+                    "description": "LEI - Legal Entity Identifier. \nRefers to ticker from issuer table - Value is mapped and returned , not to be entered by the user.",
+                    "type": "string"
+                },
+                "businessPurpose": {
+                    "description": "Business Purpose.",
+                    "type": "string"
+                },
+                "active": {
+                    "description": "active- Flag that indicates whether the counterparty is in active/defunct state.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "v1BrokerAuditCriterion": {
+            "description": "Criteria to retrieve audit records for broker entity.",
+            "type": "object",
+            "title": "Broker audit criterion",
+            "properties": {
+                "brokerTickers": {
+                    "description": "Broker ticker for which audit information is to be retrieved.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "brokerType": {
+                    "type": "string",
+                    "title": "Broker Type"
+                }
+            }
+        },
+        "v1BrokerConfirmRouting": {
+            "description": "BrokerConfirmRouting describes instructions for delivering trade information to a broker desk.\nAfter a trade is booked in Aladdin, it needs to be confirmed with broker. \nConfirm routings are setup at broker level in order for the confirmation deliveries to be created and sent out.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Resources must have a 'id' field.\nName describes the computer or human assigned resource identifier.\nRouting id.",
+                    "type": "string"
+                },
+                "brokerId": {
+                    "description": "Represents Aladdin Broker Identifier (Numeric), commonly referred to as broker code.",
+                    "type": "string"
+                },
+                "brokerDeskId": {
+                    "description": "Broker desk id.",
+                    "type": "string"
+                },
+                "deliveryPurpose": {
+                    "description": "Purpose of the confirmation delivery. Please see decode named DELIV_PURPOSE.",
+                    "type": "string"
+                },
+                "deliveryType": {
+                    "description": "The method of delivery. E.g. fax. Please see decode named BRKR_DELIV_T.",
+                    "type": "string"
+                },
+                "deliveryFormat": {
+                    "description": "Format of the delivery. Please see decode named BRKR_FORMATS.",
+                    "type": "string"
+                },
+                "recipientContactId": {
+                    "description": "The contact id of the recipient.",
+                    "type": "string"
+                },
+                "autoSend": {
+                    "description": "Send automatically true, do not send automatically false.",
+                    "type": "boolean"
+                },
+                "confirmDeliveryRule": {
+                    "description": "JQL to evaluate whether to create delivery.",
+                    "type": "string"
+                },
+                "reviewerSignRequired": {
+                    "description": "Boolean flag that tells whether to add digital signature of reviewer to confirm sheet or not.",
+                    "type": "boolean"
+                },
+                "deliveryStartDate": {
+                    "description": "Date in which delivery becomes effective. NULL=no min effective date.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "deliveryStopDate": {
+                    "description": "Date in which delivery stops being effective. NULL=infinity date.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "scheduleName": {
+                    "description": "Schedule to follow if auto send is true.",
+                    "type": "string"
+                },
+                "businessPurpose": {
+                    "description": "Purpose of delivery from business standpoint. This specifies the type of delivery like Confirm/Recon etc.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1BrokerConfirmRoutingAuditCriterion": {
+            "description": "Criteria to retrieve audit records for broker confirm routing entity.",
+            "type": "object",
+            "title": "Broker confirm routing audit criterion",
+            "properties": {
+                "brokerTickers": {
+                    "description": "Broker ticker for which audit information is to be retrieved.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1BrokerDesk": {
+            "description": "Each broker in Aladdin will have at least one desk assigned.\nThe desk selected for a trade designates the group and specific contact at the broker firm with whom the transaction was done.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Resources must have a 'id' field.\nName describes the computer or human assigned resource identifier.\nDesk id.",
+                    "type": "string"
+                },
+                "brokerId": {
+                    "description": "Represents Aladdin Broker Identifier (Numeric), commonly referred to as broker code.",
+                    "type": "string"
+                },
+                "brokerEntity": {
+                    "description": "Broker entity based on the decode BROKER_ENTITY.",
+                    "type": "string"
+                },
+                "deskType": {
+                    "description": "Broker desk types.",
+                    "type": "string"
+                },
+                "assistantId": {
+                    "description": "Assistant id.",
+                    "type": "string"
+                },
+                "salesmanId": {
+                    "description": "Salesman id.",
+                    "type": "string"
+                },
+                "deskRule": {
+                    "description": "Represents rule like BQL to default a Desk to a Trade.",
+                    "type": "string"
+                },
+                "deskCode": {
+                    "description": "Desk Code.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1BrokerDeskAuditCriterion": {
+            "description": "Criteria to retrieve audit records for broker desk entity.",
+            "type": "object",
+            "title": "Broker desk audit criterion",
+            "properties": {
+                "brokerTickers": {
+                    "description": "Broker ticker for which audit information is to be retrieved.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1BrokerExternalAlias": {
+            "description": "It is used to map an Aladdin broker to the aliases by which the broker is known outside of Aladdin®.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Resources must have a 'id' field.\nName describes the computer or human assigned resource identifier.\nRepresents Aladdin Broker Identifier (Numeric), commonly referred to as broker code.",
+                    "type": "string"
+                },
+                "brokerDeskId": {
+                    "description": "Broker desk id.",
+                    "type": "string"
+                },
+                "brokerExternalOrganisationId": {
+                    "type": "string",
+                    "title": "External organisation.\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because resource it should reference has not been created... --)"
+                },
+                "externalAlias": {
+                    "description": "Extern id value.",
+                    "type": "string"
+                },
+                "alternateInfo1": {
+                    "description": "Additional data point to provide data in addition to extern id.",
+                    "type": "string"
+                },
+                "alternateInfo2": {
+                    "description": "Additional data point to provide data in addition to extern id.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1BrokerExternalAliasAuditCriterion": {
+            "description": "Criteria to retrieve audit records for broker external alias entity.",
+            "type": "object",
+            "title": "Broker external alias audit criterion",
+            "properties": {
+                "brokerTickers": {
+                    "description": "Broker ticker for which audit information is to be retrieved.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1CounterPartySettlementInstruction": {
+            "description": "CounterPartySettlementInstruction describes information about settlement instructions for a broker or account.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Resources must have a 'id' field.\n\nName describes the computer or human assigned resource identifier.\nRepresents Settle Code.",
+                    "type": "string"
+                },
+                "brokerId": {
+                    "description": "Represents Aladdin Broker Identifier (Numeric), commonly referred to as broker code.",
+                    "type": "string"
+                },
+                "accountName": {
+                    "description": "Represents account name of the settlement instruction.",
+                    "type": "string"
+                },
+                "deliveryName": {
+                    "description": "Represents delivery name for the settlement instruction.",
+                    "type": "string"
+                },
+                "settlementInstructionRule": {
+                    "description": "Represents rule like bql, which if evaluated to true, selects given instruction.",
+                    "type": "string"
+                },
+                "settlementInstructionState": {
+                    "description": "Represents settlement instruction state.",
+                    "$ref": "#/definitions/v1SettlementInstructionState"
+                },
+                "settlementInstructionModifier": {
+                    "description": "Represents modifier of the settlement instruction record.",
+                    "type": "string"
+                },
+                "settlementInstructionModifyDate": {
+                    "description": "Represents modified date of the settlement instruction record.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "settlementInstructionReviewer": {
+                    "description": "Represents reviewer of the settlement instruction record.",
+                    "type": "string"
+                },
+                "settlementInstructionReviewDate": {
+                    "description": "Represents reviewed date of the settlement instruction record.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "settlementParties": {
+                    "description": "Represents the settlement parties associated with settlement instruction record.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "settlementInstructionEntity": {
+                    "description": "Represents broker entity based on the decode BROKER_ENTITY.",
+                    "type": "string"
+                },
+                "templateDefinitionMaps": {
+                    "description": "Template definition Map.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1CounterpartySettlementInstructionAuditCriterion": {
+            "description": "Criteria to retrieve audit records for counterparty settlement instructions entity.",
+            "type": "object",
+            "title": "Counterparty settlement instructions audit criterion",
+            "properties": {
+                "brokerTickers": {
+                    "description": "Broker ticker for which audit information is to be retrieved.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "deliveryName": {
+                    "description": "Represents delivery name for the settlement instruction.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1EntityRevision": {
+            "description": "An audit entity represents a specific entity of the broker resource.",
+            "type": "object",
+            "title": "Entity Revision",
+            "properties": {
+                "broker": {
+                    "description": "Broker entity for which audit information is retrieved.",
+                    "$ref": "#/definitions/v1Broker"
+                },
+                "brokerDesk": {
+                    "description": "Broker Desk entity for which audit information is retrieved.",
+                    "$ref": "#/definitions/v1BrokerDesk"
+                },
+                "brokerExternalAlias": {
+                    "description": "Broker External Alias entity for which audit information is retrieved.",
+                    "$ref": "#/definitions/v1BrokerExternalAlias"
+                },
+                "brokerConfirmRouting": {
+                    "description": "Broker Confirm Routing  entity for which audit information is retrieved.",
+                    "$ref": "#/definitions/v1BrokerConfirmRouting"
+                },
+                "counterPartySettlementInstruction": {
+                    "description": "Counter Party Settlement Instruction entity for which audit information is retrieved.",
+                    "$ref": "#/definitions/v1CounterPartySettlementInstruction"
+                },
+                "brokerTicker": {
+                    "description": "Represents ticker of the entity for which audit data is being retrieved.",
+                    "type": "string"
+                },
+                "modifier": {
+                    "description": "Represents username of the user who made changes to the record.",
+                    "type": "string"
+                },
+                "changedTime": {
+                    "description": "Represents the date when changes were made to the record.",
+                    "$ref": "#/definitions/typeDateTime"
+                },
+                "operation": {
+                    "description": "Represents the operation performed on the record.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1FilterEntityRevisionsRequest": {
+            "type": "object",
+            "title": "The request message for AuditAPI.FilterEntityRevisions.\n(-- api-linter: aladdin::9016::request-message-name=disabled\n aip.dev/not-precedent: We need to do this because this is an api on a local message an not on a resource --)",
+            "properties": {
+                "pageSize": {
+                    "description": "The maximum number of audit records to return. The service may\nreturn fewer than this value. If unspecified, at most 500\naudit records will be returned. The maximum value is 500; values\nabove 500 will be coerced to 500.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "pageToken": {
+                    "description": "A page token, received from a previous 'FilterAuditRecords' call.\nProvide this to retrieve the subsequent page.\n\nWhen paginating, all other parameters provided to\n'FilterAuditRecords' must match the call that provided the page\ntoken.",
+                    "type": "string"
+                },
+                "query": {
+                    "description": "Defines filtering criteria on the Audit data.",
+                    "$ref": "#/definitions/v1AuditEntityQuery"
+                }
+            }
+        },
+        "v1FilterEntityRevisionsResponse": {
+            "type": "object",
+            "title": "The response message for AuditAPI.FilterEntityRevisions.\n(-- api-linter: aladdin::9016::response-message-name=disabled\n aip.dev/not-precedent: We need to do this because this is an api on a local message an not on a resource --)",
+            "properties": {
+                "entityRevisions": {
+                    "description": "Audit entities to be returned.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1EntityRevision"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "A token, which can be sent as 'page_token' to retrieve the next page.\nIf this field is omitted, there are no subsequent pages.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1SettlementInstructionState": {
+            "description": "Enumeration of possible states of Counter Party Settlement Instructions.\n\n - SETTLEMENT_INSTRUCTION_STATE_UNSPECIFIED: Reserved value.\n - SETTLEMENT_INSTRUCTION_STATE_APPROVED: Approved cde=0.\n - SETTLEMENT_INSTRUCTION_STATE_DELETED: Deleted cde=1.\n - SETTLEMENT_INSTRUCTION_STATE_UNAPPROVED: Unapproved cde=3.\n - SETTLEMENT_INSTRUCTION_STATE_REJECTED: Rejected cde=4.",
+            "type": "string",
+            "default": "SETTLEMENT_INSTRUCTION_STATE_UNSPECIFIED",
+            "enum": [
+                "SETTLEMENT_INSTRUCTION_STATE_UNSPECIFIED",
+                "SETTLEMENT_INSTRUCTION_STATE_APPROVED",
+                "SETTLEMENT_INSTRUCTION_STATE_DELETED",
+                "SETTLEMENT_INSTRUCTION_STATE_UNAPPROVED",
+                "SETTLEMENT_INSTRUCTION_STATE_REJECTED"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.reference_data.broker.v1.Audit": "This grants access to all endpoints in the investment_operations.reference_data.broker.v1.Audit API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.reference_data.broker.v1.Audit": "This grants access to all endpoints in the investment_operations.reference_data.broker.v1.Audit API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "investment_operations.reference_data.broker.v1.Audit",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "investment_operations.reference_data.broker.v1.Audit",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

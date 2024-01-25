@@ -1,0 +1,2192 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Capital flows are the cash and asset subscriptions coming into a fund and the cash and asset redemptions going out of a fund (e.g., client contributions, withdrawals, and initial funding for a portfolio). This API permits users to validate, create, update, and receive capital flows transactions and their details. User needs standard API permissison ALADDIN_API_USER to use the Capital Flows API and standard newcash permissions to perform different actions. Please refer to the Capital Flows User Guide on the client landing page for more information on newcash permission structure.",
+        "title": "Capital Flows 1.0.0",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.clients.capital_flows.enriched_capital_flow.EnrichedCapitalFlowAPI",
+        "x-aladdin-api-stability": "stable",
+        "x-aladdin-spec-id": "agraph.clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlowAPI"
+    },
+    "basePath": "/api/clients/capital-flows/enriched-capital-flow/v1/",
+    "paths": {
+        "/enrichedCapitalFlow:transition": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "User would require standard newcash permissions to perform action(s) based on business workflow and user's role (Standard newcash permissions are: VIEW_NEWCASH, CASH_PAY, CASH_MOD, CASH_CONF, ASSET_MOD, ASSET_CONF, CASH_TRANSFER, ASSET_TRANSFER).\n(-- api-linter: aladdin::9002::wordslist-custom-method-http=disabled\n aip.dev/not-precedent: We need to do this because this method name is more meaningful ... --)",
+                "summary": "Transition capital flows to a given state",
+                "operationId": "EnrichedCapitalFlowAPI_TransitionEnrichedCapitalFlow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1TransitionEnrichedCapitalFlowRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1EnrichedCapitalFlow"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 100
+            }
+        },
+        "/enrichedCapitalFlows/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "User would require standard View newcash permission i.e VIEW_NEWCASH.",
+                "summary": "Retrieve a capital flow transaction",
+                "operationId": "EnrichedCapitalFlowAPI_GetEnrichedCapitalFlow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "enriched capital flow unique ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1EnrichedCapitalFlow"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 100
+            }
+        },
+        "/enrichedCapitalFlows:batchValidate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "User would require standard newcash permissions to perform action(s) based on business workflow and user's role (Standard newcash permissions are: VIEW_NEWCASH, CASH_PAY, CASH_MOD, CASH_CONF, ASSET_MOD, ASSET_CONF, CASH_TRANSFER, ASSET_TRANSFER).\n\nRecommendation for usage:\n\n(1) For real-time Capital flows posting, recommendation is to provide 1-50 Capital Flows/request with up to 100 such requests per minute.\n\n(2) For large batch of Capital Flow posting, the recommendation is to provide 1-20 requests per minute with up to 250 Capital flows/request. Subsequent requests should be sent once the response for previous request(s) is received. Also, If a timeout is received, then reduce the number of flows/requests to 200 or less.\n\n(3) Do not update the same Capital Flows across multiple concurrent requests. Prefer to use distinct batches across concurrent Capital Flows requests.\n\n(4) For concurrent requests, it is recommended to provide Capital Flows version in each request.",
+                "summary": "Validate all capital flows in single batch",
+                "operationId": "EnrichedCapitalFlowAPI_BatchValidateEnrichedCapitalFlows",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchValidateEnrichedCapitalFlowsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchValidateEnrichedCapitalFlowsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 100
+            }
+        },
+        "/enrichedCapitalFlows:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "User would require standard View newcash permission i.e VIEW_NEWCASH.",
+                "summary": "Filter capital flows based on search query",
+                "operationId": "EnrichedCapitalFlowAPI_FilterEnrichedCapitalFlows",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterEnrichedCapitalFlowsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterEnrichedCapitalFlowsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 100
+            }
+        },
+        "/enrichedCapitalFlows:filterByHistoricalTransactions": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "User would require standard View newcash permission i.e VIEW_NEWCASH.",
+                "summary": "Filter capital flows historical based on search",
+                "operationId": "EnrichedCapitalFlowAPI_FilterEnrichedCapitalFlowsByHistoricalTransactions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterEnrichedCapitalFlowsByHistoricalTransactionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterEnrichedCapitalFlowsByHistoricalTransactionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 100
+            }
+        },
+        "/enrichedCapitalFlows:import": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "User would require standard newcash permissions to perform action(s) based on business workflow and user's role (Standard newcash permissions are: VIEW_NEWCASH, CASH_PAY, CASH_MOD, CASH_CONF, ASSET_MOD, ASSET_CONF, CASH_TRANSFER, ASSET_TRANSFER).\n\nRecommendation for usage:\n\n(1) For real-time Capital flows posting, recommendation is to provide 1-50 Capital Flows/request with up to 100 such requests per minute.\n\n(2) For large batch of Capital Flow posting, the recommendation is to provide 1-20 requests per minute with up to 250 Capital flows/request. Subsequent requests should be sent once the response for previous request(s) is received. Also, If a timeout is received, then reduce the number of flows/requests to 200 or less.\n\n(3) Do not update the same Capital Flows across multiple concurrent requests. Prefer to use distinct batches across concurrent Capital Flows requests.\n\n(4) For concurrent requests, it is recommended to provide Capital Flows version in each request.",
+                "summary": "Creates/Updates multiple capital flows transaction",
+                "operationId": "EnrichedCapitalFlowAPI_ImportEnrichedCapitalFlows",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1ImportEnrichedCapitalFlowsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1ImportEnrichedCapitalFlowsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 100
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "enumsAction": {
+            "description": "Represents capital flow lifecycle transition actions.\n\n - ACTION_UNSPECIFIED: Represents unspecified action.\n - ACTION_AUTHORIZE: Represents authorize action.\n - ACTION_CONFIRM: Represents confirm action.\n - ACTION_UNCONFIRM: Represents unconfirm action.\n - ACTION_REQUEST_CANCEL: Represents request cancel action.\n - ACTION_AUTHORIZE_CANCEL: Represents authorize cancel action.\n - ACTION_REJECT_CANCEL: Represents reject cancel action.\n - ACTION_CANCEL: Represents cancel action.\n - ACTION_RESET: Represents reset action.\n - ACTION_FINALISE: Represents finalise action.",
+            "type": "string",
+            "default": "ACTION_UNSPECIFIED",
+            "enum": [
+                "ACTION_UNSPECIFIED",
+                "ACTION_AUTHORIZE",
+                "ACTION_CONFIRM",
+                "ACTION_UNCONFIRM",
+                "ACTION_REQUEST_CANCEL",
+                "ACTION_AUTHORIZE_CANCEL",
+                "ACTION_REJECT_CANCEL",
+                "ACTION_CANCEL",
+                "ACTION_RESET",
+                "ACTION_FINALISE"
+            ]
+        },
+        "enumsCapitalFlowBasis": {
+            "description": "Describes the basis of capital flow record.\n\n - CAPITAL_FLOW_BASIS_UNSPECIFIED: Represents unspecified basis.\n - CAPITAL_FLOW_BASIS_UNIT: Represents unit basis.\n - CAPITAL_FLOW_BASIS_CASH: Represents cash basis.\n - CAPITAL_FLOW_BASIS_SELL_ALL: Represents sell all basis.\n - CAPITAL_FLOW_BASIS_TEMPORARY: Represents temporary basis.\n - CAPITAL_FLOW_BASIS_PERCENT: Represents percent basis.",
+            "type": "string",
+            "default": "CAPITAL_FLOW_BASIS_UNSPECIFIED",
+            "enum": [
+                "CAPITAL_FLOW_BASIS_UNSPECIFIED",
+                "CAPITAL_FLOW_BASIS_UNIT",
+                "CAPITAL_FLOW_BASIS_CASH",
+                "CAPITAL_FLOW_BASIS_SELL_ALL",
+                "CAPITAL_FLOW_BASIS_TEMPORARY",
+                "CAPITAL_FLOW_BASIS_PERCENT"
+            ]
+        },
+        "enumsCapitalFlowTransactionType": {
+            "description": "Describes capital flow transaction type.\n(*Required).\n\n - CAPITAL_FLOW_TRANSACTION_TYPE_UNSPECIFIED: Represents unspecified transaction type.\n - CAPITAL_FLOW_TRANSACTION_TYPE_CASHIN: Represents CASHIN transaction type.\n - CAPITAL_FLOW_TRANSACTION_TYPE_CASHOUT: Represents CASHOUT transaction type.\n - CAPITAL_FLOW_TRANSACTION_TYPE_ASSETIN: Represents ASSETIN transaction type.\n - CAPITAL_FLOW_TRANSACTION_TYPE_ASSETOUT: Represents ASSETOUT transaction type.\n - CAPITAL_FLOW_TRANSACTION_TYPE_TRANSFERIN: Represents TRANSFERIN transaction type.\n - CAPITAL_FLOW_TRANSACTION_TYPE_TRANSFEROUT: Represents TRANSFEROUT transaction type.\n - CAPITAL_FLOW_TRANSACTION_TYPE_ASSETTRNFRIN: Represents ASSETTRNFRIN transaction type.\n - CAPITAL_FLOW_TRANSACTION_TYPE_ASSETTRNFROUT: Represents ASSETTRNFROUT transaction type.",
+            "type": "string",
+            "default": "CAPITAL_FLOW_TRANSACTION_TYPE_UNSPECIFIED",
+            "enum": [
+                "CAPITAL_FLOW_TRANSACTION_TYPE_UNSPECIFIED",
+                "CAPITAL_FLOW_TRANSACTION_TYPE_CASHIN",
+                "CAPITAL_FLOW_TRANSACTION_TYPE_CASHOUT",
+                "CAPITAL_FLOW_TRANSACTION_TYPE_ASSETIN",
+                "CAPITAL_FLOW_TRANSACTION_TYPE_ASSETOUT",
+                "CAPITAL_FLOW_TRANSACTION_TYPE_TRANSFERIN",
+                "CAPITAL_FLOW_TRANSACTION_TYPE_TRANSFEROUT",
+                "CAPITAL_FLOW_TRANSACTION_TYPE_ASSETTRNFRIN",
+                "CAPITAL_FLOW_TRANSACTION_TYPE_ASSETTRNFROUT"
+            ]
+        },
+        "enumsEstimateState": {
+            "description": "Describes estimated state of capital flow.\n(*Required).\n\n - ESTIMATE_STATE_UNSPECIFIED: Represents unspecified estimated state.\n - ESTIMATE_STATE_ESTIMATED: Represents estimated state as estimated.\n - ESTIMATE_STATE_FINAL: Represents estimated state as final.",
+            "type": "string",
+            "default": "ESTIMATE_STATE_UNSPECIFIED",
+            "enum": [
+                "ESTIMATE_STATE_UNSPECIFIED",
+                "ESTIMATE_STATE_ESTIMATED",
+                "ESTIMATE_STATE_FINAL"
+            ]
+        },
+        "enumsPricingMethodology": {
+            "description": "Describes the pricing methodology of capital flow record.\n\n - PRICING_METHODOLOGY_UNSPECIFIED: Represents unspecified pricing methodology\n - PRICING_METHODOLOGY_CANCELLED: Represents cancelled pricing methodology.\n - PRICING_METHODOLOGY_ESTIMATE: Represents estimate pricing methodology.\nEstimate pricing methodology is always unpriced.\n - PRICING_METHODOLOGY_UNPRICED: Represents unpriced pricing methodology .\n - PRICING_METHODOLOGY_PRICED: Represents priced pricing methodology.",
+            "type": "string",
+            "default": "PRICING_METHODOLOGY_UNSPECIFIED",
+            "enum": [
+                "PRICING_METHODOLOGY_UNSPECIFIED",
+                "PRICING_METHODOLOGY_CANCELLED",
+                "PRICING_METHODOLOGY_ESTIMATE",
+                "PRICING_METHODOLOGY_UNPRICED",
+                "PRICING_METHODOLOGY_PRICED"
+            ]
+        },
+        "enumsSeverity": {
+            "description": "Severity describes whether it is a warning or restriction.\n\n - SEVERITY_UNSPECIFIED: Default value.\n - SEVERITY_WARNING: Warning.\n - SEVERITY_RESTRICTION: Restriction.",
+            "type": "string",
+            "default": "SEVERITY_UNSPECIFIED",
+            "enum": [
+                "SEVERITY_UNSPECIFIED",
+                "SEVERITY_WARNING",
+                "SEVERITY_RESTRICTION"
+            ]
+        },
+        "enumsState": {
+            "description": "Describes the capital flow status.\n\n - STATE_UNSPECIFIED: Represents unspecified status.\n - STATE_OPEN: Represents open status.\n - STATE_CANCEL: Represents cancel status.\n - STATE_AUTHORIZED: Represents authorized status.\n - STATE_CONFIRMED: Represents confirmed status.\n - STATE_CANCEL_REQUESTED: Represents cancel requested status.",
+            "type": "string",
+            "default": "STATE_UNSPECIFIED",
+            "enum": [
+                "STATE_UNSPECIFIED",
+                "STATE_OPEN",
+                "STATE_CANCEL",
+                "STATE_AUTHORIZED",
+                "STATE_CONFIRMED",
+                "STATE_CANCEL_REQUESTED"
+            ]
+        },
+        "enumsTrueUp": {
+            "description": "Describes the true-up analysis of capital flow record.\n\n - TRUE_UP_UNSPECIFIED: Represents unspecified true up.\n - TRUE_UP_NOT_STARTED: Represents not started true up.\n - TRUE_UP_FA_PRICES_APPLIED_DEPENDENCY: Represents fund accountant prices applied - Dependency true up\n - TRUE_UP_FA_PRICES_APPLIED: Represents fund accountant prices applied true up\n - TRUE_UP_DEALING_PRICES_APPLIED_DEPENDENCY: Represents dealing prices applied - Dependency true up\n - TRUE_UP_DEALING_PRICES_APPLIED: Represents dealing prices applied true up.\n - TRUE_UP_PRICED: Represents priced true up.",
+            "type": "string",
+            "default": "TRUE_UP_UNSPECIFIED",
+            "enum": [
+                "TRUE_UP_UNSPECIFIED",
+                "TRUE_UP_NOT_STARTED",
+                "TRUE_UP_FA_PRICES_APPLIED_DEPENDENCY",
+                "TRUE_UP_FA_PRICES_APPLIED",
+                "TRUE_UP_DEALING_PRICES_APPLIED_DEPENDENCY",
+                "TRUE_UP_DEALING_PRICES_APPLIED",
+                "TRUE_UP_PRICED"
+            ]
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1BatchValidateEnrichedCapitalFlowsRequest": {
+            "type": "object",
+            "title": "The request message for EnrichedCapitalFlowAPI.BatchValidateEnrichedCapitalFlows",
+            "required": [
+                "enrichedCapitalFlows"
+            ],
+            "properties": {
+                "enrichedCapitalFlows": {
+                    "type": "array",
+                    "title": "Array of capital flows transactions.\nportfolioId, tradeDate, settlementDate, cashAmount, cashOriginator, capitalFlow transactionType, estimateState, and CurrencyCode are all mandatory fields for a validate request",
+                    "required": [
+                        "enriched_capital_flows"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1EnrichedCapitalFlow"
+                    }
+                }
+            }
+        },
+        "v1BatchValidateEnrichedCapitalFlowsResponse": {
+            "type": "object",
+            "title": "The response message for EnrichedCapitalFlowAPI.BatchValidateEnrichedCapitalFlows",
+            "properties": {
+                "validateEnrichedCapitalFlowResponses": {
+                    "type": "array",
+                    "title": "enriched capital flows validated",
+                    "items": {
+                        "$ref": "#/definitions/v1ValidateEnrichedCapitalFlowResponse"
+                    }
+                }
+            }
+        },
+        "v1EnrichedCapitalFlow": {
+            "type": "object",
+            "title": "EnrichedCapitalFlow describes capital flows are the cash and asset subscriptions\ncoming newly into a fund as well as the cash and asset redemptions going out of a fund \n(e.g. client contributions, withdrawals, and initial funding for a portfolio)",
+            "required": [
+                "cashAmount",
+                "enrichedCapitalFlowTransactionType",
+                "cashOriginator",
+                "currencyCode",
+                "settlementDate",
+                "tradeDate",
+                "estimateState",
+                "portfolioTicker"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Unique Id for capital flows transaction record. Numeric value as a string"
+                },
+                "cashAmount": {
+                    "description": "Cash amount in the specified currency.\nIncoming cash is positive, outgoing cash is negative\n(*Required).",
+                    "type": "number",
+                    "format": "double",
+                    "required": [
+                        "cash_amount"
+                    ]
+                },
+                "enrichedCapitalFlowTransactionType": {
+                    "title": "Represents transaction type of capital flow\n(*Required)",
+                    "required": [
+                        "capital_flow_transaction_type"
+                    ],
+                    "$ref": "#/definitions/enumsCapitalFlowTransactionType"
+                },
+                "cashOriginator": {
+                    "type": "string",
+                    "title": "The cash originator is non-Aladdin system or third party from which this newcash originated.\nAt BlackRock and some clients, this is a picklist whose valid values are in the CASH_ORIGINATOR decode.\nAt other clients, this is a free-form field\n(*Required)",
+                    "required": [
+                        "cash_originator"
+                    ]
+                },
+                "currencyCode": {
+                    "type": "string",
+                    "title": "The currency's ISO code, e.g., USD, EUR, NOK, SGD, etc.\nThis is widely available publicly. For a full list in Aladdin, see the B_CURRENCY decode\n(*Required)",
+                    "required": [
+                        "currency_code"
+                    ]
+                },
+                "createTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Timestamp when this record was created"
+                },
+                "modifier": {
+                    "type": "string",
+                    "title": "Aladdin user Id that last modified this record"
+                },
+                "modifyTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Timestamp when this record was modified"
+                },
+                "settlementDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Capital flows transaction settlement date\n(*Required)",
+                    "required": [
+                        "settlement_date"
+                    ]
+                },
+                "state": {
+                    "title": "Describes the capital flow status\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: this Represents capital flow state. --)",
+                    "$ref": "#/definitions/enumsState"
+                },
+                "tradeDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Capital flows transaction trade date\n(*Required)",
+                    "required": [
+                        "trade_date"
+                    ]
+                },
+                "authorizerUserId": {
+                    "type": "string",
+                    "title": "Authorizer Aladdin user Id"
+                },
+                "authorizingSystem": {
+                    "type": "string",
+                    "title": "Authorizing system"
+                },
+                "authorizeTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Datetime when this record was authorized"
+                },
+                "creator": {
+                    "type": "string",
+                    "title": "Aladdin user Id that created this record"
+                },
+                "approverUserId": {
+                    "type": "string",
+                    "title": "Approver Aladdin user Id"
+                },
+                "approvingSystem": {
+                    "type": "string",
+                    "title": "Approving system"
+                },
+                "confirmTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Timestamp when this record was confirmed"
+                },
+                "estimateState": {
+                    "title": "Estimate state\n(*Required)",
+                    "required": [
+                        "estimate_state"
+                    ],
+                    "$ref": "#/definitions/enumsEstimateState"
+                },
+                "fxRate": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Exchange rate to base currency for this capital flow transaction"
+                },
+                "externalEnrichedCapitalFlowIds": {
+                    "type": "array",
+                    "title": "List of external capital flows transaction Ids",
+                    "items": {
+                        "$ref": "#/definitions/v1ExternalEnrichedCapitalFlowIdentifier"
+                    }
+                },
+                "enrichedCapitalFlowComment": {
+                    "type": "string",
+                    "title": "General comment on capital flows transaction record"
+                },
+                "orderId": {
+                    "type": "string",
+                    "title": "Unique Aladdin Id for the order related transaction (e.g., placement, trade, capital flow).\nThis is the Aladdin order number which is related to capital flow transaction\n(aip.dev/beta-blocker: This should reference\na trading order resource once it is created.)"
+                },
+                "orderType": {
+                    "type": "string",
+                    "title": "Order type\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because this ia more meaningful type name... --)"
+                },
+                "reason": {
+                    "type": "string",
+                    "title": "Reason for cash movement.\nValid values include INITFUND (Initial Funding), CLIENT (client contribution), SUBS (Subscriptions), REDS (Redemptions), OTHER (Other), etc.\nFull list of values stored in NEWCASH_REASON decode"
+                },
+                "systemOwner": {
+                    "type": "string",
+                    "title": "The source that currently owns this record.\nThis value is used to maintain exclusive update rights to the record\nto one particular source so that other sources cannot update this record"
+                },
+                "touchCount": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "The number of times this record has been touched/modified"
+                },
+                "trueUp": {
+                    "description": "Describes the true-up analysis of capital flows transaction.",
+                    "$ref": "#/definitions/enumsTrueUp"
+                },
+                "unitOwnerId": {
+                    "type": "string",
+                    "title": "Portfolio code that is subscribing to this fund with these units"
+                },
+                "unitPrice": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "The price paid or received for each unit issued"
+                },
+                "unitsIssue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "The units of a pooled fund issued related to this capital flows transaction"
+                },
+                "enrichedCapitalFlowBasis": {
+                    "title": "Represents basis on which the capital flow is denominated",
+                    "$ref": "#/definitions/enumsCapitalFlowBasis"
+                },
+                "assetId": {
+                    "type": "string",
+                    "title": "Aladdin asset Id. May represent a portfolio or an index"
+                },
+                "pricedEntity": {
+                    "type": "string",
+                    "title": "The entity that priced the order"
+                },
+                "pricedTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Pricing timestamp"
+                },
+                "settlementCode": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Settlement instruction code"
+                },
+                "pricingMethodology": {
+                    "title": "Pricing methodology",
+                    "$ref": "#/definitions/enumsPricingMethodology"
+                },
+                "enrichedCapitalFlowSource": {
+                    "type": "string",
+                    "title": "source of the capital flows transaction"
+                },
+                "settlementInfo": {
+                    "type": "string",
+                    "title": "Settlement info"
+                },
+                "clientPaymentReference": {
+                    "type": "string",
+                    "title": "Free form text field for payment ref field on swift"
+                },
+                "cancelRequestor": {
+                    "type": "string",
+                    "title": "Person that requested cancellation.\nWhen populated by Aladdin, this will be an Aladdin user Id"
+                },
+                "cancelApprover": {
+                    "type": "string",
+                    "title": "Aladdin user Id that approved cancellation.\nWhen populated by internal systems, this will be a system Id"
+                },
+                "sendEligible": {
+                    "type": "boolean",
+                    "title": "Eligible-to-send flag"
+                },
+                "enrichedCapitalFlowTransferDetail": {
+                    "title": "Represents enriched capital flow transfer detail",
+                    "$ref": "#/definitions/v1EnrichedCapitalFlowTransferDetail"
+                },
+                "portfolioTicker": {
+                    "type": "string",
+                    "title": "Portfolio ticker",
+                    "required": [
+                        "portfolio_ticker"
+                    ]
+                },
+                "brokerTicker": {
+                    "type": "string",
+                    "title": "Counterparty ticker"
+                },
+                "portfolioId": {
+                    "description": "Portfolio code.",
+                    "type": "string"
+                },
+                "brokerId": {
+                    "description": "Counterparty code.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1EnrichedCapitalFlowQuery": {
+            "type": "object",
+            "title": "Describes capital flow search query. organizationId, tradeDate, portfolioId.\nmust not be provided as individual criteria",
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "title": "Capital flow transaction Ids",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "primaryExternalIds": {
+                    "type": "array",
+                    "title": "Capital flows transactions primary external Ids",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "organizationId": {
+                    "type": "string",
+                    "title": "External organization Id.\nThis must be provided with at least one of the following fields (ids, primaryExternalIds, portfolioIds and tradeDate, orderIds)\n(-- api-linter: core::0124::valid-reference=disabled\n aip.dev/not-precedent: We need to do this because this is a valid resource... --)"
+                },
+                "orderIds": {
+                    "type": "array",
+                    "title": "Aladdin Order Ids This should reference a trading order resource once it is created. --)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "portfolioTickers": {
+                    "type": "array",
+                    "title": "Aladdin portfolio tickers.\nThis array must be provided with at least one of the following fields (ids, primaryExternalIds, tradeDate, orderIds)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "tradeDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Capital flows transaction trade date.\nThis must be provided with at least one of the following fields (ids, primaryExternalIds, portfolioIds, orderIds)"
+                },
+                "portfolioGroupTickers": {
+                    "type": "array",
+                    "title": "Aladdin portfolio group tickers.\nThis array must be provided with at least one of the following fields (ids, primaryExternalIds, tradeDate, orderIds)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "modifyDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Capital flows transaction modify date.\nThis must be provided with at least one of the following fields (ids, primaryExternalIds, portfolioIds, orderIds)"
+                }
+            }
+        },
+        "v1EnrichedCapitalFlowTransferDetail": {
+            "type": "object",
+            "title": "Describes enriched capital flow transfer details",
+            "properties": {
+                "transferId": {
+                    "type": "string",
+                    "title": "This field contains the unique Id of the reciprocal transfer, where a subscription into one fund is a redemption from another fund.\nThis can also represent an interfund transfer, where a trade out of one fund is a trade into another fund.\nIf a redemption from fund A has unique Id 123 and transfer Id 456, then the reciprocal subscription into fund B will have unique Id 456 and transfer Id 123"
+                },
+                "transferFundTicker": {
+                    "type": "string",
+                    "title": "Portfolio ticker for transfer fund"
+                },
+                "transferBrokerTicker": {
+                    "type": "string",
+                    "title": "Transfer counterparty ticker"
+                },
+                "transferSettleCode": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Settlement instruction code"
+                },
+                "transferFund": {
+                    "description": "Portfolio code for transfer fund.",
+                    "type": "string"
+                },
+                "transferBrokerCode": {
+                    "description": "Counterparty code for transfer counterparty ticker.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1EnrichedCapitalFlowTransition": {
+            "type": "object",
+            "title": "Describes capital flow transition",
+            "properties": {
+                "enrichedCapitalFlowId": {
+                    "description": "Capital flows transaction newcash Id\nFor state transition of existing newcash, request should provide either EnrichedCapitalFlowId or primaryExternalId.\nProvided key value will be used to identify unique newcash record for state transition.",
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Capital flows transaction record version. The value provided here should increment the current version/touchCount by one.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n    aip.dev/not-precedent: We need to do this because it refers to version of capital flow record... --)"
+                },
+                "action": {
+                    "title": "Capital flows transaction state transition details\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because it represents capital flow action --)",
+                    "$ref": "#/definitions/enumsAction"
+                },
+                "enrichedCapitalFlowComment": {
+                    "type": "string",
+                    "title": "General comment on capital flows transaction state transition"
+                },
+                "primaryExternalId": {
+                    "type": "string",
+                    "title": "ExternalNewcashId of the existing cash\nFor state transition of existing newcash, request should provide either capitalFlowId or primaryExternalId.\nProvided key value will be used to identify unique newcash record for state transition.\n(-- api-linter: core::0124::required-reference=disabled\n    aip.dev/not-precedent: We need to do this because this is not a resource.. --)"
+                },
+                "rebookPrimaryExternalId": {
+                    "type": "string",
+                    "title": "Capital flows transaction updated External Identifier for newcash record\nValue for this optional parameter can be provided for cancellation and rebooking use case in which this end point will update and replace primaryExternId with provided key value in rebookPrimaryExternalId with action CANCEL only.\n(-- api-linter: core::0124::required-reference=disabled\n    aip.dev/not-precedent: We need to do this because this is not a resource.. --)"
+                }
+            }
+        },
+        "v1EnrichedCapitalFlowValidation": {
+            "type": "object",
+            "title": "EnrichedCapitalFlowValidation describes the validation result",
+            "required": [
+                "errorField",
+                "errorMessage"
+            ],
+            "properties": {
+                "severity": {
+                    "title": "The severity of the violation\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because this name is more meaningful... --)",
+                    "$ref": "#/definitions/enumsSeverity"
+                },
+                "errorField": {
+                    "type": "string",
+                    "title": "Field for which the error occured",
+                    "required": [
+                        "error_field"
+                    ]
+                },
+                "errorMessage": {
+                    "type": "string",
+                    "title": "A description of an error\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because we need\na plain string field --)",
+                    "required": [
+                        "error_message"
+                    ]
+                }
+            }
+        },
+        "v1EnrichedCapitalFlowsByHistoricalTransactionsQuery": {
+            "description": "Query search parameters.\nThis method returns: the latest version of the capital flows transaction record when no version is provided;\nthe specified version of the capital flows transaction record when the version is provided;\nor all versions of the capital flows transaction record when '*' is provided as the version.",
+            "type": "object",
+            "required": [
+                "enrichedCapitalFlowId"
+            ],
+            "properties": {
+                "enrichedCapitalFlowId": {
+                    "type": "string",
+                    "title": "This criterion specifies the Id of the capital flow to filter revisions against",
+                    "required": [
+                        "enriched_capital_flow_id"
+                    ]
+                },
+                "enrichedCapitalFlowVersion": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Capital flows transaction record version. Same as touchCount"
+                }
+            }
+        },
+        "v1EnrichedCapitalFlowsResponse": {
+            "type": "object",
+            "title": "The response message for EnrichedCapitalFlowAPI.ImportEnrichedCapitalFlows",
+            "properties": {
+                "enrichedCapitalFlow": {
+                    "title": "Represents the enriched capital flow record",
+                    "$ref": "#/definitions/v1EnrichedCapitalFlow"
+                },
+                "status": {
+                    "title": "The status of the operation in case of failure/success",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "enrichedCapitalFlowValidations": {
+                    "type": "array",
+                    "title": "Represents the validation associated with the enriched capital flow record",
+                    "items": {
+                        "$ref": "#/definitions/v1EnrichedCapitalFlowValidation"
+                    }
+                },
+                "processed": {
+                    "type": "boolean",
+                    "title": "Indicates whether the record is successfully created/updated or not"
+                }
+            }
+        },
+        "v1ExternalEnrichedCapitalFlowIdentifier": {
+            "type": "object",
+            "title": "ExternalIdentifier describes the identifier for external enriched capital flow\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: we need to use Identifier here. --)",
+            "properties": {
+                "primaryExternalId": {
+                    "type": "string",
+                    "title": "External system's identifier for this record, part 1\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because this is not a resource... --)"
+                },
+                "secondaryExternalId": {
+                    "type": "string",
+                    "title": "External system's identifier for this record, part 2"
+                },
+                "organizationId": {
+                    "type": "string",
+                    "title": "Aladdin's unique Id for an organization or system\n(-- api-linter: core::0124::valid-reference=disabled\n aip.dev/not-precedent: We need to do this because this is a valid resource... --)"
+                }
+            }
+        },
+        "v1FilterEnrichedCapitalFlowsByHistoricalTransactionsRequest": {
+            "type": "object",
+            "title": "The request message for EnrichedCapitalFlowAPI.FilterEnrichedCapitalFlowsByHistoricalTransactionsRequest.\nPresently pagination is not supported",
+            "properties": {
+                "pageSize": {
+                    "description": "The maximum number of capital flows transaction records to return.\nThe service may return fewer than this value.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "pageToken": {
+                    "description": "When paginating, all other parameters provided to\n'FilterEnrichedCapitalFlowsByHistoricalTransactions' must match the call that provided the page\ntoken.\nThis field is not being used presently",
+                    "type": "string",
+                    "title": "A page token, received from a previous 'FilterEnrichedCapitalFlowsByHistoricalTransactions' call.\nProvide this to retrieve the subsequent page"
+                },
+                "query": {
+                    "title": "Represents capital flow revisions search query",
+                    "$ref": "#/definitions/v1EnrichedCapitalFlowsByHistoricalTransactionsQuery"
+                }
+            }
+        },
+        "v1FilterEnrichedCapitalFlowsByHistoricalTransactionsResponse": {
+            "type": "object",
+            "title": "The response message for EnrichedCapitalFlowAPI.FilterEnrichedCapitalFlowsByHistoricalTransactions",
+            "properties": {
+                "enrichedCapitalFlows": {
+                    "type": "array",
+                    "title": "The entities that match the specified FilterEnrichedCapitalFlowsByHistoricalTransactionsRequest",
+                    "items": {
+                        "$ref": "#/definitions/v1EnrichedCapitalFlow"
+                    }
+                },
+                "nextPageToken": {
+                    "type": "string",
+                    "title": "A token, which can be sent as 'page_token' to retrieve the next page.\nIf this field is omitted, there are no subsequent pages"
+                }
+            }
+        },
+        "v1FilterEnrichedCapitalFlowsRequest": {
+            "type": "object",
+            "title": "The request message for EnrichedCapitalFlowAPI.FilterEnrichedCapitalFlows.\nPresently pagination is not supported",
+            "properties": {
+                "pageSize": {
+                    "description": "The maximum number of capital flows transaction records to return.\nThe service may return fewer than this value.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "pageToken": {
+                    "description": "When paginating, all other parameters provided to\n'FilterEnrichedCapitalFlows' must match the call that provided the page\ntoken.\nThis field is not being used presently",
+                    "type": "string",
+                    "title": "A page token, received from a previous 'FilterEnrichedCapitalFlows' call.\nProvide this to retrieve the subsequent page"
+                },
+                "enrichedCapitalFlowQuery": {
+                    "title": "Describes enriched capital flow search query.\norganizationId, tradeDate, and portfolioId cannot be provided as individual criteria - they must accompany the fields specified in the field descriptions",
+                    "$ref": "#/definitions/v1EnrichedCapitalFlowQuery"
+                }
+            }
+        },
+        "v1FilterEnrichedCapitalFlowsResponse": {
+            "type": "object",
+            "title": "The response message for EnrichedCapitalFlowAPI.FilterEnrichedCapitalFlows",
+            "properties": {
+                "enrichedCapitalFlows": {
+                    "type": "array",
+                    "title": "enriched capital flows to be returned",
+                    "items": {
+                        "$ref": "#/definitions/v1EnrichedCapitalFlow"
+                    }
+                },
+                "nextPageToken": {
+                    "type": "string",
+                    "title": "A token, which can be sent as 'page_token' to retrieve the next page.\nIf this field is omitted, there are no subsequent pages.\nThis field is not being used presently"
+                }
+            }
+        },
+        "v1ImportEnrichedCapitalFlowsRequest": {
+            "type": "object",
+            "title": "The request message for EnrichedCapitalFlowAPI.ImportEnrichedCapitalFlows",
+            "required": [
+                "enrichedCapitalFlows"
+            ],
+            "properties": {
+                "enrichedCapitalFlows": {
+                    "description": "Id and primaryExternalId are not mandatory fields when creating new capital flows transactions. If neither field is included in the request, Aladdin will create a new capital flows transaction and generate and return an Id in the response. Here are a few example scenarios:\n\n(1) If the Id field is present in the request and the value matches an existing Id, then the existing capital flows transaction is updated. If the Id value does not match an existing record in the database, then a restriction is returned in the response\n\n(2) If the Id field is not present in the request, then a new capital flow is created and its Id is auto-generated and returned in the response\n\n(3) If the primaryExternalId field is present in the request and the value matches an existing primaryExternalId, then the existing capital flows transaction record is updated. If the primaryExternalId value does not match an existing record in the database, then a new capital flow will be created with the given primaryExternalId value and a new Id is auto-generated and returned in the response",
+                    "type": "array",
+                    "title": "Array of capital flows transactions. portfolioId, tradeDate, settlementDate, cashAmount, cashOriginator, capitalFlow transactionType, estimateState, and currencyCode are mandatory fields to create new capital flows transactions",
+                    "required": [
+                        "enriched_capital_flows"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1EnrichedCapitalFlow"
+                    }
+                },
+                "manualStateCycle": {
+                    "description": "Represents manual state cycle.\nThis enables the API to respect the capital flows transaction status present in the request rather than defaulting to the standard capital flow lifecycle status.\nThis optional flag is useful for systems that need to create capital flows transactions in an authorized or confirmed status, or update transactions to cancelled status in single step.\nBy default, this value is \"False\", which results in creating transactions in an open status.\nSetting this value to \"True\" allows users flexibility to create transactions in either authorized or confirmed status, with authorizerUserId or approverUserId provided respectively; or update transactions to cancelled status in single step, with cancelRequestor and cancelApprover provided.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "v1ImportEnrichedCapitalFlowsResponse": {
+            "type": "object",
+            "title": "The response message for EnrichedCapitalFlowAPI.ImportEnrichedCapitalFlows",
+            "properties": {
+                "enrichedCapitalFlowsResponses": {
+                    "type": "array",
+                    "title": "enriched capital flows created/updated",
+                    "items": {
+                        "$ref": "#/definitions/v1EnrichedCapitalFlowsResponse"
+                    }
+                },
+                "includePartialErrors": {
+                    "type": "boolean",
+                    "title": "Indicates the response contains partial errors or not\n(-- api-linter: core::0144::message-field-plural=disabled\n aip.dev/not-precedent: We need to do this because it better describes the goal of this flag --)"
+                }
+            }
+        },
+        "v1TransitionEnrichedCapitalFlowRequest": {
+            "type": "object",
+            "title": "The request message for EnrichedCapitalFlowAPI.TransitionEnrichedCapitalFlow",
+            "properties": {
+                "enrichedCapitalFlowTransition": {
+                    "title": "Capital flow transition.\nCapital Flow Id, Action, Modifier, Version are mandatory fields in all transition request",
+                    "$ref": "#/definitions/v1EnrichedCapitalFlowTransition"
+                }
+            }
+        },
+        "v1ValidateEnrichedCapitalFlowResponse": {
+            "type": "object",
+            "title": "Describes Validated enriched capital flow result",
+            "properties": {
+                "enrichedCapitalFlow": {
+                    "title": "Represents the enriched capital flow record",
+                    "$ref": "#/definitions/v1EnrichedCapitalFlow"
+                },
+                "status": {
+                    "title": "The status of the operation in case of failure/success",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "enrichedCapitalFlowValidations": {
+                    "type": "array",
+                    "title": "Represents the validations associated with the enriched apital flow record",
+                    "items": {
+                        "$ref": "#/definitions/v1EnrichedCapitalFlowValidation"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read": "non-sensitive read",
+                "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read": "non-sensitive read",
+                "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read",
+                "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:read",
+                "clients.capital_flows.enriched_capital_flow.v1.EnrichedCapitalFlow:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}
