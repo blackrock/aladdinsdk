@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "aladdinsdk-preview"
+name = "aladdinsdk"
 version = "0.0.1a1"
 authors = [
   { name="Vedant Naik", email="naik.vedant@gmail.com" },
