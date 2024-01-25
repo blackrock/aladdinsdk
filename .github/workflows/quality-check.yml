@@ -44,8 +44,14 @@ jobs:
         name: pytest-results
         path: junit/test-results.xml
       if: ${{ always() }}
-    # - name: Build package
-    #   run: python -m build
+    - name: Build package
+      run: python -m build
+    - name: (TEMP) Upload build results
+      uses: actions/upload-artifact@v3
+      with:
+        name: aladdinsdk-build
+        path: dist/*
+      if: ${{ always() }}
     # - name: Publish package
     #   uses: pypa/gh-action-pypi-publish@release/v1
     #   with:
