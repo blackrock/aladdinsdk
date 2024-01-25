@@ -56,7 +56,7 @@ def _run_command(command_array, message):
         return False
 
 
-def _update_asdk_repo_codegen_section(api_name, api_version, api_module_path, target_api_directory):
+def _update_asdk_repo_codegen_section(api_name, api_version, api_module_path, api_swagger_target_location):
     """
     Method to update ASDK's codegen sections. Particularly codegen allow list yaml file.
 
@@ -79,7 +79,7 @@ def _update_asdk_repo_codegen_section(api_name, api_version, api_module_path, ta
     _filtered_api_list = [x for x in _codegen_api_allow_list['CODEGEN_API_SETTINGS']['ALLOW_LIST'] if x['api_name'] != api_name]
 
     # i.e. if running in onboard mode, append new api entry to file
-    with open(f"{target_api_directory}/swagger.json", "r") as file:
+    with open(f"{api_swagger_target_location}/swagger.json", "r") as file:
         _target_swagger_json = json.load(file)
 
     _filtered_api_list.append({
@@ -124,10 +124,12 @@ def _generate_target_api_details_from_agraph_swagger_spec(agraph_swagger_file_pa
             spec_id_split = x_aladdin_spec_id.split('.')
             if spec_id_split[0] == "agraph":
                 spec_id_split.pop(0)
+
+            api_swagger_target_location = os.path.join('aladdinsdk', 'api', 'codegen', *spec_id_split)
             api_name = spec_id_split.pop()
             api_ver = spec_id_split.pop()
             api_module_path = f"aladdinsdk.api.codegen.{'.'.join(spec_id_split)}"
-            return api_name, api_ver, api_module_path
+            return api_name, api_ver, api_module_path, api_swagger_target_location
     except KeyError:
         raise Exception("Incorrect swagger file encountered. "
                         "Info section needs to have 'x-aladdin-spec-id' to help identify API name, version and module path")
@@ -151,7 +153,7 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
     Returns:
         tuple: API Name-Version, Generated APIs target module
     """
-    api_name, api_ver, api_module_path = _generate_target_api_details_from_agraph_swagger_spec(path_to_agraph_openapi_spec_file)
+    api_name, api_ver, api_module_path, api_swagger_target_location = _generate_target_api_details_from_agraph_swagger_spec(path_to_agraph_openapi_spec_file)
     if api_name is None or api_ver is None or api_module_path is None:
         raise Exception("Insufficient API information in swagger files")
 
@@ -193,7 +195,7 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
 
     print(f"[API: {api_name}-{api_ver}] - Openapi codegen steps done. Proceeding with ASDK updates...")
     _update_asdk_repo_codegen_section(api_name=api_name, api_version=api_ver,
-                                      api_module_path=api_module_path, target_api_directory=target_api_directory)
+                                      api_module_path=api_module_path, api_swagger_target_location=api_swagger_target_location)
 
     if is_successful:
         print(f"[API: {api_name}-{api_ver}] - API Onboarding complete. Result: 'success'")
