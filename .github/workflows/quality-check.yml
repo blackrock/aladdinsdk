@@ -46,7 +46,7 @@ jobs:
       if: ${{ always() }}
     - name: Build package
       run: |
-        python -m pip install build
+        python -m pip install build setuptools
         python -m build
     - name: (TEMP) Upload build results
       uses: actions/upload-artifact@v3
