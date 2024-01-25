@@ -27,5 +27,7 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["aladdinsdk"]  # ["*"] by default
-namespaces = false  # true by default
+include = ["aladdinsdk*"]  # ["*"] by default
+
+[tool.setuptools.package-data]
+aladdinsdk = ["**/*.json", "api/codegen/codegen_allow_list.yaml"]
