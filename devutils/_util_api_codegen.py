@@ -240,8 +240,8 @@ if __name__ == "__main__":
     __path_to_source_api_proto = args.source_api_proto_path
 
     if __codegen_util_run_mode == _RUN_MODE_ONBOARD:  # If run mode, derive additional constants needed for program execution
-        __temp_str_splits = __path_to_source_api_proto.rsplit('_api.proto', 1)[0].split("/", 2) if __path_to_source_api_proto is not None else []
-        if len(__temp_str_splits) > 0 and __temp_str_splits[0] == __temp_str_splits[1]:  # Most agraph API paths have duplicate domain/segment, which needs to be ignored
+        __temp_str_splits = __path_to_source_api_proto.rsplit('_api.proto', 1)[0].split("/", 2)
+        if __temp_str_splits[0] == __temp_str_splits[1]:  # Most agraph API paths have duplicate domain/segment, which needs to be ignored
             __temp_str_splits.pop(0)
         __path_to_target_api_module = '/'.join(__temp_str_splits)
 
