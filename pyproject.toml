@@ -27,8 +27,5 @@ dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["aladdinsdk*"]  # ["*"] by default
+include = ["aladdinsdk"]  # ["*"] by default
 namespaces = false  # true by default
-
-[tool.setuptools.package-data]
-aladdinsdk = ["*.json", "*.yaml"]

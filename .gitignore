@@ -187,3 +187,12 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+sdist/
+*.egg-info/
+*.egg
