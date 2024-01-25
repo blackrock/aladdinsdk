@@ -1,8 +1,8 @@
 from unittest import TestCase, mock
 import os
-from importlib import reload
 from aladdinsdk.common.secrets import fsutil, keyringutil
 from test.resources.testutils import utils
+
 
 class TestCommonSecretsFSUtil(TestCase):
     @classmethod
@@ -19,7 +19,7 @@ class TestCommonSecretsFSUtil(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def test_read_secret_from_file_default(self):
         content = fsutil.read_secret_from_file('test/resources/non_existent_file.txt', 'default_val')
         self.assertEqual(content, "default_val")
@@ -27,47 +27,49 @@ class TestCommonSecretsFSUtil(TestCase):
     def test_read_secret_from_file(self):
         content = fsutil.read_secret_from_file('test/resources/testdata/sample_secret_text_file.txt')
         self.assertEqual(content, "shh!thisisasecretdude,readitandforget!")
-    
+
     def test_read_secret_from_yaml_file_default(self):
         content = fsutil.read_secret_from_yaml_file('test/resources/testdata/sample_vault_inject_1.yaml', 'incorrect_key', 'default_val')
         self.assertEqual(content, "default_val")
-        
+
         content = fsutil.read_secret_from_yaml_file('test/resources/malformed_yaml_example.yaml', 'foo', 'default_val')
         self.assertEqual(content, "default_val")
-        
+
         content = fsutil.read_secret_from_yaml_file('test/resources/non_existent_file.yaml', 'foo', 'default_val')
         self.assertEqual(content, "default_val")
-        
+
         content = fsutil.read_secret_from_yaml_file('test/resources/non_existent_file.yaml', 'foo')
         self.assertIsNone(content)
-        
+
     def test_read_secret_from_yaml_file_success(self):
         content = fsutil.read_secret_from_yaml_file('test/resources/testdata/sample_vault_inject_1.yaml', 'test_key')
         self.assertEqual(content, "test_val")
-    
+
     def test_read_secret_from_yaml_file_yaml_error(self):
         content = fsutil.read_secret_from_yaml_file('test/resources/testdata/malformed_yaml_example.yaml', 'test_key')
         self.assertIsNone(content)
 
     def test_password_encryption(self):
-        sample_encrypted_password_file='test/resources/testdata/sample_encrypted_password.txt'
+        sample_encrypted_password_file = 'test/resources/testdata/sample_encrypted_password.txt'
         if os.path.isfile(sample_encrypted_password_file):
             os.remove(sample_encrypted_password_file)
-            
+
         # Encryption
-        fsutil.store_encrypted_content_in_file("samplepassword", sample_encrypted_password_file, None, 'test/resources/testdata/sample_encryption_key.txt')
+        fsutil.store_encrypted_content_in_file("samplepassword", sample_encrypted_password_file, None,
+                                               'test/resources/testdata/sample_encryption_key.txt')
         password_stored = os.path.isfile(sample_encrypted_password_file)
         self.assertEqual(password_stored, True)
-        
+
         # Decryption
-        plain_password = fsutil.decrypt_file_content(sample_encrypted_password_file, None, 'test/resources/testdata/sample_encryption_key.txt')
+        plain_password = fsutil.decrypt_file_content(sample_encrypted_password_file, None,
+                                                     'test/resources/testdata/sample_encryption_key.txt')
         self.assertEqual(plain_password, 'samplepassword')
-        
+
         # cleanup
         if os.path.isfile(sample_encrypted_password_file):
             os.remove(sample_encrypted_password_file)
-        
-        
+
+
 class TestCommonSecretsKeyringutil(TestCase):
     @classmethod
     def setUpClass(self):
@@ -83,7 +85,7 @@ class TestCommonSecretsKeyringutil(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-        
+
     def setUp(self):
         utils.reload_modules()
         return super().setUp()
@@ -121,10 +123,10 @@ class TestCommonSecretsKeyringutil(TestCase):
         mock_is_keyring_available.return_value = True
         mock_keyring.get_keyring.return_value = "TEST_KEYRING"
         mock_getpass.return_value = "shakimaan"
-        
+
         keyringutil.store_user_password(prompt_user=True)
         mock_keyring.set_password.assert_called_with("ASDK-PASSWORD-http://dummy.dws.com", "gvmoshastri", "shakimaan")
-        self.assertEqual(mock_getpass.call_count, 2) 
+        self.assertEqual(mock_getpass.call_count, 2)
 
     @mock.patch('aladdinsdk.common.secrets.keyringutil.getpass.getpass')
     @mock.patch('aladdinsdk.common.secrets.keyringutil._keyring')
@@ -132,21 +134,21 @@ class TestCommonSecretsKeyringutil(TestCase):
     def test_store_user_password_with_prompt_user_twice(self, mock_is_keyring_available, mock_keyring, mock_getpass):
         mock_is_keyring_available.return_value = True
         mock_keyring.get_keyring.return_value = "TEST_KEYRING"
-        mock_getpass.side_effect=["shakimaan", "typo", "shakimaan", "shakimaan"]
-        
+        mock_getpass.side_effect = ["shakimaan", "typo", "shakimaan", "shakimaan"]
+
         keyringutil.store_user_password(prompt_user=True)
         mock_keyring.set_password.assert_called_with("ASDK-PASSWORD-http://dummy.dws.com", "gvmoshastri", "shakimaan")
-        self.assertEqual(mock_getpass.call_count, 4) 
+        self.assertEqual(mock_getpass.call_count, 4)
 
     @mock.patch('aladdinsdk.common.secrets.keyringutil.getpass.getpass')
     @mock.patch('aladdinsdk.common.secrets.keyringutil._keyring')
     def test_store_user_password_with_prompt_user_multiple_times_no_password(self, mock_keyring, mock_getpass):
         mock_keyring.get_keyring.return_value = "TEST_KEYRING"
-        mock_getpass.side_effect=["shakimaan", "typo", "shakimaan", "typo2", "shaktimaan", "typo3"]
-        
+        mock_getpass.side_effect = ["shakimaan", "typo", "shakimaan", "typo2", "shaktimaan", "typo3"]
+
         keyringutil.store_user_password(prompt_user=True)
         mock_keyring.set_password.assert_not_called()
-        self.assertEqual(mock_getpass.call_count, 6) # Number of max retries times 2
+        self.assertEqual(mock_getpass.call_count, 6)  # Number of max retries times 2
 
     @mock.patch('aladdinsdk.common.secrets.keyringutil._keyring')
     def test_store_user_password_missing_keyring(self, mock_keyring):
@@ -173,7 +175,7 @@ class TestCommonSecretsKeyringutil(TestCase):
         test_pwd = keyringutil.get_user_password()
         mock_keyring.get_password.assert_called_with("ASDK-PASSWORD-http://dummy.dws.com", "gvmoshastri")
         self.assertEqual(test_pwd, "shaktimaan")
-        
+
         mock_keyring.get_keyring.return_value = "TEST_KEYRING"
         mock_keyring.get_password.return_value = None
         test_pwd = keyringutil.get_user_password()
@@ -204,7 +206,7 @@ class TestCommonSecretsKeyringutilNotCalledOutsideLocal(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-        
+
     def setUp(self):
         utils.reload_modules()
         return super().setUp()
@@ -226,4 +228,3 @@ class TestCommonSecretsKeyringutilNotCalledOutsideLocal(TestCase):
         mock_keyring.get_keyring.return_value = "TEST_KEYRING"
         keyringutil.get_user_password()
         mock_keyring.get_password.assert_not_called()
-        

@@ -18,6 +18,7 @@ except ImportError:
     __git_revision__ = 'Unknown'
     __version__ = 'Unknown'
 
+
 def set_stream_logger(name='aladdinsdk', level=logging.DEBUG, format_string=None):
     """
     Add a stream handler for the given name and level to the logging module.
@@ -27,8 +28,9 @@ def set_stream_logger(name='aladdinsdk', level=logging.DEBUG, format_string=None
     For debugging purposes a good choice is to set the stream logger to ``''``
     which is equivalent to saying "log everything".
     .. WARNING::
-       Be aware that when logging trace will appear in your logs. If your payloads contain sensitive data
-       this should not be used in production.
+       Be aware that when logging trace will appear in your logs.
+       If your payload contain sensitive data this should not
+       be used in production.
     :type name: string
     :param name: Log name
     :type level: int
@@ -48,24 +50,32 @@ def set_stream_logger(name='aladdinsdk', level=logging.DEBUG, format_string=None
     logger.addHandler(handler)
     return logger
 
+
 # Set up logging to ``/dev/null`` like a library is supposed to.
 # https://docs.python.org/3.3/howto/logging.html#configuring-logging-for-a-library
 class NullHandler(logging.Handler):
     def emit(self, record):
         pass
 
+
 logging.getLogger('aladdinsdk').addHandler(NullHandler())
 
-##Add set stream loggers and logging level is read from user_config
+# Add set stream loggers and logging level is read from user_config
 user_settings_log_level = user_settings.get_log_level()
 set_stream_logger(level=user_settings_log_level)
 logger = logging.getLogger(__name__)
 logger.debug(f"Log Level set using user settings ::{user_settings_log_level}")
 
+
 def zen():
-    import this
+    import this  # noqa: F401
+
 
 # If user hasn't set a config file
 if os.environ.get(ENV_VAR_ASDK_USER_CONFIG_FILE, None) is None:
-    logger.info(f"SDK {ENV_VAR_ASDK_USER_CONFIG_FILE} environment variable for config file not provided. Defaulting to preloaded configuration file. {SDK_HELP_MESSAGE_SUFFIX} on available options to create/set a config file.")
-    logger.info(f"You may use aladdinsdk.config.print_user_config_file_template() to get a template. Copy that content into a file and set {ENV_VAR_ASDK_USER_CONFIG_FILE} environment variable to point to that file and restart your notebook kernel.")
+    logger.info(f"SDK {ENV_VAR_ASDK_USER_CONFIG_FILE} environment variable for config file "
+                f"not provided. Defaulting to preloaded configuration file."
+                f"{SDK_HELP_MESSAGE_SUFFIX} on available options to create/set a config file.")
+    logger.info(f"You may use aladdinsdk.config.print_user_config_file_template() to get a "
+                f"template. Copy that content into a file and set {ENV_VAR_ASDK_USER_CONFIG_FILE} "
+                "environment variable to point to that file and restart your notebook kernel.")

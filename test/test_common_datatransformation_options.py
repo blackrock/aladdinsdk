@@ -3,6 +3,7 @@ import os
 from test.resources.testutils import utils
 from aladdinsdk.common.error.asdkerrors import AsdkTransformationException
 
+
 class TestCommonDataTransformationOptions(TestCase):
     @classmethod
     def setUpClass(self):
@@ -19,45 +20,44 @@ class TestCommonDataTransformationOptions(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         return super().setUp()
-    
+
     def test_conversion_option_valid(self):
-        
         arr = self.test_subject.conversion_options(json_string_valid_normal)
         for p in arr:
-          self.test_subject.convert(json_string_valid_normal, p)
+            self.test_subject.convert(json_string_valid_normal, p)
         assert "batters.batter.[*]" in arr
 
         arr = self.test_subject.conversion_options(json_string_bigger)
         for p in arr:
-          self.test_subject.convert(json_string_bigger, p)
-        assert "[0].batters.batter.[*]" in arr  
+            self.test_subject.convert(json_string_bigger, p)
+        assert "[0].batters.batter.[*]" in arr
 
     def test_conversion_option_extreme(self):
         arr = self.test_subject.conversion_options("{}")
         for p in arr:
-          self.test_subject.convert("{}", p)
+            self.test_subject.convert("{}", p)
         assert "[*]" in arr
-        self.assertEqual(len(arr),1, "The only available path for empty json object is [*]")
-        
+        self.assertEqual(len(arr), 1, "The only available path for empty json object is [*]")
+
         arr = self.test_subject.conversion_options(json_string_depth_one)
         for p in arr:
-          self.test_subject.convert(json_string_depth_one, p)
+            self.test_subject.convert(json_string_depth_one, p)
         assert "[*]" in arr
-        self.assertEqual(len(arr),1, "The only available path for plain json object is [*]")
-        
+        self.assertEqual(len(arr), 1, "The only available path for plain json object is [*]")
+
         arr = self.test_subject.conversion_options("[]")
         for p in arr:
-          self.test_subject.convert("[]", p)
+            self.test_subject.convert("[]", p)
         assert "[*]" in arr
-        self.assertEqual(len(arr),1, "The only available path for empty array is [*]")
+        self.assertEqual(len(arr), 1, "The only available path for empty array is [*]")
 
         with self.assertRaises(AsdkTransformationException):
-          arr = self.test_subject.conversion_options(None)
-          for p in arr:
-            self.test_subject.convert(None, p)
+            arr = self.test_subject.conversion_options(None)
+            for p in arr:
+                self.test_subject.convert(None, p)
 
 
 json_string_depth_one = """

@@ -2,9 +2,11 @@ import logging
 
 from aladdinsdk.common.error.handlers.abstract import AbstractAsdkExceptionHandler, AsdkErrorCode, exception_type_matches
 
-from aladdinsdk.common.error.asdkerrors import AsdkApiException, AsdkEmailNotificationException, AsdkExportDataException, AsdkOAuthException, AsdkSetupException
+from aladdinsdk.common.error.asdkerrors import AsdkApiException, AsdkEmailNotificationException, AsdkExportDataException
+from aladdinsdk.common.error.asdkerrors import AsdkOAuthException, AsdkSetupException
 
 _logger = logging.getLogger(__name__)
+
 
 class AsdkInternalExceptionHandler(AbstractAsdkExceptionHandler):
     """
@@ -13,7 +15,6 @@ class AsdkInternalExceptionHandler(AbstractAsdkExceptionHandler):
     Args:
         Exception (_type_): _description_
     """
-    
     supported_exception_modules = [
         AsdkSetupException,
         AsdkApiException,
@@ -21,14 +22,14 @@ class AsdkInternalExceptionHandler(AbstractAsdkExceptionHandler):
         AsdkEmailNotificationException,
         AsdkOAuthException
     ]
-    
+
     original_exception = None
-    
+
     error_code = AsdkErrorCode.AE001
-    
+
     def __init__(self, original_exception):
         self.original_exception = original_exception
-    
+
     def handle_error(self):
         _logger.error(f"{self.original_exception} occurred. Error code {self.error_code}")
         if exception_type_matches(AsdkApiException, self.original_exception):

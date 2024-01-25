@@ -1,5 +1,3 @@
-import sys
-import os
 import importlib
 import getpass
 import logging
@@ -20,16 +18,17 @@ keyring used to interact with OS credential manager (e.g. Keychain Access on Mac
 Storing user password under service: 'ASDK-PASSWORD-defaultWebServer' and username: username
 """
 
+
 def delete_user_password():
     service = _asdk_user_password_service_prefix + DEFAULT_WEB_SERVER
-    username = user_settings.get_username()    
-    
+    username = user_settings.get_username()
     _delete_keyring_entry(service, username)
+
 
 def store_user_password(password=None, prompt_user=False):
     service = _asdk_user_password_service_prefix + DEFAULT_WEB_SERVER
     username = user_settings.get_username()
-    
+
     if (not password) or prompt_user:
         password = _prompt_passwd(service, username)
 
@@ -39,15 +38,16 @@ def store_user_password(password=None, prompt_user=False):
             _logger.info(f"Password successfully stored for [username: {username} , service: {service}]")
     else:
         _logger.error(f"Failed to store password for [username: {username} , service: {service}]")
-    
+
     return password
+
 
 def get_user_password():
     service = _asdk_user_password_service_prefix + DEFAULT_WEB_SERVER
     username = user_settings.get_username()
-    
+
     kr_password = _get_keyring_entry(service, username)
-    
+
     if kr_password:
         _logger.info(f"Password found in OS Credential manager for [username: {user_settings.get_username()} , service: {service}]")
     else:
@@ -55,18 +55,19 @@ def get_user_password():
 
     return kr_password
 
-## Helpers
 
+# Helpers
 def _delete_keyring_entry(service, username):
     if user_settings.get_run_mode() != user_settings.CONF_RUN_MODE_LOCAL:
         _logger.error("Secret management using keyring should only be used for local development.")
-        return False    
-    
+        return False
+
     if _is_keyring_available() and _keyring is not None:
         try:
             _keyring.delete_password(service, username)
         except _keyring.errors.PasswordDeleteError:
             _logger.warning(f"Attempted to delete keyring entry which does not exist: [service: {service}, username: {username}]")
+
 
 def _set_keyring_entry(service, username, password):
     if user_settings.get_run_mode() != user_settings.CONF_RUN_MODE_LOCAL:
@@ -84,17 +85,19 @@ def _set_keyring_entry(service, username, password):
         _logger.error("Unable to set secret in keyring, 'keyring' unavailable.")
         return False
 
-def _get_keyring_entry(service, username):    
+
+def _get_keyring_entry(service, username):
     if user_settings.get_run_mode() != user_settings.CONF_RUN_MODE_LOCAL:
         _logger.error("Secret management using keyring should only be used for local development.")
         return None
-    
+
     # First check for keyring
     if _is_keyring_available() and _keyring is not None:
         return _keyring.get_password(service, username)
     else:
         _logger.error("Password not found in a credential manager, 'keyring' unavailable.")
         return None
+
 
 def _prompt_passwd(service, username):
     """Prompt user to enter password
@@ -103,20 +106,21 @@ def _prompt_passwd(service, username):
     """
     passwd = None
     verify = ""
-    
+
     retry_count = 3
-    
+
     while (passwd != verify and retry_count > 0):
         if retry_count != 3:
             print(f"{retry_count} attempt(s) left")
         passwd = getpass.getpass(f"Enter password to be stored in OS credential manager for [username: {username} , service: {service}]: ")
         verify = getpass.getpass("Re-type password: ")
         retry_count -= 1
-    
+
     if passwd == verify:
         return passwd
     else:
         return None
+
 
 def _is_keyring_available():
     """Obtain reference to keyring module
@@ -139,6 +143,5 @@ def _is_keyring_available():
         except Exception:
             _logger.error("Local development mode. OS specific credential manager cannot be used. Try importing keyring in venv.")
             _keyring_available = False
-            
+
     return _keyring_available
-    

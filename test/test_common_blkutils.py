@@ -1,18 +1,9 @@
 import os
 from unittest import TestCase, mock
-from importlib import reload
 from test.resources.testutils import extmocks, utils
 
-def _reload_modules():
-    import aladdinsdk
-    from aladdinsdk.config import asdkconf, user_settings, internal_settings
-    from aladdinsdk.common.blkutils import blkutils
-    reload(aladdinsdk.common.blkutils.blkutils)
-    reload(aladdinsdk.config.asdkconf)
-    reload(aladdinsdk.config.user_settings)
-    reload(aladdinsdk.config.internal_settings)
 
-class TestBlkutilsWithDefaultWebServer(TestCase):    
+class TestBlkutilsWithDefaultWebServer(TestCase):
     @classmethod
     def setUpClass(self):
         self.env_patcher = mock.patch.dict(os.environ, {
@@ -30,22 +21,22 @@ class TestBlkutilsWithDefaultWebServer(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         return super().setUp()
-    
-    @mock.patch('requests.get', side_effect=extmocks.mocked_successful_requests_get)   
+
+    @mock.patch('requests.get', side_effect=extmocks.mocked_successful_requests_get)
     def test_get_adc_account_from_files_dat(self, mock_requests_get):
         self.assertEqual(self.test_subject.get_adc_account_private_link(), "mock_snowflake_dswrite.privatelink")
-     
+
     @mock.patch('requests.get', side_effect=extmocks.mocked_successful_requests_get_without_token)
     def test_get_adc_account_from_files_dat_failure(self, mock_requests_get):
         self.assertIsNone(self.test_subject.get_adc_account_private_link())
-    
+
     @mock.patch('requests.get', side_effect=extmocks.mocked_successful_requests_get_with_token)
     def test_get_files_dat_token_value_success(self, mock_user_settings_default_web_server):
         self.assertEqual(self.test_subject.get_files_dat_token_value("TEST_TOKEN"), "TEST_TOKEN_VALUE")
-    
+
     @mock.patch('requests.get', side_effect=Exception("something wrong"))
     @mock.patch('logging.Logger.warning')
     def test_get_files_dat_token_value_failure(self, mock_logger_warning, mock_user_settings_default_web_server):

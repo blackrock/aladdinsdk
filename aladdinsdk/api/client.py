@@ -1,3 +1,4 @@
+import os
 import asyncio
 import json
 import inspect
@@ -18,19 +19,21 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-_HttpEndpointDescription = namedtuple("EndpointDescription",["http_endpoint","http_method"])
+_HttpEndpointDescription = namedtuple("EndpointDescription", ["http_endpoint", "http_method"])
 
-_api_oauth_scopes_enabled = False # Switch to enable/disable scopes when AGraph releases support for scopes
+# Switch to enable/disable scopes to be picked from AGraph specs
+_api_oauth_scopes_enabled = os.environ.get("AGRAPH_SCOPES_ENABLED", "False").lower() in ('true', '1', 't')
+
 
 class AladdinAPI():
     """
     API Client for Aladdin Graph API calls
     """
-    
+
     @asdk_exception_handler
     @dynamic_asdk_config_reload
-    def __init__(self, 
-                 api_name, 
+    def __init__(self,
+                 api_name,
                  default_web_server=DEFAULT_WEB_SERVER,
                  **kwargs):
         """
@@ -46,26 +49,39 @@ class AladdinAPI():
             api_name (string): Name of the API
             default_web_server (string, optional): Default web server. Defaults to os.environ.get("defaultWebServer").
             auth_flow_type (string, optional): Auth Flow type for oauth token generation. Defaults to user_settings.get_auth_flow_type().
-            api_key (string, optional): API Key. Defaults to value set as "ASDK_API__TOKEN" environment variable, or "api.token" in settings yaml, None if not configured.
+            api_key (string, optional): API Key. Defaults to value set as "ASDK_API__TOKEN" environment variable, or "api.token" in settings yaml,
+                None if not configured.
             auth_type (string, optional): API Authentication Type. Must be in [BASIC_AUTH, OAUTH]
-            username (string, optional): Username. Defaults to value set as "ASDK_USER_CREDENTIALS__USERNAME" environment variable, or "user_credentials.username" in settings yaml, None if not configured.
-            password (string, optional): Password. Defaults to value set as "ASDK_USER_CREDENTIALS__PASSWORD" environment variable, or "user_credentials.password" in settings yaml, None if not configured.
-            client_id (string, optional): Client Id for Oauth. Defaults to value set as "ASDK_OAUTH__CLIENT_ID" environment variable, or "oauth.client_id" in settings yaml, None if not configured.
-            client_secret (string, optional): Client Secret for Oauth. Defaults to value set as "ASDK_OAUTH__CLIENT_SECRET" environment variable, or "oauth.client_secret" in settings yaml, None if not configured.
-            refresh_token (string, optional): Refresh token to use for oauth token uri. Defaults to value set as "ASDK_OAUTH__REFRESH_TOKEN" environment variable, or "oauth.refresh_token" in settings yaml, None if not configured.
-            api_access_token (string, optional): API Authentication token for Oauth. Defaults to None. If no access token provided, AladdinSDK will look to client id, secret and refresh token values for fetching access token
-            auth_server_proxy (string, optional): API Auth Server Proxy for Oauth. Defaults to value set as "ASDK_OAUTH__AUTH_SERVER_PROXY" environment variable, or "oauth.auth_server_proxy" in settings yaml, None if not configured.
-            auth_server_url (string, optional): API Auth Server URL for Oauth. Defaults to value set as "ASDK_OAUTH__AUTH_SERVER_URL" environment variable, or "oauth.auth_server_url" in settings yaml, None if not configured.
-            password_filepath (string, optional): Password filepath (Basic Auth). Defaults to value set as "ASDK_USER_CREDENTIALS__PASSWORD_FILEPATH" environment variable, or "user_credentials.password_filepath" in settings yaml, None if not configured.
-            encrypted_password_filepath (string, optional): Encrypted Password filepath (Basic Auth). Defaults to value set as "ASDK_USER_CREDENTIALS__ENCRYPTED_PASSWORD_FILEPATH" environment variable, or "user_credentials.encrypted_password_filepath" in settings yaml, None if not configured.
-            encryption_filepath (string, optional): Encryption filepath. Defaults to value set as "ASDK_USER_CREDENTIALS__ENCRYPTED_FILEPATH" environment variable, or "user_credentials.encryption_filepath" in settings yaml, None if not configured.
+            username (string, optional): Username. Defaults to value set as "ASDK_USER_CREDENTIALS__USERNAME" environment variable,
+                or "user_credentials.username" in settings yaml, None if not configured.
+            password (string, optional): Password. Defaults to value set as "ASDK_USER_CREDENTIALS__PASSWORD" environment variable,
+                or "user_credentials.password" in settings yaml, None if not configured.
+            client_id (string, optional): Client Id for Oauth. Defaults to value set as "ASDK_OAUTH__CLIENT_ID" environment variable,
+                or "oauth.client_id" in settings yaml, None if not configured.
+            client_secret (string, optional): Client Secret for Oauth. Defaults to value set as "ASDK_OAUTH__CLIENT_SECRET" environment variable,
+                or "oauth.client_secret" in settings yaml, None if not configured.
+            refresh_token (string, optional): Refresh token to use for oauth token uri. Defaults to value set as "ASDK_OAUTH__REFRESH_TOKEN"
+                environment variable, or "oauth.refresh_token" in settings yaml, None if not configured.
+            api_access_token (string, optional): API Authentication token for Oauth. Defaults to None. If no access token provided,
+                AladdinSDK will look to client id, secret and refresh token values for fetching access token
+            auth_server_proxy (string, optional): API Auth Server Proxy for Oauth. Defaults to value set as "ASDK_OAUTH__AUTH_SERVER_PROXY"
+                environment variable, or "oauth.auth_server_proxy" in settings yaml, None if not configured.
+            auth_server_url (string, optional): API Auth Server URL for Oauth. Defaults to value set as "ASDK_OAUTH__AUTH_SERVER_URL"
+                environment variable, or "oauth.auth_server_url" in settings yaml, None if not configured.
+            password_filepath (string, optional): Password filepath (Basic Auth). Defaults to value set as "ASDK_USER_CREDENTIALS__PASSWORD_FILEPATH"
+                environment variable, or "user_credentials.password_filepath" in settings yaml, None if not configured.
+            encrypted_password_filepath (string, optional): Encrypted Password filepath (Basic Auth). Defaults to value set as
+                "ASDK_USER_CREDENTIALS__ENCRYPTED_PASSWORD_FILEPATH" environment variable, or "user_credentials.encrypted_password_filepath" in
+                settings yaml, None if not configured.
+            encryption_filepath (string, optional): Encryption filepath. Defaults to value set as "ASDK_USER_CREDENTIALS__ENCRYPTED_FILEPATH"
+                environment variable, or "user_credentials.encryption_filepath" in settings yaml, None if not configured.
         """
         # Fetch details from registry
         self._details = get_api_details(api_name=api_name)
 
         # Build API instance from openapi codegen
         configuration = self._details.api_configuration(
-            host = urljoin(default_web_server, self._details.host_url_path),
+            host=urljoin(default_web_server, self._details.host_url_path),
         )
         self.instance = self._build_api_client_instance(configuration)
         self._api_auth_util = ApiAuthUtil(configuration=configuration, **inflate_api_kwargs(kwargs))
@@ -74,7 +90,7 @@ class AladdinAPI():
         _endpoint_method_mappings = self._generate_swagger_mappings()
         self._endpoint_path_to_method_mappings = _endpoint_method_mappings[0]
         self._endpoint_to_scope_mappings = _endpoint_method_mappings[1]
-  
+
     def _build_api_client_instance(self, configuration):
         """
         Create and return an instance of the API class
@@ -87,10 +103,10 @@ class AladdinAPI():
         """
         # Enter a context with an instance of the API client
         api_client = self._details.api_client(configuration)
-        
+
         # Create an instance of the API class
         api_instance = self._details.api_default_class(api_client)
-        
+
         return api_instance
 
     def _is_valid_transformation_option(self, asdk_transformation_option):
@@ -111,7 +127,7 @@ class AladdinAPI():
             if not isinstance(api_response, str) and hasattr(api_response, 'json'):
                 api_response = api_response.json()
             api_response = json_to_pandas.convert(api_response, asdk_transformation_option['flatten'])
-        return api_response    
+        return api_response
 
     def _generate_swagger_mappings(self):
         """
@@ -124,19 +140,20 @@ class AladdinAPI():
         """
         swagger_path_to_api_method_map = {}
         api_method_to_scopes_map = {}
-        
+
         json_object = self._read_swagger_json()
-        operation_id_objects = jsonpath_ng.parse(f'$.paths..operationId').find(json_object)
-        
+        operation_id_objects = jsonpath_ng.parse('$.paths..operationId').find(json_object)
+
         # Create interim map for methods to swagger endpoint paths
         end_point_op_ids = {}
         for obj in operation_id_objects:
-            end_point_op_ids[obj.value.replace("_","").lower()] = _HttpEndpointDescription(str(obj.full_path.left.left.right), str(obj.full_path.left.right))
-        
+            end_point_op_ids[obj.value.replace("_", "").lower()] = _HttpEndpointDescription(str(obj.full_path.left.left.right),
+                                                                                            str(obj.full_path.left.right))
+
         # For each endpoint method, populate appropriate mappings
         for method in self._details.api_class_methods:
-            k = method.replace("_","")
-            if(k in end_point_op_ids.keys()):
+            k = method.replace("_", "")
+            if (k in end_point_op_ids.keys()):
                 # map swagger endpoint path to API method from codegen client
                 swagger_path_to_api_method_map[end_point_op_ids[k]] = method
                 # map API method from codegen client to OAuth API scope
@@ -147,10 +164,8 @@ class AladdinAPI():
 
     def _fetch_scopes_from_swagger(self, swagger_json_object, ep_path):
         scope_values = []
-        # scopes switched off for private-preview
         if _api_oauth_scopes_enabled:
-            # TODO: enhance based on how API team sets up scopes
-            raw_scopes = jsonpath_ng.parse(f'$.info.x-aladdin-spec-id').find(swagger_json_object)
+            raw_scopes = jsonpath_ng.parse('$.info.x-aladdin-spec-id').find(swagger_json_object)
             scope_values = [x.value for x in raw_scopes]
             _logger.debug(f"Fetching scope from swagger file for ({ep_path.http_method} - {ep_path.http_endpoint}): {scope_values}")
         return scope_values
@@ -158,11 +173,11 @@ class AladdinAPI():
     def _read_swagger_json(self):
         swagger_string = ""
         swagger_file_path = self._details.swagger_file_path
-        
+
         if not swagger_file_path.exists():
             raise AsdkApiException(f"API [{self._details.api_name}] is mapped to invalid swagger path [{swagger_file_path}] .")
         with swagger_file_path.open(encoding='utf-8') as swagger_file:
-            swagger_string = swagger_file.read()  
+            swagger_string = swagger_file.read()
         json_object = None
         try:
             json_object = json.loads(swagger_string)
@@ -173,7 +188,7 @@ class AladdinAPI():
 
     def get_api_endpoint_methods(self):
         return self._details.api_class_methods
-    
+
     def get_api_endpoint_path_tuples(self):
         return [(ep_path.http_endpoint, ep_path.http_method) for ep_path in self._endpoint_path_to_method_mappings.keys()]
 
@@ -235,7 +250,8 @@ class AladdinAPI():
     @asdk_exception_handler
     @api_retry
     @dynamic_asdk_config_reload
-    def call_api(self, api_endpoint_name, request_body=None, _oauth_scopes=None, _deserialize_to_object=True, asdk_transformation_option={'type': "json", 'flatten': None}, **params):
+    def call_api(self, api_endpoint_name, request_body=None, _oauth_scopes=None, _deserialize_to_object=True,
+                 asdk_transformation_option={'type': "json", 'flatten': None}, **params):
         """
         Wrapper method for making an API call using generated client code from Aladdin Graph swagger specification
 
@@ -244,7 +260,8 @@ class AladdinAPI():
             request_body (_type_, optional): Request body for API call. Defaults to None.
             _oauth_scopes (_type_, optional): Scopes for OAuth. Defaults to None.
             _deserialize_to_object (bool, optional): Deserialize response to python Codegen API response object. Defaults to True.
-            asdk_transformation_option (dict, optional): Transformation options to dictate response transformation (EXPERIMENTAL). Defaults to {'type': "json", 'flatten': None}.
+            asdk_transformation_option (dict, optional): Transformation options to dictate response transformation (EXPERIMENTAL).
+                Defaults to {'type': "json", 'flatten': None}.
 
         Raises:
             AsdkApiException: _description_
@@ -255,15 +272,16 @@ class AladdinAPI():
         api_endpoint_name = self._endpoint_path_mapping_helper(api_endpoint_name)
         if api_endpoint_name not in self.get_api_endpoint_methods():
             raise AsdkApiException("Incorrect endpoint path/method passed")
-        
+
         if _oauth_scopes is None or len(_oauth_scopes) == 0:
             _oauth_scopes = self._endpoint_to_scope_mappings.get(api_endpoint_name, None)
-        
+
         request_headers = self._api_auth_util.add_auth_details_to_header_and_config(_oauth_scopes)
-        
-        endpoint_to_call = getattr(self.instance, api_endpoint_name) if _deserialize_to_object else getattr(self.instance, f"{api_endpoint_name}_with_http_info")
+
+        endpoint_to_call = getattr(self.instance, api_endpoint_name) if _deserialize_to_object else getattr(self.instance,
+                                                                                                            f"{api_endpoint_name}_with_http_info")
         sig = self.get_api_endpoint_signature(api_endpoint_name)
-        
+
         if 'body' in sig.parameters.keys():
             api_response = endpoint_to_call(
                 vnd_com_blackrock_request_id=request_headers[_HEADER_KEY_REQUEST_ID],
@@ -279,7 +297,7 @@ class AladdinAPI():
                 _headers=request_headers,
                 **params
             )
-        
+
         if not _deserialize_to_object:
             # disabled deserialization and response validation - for inaccurate aladdin-graph API protos and/or API server implementations
             if hasattr(api_response, "raw_data"):
@@ -287,7 +305,7 @@ class AladdinAPI():
 
         if self._is_valid_transformation_option(asdk_transformation_option):
             api_response = self._response_transformation(api_response, asdk_transformation_option)
-        
+
         return api_response
 
     async def _poll_lro_status(self, check_lro_status_endpoint, lro_id, _deserialize_to_object=True, status_check_interval=None):
@@ -314,7 +332,8 @@ class AladdinAPI():
             _logger.debug(f"LRO status check attempt #{attempt}, result: {status_check_result}")
         return status_check_result
 
-    async def call_lro_status_api(self, check_lro_status_endpoint, lro_id, _deserialize_to_object=True, status_check_interval=None, timeout: int = None):
+    async def call_lro_status_api(self, check_lro_status_endpoint, lro_id, _deserialize_to_object=True,
+                                  status_check_interval=None, timeout: int = None):
         """
         Helper method to poll on an LRO call
 
@@ -343,15 +362,17 @@ class AladdinAPI():
 
         return lro_completion_response
 
-    async def call_lro_api(self, start_lro_endpoint, check_lro_status_endpoint, status_check_interval=None, callback_func=None, request_body=None, _deserialize_to_object=True, timeout: int = None, **params):
+    async def call_lro_api(self, start_lro_endpoint, check_lro_status_endpoint, status_check_interval=None, callback_func=None,
+                           request_body=None, _deserialize_to_object=True, timeout: int = None, **params):
         """
         API Wrapper for Long Running Operation calls.
-        
+
         Args:
             start_lro_endpoint (_type_): Endpoint for API instance to be used for starting a Long Running Operation
             check_lro_status_endpoint (_type_): Endpoint for API instance to be used for checking the status of Long Running Operation
             status_check_interval (_type_, optional): Time duration between status checks. Defaults to 10 (based on user configuration).
-            callback_func (_type_, optional): Optional callback function to be invoked with LRO endpoint response once the operation is done. Defaults to None - returns LRO response as is.
+            callback_func (_type_, optional): Optional callback function to be invoked with LRO endpoint response once the operation is done.
+                Defaults to None - returns LRO response as is.
             request_body (_type_, optional): Request payload for start_lro_endpoint. Defaults to None.
             timeout (int, optional): Timeout in seconds for LRO operation. Defaults to 300 (based on user configuration).
 
@@ -361,7 +382,6 @@ class AladdinAPI():
         Returns:
             If callback function is not provided, returns LRO endpoint response as is
             else, invokes callback function with LRO response and returns result of callback function
-            
         """
         # Commence LRO
         start_lro_response = self.call_api(start_lro_endpoint, request_body, _deserialize_to_object=_deserialize_to_object, **params)
@@ -374,7 +394,10 @@ class AladdinAPI():
             lro_completion_response = start_lro_response
         else:
             lro_id = start_lro_response.id if _deserialize_to_object else start_lro_response['id']
-            lro_completion_response = await self.call_lro_status_api(check_lro_status_endpoint, lro_id, _deserialize_to_object=_deserialize_to_object, status_check_interval=status_check_interval, timeout=timeout)
+            lro_completion_response = await self.call_lro_status_api(check_lro_status_endpoint, lro_id,
+                                                                     _deserialize_to_object=_deserialize_to_object,
+                                                                     status_check_interval=status_check_interval,
+                                                                     timeout=timeout)
         # process LRO response - invoke callback function if given
         if callback_func is not None:
             return callback_func(lro_completion_response)
@@ -393,17 +416,17 @@ class AladdinAPI():
         if isinstance(user_input_endpoint, str) and not user_input_endpoint.startswith("/"):
             # user may have provided endpoint method name directly
             return user_input_endpoint
-        
+
         if isinstance(user_input_endpoint, str) and user_input_endpoint.startswith("/"):
             # user provided a path from swagger json
             return self._endpoint_path_string_input_mapping_helper(user_input_endpoint)
-        
+
         if isinstance(user_input_endpoint, tuple) or isinstance(user_input_endpoint, _HttpEndpointDescription):
             # user has provided a tuple
             http_endpoint = user_input_endpoint[0]
             http_method = user_input_endpoint[1].lower()
             return self._endpoint_path_to_method_mappings.get(_HttpEndpointDescription(http_endpoint, http_method), None)
-    
+
     def _endpoint_path_string_input_mapping_helper(self, user_input_endpoint):
         _matched_endpoint_method = None
         _matched_http_methods = []
@@ -414,5 +437,6 @@ class AladdinAPI():
             if endpoint_method is not None:
                 _matched_http_methods.append(httpmethod)
         if len(_matched_http_methods) > 1:
-            _logger.warning(f"Multiple methods map to path {user_input_endpoint}. Input may need to be more specific - provide a tuple with (path, method) where method is one of {_matched_http_methods}")
+            _logger.warning(f"Multiple methods map to path {user_input_endpoint}. Input may need to be more "
+                            f"specific - provide a tuple with (path, method) where method is one of {_matched_http_methods}")
         return _matched_endpoint_method

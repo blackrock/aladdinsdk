@@ -18,6 +18,7 @@ Note: Read from yaml currently supports reading values at first level
 
 _default_key_for_enc = b'T10Zcv_jbwBI2KANbEoytpeK6zVbP_F5owJajX-sSGA='
 
+
 def read_base64_enc_file(path):
     """
     Given a file path to a secret file containing base64 encrypted secret, read and decrypt the contents and return as string
@@ -29,12 +30,12 @@ def read_base64_enc_file(path):
     """
     enc_secret = read_secret_from_file(path)
     dec_secret = base64.b64decode(enc_secret)
-    
+
     if isinstance(dec_secret, bytes):
-        dec_secret = dec_secret.decode("utf-8") 
-    
+        dec_secret = dec_secret.decode("utf-8")
+
     return dec_secret
-    
+
 
 def read_secret_from_file(path, default_val=None):
     """
@@ -55,10 +56,11 @@ def read_secret_from_file(path, default_val=None):
         _logger.debug(e)
         return default_val
 
+
 def read_secret_from_yaml_file(path, key, default_val=None):
     """
     Given a path to a yaml file, and a key, return the value
-    
+
     Args:
         path(string): File path to yaml file containing secrets
         key(string): secret key
@@ -69,7 +71,8 @@ def read_secret_from_yaml_file(path, key, default_val=None):
     except (FileNotFoundError, yaml.YAMLError, KeyError, NotADirectoryError) as e:
         _logger.debug(e)
         return default_val
-        
+
+
 def _read_yaml_file(path):
     """
     Read and return contents of given yaml file
@@ -85,9 +88,12 @@ def _read_yaml_file(path):
             _logger.debug(e)
             raise e
 
-def store_encrypted_content_in_file(plain_text_secret, filepath_to_encrypted_secret, encryption_key=_default_key_for_enc, filepath_to_encryption_key=None):
+
+def store_encrypted_content_in_file(plain_text_secret, filepath_to_encrypted_secret, encryption_key=_default_key_for_enc,
+                                    filepath_to_encryption_key=None):
     """
-    This method takes plain text secret (e.g. password), path to where encrypted secret needs to be stored, optionally an encryption key or path to a file storing encryption key
+    This method takes plain text secret (e.g. password), path to where encrypted secret needs to be stored, optionally an encryption key or
+    path to a file storing encryption key
     This will be used one time by the user outside of the general execution
 
     Args:
@@ -103,6 +109,7 @@ def store_encrypted_content_in_file(plain_text_secret, filepath_to_encrypted_sec
     encrypted_password = cipher_suite.encrypt(bytes(plain_text_secret, 'utf-8'))
     with open(filepath_to_encrypted_secret, "wb") as encrypted_password_file:
         encrypted_password_file.write(encrypted_password)
+
 
 def decrypt_file_content(filepath_to_encrypted_secret, encryption_key=_default_key_for_enc, filepath_to_encryption_key=None):
     """

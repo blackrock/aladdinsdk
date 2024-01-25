@@ -1,14 +1,7 @@
 from unittest import TestCase, mock
 import os
-from importlib import reload
 from test.resources.testutils import utils
 
-def _reload_modules():
-    import aladdinsdk
-    from aladdinsdk.config import asdkconf, user_settings
-    reload(aladdinsdk)
-    reload(aladdinsdk.config.asdkconf)
-    reload(aladdinsdk.config.user_settings)
 
 class TestRetry(TestCase):
     @classmethod
@@ -24,13 +17,13 @@ class TestRetry(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         class TestConfiguration(object):
             def __init__(self):
                 self.api_key = {}
         self.test_configuration = TestConfiguration()
-    
+
     def test_API_retry_without_exception(self):
         from aladdinsdk.common.retry import api_retry
 

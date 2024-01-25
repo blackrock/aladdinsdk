@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import datetime
 from unittest import TestCase, mock
 import os
 import asyncio
@@ -7,18 +6,18 @@ import asyncio
 import pandas as pd
 from aladdinsdk.common.authentication.api import ApiAuthUtil
 
-from aladdinsdk.common.error.asdkerrors import AsdkApiException, AsdkOAuthException, AsdkSetupException
+from aladdinsdk.common.error.asdkerrors import AsdkApiException
 from test.resources.testutils import utils
 
+
 class TestApiRegistry(TestCase):
-    
     @dataclass
     class CodegenAllowListEntryStruct:
         api_module_path: any = None
         api_name: any = None
         api_version: any = None
         host_url_path: any = None
-    
+
     @classmethod
     def setUpClass(self):
         self.env_patcher = mock.patch.dict(os.environ, {
@@ -33,7 +32,7 @@ class TestApiRegistry(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         return super().setUp()
 
@@ -44,14 +43,14 @@ class TestApiRegistry(TestCase):
 
     def test_get_api_details_failure_non_existent_api(self):
         from aladdinsdk.api.registry import get_api_details
-        
+
         with self.assertRaises(AsdkApiException) as context:
             get_api_details('NonExistentTestAsdkAPI')
             self.assertTrue("API not supported for SDK calls at the moment." in context.exception)
-    
+
     def test_get_api_details(self):
         from aladdinsdk.api.registry import get_api_details, AladdinAPICodegenDetails
-        
+
         expected = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v2',
@@ -59,20 +58,19 @@ class TestApiRegistry(TestCase):
             '/api/reference-architecture/demo/train-journey/v1/',
             'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v1/train_journey/swagger.json'
         )
-        
+
         test_case = TestCase()
-        test_case.addTypeEqualityFunc(AladdinAPICodegenDetails, lambda first, second, msg: 
-            first.api_name == second.api_name 
-            and first.api_module_path == second.api_module_path
-            and first.api_class_name == second.api_class_name
-            and first.host_url_path == second.host_url_path
-            and first.swagger_file_path == second.swagger_file_path
-            and first.api_client == second.api_client
-            and first.api_configuration == second.api_configuration
-            and first.api_default_class == second.api_default_class
-            and first.api_class_methods == second.api_class_methods
-            )
-        
+        test_case.addTypeEqualityFunc(AladdinAPICodegenDetails, lambda first, second, msg:
+                                      first.api_name == second.api_name
+                                      and first.api_module_path == second.api_module_path
+                                      and first.api_class_name == second.api_class_name
+                                      and first.host_url_path == second.host_url_path
+                                      and first.swagger_file_path == second.swagger_file_path
+                                      and first.api_client == second.api_client
+                                      and first.api_configuration == second.api_configuration
+                                      and first.api_default_class == second.api_default_class
+                                      and first.api_class_methods == second.api_class_methods)
+
         resp = get_api_details('TrainJourneyAPI')
         test_case.assertEqual(resp, expected)
 
@@ -82,7 +80,7 @@ class TestApiRegistry(TestCase):
         import sys
         from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1 import train_journey
         sys.modules['aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey'] = train_journey
-        
+
         mock_internal_settings.get_api_allow_list.return_value = [
             {
                 'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
@@ -103,14 +101,14 @@ class TestApiRegistry(TestCase):
                 'host_url_path': '/api/reference-architecture/demo/train-journey/v1/'
             }
         ]
-        
+
         # reload registry to pick up above mock
         import importlib
         import aladdinsdk
         importlib.reload(aladdinsdk.api.registry)
-        
+
         from aladdinsdk.api.registry import get_api_details, AladdinAPICodegenDetails
-        
+
         expected_latest = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v2',
@@ -118,7 +116,7 @@ class TestApiRegistry(TestCase):
             '/api/reference-architecture/demo/train-journey/v2/',
             'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v2/train_journey/swagger.json'
         )
-        
+
         expected_v1 = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v1',
@@ -126,7 +124,7 @@ class TestApiRegistry(TestCase):
             '/api/reference-architecture/demo/train-journey/v1/',
             'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v1/train_journey/swagger.json'
         )
-        
+
         expected_v2 = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v2',
@@ -134,7 +132,7 @@ class TestApiRegistry(TestCase):
             '/api/reference-architecture/demo/train-journey/v2/',
             'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v2/train_journey/swagger.json'
         )
-        
+
         expected_token_v1 = AladdinAPICodegenDetails(
             'TokenAPI',
             'v1',
@@ -142,39 +140,38 @@ class TestApiRegistry(TestCase):
             '/api/platform/infrastructure/token/v1/',
             'aladdinsdk/api/codegen/platform/infrastructure/token/v1/token/swagger.json',
         )
-        
+
         test_case = TestCase()
-        test_case.addTypeEqualityFunc(AladdinAPICodegenDetails, lambda first, second, msg: 
-            first.api_name == second.api_name 
-            and first.api_module_path == second.api_module_path
-            and first.api_class_name == second.api_class_name
-            and first.host_url_path == second.host_url_path
-            and first.api_client == second.api_client
-            and first.api_configuration == second.api_configuration
-            and first.api_default_class == second.api_default_class
-            and first.api_class_methods == second.api_class_methods
-            )
-        
+        test_case.addTypeEqualityFunc(AladdinAPICodegenDetails, lambda first, second, msg:
+                                      first.api_name == second.api_name
+                                      and first.api_module_path == second.api_module_path
+                                      and first.api_class_name == second.api_class_name
+                                      and first.host_url_path == second.host_url_path
+                                      and first.api_client == second.api_client
+                                      and first.api_configuration == second.api_configuration
+                                      and first.api_default_class == second.api_default_class
+                                      and first.api_class_methods == second.api_class_methods)
+
         # No version provided for multiple versioned APIs - should give the latest version
         resp = get_api_details('TrainJourneyAPI')
         test_case.assertEqual(resp, expected_latest)
-        
+
         # Specific version given, should return that version
         resp = get_api_details('TrainJourneyAPI', 'v1')
         test_case.assertEqual(resp, expected_v1)
-        
+
         # Specific version given, should return that version
         resp = get_api_details('TrainJourneyAPI', 'v2')
         test_case.assertEqual(resp, expected_v2)
-        
+
         # No version provided for single versioned APIs - should give the only present version
         resp = get_api_details('TokenAPI')
         test_case.assertEqual(resp, expected_token_v1)
-    
+
     @mock.patch('aladdinsdk.config.internal_settings')
     @mock.patch('logging.Logger.debug')
     def test_get_api_details_failure_to_setup_malformed_allow_list(self, mock_log_debug, mock_internal_settings):
-        
+
         mock_internal_settings.get_api_allow_list.return_value = [
             {
                 'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
@@ -189,14 +186,13 @@ class TestApiRegistry(TestCase):
             }
         ]
         delattr(mock_internal_settings.get_api_allow_list[0].return_value, 'api_name')
-        
+
         # reload registry to pick up above mock
         import importlib
         import aladdinsdk
         importlib.reload(aladdinsdk)
         importlib.reload(aladdinsdk.api.registry)
-        from aladdinsdk.api.registry import get_api_details, AladdinAPICodegenDetails
-        mock_log_debug.assert_called_with("Internal SDK setup warning. Unable to fully setup API registry. Potentially malformed codegen allow list configuration. Review CODEGEN_API_SETTINGS.ALLOW_LIST.")
+        mock_log_debug.assert_called_with("Internal SDK setup warning. Unable to fully setup API registry. Potentially malformed allow list.")
 
     @mock.patch('aladdinsdk.config.internal_settings')
     @mock.patch('logging.Logger.debug')
@@ -208,13 +204,13 @@ class TestApiRegistry(TestCase):
                 'host_url_path': '/api/reference-architecture/demo/train-journey/v1/'
             }
         ]
-        
+
         # reload registry to pick up above mock
         import importlib
         import aladdinsdk
         importlib.reload(aladdinsdk)
         importlib.reload(aladdinsdk.api.registry)
-        
+
         from aladdinsdk.api.registry import get_api_names
         self.assertNotIn("TestAPIShouldNotExist", get_api_names())
         mock_log_debug.assert_called()
@@ -238,73 +234,75 @@ class TestApiClient(TestCase):
 
     def test_api_client_init_success(self):
         from aladdinsdk.api.client import AladdinAPI
-        
+
         test_subject = AladdinAPI('TrainJourneyAPI')
         self.assertIsNotNone(test_subject)
-    
+
     def test_api_client_endpoint_introspection_success(self):
         from aladdinsdk.api.client import AladdinAPI
-        
+
         test_subject = AladdinAPI('TrainJourneyAPI')
-        
+
         endpoint_methods = test_subject.get_api_endpoint_methods()
         self.assertIn('train_journey_api_filter_train_journeys', endpoint_methods)
-        
+
         endpoint_methods = test_subject.get_api_endpoint_path_tuples()
         self.assertIn(('/trainJourneys/{id}', 'get'), endpoint_methods)
-        
+
         endpoint_signature = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
-        
+
         self.assertIsNotNone(endpoint_signature)
-        
+
     def test_api_client_endpoint_introspection_failure(self):
         from aladdinsdk.api.client import AladdinAPI
         from aladdinsdk.common.error.asdkerrors import AsdkApiException
-        
+
         test_subject = AladdinAPI('TrainJourneyAPI')
-        
-        with self.assertRaises(AsdkApiException) as context:        
+
+        with self.assertRaises(AsdkApiException) as context:
             test_subject.get_api_endpoint_signature('non_existent_endpoint')
             self.assertTrue('Incorrect endpoint path/method passed' in context.exception)
-        
+
     def test_call_api_with_request_body_success(self):
         from aladdinsdk.api.client import AladdinAPI
-        
+
         test_subject = AladdinAPI('TrainJourneyAPI')
-        
+
         signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
-        
+
         with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys') as mock_filter_call:
             with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
-                mock_filter_call.return_value = "TEST_RESPONSE"    
+                mock_filter_call.return_value = "TEST_RESPONSE"
                 mock_signature_helper.return_value = signature_bkp
-                
-                resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys', request_body={ "payload_key": "payload value" })
+
+                resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                             request_body={"payload_key": "payload value"})
                 mock_filter_call.assert_called_once_with(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
-                    body={ "payload_key": "payload value" })
+                    body={"payload_key": "payload value"})
             self.assertEqual(resp, 'TEST_RESPONSE')
 
     def test_call_api_with_request_body_success_disable_deserialization(self):
         from aladdinsdk.api.client import AladdinAPI
-        
+
         test_subject = AladdinAPI('TrainJourneyAPI')
-        
+
         signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
-        
+
         with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
             with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
                 mock_filter_call.return_value = utils.UnitTestRESTResponse(None, 200, "", """{"resp_key": "resp_val"}""".encode('utf-8'))
                 mock_signature_helper.return_value = signature_bkp
-                
-                resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys', request_body={ "payload_key": "payload value" }, _deserialize_to_object=False)
+
+                resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                             request_body={"payload_key": "payload value"}, _deserialize_to_object=False)
                 mock_filter_call.assert_called_once_with(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
-                    body={ "payload_key": "payload value" })
+                    body={"payload_key": "payload value"})
             self.assertEqual(resp, {"resp_key": "resp_val"})
 
     def test_call_api_with_request_body_success_dataframe(self):
@@ -347,7 +345,8 @@ class TestApiClient(TestCase):
                 mock_signature_helper.return_value = signature_bkp
 
                 resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
-                                             request_body={"payload_key": "payload value"}, asdk_transformation_option={'type': "dataframe", 'flatten': "batters.batter.[*]"})
+                                             request_body={"payload_key": "payload value"},
+                                             asdk_transformation_option={'type': "dataframe", 'flatten': "batters.batter.[*]"})
                 mock_filter_call.assert_called_once_with(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
@@ -374,12 +373,12 @@ class TestApiClient(TestCase):
                 _headers=mock.ANY,
                 param_key_1="param value 1")
             self.assertEqual(resp, 'TEST_RESPONSE')
-    
+
     def test_call_api_failure(self):
         from aladdinsdk.api.client import AladdinAPI
-        
+
         test_subject = AladdinAPI('TrainJourneyAPI')
-        
+
         with self.assertRaises(Exception) as context:
             test_subject.call_api('FAKE_ENDPOINT', {})
             self.assertTrue('Incorrect endpoint path/method passed' in context.exception)
@@ -415,9 +414,9 @@ class TestApiClientLroCalls(TestCase):
         test_subject = AladdinAPI('TrainJourneyAPI')
 
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
-            mock_call_api_response_1 = { "done": False, "error": None, "id": 'mock-123-id', "meta": None, "response": None }
-            mock_call_api_response_2 = { "done": False, "error": None, "id": 'mock-123-id', "meta": None, "response": None }
-            mock_call_api_response_3 = { "done": True, "error": None, "id": 'mock-123-id', "meta": None, "response": {"resp_key": "resp_lro_val"} }
+            mock_call_api_response_1 = {"done": False, "error": None, "id": 'mock-123-id', "meta": None, "response": None}
+            mock_call_api_response_2 = {"done": False, "error": None, "id": 'mock-123-id', "meta": None, "response": None}
+            mock_call_api_response_3 = {"done": True, "error": None, "id": 'mock-123-id', "meta": None, "response": {"resp_key": "resp_lro_val"}}
             mock_call_api.side_effect = [
                 mock_call_api_response_1,
                 mock_call_api_response_2,
@@ -442,7 +441,8 @@ class TestApiClientLroCalls(TestCase):
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
             mock_call_api_response_1 = TestApiClientLroCalls.MockLroApiResponse(done=False, error=None, id='mock-123-id', meta=None, response=None)
             mock_call_api_response_2 = TestApiClientLroCalls.MockLroApiResponse(done=False, error=None, id='mock-123-id', meta=None, response=None)
-            mock_call_api_response_3 = TestApiClientLroCalls.MockLroApiResponse(done=True, error=None, id='mock-123-id', meta=None, response='TEST_LRO_RESPONSE')
+            mock_call_api_response_3 = TestApiClientLroCalls.MockLroApiResponse(done=True, error=None, id='mock-123-id', meta=None,
+                                                                                response='TEST_LRO_RESPONSE')
             mock_call_api.side_effect = [
                 mock_call_api_response_1,
                 mock_call_api_response_2,
@@ -463,7 +463,7 @@ class TestApiClientLroCalls(TestCase):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
-            mock_call_api_response_1 = {'done':True, 'error':None, 'id':'mock-123-id', 'meta':None, 'response':'TEST_LRO_RESPONSE_DONE_IN_ONE'}
+            mock_call_api_response_1 = {'done': True, 'error': None, 'id': 'mock-123-id', 'meta': None, 'response': 'TEST_LRO_RESPONSE_DONE_IN_ONE'}
             mock_call_api.side_effect = [
                 mock_call_api_response_1,
             ]
@@ -501,7 +501,8 @@ class TestApiClientLroCalls(TestCase):
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
             mock_call_api_response_1 = TestApiClientLroCalls.MockLroApiResponse(done=False, error=None, id='mock-123-id', meta=None, response=None)
             mock_call_api_response_2 = TestApiClientLroCalls.MockLroApiResponse(done=False, error=None, id='mock-123-id', meta=None, response=None)
-            mock_call_api_response_3 = TestApiClientLroCalls.MockLroApiResponse(done=True, error=None, id='mock-123-id', meta=None, response={"resp_key": "TEST_LRO_RESPONSE_IN_CALLBACK"})
+            mock_call_api_response_3 = TestApiClientLroCalls.MockLroApiResponse(done=True, error=None, id='mock-123-id', meta=None,
+                                                                                response={"resp_key": "TEST_LRO_RESPONSE_IN_CALLBACK"})
             mock_call_api.side_effect = [
                 mock_call_api_response_1,
                 mock_call_api_response_2,
@@ -524,9 +525,10 @@ class TestApiClientLroCalls(TestCase):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
-            mock_call_api_response_1 = {'done':False, 'error':None, 'id':'mock-123-id', 'meta':None, 'response':None}
-            mock_call_api_response_2 = {'done':False, 'error':None, 'id':'mock-123-id', 'meta':None, 'response':None}
-            mock_call_api_response_3 = {'done':True, 'error':None, 'id':'mock-123-id', 'meta':None, 'response':{"resp_key": "TEST_LRO_RESPONSE_IN_CALLBACK"}}
+            mock_call_api_response_1 = {'done': False, 'error': None, 'id': 'mock-123-id', 'meta': None, 'response': None}
+            mock_call_api_response_2 = {'done': False, 'error': None, 'id': 'mock-123-id', 'meta': None, 'response': None}
+            mock_call_api_response_3 = {'done': True, 'error': None, 'id': 'mock-123-id', 'meta': None,
+                                        'response': {"resp_key": "TEST_LRO_RESPONSE_IN_CALLBACK"}}
             mock_call_api.side_effect = [
                 mock_call_api_response_1,
                 mock_call_api_response_2,
@@ -552,7 +554,8 @@ class TestApiClientLroCalls(TestCase):
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
             mock_call_api_response_1 = TestApiClientLroCalls.MockLroApiResponse(done=False, error=None, id='mock-123-id', meta=None, response=None)
             mock_call_api_response_2 = TestApiClientLroCalls.MockLroApiResponse(done=False, error=None, id='mock-123-id', meta=None, response=None)
-            mock_call_api_response_3 = TestApiClientLroCalls.MockLroApiResponse(done=True, error=None, id='mock-123-id', meta=None, response='TEST_LRO_RESPONSE')
+            mock_call_api_response_3 = TestApiClientLroCalls.MockLroApiResponse(done=True, error=None, id='mock-123-id', meta=None,
+                                                                                response='TEST_LRO_RESPONSE')
             mock_call_api.side_effect = [
                 mock_call_api_response_1,
                 mock_call_api_response_2,
@@ -579,7 +582,8 @@ class TestApiClientLroCalls(TestCase):
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
             mock_call_api_response_1 = TestApiClientLroCalls.MockLroApiResponse(done=False, error=None, id='mock-123-id', meta=None, response=None)
             mock_call_api_response_2 = TestApiClientLroCalls.MockLroApiResponse(done=False, error=None, id='mock-123-id', meta=None, response=None)
-            mock_call_api_response_3 = TestApiClientLroCalls.MockLroApiResponse(done=True, error=None, id='mock-123-id', meta=None, response='TEST_LRO_RESPONSE')
+            mock_call_api_response_3 = TestApiClientLroCalls.MockLroApiResponse(done=True, error=None, id='mock-123-id', meta=None,
+                                                                                response='TEST_LRO_RESPONSE')
             mock_call_api.side_effect = [
                 mock_call_api_response_1,
                 mock_call_api_response_2,
@@ -632,23 +636,22 @@ class TestApiClientSwaggerExtension(TestCase):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         test_subject._details = mock_codegen_details
-       
+
         with self.assertRaises(AsdkApiException) as context:
             test_subject._generate_swagger_mappings()
             self.assertTrue("API [TrainJourneyAPI] is mapped to invalid swagger path [non-existent-path] ." in context.exception)
-   
-   
+
     @mock.patch('aladdinsdk.api.registry.AladdinAPICodegenDetails')
     @mock.patch('logging.Logger.debug')
     def test_swagger_unknown_method_should_not_be_mapped(self, mock_log_debug, mock_codegen_details):
         mock_codegen_details.api_class_methods = ["method_one"]
-        
+
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         mock_codegen_details.swagger_file_path = test_subject._details.swagger_file_path
         mock_codegen_details.api_name = test_subject._details.api_name
         test_subject._details = mock_codegen_details
-       
+
         test_subject._generate_swagger_mappings()
         mock_log_debug.assert_called_with("Unable to map [method_one]. Method may not be callable via REST endpoint wrappers.")
 
@@ -662,11 +665,11 @@ class TestApiClientSwaggerExtension(TestCase):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         test_subject._details = mock_codegen_details
-       
+
         with self.assertRaises(AsdkApiException) as context:
             test_subject._generate_swagger_mappings()
             self.assertTrue("Api module path" in context.exception)
-    
+
     @mock.patch('aladdinsdk.api.registry.AladdinAPICodegenDetails')
     def test_methods_not_exist(self, mock_codegen_details):
         mock_codegen_details.api_name = 'TrainJourneyAPI'
@@ -677,7 +680,7 @@ class TestApiClientSwaggerExtension(TestCase):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         test_subject._details = mock_codegen_details
-       
+
         with self.assertRaises(AsdkApiException) as context:
             test_subject._generate_swagger_mappings()
             self.assertIn("Unknown method", str(context.exception))
@@ -703,31 +706,31 @@ class TestApiClientRestEndpointMethodMappings(TestCase):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
-            mock_call_api.return_value = True # no need to test call_api as part of this unit test
+            mock_call_api.return_value = True  # no need to test call_api as part of this unit test
             test_subject.get("/trainJourneys/{id}", "foo", "bar")
             mock_call_api.assert_called_once_with(("/trainJourneys/{id}", "get"), "foo", "bar")
-            
+
     def test_post_mapping(self):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
-            mock_call_api.return_value = True # no need to test call_api as part of this unit test
+            mock_call_api.return_value = True  # no need to test call_api as part of this unit test
             test_subject.post("/trainJourneys", "foo", "bar")
             mock_call_api.assert_called_once_with(("/trainJourneys", "post"), "foo", "bar")
-            
+
     def test_delete_mapping(self):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
-            mock_call_api.return_value = True # no need to test call_api as part of this unit test
+            mock_call_api.return_value = True  # no need to test call_api as part of this unit test
             test_subject.delete("/trainJourneys/{id}", "foo", "bar")
             mock_call_api.assert_called_once_with(("/trainJourneys/{id}", "delete"), "foo", "bar")
-            
+
     def test_patch_mapping(self):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
-            mock_call_api.return_value = True # no need to test call_api as part of this unit test
+            mock_call_api.return_value = True  # no need to test call_api as part of this unit test
             test_subject.patch("/trainJourneys/{trainJourney.id}", "foo", "bar")
             mock_call_api.assert_called_once_with(("/trainJourneys/{trainJourney.id}", "patch"), "foo", "bar")
 
@@ -741,7 +744,8 @@ class TestApiClientRestEndpointMethodMappings(TestCase):
     def test_endpoint_path_mapping_helper_python_method(self):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
-        self.assertEqual(test_subject._endpoint_path_mapping_helper("train_journey_api_create_train_journey"), "train_journey_api_create_train_journey")
+        self.assertEqual(test_subject._endpoint_path_mapping_helper("train_journey_api_create_train_journey"),
+                         "train_journey_api_create_train_journey")
 
     def test_endpoint_path_mapping_helper_tuple(self):
         from aladdinsdk.api.client import AladdinAPI
@@ -753,7 +757,8 @@ class TestApiClientRestEndpointMethodMappings(TestCase):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI')
         self.assertEqual(test_subject._endpoint_path_mapping_helper("/trainJourneys/{id}"), "train_journey_api_get_train_journey")
-        self.assertIn(test_subject._endpoint_path_mapping_helper("/trainJourneys"), ["train_journey_api_create_train_journey", "train_journey_api_list_train_journeys"])
+        self.assertIn(test_subject._endpoint_path_mapping_helper("/trainJourneys"),
+                      ["train_journey_api_create_train_journey", "train_journey_api_list_train_journeys"])
 
     @mock.patch('logging.Logger.warning')
     def test_endpoint_path_mapping_helper_swagger_path_warning(self, mock_log_warning):
@@ -761,8 +766,12 @@ class TestApiClientRestEndpointMethodMappings(TestCase):
         test_subject = AladdinAPI('TrainJourneyAPI')
         test_subject._endpoint_path_to_method_mappings[("/fake_swagger_path", "get")] = "fake_endpoint_python_get_method"
         test_subject._endpoint_path_to_method_mappings[("/fake_swagger_path", "put")] = "fake_endpoint_python_put_method"
-        self.assertIn(test_subject._endpoint_path_mapping_helper("/fake_swagger_path"), ["fake_endpoint_python_get_method", "fake_endpoint_python_put_method"])
-        mock_log_warning.assert_called_with("Multiple methods map to path /fake_swagger_path. Input may need to be more specific - provide a tuple with (path, method) where method is one of ['get', 'put']")
+        self.assertIn(test_subject._endpoint_path_mapping_helper("/fake_swagger_path"),
+                      ["fake_endpoint_python_get_method", "fake_endpoint_python_put_method"])
+        mock_log_warning.assert_called_with("Multiple methods map to path /fake_swagger_path. "
+                                            "Input may need to be more specific - provide a tuple with "
+                                            "(path, method) where method is one of ['get', 'put']")
+
 
 class TestApiOauthComputeSession(TestCase):
     @classmethod
@@ -781,6 +790,7 @@ class TestApiOauthComputeSession(TestCase):
         super().tearDownClass()
         self.env_patcher.stop()
 
+
 class TestApiOauthRunLocal(TestCase):
     @classmethod
     def setUpClass(self):
@@ -797,15 +807,17 @@ class TestApiOauthRunLocal(TestCase):
         super().tearDownClass()
         self.env_patcher.stop()
 
-    @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server', return_value=["ACCESS_TOKEN123", 3600])
+    @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server',
+                return_value=["ACCESS_TOKEN123", 3600])
     @mock.patch('aladdinsdk.common.secrets.fsutil.read_secret_from_file', return_value=None)
     def test_api_client_get_oauth_token_success(self, oauth_token, secret):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI', client_id='id', client_secret='secret', refresh_token='refresh_token')
         with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys') as mock_filter_call:
             mock_filter_call.return_value = "TEST_RESPONSE"
-            test_subject.call_api("train_journey_api_filter_train_journeys", {"test" : "body"})
+            test_subject.call_api("train_journey_api_filter_train_journeys", {"test": "body"})
             self.assertIsNotNone(test_subject)
+
 
 class TestGetOauthToken(TestCase):
     @classmethod
@@ -829,18 +841,13 @@ class TestGetOauthToken(TestCase):
                 self.api_key = {}
         self.test_configuration = TestConfiguration()
 
-    @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server', return_value=['ACCESS_TOKEN123', 3600])
+    @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server',
+                return_value=['ACCESS_TOKEN123', 3600])
     def test_api_client_get_oauth_token_from_server(self, oauth_token):
         api_auth_util = ApiAuthUtil(configuration={}, client_id='id', client_secret='secret', refresh_token='token')
         result = api_auth_util._request_oauth_access_token_tuple(scopes="test.scope")
         self.assertEqual(result, ['ACCESS_TOKEN123', 3600])
 
-    # @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server', return_value=['ACCESS_TOKEN123', 3600])
-    # @mock.patch('aladdinsdk.common.secrets.fsutil.read_secret_from_file', return_value=None)
-    # def test_api_client_access_token(self, oauth_token, oauth_param):
-    #     api_auth_util_2 = ApiAuthUtil(configuration=self.test_configuration, token_ttl=datetime.datetime.utcnow())
-    #     result = api_auth_util_2.add_auth_details_to_header_and_config()
-    #     self.assertEqual(result.get('Authorization'), 'Bearer ACCESS_TOKEN123')
 
 class TestGetOauthTokenMissingSecret(TestCase):
     @classmethod
@@ -861,14 +868,14 @@ class TestGetOauthTokenMissingSecret(TestCase):
     @mock.patch('aladdinsdk.common.secrets.fsutil.read_secret_from_file', return_value=None)
     def test_api_client_get_oauth_token_exception_missing_secret(self, oauth_param):
         api_auth_util = ApiAuthUtil(configuration={}, client_id='id', client_secret='secret')
-        resp_access_token, resp_ttl = api_auth_util._request_oauth_access_token_tuple(scopes=None) 
+        resp_access_token, resp_ttl = api_auth_util._request_oauth_access_token_tuple(scopes=None)
         self.assertIsNone(resp_access_token)
         self.assertIsNone(resp_ttl)
-        
+
     @mock.patch('aladdinsdk.common.secrets.fsutil.read_secret_from_file', return_value=None)
     def test_api_client_get_basic_auth_exception_missing_pwd(self, param):
         from aladdinsdk.common.authentication.basicauth import basicauthutil
-        api_auth_util = ApiAuthUtil(configuration={}, username='user')
+        ApiAuthUtil(configuration={}, username='user')
         with self.assertRaises(AsdkApiException) as context:
             basicauthutil.fetch_password_from_user_settings()
             self.assertTrue("Insufficient API initialization information" in context.exception)

@@ -11,16 +11,19 @@ ENV_VAR_ASDK_USER_CONFIG_FILE = "ASDK_USER_CONFIG_FILE"
 ENV_VAR_DEFAULT_WEB_SERVER = "defaultWebServer"
 ENV_VAR_NB_USER = "NB_USER"
 ENV_VAR_DEFAULT_ASDK_CONFIG_FILE = "DEFAULT_ASDK_CONFIG_FILE"
-DEFAULT_ASDK_CONFIG_FILE = os.environ.get(ENV_VAR_DEFAULT_ASDK_CONFIG_FILE, os.path.abspath(os.path.join(os.sep, "tmp", "asdk", "asdk_default_config.yaml")))
+DEFAULT_ASDK_CONFIG_FILE = os.environ.get(ENV_VAR_DEFAULT_ASDK_CONFIG_FILE,
+                                          os.path.abspath(os.path.join(os.sep, "tmp", "asdk", "asdk_default_config.yaml")))
 
 # Read SDK codebase settings
 _CODEGEN_ALLOW_LIST_INTERNAL_CONFIG_FILE = Path(__file__).parent / "../api/codegen/codegen_allow_list.yaml"
 
-## Decorators
+
+# Decorators
 def dynamic_asdk_config_reload(func):
     """
     Decorator for reloading AladdinSDK configurations dynamically by detecting changes in provided config file.
-    Adding this decorator to any function will ensure any changes done to the configuration file mid-program execution, are loaded before executing the decorated function.
+    Adding this decorator to any function will ensure any changes done to the configuration file mid-program execution,
+    are loaded before executing the decorated function.
     Note: In the event configuration changes are still not loaded due to file system io latency, re-run your program
 
     Args:
@@ -38,8 +41,9 @@ def dynamic_asdk_config_reload(func):
                                     settings_files=_get_user_config_file(),
                                     merge_enabled=True)
                 config_file_md5 = current_config_file_md5
-        return func(*args, **kwargs) # execute decorated config read helper method        
+        return func(*args, **kwargs)  # execute decorated config read helper method
     return _handler_function
+
 
 # Helpers
 def _get_file_md5_hash(filepath):
@@ -49,18 +53,21 @@ def _get_file_md5_hash(filepath):
     f.close()
     return file_md5_hash
 
+
 def _get_user_config_file():
-   user_provided_config_filepath = os.environ.get(ENV_VAR_ASDK_USER_CONFIG_FILE, None)
-   if user_provided_config_filepath is not None:
-     return [user_provided_config_filepath]
-   else:
-     return []
+    user_provided_config_filepath = os.environ.get(ENV_VAR_ASDK_USER_CONFIG_FILE, None)
+    if user_provided_config_filepath is not None:
+        return [user_provided_config_filepath]
+    else:
+        return []
+
 
 def _get_preloaded_config_files_to_read_list():
-    preloaded_config_files=[_CODEGEN_ALLOW_LIST_INTERNAL_CONFIG_FILE]
+    preloaded_config_files = [_CODEGEN_ALLOW_LIST_INTERNAL_CONFIG_FILE]
     if DEFAULT_ASDK_CONFIG_FILE is not None and os.path.exists(DEFAULT_ASDK_CONFIG_FILE):
         preloaded_config_files.append(DEFAULT_ASDK_CONFIG_FILE)
     return preloaded_config_files
+
 
 # Read user provided config file if present
 config_file_md5 = None
@@ -69,7 +76,8 @@ _user_config_file_path = os.environ.get(ENV_VAR_ASDK_USER_CONFIG_FILE, None)
 if _user_config_file_path is not None:
     config_file_md5 = _get_file_md5_hash(_user_config_file_path)
 else:
-    _logger.debug(f"AladdinSDK running without a user configuration file. Some of the SDK functionality may be unavailable in this case. Set {ENV_VAR_ASDK_USER_CONFIG_FILE} environment variable, pointing to the user configuration yaml file.")
+    _logger.debug("AladdinSDK running without a user configuration file. Some of the SDK functionality may be unavailable in this case. "
+                  f"Set {ENV_VAR_ASDK_USER_CONFIG_FILE} environment variable, pointing to the user configuration yaml file.")
 
 # Initialize config settings instance
 AsdkConf = Dynaconf(envvar_prefix="ASDK", load_dotenv=True,

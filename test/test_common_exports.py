@@ -8,6 +8,7 @@ from aladdinsdk.common.error.asdkerrors import AsdkExportDataException
 from test.resources.testutils import utils
 import pandas as pd
 
+
 class TestCommonExportsWithOverWriteDataSet(TestCase):
     @classmethod
     def setUpClass(self):
@@ -25,27 +26,27 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         return super().setUp()
-    
+
     def test_csv_export_valid(self):
-        input_1 = pd.DataFrame([1,2,3])
+        input_1 = pd.DataFrame([1, 2, 3])
         result_1 = self.test_subject.export_data(input_1, './test/resources/testdata/exportdata/export_csv_file_test.csv', 'csv')
         self.assertTrue(result_1)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_csv_file_test.csv'))
 
-        input_2 = [1,2,3]
+        input_2 = [1, 2, 3]
         result_2 = self.test_subject.export_data(input_2, './test/resources/testdata/exportdata/export_csv_file_test.csv', 'csv')
         self.assertTrue(result_2)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_csv_file_test.csv'))
 
-        with self.assertRaises(AsdkExportDataException) as context:     
+        with self.assertRaises(AsdkExportDataException) as context:
             input_3 = [self.get_unserializable_input_response_object(), self.get_unserializable_input_response_object()]
             self.test_subject.export_data(input_3, './test/resources/testdata/exportdata/export_csv_file_test.csv', 'csv')
             self.assertTrue('Export Data Exception' in context.exception)
 
-        input_4 = {"A" : 1, "B" : 2}
+        input_4 = {"A": 1, "B": 2}
         result_4 = self.test_subject.export_data(input_4, './test/resources/testdata/exportdata/export_csv_file_test.csv', 'csv')
         self.assertTrue(result_4)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_csv_file_test.csv'))
@@ -78,12 +79,12 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
         os.remove('./test/resources/testdata/exportdata/export_csv_file_test.csv')
 
     def test_excel_export_valid(self):
-        input_1 = pd.DataFrame([1,2,3])
+        input_1 = pd.DataFrame([1, 2, 3])
         result_1 = self.test_subject.export_data(input_1, './test/resources/testdata/exportdata/export_excel_file_test.xlsx', 'excel')
         self.assertTrue(result_1)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_excel_file_test.xlsx'))
 
-        input_2 = [1,2,3]
+        input_2 = [1, 2, 3]
         result_2 = self.test_subject.export_data(input_2, './test/resources/testdata/exportdata/export_excel_file_test.xlsx', 'excel')
         self.assertTrue(result_2)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_excel_file_test.xlsx'))
@@ -94,11 +95,11 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_excel_file_test.xlsx'))
 
         input_4 = [self.get_unserializable_input_response_object(), self.get_unserializable_input_response_object()]
-        with self.assertRaises(AsdkExportDataException) as context:     
-            self.test_subject.export_data(input_4, './test/resources/testdata/exportdata/export_excel_file_test.xlsx', 'excel')   
+        with self.assertRaises(AsdkExportDataException) as context:
+            self.test_subject.export_data(input_4, './test/resources/testdata/exportdata/export_excel_file_test.xlsx', 'excel')
             self.assertTrue('Export Data Exception' in context.exception)
-        
-        input_5 = {"A" : 1, "B" : 2}
+
+        input_5 = {"A": 1, "B": 2}
         result_5 = self.test_subject.export_data(input_5, './test/resources/testdata/exportdata/export_excel_file_test.xlsx', 'excel')
         self.assertTrue(result_5)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_excel_file_test.xlsx'))
@@ -113,11 +114,11 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
         self.assertTrue(result_7)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_excel_file_test.xlsx'))
 
-        input_8 = [[1,2,3], [4,5,6]]
+        input_8 = [[1, 2, 3], [4, 5, 6]]
         result_8 = self.test_subject.export_data(input_8, './test/resources/testdata/exportdata/export_excel_file_test.xlsx', 'excel')
         self.assertTrue(result_8)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_excel_file_test.xlsx'))
-        
+
         input_9 = self.get_serializable_input_response_object()
         result_9 = self.test_subject.export_data(input_9, './test/resources/testdata/exportdata/export_excel_file_test.xlsx', 'excel')
         self.assertTrue(result_9)
@@ -131,27 +132,27 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
         os.remove('./test/resources/testdata/exportdata/export_excel_file_test.xlsx')
 
     def test_json_export_valid(self):
-        input_1 = pd.DataFrame([1,2,3])
+        input_1 = pd.DataFrame([1, 2, 3])
         result_1 = self.test_subject.export_data(input_1, './test/resources/testdata/exportdata/export_json_file_test.json', 'json')
         self.assertTrue(result_1)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_json_file_test.json'))
 
-        input_2 = [1,2,3]
+        input_2 = [1, 2, 3]
         result_2 = self.test_subject.export_data(input_2, './test/resources/testdata/exportdata/export_json_file_test.json', 'json')
         self.assertTrue(result_2)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_json_file_test.json'))
 
-        input_3 = [[1,2,3], [4,5,6]]        
+        input_3 = [[1, 2, 3], [4, 5, 6]]
         result_3 = self.test_subject.export_data(input_3, './test/resources/testdata/exportdata/export_json_file_test.json', 'json')
         self.assertTrue(result_3)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_json_file_test.json'))
 
         input_4 = [self.get_unserializable_input_response_object(), self.get_unserializable_input_response_object()]
-        with self.assertRaises(AsdkExportDataException) as context:     
-            self.test_subject.export_data(input_4, './test/resources/testdata/exportdata/export_json_file_test.json', 'json')   
+        with self.assertRaises(AsdkExportDataException) as context:
+            self.test_subject.export_data(input_4, './test/resources/testdata/exportdata/export_json_file_test.json', 'json')
             self.assertTrue('Export Data Exception' in context.exception)
 
-        input_5 = {"A" : 1, "B" : 2}
+        input_5 = {"A": 1, "B": 2}
         result_5 = self.test_subject.export_data(input_5, './test/resources/testdata/exportdata/export_json_file_test.json', 'json')
         self.assertTrue(result_5)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_json_file_test.json'))
@@ -174,12 +175,12 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
         os.remove('./test/resources/testdata/exportdata/export_json_file_test.json')
 
     def test_pickle_export_valid(self):
-        input_1 = pd.DataFrame([1,2,3])
+        input_1 = pd.DataFrame([1, 2, 3])
         result_1 = self.test_subject.export_data(input_1, './test/resources/testdata/exportdata/export_pickle_file_test.pkl', 'pickle')
         self.assertTrue(result_1)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_pickle_file_test.pkl'))
 
-        input_2 = [1,2,3]
+        input_2 = [1, 2, 3]
         result_2 = self.test_subject.export_data(input_2, './test/resources/testdata/exportdata/export_pickle_file_test.pkl', 'pickle')
         self.assertTrue(result_2)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_pickle_file_test.pkl'))
@@ -194,7 +195,7 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
         self.assertTrue(result_4)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_pickle_file_test.pkl'))
 
-        input_5 = {"A" : 1, "B" : 2}
+        input_5 = {"A": 1, "B": 2}
         result_5 = self.test_subject.export_data(input_5, './test/resources/testdata/exportdata/export_pickle_file_test.pkl', 'pickle')
         self.assertTrue(result_5)
         self.assertTrue(self.does_file_have_content('./test/resources/testdata/exportdata/export_pickle_file_test.pkl'))
@@ -211,11 +212,11 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
 
         # exception for pickle export
         with mock.patch('aladdinsdk.common.exports.export_pickle.write_pickle', side_effect=Exception('Exception')):
-            with self.assertRaises(Exception) as context:        
+            with self.assertRaises(Exception) as context:
                 file_path = './test/resources/testdata/exportdata/export_pickle_file_test.pkl'
-                self.test_subject.export_data([1,2,3], file_path, 'pickle')
+                self.test_subject.export_data([1, 2, 3], file_path, 'pickle')
                 self.assertTrue('Exception' in context.exception)
-        
+
         input_8 = self.get_input_json()
         result_8 = self.test_subject.export_data(input_8, './test/resources/testdata/exportdata/export_pickle_file_test.pkl', 'pickle')
         self.assertTrue(result_8)
@@ -225,15 +226,15 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
 
     def test_file_validation(self):
         # test incorrect path
-        with self.assertRaises(AsdkExportDataException) as context:        
+        with self.assertRaises(AsdkExportDataException) as context:
             file_path = './test/resourcess/testdata/exportdata/test_export_file.csv'
-            self.test_subject.export_data([1,2,3], file_path, 'csv')
+            self.test_subject.export_data([1, 2, 3], file_path, 'csv')
             self.assertTrue('Unable to validate file path and permissions' in context.exception)
 
         # test data already existing in file and overwrite flag set
         file_path_2 = './test/resources/testdata/exportdata/test_export_file.json'
         open(file_path_2, 'w')
-        df = pd.DataFrame([1,2,3])
+        df = pd.DataFrame([1, 2, 3])
         df.to_json(file_path_2)
         result_2 = self.test_subject.export_data([1, 2, 3], file_path_2, 'json')
         self.assertTrue(result_2)
@@ -246,9 +247,9 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
         self.assertTrue(result_3)
         os.remove(file_path_3)
 
-        with self.assertRaises(AsdkExportDataException) as context:        
+        with self.assertRaises(AsdkExportDataException) as context:
             file_path = './test/resourcess/testdata/exportdata/test_export_file.csv'
-            self.test_subject.export_data([1,2,3], file_path, 'csv')
+            self.test_subject.export_data([1, 2, 3], file_path, 'csv')
             self.assertTrue('Unable to validate file path and permissions' in context.exception)
 
         # test file that doesn't exist
@@ -256,28 +257,28 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
         result_4 = self.test_subject.export_data([1, 2, 3], file_path_4, 'pickle')
         self.assertTrue(result_4)
         os.remove(file_path_4)
-        
+
     def test_write_json_exception(self):
         file_path = './test/resources/testdata/exportdata/export_json_file_test.json'
         with mock.patch('aladdinsdk.common.exports.export_json.json.dumps', side_effect=TypeError('Exception')):
-            with self.assertRaises(AsdkExportDataException) as context:        
-                self.test_subject.export_data([1,2,3], file_path, 'json')
+            with self.assertRaises(AsdkExportDataException) as context:
+                self.test_subject.export_data([1, 2, 3], file_path, 'json')
                 self.assertTrue('Exception' in context.exception)
         os.remove(file_path)
-    
+
     def test_write_pickle_exception(self):
         file_path = './test/resources/testdata/exportdata/export_pickle_file_test.pkl'
         with mock.patch('aladdinsdk.common.exports.utils.write_file_util.pickle.dump', side_effect=TypeError('Exception')):
-            with self.assertRaises(AsdkExportDataException) as context:        
-                self.test_subject.export_data([{1 :1}], file_path, 'pickle')
+            with self.assertRaises(AsdkExportDataException) as context:
+                self.test_subject.export_data([{1: 1}], file_path, 'pickle')
                 self.assertTrue('Exception' in context.exception)
         os.remove(file_path)
 
     def test_file_validation_exception(self):
         file_path = './test/resources/testdata/exportdata/test.pkl'
         with mock.patch('os.access', side_effect=Exception('Exception')):
-            with self.assertRaises(Exception) as context:        
-                self.test_subject.export_data([1,2,3], file_path, 'pickle')
+            with self.assertRaises(Exception) as context:
+                self.test_subject.export_data([1, 2, 3], file_path, 'pickle')
                 self.assertTrue('Exception' in context.exception)
 
     def test_get_supported_types(self):
@@ -286,68 +287,68 @@ class TestCommonExportsWithOverWriteDataSet(TestCase):
 
     def test_invalid_supported_types(self):
         file_path = './test/resources/testdata/exportdata/test_export_file.pkl'
-        result = self.test_subject.export_data([1,2,3], file_path, 'pkl')
+        result = self.test_subject.export_data([1, 2, 3], file_path, 'pkl')
         self.assertFalse(result)
 
     def test_export_class_exception_raised(self):
         with mock.patch('aladdinsdk.common.exports.export.validate_file_and_path', side_effect=Exception('Exception')):
-            with self.assertRaises(Exception) as context:        
+            with self.assertRaises(Exception) as context:
                 file_path = './test/resources/testdata/exportdata/test_export_file.pkl'
-                self.test_subject.export_data([1,2,3], file_path, 'pickle')
+                self.test_subject.export_data([1, 2, 3], file_path, 'pickle')
                 self.assertTrue('Exception' in context.exception)
-    
+
     def test_write_util_exception(self):
         # for json
         with mock.patch('os.stat', side_effect=OSError('Exception')):
-            with self.assertRaises(AsdkExportDataException) as context:        
+            with self.assertRaises(AsdkExportDataException) as context:
                 file_path = './test/resources/testdata/exportdata/export_json_file_test.json'
-                self.test_subject.export_data([1,2,3], file_path, 'json')
+                self.test_subject.export_data([1, 2, 3], file_path, 'json')
                 self.assertTrue('Exception' in context.exception)
-        
+
         # for pickle
         with mock.patch('aladdinsdk.common.exports.utils.write_file_util.write_pickle', side_effect=Exception('Exception')):
-            with self.assertRaises(Exception) as context:        
+            with self.assertRaises(Exception) as context:
                 file_path = './test/resources/testdata/exportdata/export_pickle_file_test.pkl'
-                self.test_subject.export_data([1,2,3], file_path, 'pickle')
+                self.test_subject.export_data([1, 2, 3], file_path, 'pickle')
                 self.assertTrue('Exception' in context.exception)
-    
+
     def test_export_data_other_exception(self):
         # test Type Error
         with mock.patch('aladdinsdk.common.exports.export.validate_file_and_path', side_effect=TypeError('Exception')):
-            with self.assertRaises(TypeError) as context:        
+            with self.assertRaises(TypeError) as context:
                 file_path = './test/resources/testdata/exportdata/export_pickle_file_test.pkl'
-                self.test_subject.export_data([1,2,3], file_path, 'pickle')
-                self.assertTrue('Exception' in context.exception)
-        
-        # test Value Error
-        with mock.patch('aladdinsdk.common.exports.export.validate_file_and_path', side_effect=ValueError('Exception')):
-            with self.assertRaises(ValueError) as context:        
-                file_path = './test/resources/testdata/exportdata/export_pickle_file_test.pkl'
-                self.test_subject.export_data([1,2,3], file_path, 'pickle')
+                self.test_subject.export_data([1, 2, 3], file_path, 'pickle')
                 self.assertTrue('Exception' in context.exception)
 
+        # test Value Error
+        with mock.patch('aladdinsdk.common.exports.export.validate_file_and_path', side_effect=ValueError('Exception')):
+            with self.assertRaises(ValueError) as context:
+                file_path = './test/resources/testdata/exportdata/export_pickle_file_test.pkl'
+                self.test_subject.export_data([1, 2, 3], file_path, 'pickle')
+                self.assertTrue('Exception' in context.exception)
 
     def does_file_have_content(self, file_path):
         return os.stat(file_path).st_size != 0
-    
+
     def clear_file(self, file_path):
         open(file_path, 'w')
 
     def get_unserializable_input_response_object(self):
         return ApiUnserializableTestObject()
-    
+
     def get_serializable_input_response_object(self):
         return ApiSerializableTestObject()
-    
+
     def get_input_json(self):
         input_obj = {
-            'key1'  : 1,
-            'key2' : True,
-            'key3' : datetime.date(2020, 1, 5).isoformat(),
-            'key4' : [1,2,3],
-            'key5' : datetime.datetime(1970, 1, 1, 0, 0, tzinfo=datetime.timezone.utc).isoformat()
+            'key1': 1,
+            'key2': True,
+            'key3': datetime.date(2020, 1, 5).isoformat(),
+            'key4': [1, 2, 3],
+            'key5': datetime.datetime(1970, 1, 1, 0, 0, tzinfo=datetime.timezone.utc).isoformat()
         }
         return json.dumps(input_obj)
+
 
 class TestCommonExportsWithoutOverWriteDataSet(TestCase):
     @classmethod
@@ -365,16 +366,16 @@ class TestCommonExportsWithoutOverWriteDataSet(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         return super().setUp()
-    
+
     def test_file_validation_without_overwrite_data_set(self):
         # test data already existing in file and overwrite flag not set
         file_path = './test/resources/testdata/exportdata/test_export_file.csv'
         open(file_path, 'w')
-        df = pd.DataFrame([1,2,3])
-        df.to_csv(file_path, sep='\t')  
+        df = pd.DataFrame([1, 2, 3])
+        df.to_csv(file_path, sep='\t')
         result = self.test_subject.export_data([1, 2, 3], file_path, 'csv')
         self.assertFalse(result)
         os.remove(file_path)
@@ -383,7 +384,7 @@ class TestCommonExportsWithoutOverWriteDataSet(TestCase):
         # test new empty file and date format not set
         file_path = './test/resources/testdata/exportdata/test_new_file.xlsx'
         open(file_path, 'w')
-        with self.assertRaises(AsdkExportDataException) as context:        
+        with self.assertRaises(AsdkExportDataException) as context:
             file_path = './test/resources/testdata/exportdata/test_new_file.xlsx'
             self.test_subject.export_data(self.get_unserializable_input_response_object().__dict__, file_path, 'excel')
             self.assertTrue('Exception' in context.exception)
@@ -394,8 +395,8 @@ class TestCommonExportsWithoutOverWriteDataSet(TestCase):
         file_path = './test/resources/testdata/exportdata/export_pickle_file_test.pkl'
         open(file_path, 'wb')
         with mock.patch('aladdinsdk.common.exports.export.validate_file_and_path', side_effect=AsdkExportDataException('Exception')):
-            with self.assertRaises(AsdkExportDataException) as context:        
-                self.test_subject.export_data([1,2,3], file_path, 'pickle')
+            with self.assertRaises(AsdkExportDataException) as context:
+                self.test_subject.export_data([1, 2, 3], file_path, 'pickle')
                 self.assertTrue('Exception' in context.exception)
         os.remove(file_path)
 
@@ -404,16 +405,17 @@ class TestCommonExportsWithoutOverWriteDataSet(TestCase):
         file_path = './test/resources/testdata/exportdata/export_json_file_test.json'
         open(file_path, 'w')
         with mock.patch('aladdinsdk.common.exports.export.export_data', side_effect=AsdkExportDataException('Exception')):
-            with self.assertRaises(AsdkExportDataException) as context:        
-                self.test_subject.export_data([1,2,3], file_path, 'json')
+            with self.assertRaises(AsdkExportDataException) as context:
+                self.test_subject.export_data([1, 2, 3], file_path, 'json')
                 self.assertTrue('Exception' in context.exception)
         os.remove(file_path)
 
     def get_unserializable_input_response_object(self):
         return ApiUnserializableTestObject()
-    
+
     def get_serializable_input_response_object(self):
         return ApiSerializableTestObject()
+
 
 class TestCommonExportsWithMalformedOverWriteDataSet(TestCase):
     @classmethod
@@ -431,20 +433,21 @@ class TestCommonExportsWithMalformedOverWriteDataSet(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         return super().setUp()
-    
+
     def test_export_raises_error(self):
         # test file with existing data
-        file_path = './test/resources/testdata/exportdata/export_csv_file_test.csv'  
-        df = pd.DataFrame([1,2,3])
-        df.to_csv(file_path, sep='\t')    
-        with self.assertRaises(AsdkExportDataException) as context:        
-            input_1 = pd.DataFrame([1,2,3])
+        file_path = './test/resources/testdata/exportdata/export_csv_file_test.csv'
+        df = pd.DataFrame([1, 2, 3])
+        df.to_csv(file_path, sep='\t')
+        with self.assertRaises(AsdkExportDataException) as context:
+            input_1 = pd.DataFrame([1, 2, 3])
             self.test_subject.export_data(input_1, file_path, 'csv')
             self.assertTrue('Overwrite data flag type incorrect' in context.exception)
         os.remove(file_path)
+
 
 class TestWriteUtil(TestCase):
     @classmethod
@@ -460,17 +463,17 @@ class TestWriteUtil(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         return super().setUp()
-    
+
     def test_write_raises_error(self):
         # test write json exception
         file_path = './test/resources/testdata/exportdata/export_json_file_test.json'
         open(file_path, 'w')
         with mock.patch('builtins.open', side_effect=OSError('Exception')):
-            with self.assertRaises(AsdkExportDataException) as context:        
-                self.test_subject.write_json([1,2,3], file_path)
+            with self.assertRaises(AsdkExportDataException) as context:
+                self.test_subject.write_json([1, 2, 3], file_path)
                 self.assertTrue('Exception' in context.exception)
         os.remove(file_path)
 
@@ -478,7 +481,7 @@ class TestWriteUtil(TestCase):
         file_path_2 = './test/resources/testdata/exportdata/export_pickle_file_test.pkl'
         open(file_path_2, 'wb')
         with mock.patch('builtins.open', side_effect=OSError('Exception')):
-            with self.assertRaises(AsdkExportDataException) as context:        
-                self.test_subject.write_pickle([1,2,3], file_path_2)
+            with self.assertRaises(AsdkExportDataException) as context:
+                self.test_subject.write_pickle([1, 2, 3], file_path_2)
                 self.assertTrue('Exception' in context.exception)
         os.remove(file_path_2)

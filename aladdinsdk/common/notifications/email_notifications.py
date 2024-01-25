@@ -11,15 +11,16 @@ from aladdinsdk.config.asdkconf import dynamic_asdk_config_reload
 
 _logger = logging.getLogger(__name__)
 
+
 @dynamic_asdk_config_reload
 def send_email_notification(subject: str,
-                message: str,
-                recipients: list = user_settings.get_notifications_email_to(),
-                sender: str = user_settings.get_notifications_email_sender(),
-                username: str = user_settings.get_notifications_email_username(),
-                password: str = user_settings.get_notifications_email_password(),
-                host: str = user_settings.get_notifications_email_host(),
-                **kwargs):
+                            message: str,
+                            recipients: list = user_settings.get_notifications_email_to(),
+                            sender: str = user_settings.get_notifications_email_sender(),
+                            username: str = user_settings.get_notifications_email_username(),
+                            password: str = user_settings.get_notifications_email_password(),
+                            host: str = user_settings.get_notifications_email_host(),
+                            **kwargs):
     """
     Send an email notification using SMTP
 
@@ -29,7 +30,7 @@ def send_email_notification(subject: str,
         message (String): email content
         recipients (List<String>): list of users to send email
         sender (String): used in the sender field for the email
-        username (String): used to login to email 
+        username (String): used to login to email
         password (String): used to login to email
         host (String): email host
         Optional:
@@ -52,6 +53,7 @@ def send_email_notification(subject: str,
     except (smtplib.SMTPResponseException, TypeError, OSError, AsdkEmailNotificationException) as e:
         raise AsdkEmailNotificationException(e)
 
+
 def _send_email(context, email_host, email_msg, username, password):
     """
     Initializes smtp with host to send email notification
@@ -72,14 +74,15 @@ def _send_email(context, email_host, email_msg, username, password):
             smtp.sendmail(email_msg['From'], email_msg['To'].split(',') + email_msg['Cc'].split(','), email_msg.as_string())
         _logger.info(f"Email notification successfully sent by [username: {user_settings.get_username()}]")
 
+
 def _get_email_host(host):
     """
-    Get server to use for email. 
+    Get server to use for email.
     User can pass in host in function call or define it in the configuration
-    
+
     Args:
         host (String): email host
-    
+
     Returns:
         String: email host
     """
@@ -90,6 +93,7 @@ def _get_email_host(host):
     if email_host is None:
         raise AsdkEmailNotificationException("Missing argument: No smtp host defined for sending email notifications")
     return email_host
+
 
 def _create_email_msg(username, password, sender, recipients, subject=None, message=None, **kwargs):
     """
@@ -104,7 +108,7 @@ def _create_email_msg(username, password, sender, recipients, subject=None, mess
         subject (String): email subject
         message (String): email content
         attachments (List<String>): files to attach to email
-    
+
     Raises:
         AsdkEmailNotificationException: For missing arguments
 
@@ -130,6 +134,7 @@ def _create_email_msg(username, password, sender, recipients, subject=None, mess
     _logger.info("Completed email message construction")
     return email_msg
 
+
 def _attach_files_to_email(email_msg, attachments):
     """
     Add attachments to the email message
@@ -137,7 +142,7 @@ def _attach_files_to_email(email_msg, attachments):
     Args:
         email_msg: MIMEMultipart
         attachments (List<String>): files to attach to email
-       
+
     Raises:
         AsdkEmailNotificationException: For inability to read or encode file content
     """
@@ -147,9 +152,9 @@ def _attach_files_to_email(email_msg, attachments):
             part = MIMEBase('application', 'octet-stream')
             part.set_payload((attachment).read())
             encoders.encode_base64(part)
-            part.add_header('Content-Disposition', "attachment; filename= %s" % file)               
-            email_msg.attach(part) 
+            part.add_header('Content-Disposition', "attachment; filename= %s" % file)
+            email_msg.attach(part)
         _logger.info("Completed adding attachments to email")
- 
+
     except (OSError, UnicodeEncodeError) as e:
         raise AsdkEmailNotificationException(e)

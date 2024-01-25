@@ -3,6 +3,7 @@ import os
 from aladdinsdk.common.error.asdkerrors import AsdkEmailNotificationException, AsdkApiException
 from test.resources.testutils import utils
 
+
 class TestCommonErrorNotificationsThroughEmail(TestCase):
     @classmethod
     def setUpClass(self):
@@ -19,18 +20,19 @@ class TestCommonErrorNotificationsThroughEmail(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-    
+
     def setUp(self) -> None:
         return super().setUp()
-    
+
     @mock.patch('aladdinsdk.common.error.notifications.email_notifications_for_errors.send_email_notification', return_value=True)
     def test_email_notification_for_exception_success(self, email_notif):
         test_exception = AsdkApiException("TEST")
         self.test_subject.email_notification_for_exception(test_exception)
 
-    def test_email_notification_for_exception_success(self):
-        with mock.patch('aladdinsdk.common.error.notifications.email_notifications_for_errors.send_email_notification', side_effect=AsdkEmailNotificationException):
-            with self.assertRaises(Exception) as context:        
+    def test_email_notification_for_exception_fail(self):
+        with mock.patch('aladdinsdk.common.error.notifications.email_notifications_for_errors.send_email_notification',
+                        side_effect=AsdkEmailNotificationException):
+            with self.assertRaises(Exception) as context:
                 test_exception = AsdkApiException("TEST")
                 self.test_subject.email_notification_for_exception(test_exception)
                 self.assertTrue('Unable to send email notification for exception' in context.exception)

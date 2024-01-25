@@ -13,16 +13,17 @@ OKTA_SIDECAR_SERVER = os.environ.get("OKTA_SIDECAR_SERVER_URL", "http://localhos
 OKTA_SIDECAR_PING_ENDPOINT = f"{OKTA_SIDECAR_SERVER}/v1/ping"
 OKTA_SIDECAR_ACCESS_TOKEN_ENDPOINT = f"{OKTA_SIDECAR_SERVER}/v1/access-token"
 
+
 def get_access_token_ttl_from_okta_sidecar(scopes=None):
     """
     Client for communicating with okta-sidecar server running in aladdin-compute run mode
     If streamlit modules are available, this method will fetch the 'Developer-Uid' from the websocket headers,
     and make a request to Okta Sidecar server to get access token for the user.
     If either of the following are unavailable - streamlit modules / websocket headers / okta-sidecar server - this method will return None
-    
+
     Args:
         scopes (_type_, required): List of scopes to correctly permission the access token based on api end point call
-    
+
     Returns:
         access_token: OAuth access token or None
     """
@@ -30,7 +31,7 @@ def get_access_token_ttl_from_okta_sidecar(scopes=None):
         scopes = []
     if "offline_access" not in scopes:
         scopes.append("offline_access")
-    
+
     developer_uid_from_header = ""
     if _COMPUTE_APP_TYPE == "streamlit":
         developer_uid_from_header = _retrieve_streamlit_websocket_header_developer_uid()
@@ -41,22 +42,23 @@ def get_access_token_ttl_from_okta_sidecar(scopes=None):
     if _sidecar_running and developer_uid_from_header is not None:
         access_token, expires_at = _fetch_access_token_from_okta_sidecar(developer_uid=developer_uid_from_header, scopes=scopes)
         return access_token, expires_at
-    
+
     if developer_uid_from_header is None:
         _logger.debug("Compute App http headers and/or Developer-Uid unavailable. Can not fetch access token from okta-sidecar server.")
     if not _sidecar_running:
         _logger.debug("Unable to ping okta-sidecar server. Can not fetch access token from okta-sidecar server.")
-    
+
     return None, None
+
 
 def _retrieve_streamlit_websocket_header_developer_uid():
     """
     Retrieve the 'Developer-Uid' from the streamlit websocket headers if available.
     If streamlit modules or websocket headers are unavailable, return None.
-    
+
     Returns:
         _type_: developer uid from websocket header or None
-    """ 
+    """
     try:
         importlib.import_module(STREAMLIT_MODULE_NAME)
         _websocket_headers_module = importlib.import_module(STREAMLIT_WEBSOCKET_HEADER_MODULE_NAME)
@@ -67,11 +69,12 @@ def _retrieve_streamlit_websocket_header_developer_uid():
         _logger.debug("Streamlit modules and/or websocket headers not available.")
     return None
 
+
 def _retrieve_dash_header_developer_uid():
     """
     Retrieve the 'Developer-Uid' from the dash header if available.
     If flask modules or dash header are unavailable, return None.
-    
+
     Returns:
         _type_: developer uid from dash header or None
     """
@@ -83,6 +86,7 @@ def _retrieve_dash_header_developer_uid():
     except Exception:
         _logger.debug("Dash modules and/or http headers not available.")
     return None
+
 
 def _is_okta_sidecar_running():
     """
@@ -98,6 +102,7 @@ def _is_okta_sidecar_running():
     except (requests.exceptions.RequestException):
         _logger.debug("Okta-sidecar server not available.")
     return False
+
 
 def _fetch_access_token_from_okta_sidecar(developer_uid, scopes=[]):
     """

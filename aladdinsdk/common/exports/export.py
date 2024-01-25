@@ -6,14 +6,17 @@ from aladdinsdk.common.exports import export_csv, export_excel, export_json, exp
 
 _logger = logging.getLogger(__name__)
 
+
 class ExportTypes(Enum):
     csv = 1
     excel = 2
     json = 3
     pickle = 4
 
+
 def get_supported_export_types():
     return ExportTypes._member_names_
+
 
 @asdk_exception_handler
 def export_data(input_data, file_location, export_type, overwrite_data=None):
@@ -32,7 +35,7 @@ def export_data(input_data, file_location, export_type, overwrite_data=None):
     if not validate_file_and_path(file_location, overwrite_data):
         _logger.error('File and path validation failed')
         return False
-    
+
     if export_type == ExportTypes.csv.name:
         export_csv.export_data(input_data, file_location)
     elif export_type == ExportTypes.excel.name:
@@ -44,6 +47,6 @@ def export_data(input_data, file_location, export_type, overwrite_data=None):
     else:
         _logger.error(f'Invalid export type provided. Specify one of {get_supported_export_types()}')
         return False
-    
+
     _logger.info('Export data complete')
     return True

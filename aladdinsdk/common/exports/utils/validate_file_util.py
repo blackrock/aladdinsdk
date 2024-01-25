@@ -6,20 +6,21 @@ from aladdinsdk.config.user_settings import get_overwrite_data_flag
 
 _logger = logging.getLogger(__name__)
 
+
 def validate_file_and_path(file_location, overwrite_data=None):
-    """ 
+    """
     Given a file location, determine if the path exists, user has write perms and if the file is empty
-        
+
     Args:
         file_location (_type_, required): file location
         overwrite_data (_type_, optional): overwrite data flag
-        
+
     Raises:
         AsdkExportDataException: _description_
 
     Returns:
         bool: True if file and path validation is successful
-    """         
+    """
     try:
         file_name = Path(file_location)
         folder_path = os.path.dirname(file_location)
@@ -40,26 +41,27 @@ def validate_file_and_path(file_location, overwrite_data=None):
         _logger.error('Error validating file')
         raise e
 
+
 def _validate_overwrite_data_config(overwrite_data=None):
-    """ 
+    """
     Determine the overwrite data flag value
     Method arg value overrides the user setting config
-    
+
     Args:
         overwrite_data (_type_, optional): overwrite data flag
 
     Raises:
         AsdkExportDataException: _description_
-            
+
     Returns:
-        bool: overwrite data flag        
-    """    
+        bool: overwrite data flag
+    """
     if overwrite_data is not None:
         return overwrite_data
     overwrite_data_flag = get_overwrite_data_flag()
     if isinstance(overwrite_data_flag, bool):
         return overwrite_data_flag
-    elif overwrite_data_flag == None:
+    elif overwrite_data_flag is None:
         _logger.error('Overwrite data config not set - and file has existing data')
         return False
     else:

@@ -5,10 +5,11 @@ class AsdkSetupException(Exception):
     Args:
         Exception (_type_): _description_
     """
-    
+
     def __init__(self, message="ASDK Setup Exception", *args: object):
         self.message = message
         super().__init__(self.message, *args)
+
 
 class AsdkApiException(Exception):
     """
@@ -17,10 +18,11 @@ class AsdkApiException(Exception):
     Args:
         Exception (_type_): _description_
     """
-        
+
     def __init__(self, message="API Wrapper Exception", *args: object) -> None:
         self.message = message
         super().__init__(self.message, *args)
+
 
 class AsdkAdcException(Exception):
     """
@@ -29,10 +31,11 @@ class AsdkAdcException(Exception):
     Args:
         Exception (_type_): _description_
     """
-        
+
     def __init__(self, message="ADC Wrapper Exception", *args: object) -> None:
         self.message = message
         super().__init__(self.message, *args)
+
 
 class AsdkExportDataException(Exception):
     """
@@ -41,10 +44,11 @@ class AsdkExportDataException(Exception):
     Args:
         Exception (_type_): _description_
     """
-        
+
     def __init__(self, message="Export Data Exception", *args: object) -> None:
         self.message = message
         super().__init__(self.message, *args)
+
 
 class AsdkEmailNotificationException(Exception):
     """
@@ -53,10 +57,11 @@ class AsdkEmailNotificationException(Exception):
     Args:
         Exception (_type_): _description_
     """
-        
+
     def __init__(self, message="Email Notification Exception", *args: object) -> None:
         self.message = message
         super().__init__(self.message, *args)
+
 
 class AsdkTransformationException(Exception):
     """
@@ -65,10 +70,11 @@ class AsdkTransformationException(Exception):
     Args:
         Exception (_type_): _description_
     """
-        
+
     def __init__(self, message="", *args: object) -> None:
         self.message = message
-        super().__init__(self.message, *args)       
+        super().__init__(self.message, *args)
+
 
 class AsdkOAuthException(Exception):
     """
@@ -77,7 +83,7 @@ class AsdkOAuthException(Exception):
     Args:
         Exception (_type_): _description_
     """
-        
+
     def __init__(self, message="OAuth Token exception", *args: object) -> None:
         self.message = message
         super().__init__(self.message, *args)

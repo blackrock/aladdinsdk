@@ -1,7 +1,8 @@
 from aladdinsdk.api import AladdinAPI
 from aladdinsdk.config.asdkconf import dynamic_asdk_config_reload
 from aladdinsdk.common.error.asdkerrors import AsdkAdcException
-    
+
+
 @dynamic_asdk_config_reload
 def fetch_adc_connection_access_token(adc_connection_kwargs):
     """

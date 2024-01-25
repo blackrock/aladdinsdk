@@ -31,6 +31,14 @@ AladdinSDK allows developers to easily integrate Aladdin functionality into thei
 
 ## Usage
 
+### Environemnt Variables
+
+| Environment Variable Name | Description                                                              | Mandatory | Default | Permitted Values |
+|:--------------------------|:-------------------------------------------------------------------------|:---------:|:-------:|:----------------:|
+| defaultWebServer          | BlackRock client environment's default web server                        |    Yes    |    -    |         -        |
+| ASDK_USER_CONFIG_FILE     | Path to AladdinSDK configuration to be used                              |    No     |    -    |         -        |
+| AGRAPH_SCOPES_ENABLED     | If enabled, adds scopes from swagger specs to oauth access token request |    No     |  False  |    True/False    |
+
 ### Run-time configurations
 
 AladdinSDK is highly customizable. This allows the code to be clean, readable, and reusable across environments. 
