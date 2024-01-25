@@ -45,7 +45,7 @@ jobs:
         path: junit/test-results.xml
       if: ${{ always() }}
     - name: Add codegen
-      run: python devutils/_util_api_codegen.py onboard -oas resources/api_specs/access_v1_access_swagger.json
+      run: python devutils/asdk_agraph_plugin_builder.py -osd resources/api_specs
     - name: Build package
       run: |
         python -m pip install build setuptools
