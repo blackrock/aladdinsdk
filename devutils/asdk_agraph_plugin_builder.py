@@ -56,7 +56,7 @@ def _run_command(command_array, message):
         return False
 
 
-def _update_asdk_repo_codegen_section(api_name, api_version, api_module_path, api_swagger_target_location):
+def _update_asdk_repo_codegen_section(api_name, api_version, api_module_path):
     """
     Method to update ASDK's codegen sections. Particularly codegen allow list yaml file.
 
@@ -79,6 +79,7 @@ def _update_asdk_repo_codegen_section(api_name, api_version, api_module_path, ap
     _filtered_api_list = [x for x in _codegen_api_allow_list['CODEGEN_API_SETTINGS']['ALLOW_LIST'] if x['api_name'] != api_name]
 
     # i.e. if running in onboard mode, append new api entry to file
+    api_swagger_target_location = os.path.join(*api_module_path.split('.'))
     with open(f"{api_swagger_target_location}/swagger.json", "r") as file:
         _target_swagger_json = json.load(file)
 
@@ -125,11 +126,10 @@ def _generate_target_api_details_from_agraph_swagger_spec(agraph_swagger_file_pa
             if spec_id_split[0] == "agraph":
                 spec_id_split.pop(0)
 
-            api_swagger_target_location = os.path.join('aladdinsdk', 'api', 'codegen', *spec_id_split)
             api_name = spec_id_split.pop()
             api_ver = spec_id_split.pop()
-            api_module_path = f"aladdinsdk.api.codegen.{'.'.join(spec_id_split)}"
-            return api_name, api_ver, api_module_path, api_swagger_target_location
+            api_module_path = ".".join(['aladdinsdk', 'api', 'codegen', *spec_id_split])
+            return api_name, api_ver, api_module_path
     except KeyError:
         raise Exception("Incorrect swagger file encountered. "
                         "Info section needs to have 'x-aladdin-spec-id' to help identify API name, version and module path")
@@ -153,7 +153,7 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
     Returns:
         tuple: API Name-Version, Generated APIs target module
     """
-    api_name, api_ver, api_module_path, api_swagger_target_location = _generate_target_api_details_from_agraph_swagger_spec(path_to_agraph_openapi_spec_file)
+    api_name, api_ver, api_module_path = _generate_target_api_details_from_agraph_swagger_spec(path_to_agraph_openapi_spec_file)
     if api_name is None or api_ver is None or api_module_path is None:
         raise Exception("Insufficient API information in swagger files")
 
@@ -193,9 +193,8 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
                                                        message=f"[API: {api_name}-{api_ver}] - Rsync python client code into sdk repo's "
                                                        "codegen package under newly created target directory")
 
-    print(f"[API: {api_name}-{api_ver}] - {is_successful} - Openapi codegen steps done. Proceeding with ASDK updates...")
-    _update_asdk_repo_codegen_section(api_name=api_name, api_version=api_ver,
-                                      api_module_path=api_module_path, api_swagger_target_location=api_swagger_target_location)
+    print(f"[API: {api_name}-{api_ver}] - Openapi codegen steps done successfully ({is_successful}). Proceeding with ASDK updates...")
+    _update_asdk_repo_codegen_section(api_name=api_name, api_version=api_ver, api_module_path=api_module_path)
 
     if is_successful:
         print(f"[API: {api_name}-{api_ver}] - API Onboarding complete. Result: 'success'")
@@ -204,7 +203,7 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
     return f"{api_name}-{api_ver}"
 
 
-def _build_plugin_with_swagger_files(api_swagger_files):
+def _build_api_with_swagger_files(api_swagger_files):
     """Given paths to swagger files that need to be packaged into the plugin and the target location details, use openapi-generator
     to generate python clients in a temporary location, and copy python code modules into target location under the similar
     domain/segment/api structure. Return list of completed APIs and skipped APIs (with error/reasons for skipping)
@@ -228,7 +227,7 @@ def _build_plugin_with_swagger_files(api_swagger_files):
     return completed_apis_to_spec_map, skipped_api_specs_to_reason_map
 
 
-def create_plugin_content(api_swagger_files):
+def add_api_to_asdk(api_swagger_files):
     """Generate plugin and return execution summary for this domain.
     Add supplementary files for plugin artifacts:
         api_registry.py - To help AladdinSDK understand available APIs in this domain library
@@ -242,7 +241,7 @@ def create_plugin_content(api_swagger_files):
         _type_: execution summary map entires for this domain
     """
     # generate domain plugin
-    _completed_apis_to_spec_map, _skipped_api_specs_to_reason_map = _build_plugin_with_swagger_files(api_swagger_files)
+    _completed_apis_to_spec_map, _skipped_api_specs_to_reason_map = _build_api_with_swagger_files(api_swagger_files)
 
     print(f"Completed with {len(_completed_apis_to_spec_map)} API codegen runs.")
     print_run_summary(_completed_apis_to_spec_map, _skipped_api_specs_to_reason_map)
@@ -315,4 +314,4 @@ if __name__ == "__main__":
     # Add these details to a summary map that will be printed out at the end of execution
     summary_map = {}
     api_swagger_files = glob.glob(f"{_openapi_spec_dir}/*.json")
-    create_plugin_content(api_swagger_files)
+    add_api_to_asdk(api_swagger_files)
