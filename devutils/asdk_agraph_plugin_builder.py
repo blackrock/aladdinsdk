@@ -15,14 +15,13 @@ Utility to onboard APIs to SDK
 # Run constants
 _ASDK_PLUGIN_MODULE_PREFIX = "asdk_plugin_"
 _openapi_generator_cli_version = "6.6.0"
-_OPENAPI_GENERATOR_JAR_DOWNLOAD_LINK = f'https://artifactory.blackrock.com:9000/artifactory/libs-releases/org/openapitools/openapi-generator-cli/{_openapi_generator_cli_version}/openapi-generator-cli-{_openapi_generator_cli_version}.jar'  # noqa: E501
+_OPENAPI_GENERATOR_JAR_DOWNLOAD_LINK = f'https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/{_openapi_generator_cli_version}/openapi-generator-cli-{_openapi_generator_cli_version}.jar'  # noqa: E501
 platform_os = platform.platform()
 _ASDK_PLUGIN_BUILDER_REPO = os.getcwd()
 if 'Windows' in platform_os:
     _ASDK_PLUGIN_BUILDER_REPO = pathlib.PureWindowsPath(os.getcwd()).as_posix()
 
 _openapi_generator_jar_filepath = os.path.join(_ASDK_PLUGIN_BUILDER_REPO, 'resources', 'openapi-generator-cli.jar')
-_default_run_config = os.path.join(_ASDK_PLUGIN_BUILDER_REPO, 'resources', 'domain-api-map.yaml')
 
 
 # Helper methods
