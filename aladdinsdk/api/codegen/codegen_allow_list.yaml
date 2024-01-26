@@ -5,11 +5,11 @@
 ######################################################.
 CODEGEN_API_SETTINGS:
   ALLOW_LIST:
-  - api_module_path: aladdinsdk.api.codegen.platform.infrastructure.token.v1.token
+  - api_module_path: aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI
     api_name: TokenAPI
     api_version: v1
     host_url_path: /api/platform/infrastructure/token/v1/
-  - api_module_path: aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey
+  - api_module_path: aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.TrainJourneyAPI
     api_name: TrainJourneyAPI
     api_version: v1
     host_url_path: /api/reference-architecture/demo/train-journey/v1/
