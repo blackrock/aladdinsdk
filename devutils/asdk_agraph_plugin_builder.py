@@ -125,9 +125,8 @@ def _generate_target_api_details_from_agraph_swagger_spec(agraph_swagger_file_pa
             spec_id_split = x_aladdin_spec_id.split('.')
             if spec_id_split[0] == "agraph":
                 spec_id_split.pop(0)
-
-            api_name = spec_id_split.pop()
-            api_ver = spec_id_split.pop()
+            api_name = spec_id_split[-1]
+            api_ver = spec_id_split[-2]
             api_module_path = ".".join(['aladdinsdk', 'api', 'codegen', *spec_id_split])
             return api_name, api_ver, api_module_path
     except KeyError:
