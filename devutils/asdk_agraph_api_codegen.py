@@ -269,7 +269,7 @@ if __name__ == "__main__":
     parser.add_argument('-osd', '--openapi-spec-dir', help="AGraph generated Swagger specifications", required=True)
     parser.add_argument('-oj', '--openapi-generator-cli-jar', help="(Optional) Path to openapi-generator-cli jar. If not provided, "
                         f"script will attempt to get from {_OPENAPI_GENERATOR_JAR_DOWNLOAD_LINK}")
-    parser.add_argument('-v', '--verbose', help="(Optional) More verbose summary", action='store_true', default=True)
+    parser.add_argument('-v', '--verbose', help="(Optional) More verbose summary", action='store_true', default=False)
 
     # Read input args
     args = parser.parse_args()

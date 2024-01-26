@@ -47,7 +47,7 @@ jobs:
     - name: Build package
       run: |
         python -m pip install build setuptools
-        python devutils/asdk_agraph_plugin_builder.py -osd resources/api_specs
+        python devutils/asdk_agraph_api_codegen.py -osd resources/api_specs
         python -m build
     - name: (TEMP) Upload build results
       uses: actions/upload-artifact@v3
