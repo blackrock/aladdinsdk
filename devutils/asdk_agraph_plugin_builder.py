@@ -158,6 +158,7 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
 
     # using api_module_path, generate target API location
     target_api_directory = os.path.join(*api_module_path.split('.'))
+    target_api_dir_for_rsync = os.path.join(*api_module_path.split('.')[0:-1])
 
     print(f"Onboarding API - {api_name}-{api_ver}.")
     is_successful = True
@@ -187,7 +188,7 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
         is_successful = is_successful and _run_command(cp_command_swagger,
                                                        message=f"[API: {api_name}-{api_ver}] - Copy swagger file under target directory")
 
-        rsync_command = ["rsync", "-a", os.path.join(temp_dir, target_api_directory), target_api_directory]
+        rsync_command = ["rsync", "-a", os.path.join(temp_dir, target_api_directory), target_api_dir_for_rsync]
         is_successful = is_successful and _run_command(rsync_command,
                                                        message=f"[API: {api_name}-{api_ver}] - Rsync python client code into sdk repo's "
                                                        "codegen package under newly created target directory")
@@ -202,17 +203,16 @@ def _onboard_api_using_swagger(path_to_agraph_openapi_spec_file):
     return f"{api_name}-{api_ver}"
 
 
-def _build_api_with_swagger_files(api_swagger_files):
+def _build_api_codegen_with_swagger_files(openapi_spec_dir):
     """Given paths to swagger files that need to be packaged into the plugin and the target location details, use openapi-generator
     to generate python clients in a temporary location, and copy python code modules into target location under the similar
     domain/segment/api structure. Return list of completed APIs and skipped APIs (with error/reasons for skipping)
 
-    Args:
-        api_swagger_files (_type_): _description_
-
     Returns:
         _type_: _description_
     """
+    api_swagger_files = glob.glob(f"{openapi_spec_dir}/*.json")
+
     completed_apis_to_spec_map = {}
     skipped_api_specs_to_reason_map = {}
 
@@ -223,27 +223,8 @@ def _build_api_with_swagger_files(api_swagger_files):
         except Exception as e:
             skipped_api_specs_to_reason_map[api_swagger_file] = str(e)
 
-    return completed_apis_to_spec_map, skipped_api_specs_to_reason_map
-
-
-def add_api_to_asdk(api_swagger_files):
-    """Generate plugin and return execution summary for this domain.
-    Add supplementary files for plugin artifacts:
-        api_registry.py - To help AladdinSDK understand available APIs in this domain library
-        setup.py - For plugin installation. Details in setup.py are updated for the plugin
-
-    Args:
-        api_swagger_files (_type_): _description_
-        plugin_name (_type_): _description_
-
-    Returns:
-        _type_: execution summary map entires for this domain
-    """
-    # generate domain plugin
-    _completed_apis_to_spec_map, _skipped_api_specs_to_reason_map = _build_api_with_swagger_files(api_swagger_files)
-
-    print(f"Completed with {len(_completed_apis_to_spec_map)} API codegen runs.")
-    print_run_summary(_completed_apis_to_spec_map, _skipped_api_specs_to_reason_map)
+    print(f"Completed with {len(completed_apis_to_spec_map)} API codegen runs.")
+    print_run_summary(completed_apis_to_spec_map, skipped_api_specs_to_reason_map)
 
 
 def _summary_helper_split_skipped_map(_skipped_api_specs_to_reason_map):
@@ -311,6 +292,4 @@ if __name__ == "__main__":
 
     # Run plugin builder logic for each key in run config map. Create method responds with completed/skipped APIs within the plugin build.
     # Add these details to a summary map that will be printed out at the end of execution
-    summary_map = {}
-    api_swagger_files = glob.glob(f"{_openapi_spec_dir}/*.json")
-    add_api_to_asdk(api_swagger_files)
+    _build_api_codegen_with_swagger_files(_openapi_spec_dir)
