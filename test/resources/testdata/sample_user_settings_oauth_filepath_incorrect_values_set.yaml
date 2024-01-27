@@ -1,0 +1,12 @@
+RUN_MODE: test
+
+defaultWebServer: http://dummy.dws.com
+
+API:
+  AUTH_TYPE: OAuth
+  TOKEN: "hippopotomonstrosesquippedaliophobia"
+  oauth:
+    client_details_filepath: "../test/resources/testdata/oauthdata/client_id.txt"
+    refresh_token_filepath: "./test/resourcess/testdata/oauthdata/refresh_token.txt"
+
+    

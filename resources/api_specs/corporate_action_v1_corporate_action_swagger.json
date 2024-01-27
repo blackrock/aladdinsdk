@@ -1,0 +1,1131 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "A corporate action is an event triggered by a public company that changes an equity or fixed income security issued by the company. There are two main categories - Mandatory and Voluntary.",
+        "title": "Aladdin Corporate Action",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.investment_operations.asset_lifecycle.corporate_action.CorporateActionAPI",
+        "x-aladdin-api-stability": "beta",
+        "x-aladdin-spec-id": "agraph.investment_operations.asset_lifecycle.corporate_action.v1.CorporateActionAPI"
+    },
+    "basePath": "/api/investment-operations/asset-lifecycle/corporate-action/v1/",
+    "paths": {
+        "/corporateActions/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Gets a corporate action based on corporate action Id.",
+                "summary": "Gets a corporateAction",
+                "operationId": "CorporateActionAPI_GetCorporateAction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Corporate action Id.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "CORPORATE_ACTION_VIEW_UNSPECIFIED",
+                            "CORPORATE_ACTION_VIEW_FULL"
+                        ],
+                        "type": "string",
+                        "default": "CORPORATE_ACTION_VIEW_UNSPECIFIED",
+                        "description": "View of corporate action resource.\nIf not specified, then this parameter will default to the 'CORPORATE_ACTION_VIEW_FULL' value.\n(-- api-linter: core::0131::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because we need to specify view\n of the resource... --).\n\n - CORPORATE_ACTION_VIEW_UNSPECIFIED: The default/unset value at API level.\nThe GetCorporateActions API defaults to FULL and FilterCorporateActions API defaults to DESC_ONLY on cam-server side.\n - CORPORATE_ACTION_VIEW_FULL: Includes full contents of the resource.",
+                        "name": "corporateActionView",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CorporateAction"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 100
+            }
+        },
+        "/corporateActions:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Filters corporate actions based on search criteria.\nSearch must be made using at-least any one of these: ids, externalCorporateActionIds, start/endProcessingDate, start/endExpirationDate, start/endModifyTime, assetIds. These can be clubbed (if required) with all available search parameters.\nBoth start and end date must be provided if making a search using any date/time field.\nFrom the body container, fields that are not required for making a search can be removed from corporateActionQuery object only.\nPagination not supported currently. pagesize \u0026 pageToken have to be left as they are.",
+                "summary": "Filters corporateActions",
+                "operationId": "CorporateActionAPI_FilterCorporateActions",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterCorporateActionsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterCorporateActionsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 100
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "typeDateTime": {
+            "description": "* When utc_offset is set and time_zone is unset: a civil time on a calendar\n   day with a particular offset from UTC.\n * When time_zone is set and utc_offset is unset: a civil time on a calendar\n   day in a particular time zone.\n * When neither time_zone nor utc_offset is set: a civil time on a calendar\n   day in local time.\n\nThe date is relative to the Proleptic Gregorian Calendar.\n\nIf year is 0, the DateTime is considered not to have a specific year. month\nand day must have valid, non-zero values.\n\nThis type is more flexible than some applications may want. Make sure to\ndocument and validate your application's limitations.",
+            "type": "object",
+            "title": "Represents civil time in one of a few possible ways:",
+            "properties": {
+                "year": {
+                    "description": "Optional. Year of date. Must be from 1 to 9999, or 0 if specifying a\ndatetime without a year.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "month": {
+                    "description": "Required. Month of year. Must be from 1 to 12.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "day": {
+                    "description": "Required. Day of month. Must be from 1 to 31 and valid for the year and\nmonth.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "hours": {
+                    "description": "Required. Hours of day in 24 hour format. Should be from 0 to 23. An API\nmay choose to allow the value \"24:00:00\" for scenarios like business\nclosing time.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "minutes": {
+                    "description": "Required. Minutes of hour of day. Must be from 0 to 59.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "seconds": {
+                    "description": "Required. Seconds of minutes of the time. Must normally be from 0 to 59. An\nAPI may allow the value 60 if it allows leap-seconds.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "nanos": {
+                    "description": "Required. Fractions of seconds in nanoseconds. Must be from 0 to\n999,999,999.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "utcOffset": {
+                    "description": "UTC offset. Must be whole seconds, between -18 hours and +18 hours.\nFor example, a UTC offset of -4:00 would be represented as\n{ seconds: -14400 }.",
+                    "type": "string"
+                },
+                "timeZone": {
+                    "description": "Time zone.",
+                    "$ref": "#/definitions/typeTimeZone"
+                }
+            }
+        },
+        "typeTimeZone": {
+            "description": "Represents a time zone from the\n[IANA Time Zone Database](https://www.iana.org/time-zones).",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "IANA Time Zone Database time zone, e.g. \"America/New_York\".",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Optional. IANA Time Zone Database version number, e.g. \"2019a\".",
+                    "type": "string"
+                }
+            }
+        },
+        "v1CorporateAction": {
+            "description": "CorporateActions describes an event triggered by a public company\nthat changes an equity or fixed income security issued by the company.\nThere are many different types of corporate action but they can be bucketed\ninto two main categories - mandatory and voluntary. Mandatory events do not\nrequire any action from the shareholder.\nCash dividends and stocks splits are examples of mandatory corporate action.\nVoluntary corporate action are events where shareholders may elect to\nparticipate in the event.\nExamples of voluntary events include tender offers and rights subscriptions.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "Resources must have an 'id' field.\n\nId describes the computer or human assigned resource identifier.\nString represenation of numeric internal corporate action Id.",
+                    "type": "string"
+                },
+                "corporateActionType": {
+                    "description": "Code used to categorize corporate action types.",
+                    "type": "string"
+                },
+                "corporateActionLinkState": {
+                    "description": "Link Status of a source to a composite event link.",
+                    "$ref": "#/definitions/v1CorporateActionLinkState"
+                },
+                "voluntaryMandatoryCode": {
+                    "description": "Specifies whether the Corporate Action requires a decision, [V]oluntary or\n[M]andatory.",
+                    "$ref": "#/definitions/v1VoluntaryMandatoryCode"
+                },
+                "corporateActionWorkflowState": {
+                    "description": "A corp act status in regard to workflow processing.",
+                    "$ref": "#/definitions/v1CorporateActionWorkflowState"
+                },
+                "assetId": {
+                    "type": "string",
+                    "title": "Aladdin asset identifier undergoing corporate action.\n(-- api-linter: core::0122::resource-reference-type=disabled\n    aip.dev/not-precedent: We need to do this because asset id can be nullable  --)"
+                },
+                "exDate": {
+                    "description": "First date on which shares are purchased without entitlement to the\ncorporate action. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "importantDate": {
+                    "description": "Date on a specific corporate action calculated by a specific date per event\ntype. Used to determine if a corporate action is unique. May be blank. Date\nis in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "effectiveDate": {
+                    "description": "Date on which a corporate action becomes effective. Date is in Aladdin\nServer timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "corporateActionExpirationTime": {
+                    "description": "Last date/time that an election on an voluntary corporate action can be\nexecuted. Date/Time has an associated timezone.",
+                    "$ref": "#/definitions/typeDateTime"
+                },
+                "earlyExpirationTime": {
+                    "description": "The earlier date/time in case of multiple expiration dates may have an impact on\npremiums or choice of elections. Date/Time has an associated timezone.",
+                    "$ref": "#/definitions/typeDateTime"
+                },
+                "payableDate": {
+                    "description": "The date on which payment or shares are sent to eligible holders. Date is in\nAladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "recordDate": {
+                    "description": "Date on which ownership is established to determine payment of a\ndistribution. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "firstSubDate": {
+                    "description": "Subscription begin date. First date on which a rights subscription can be\naccepted. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "firstTradeDate": {
+                    "description": "First date on which an entitlement to rights can be sold to another\nparty. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "lastSubDate": {
+                    "description": "Last Date on which a subscription can be executed. Date is in Aladdin Server\ntimezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "lastTradeDate": {
+                    "description": "Last Date on which an entitlement to rights can be sold to another\nparty. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "processingDate": {
+                    "description": "Aladdin specific date on which the corporate action is processed.\nFor Events with parent type = 'RES or 'SU' or 'WE', the Processing date =\nEffective Date - two business days.\nFor all other events, processingDate = exDate or ImportantDate. Date is in\nAladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "tradeEligibilityDate": {
+                    "description": "Aladdin specific date for position to be traded by in order to be eligible\nfor entitlement. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "settlementEligibilityDate": {
+                    "description": "Aladdin-specific date for position to be settled by in order to be eligible\nfor entitlement.\nTypically populates with due bill off date or recordDate.\nIf those dates are not available, then exDate -1 , importantDate -1. Date\nis in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "lifecycleStartDate": {
+                    "description": "Aladdin-specific date on which the corporate action event first appears on \nthe Dashboard Events Monitor. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "lifecycleEndDate": {
+                    "description": "Aladdin specific date on which the approved corporate action event falls of\nthe Dashboard Events Monitor.\nThis date is the latest of (Ex Date/Important Date + 5), (Payable Date +\n1), or (Expiration Date + 1).\nDerived from source. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "externalIssueDescription": {
+                    "description": "Text information about the security issue. This field is sourced from\nexternal feed.",
+                    "type": "string"
+                },
+                "issuerDescription": {
+                    "type": "string",
+                    "title": "Description of the security's issuing company. This field is sourced from\nexternal feed.\n(-- aip.dev/beta-blocker: This should reference\n    an issuer resource and should use issuer_id instead of\n    issuer_description. BackEnd API currently doesn't support issuer id.\n    --)"
+                },
+                "offerorName": {
+                    "description": "Name of the company or entity making an offer.",
+                    "type": "string"
+                },
+                "modifier": {
+                    "type": "string",
+                    "title": "The user who modified this corporate action.\n(-- api-linter: core::0122::resource-reference-type=disabled\n    aip.dev/not-precedent: We need to do this because this can be nullable  --)"
+                },
+                "confirmer": {
+                    "type": "string",
+                    "title": "The user who confirmed this corporate action.\n(-- api-linter: core::0122::resource-reference-type=disabled\n    aip.dev/not-precedent: We need to do this because this can be nullable  --)"
+                },
+                "modifyTime": {
+                    "description": "The date/time when this corporate action was last modified. Time is in Aladdin\nServer timezone.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "confirmTime": {
+                    "description": "The date/time when this corporate action was confirmed. Time is in Aladdin Server\ntimezone.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "minimumTradeSize": {
+                    "description": "Minimum number of shares to be exercised to participate.",
+                    "type": "number",
+                    "format": "double"
+                },
+                "taxCode": {
+                    "description": "Indicates if there are additional tax terms or documents that a client may\nneed to refer\nto in order to assess the impact of tax on the corporate action.",
+                    "$ref": "#/definitions/v1TaxCode"
+                },
+                "corporateActionOptions": {
+                    "description": "List of options for this corporate action (only one entry for mandatory\ncorporate action).\nOnly one of these can be a default option for a corporate action event.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1CorporateActionOption"
+                    }
+                },
+                "optionAlignmentState": {
+                    "description": "Tells whether composite and source event differs in option alignment or if\nit has been manaully changed and is pending for approval.",
+                    "$ref": "#/definitions/v1OptionAlignmentState"
+                },
+                "externalCorporateActionId": {
+                    "description": "Vendor or custodian-specific reference number to identify corporate action\nevent.",
+                    "type": "string"
+                },
+                "corporateActionDataSource": {
+                    "description": "Vendor or custodian that provided the corporate action feed.\n'COMPOSITE' value represents gold copy of Aladdin Record.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1CorporateActionLinkState": {
+            "description": "Enumeration of corporate action link state.\n\n - CORPORATE_ACTION_LINK_STATE_UNSPECIFIED: Reserved value. Default value if not specified.\n - CORPORATE_ACTION_LINK_STATE_CANCELLED: CANCELLED - 'R'.\n - CORPORATE_ACTION_LINK_STATE_NEAR_MATCH: NEAR_MATCH -'K'.\n - CORPORATE_ACTION_LINK_STATE_MISMATCH: MISMATCH -'M'.\n - CORPORATE_ACTION_LINK_STATE_MULTIPLE_MATCHES: MULTIPLE_MATCHES - 'X'.\n - CORPORATE_ACTION_LINK_STATE_PROPOSED: PROPOSED - 'P'.",
+            "type": "string",
+            "default": "CORPORATE_ACTION_LINK_STATE_UNSPECIFIED",
+            "enum": [
+                "CORPORATE_ACTION_LINK_STATE_UNSPECIFIED",
+                "CORPORATE_ACTION_LINK_STATE_CANCELLED",
+                "CORPORATE_ACTION_LINK_STATE_NEAR_MATCH",
+                "CORPORATE_ACTION_LINK_STATE_MISMATCH",
+                "CORPORATE_ACTION_LINK_STATE_MULTIPLE_MATCHES",
+                "CORPORATE_ACTION_LINK_STATE_PROPOSED"
+            ]
+        },
+        "v1CorporateActionOption": {
+            "description": "Options of corporate action.",
+            "type": "object",
+            "properties": {
+                "defaultOption": {
+                    "description": "If 'TRUE', then the option is automatically elected when entitlement holder\nmakes no election. By default, the value is - 'FALSE'.",
+                    "type": "boolean"
+                },
+                "recommended": {
+                    "description": "Indicates whether the option is recommended.",
+                    "type": "boolean"
+                },
+                "recommender": {
+                    "type": "string",
+                    "title": "Specifies the user who recommended the option.\n(-- api-linter: core::0122::resource-reference-type=disabled\n    aip.dev/not-precedent: We need to do this because this can be nullable  --)"
+                },
+                "optionDescription": {
+                    "description": "Full desciption of the option.\nFor some events, additional information may assist in choosing one option\ntype over another.",
+                    "type": "string"
+                },
+                "optionNumber": {
+                    "description": "Option reference number.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "optionSubType": {
+                    "description": "Option subtype.",
+                    "type": "string"
+                },
+                "optionType": {
+                    "description": "Option type.",
+                    "type": "string"
+                },
+                "payouts": {
+                    "description": "List of payouts - cash and security movements comprising this option.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1Payout"
+                    }
+                }
+            }
+        },
+        "v1CorporateActionQuery": {
+            "description": "The query required to perform a CorporateActionAPI.FilterCorporateActions\nquery.",
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "description": "Represents internal corporate action Ids.\nIf corporate Ids are provided in the search request then all other criteria \nfields would be ignored.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "externalCorporateActionIds": {
+                    "description": "Represents corporate action external Ids.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "assetIds": {
+                    "description": "Represents corporate action asset Ids.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "corporateActionTypes": {
+                    "description": "Represents corporate action types.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "corporateActionSubTypes": {
+                    "description": "Represents corporate action sub types.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "lifecycleDate": {
+                    "description": "Lifecycle date. This date is checked to see if it is between the lifecycle \nstart date and end date.\nDefaults to today if not specified. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "corporateActionDataSources": {
+                    "description": "Vendor or custodian that provided the corporate action feed.\n'COMPOSITE' value represents gold copy of Aladdin Record.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "corporateActionWorkflowStates": {
+                    "description": "Represents workflow states.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1CorporateActionWorkflowState"
+                    }
+                },
+                "startProcessingDate": {
+                    "description": "Start processing date. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "endProcessingDate": {
+                    "description": "End processing date. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "startExpirationDate": {
+                    "description": "Start expiration date. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "endExpirationDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "End expiration date. Date is in Aladdin Server timezone.”"
+                },
+                "startPayableDate": {
+                    "description": "Start Payable date. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "endPayableDate": {
+                    "description": "End Payable date. Date is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "startModifyTime": {
+                    "description": "Start Modify time. Time is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "endModifyTime": {
+                    "description": "End modify time. Time is in Aladdin Server timezone.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "voluntaryMandatoryCode": {
+                    "description": "Corporate Action Category  - VM Code [V]oluntary or [M]andatory.",
+                    "$ref": "#/definitions/v1VoluntaryMandatoryCode"
+                },
+                "portfolioGroupName": {
+                    "description": "Portfolio group containing asset Ids related to corporate action events.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1CorporateActionView": {
+            "description": "Enumeration of corporate action views.\n\n - CORPORATE_ACTION_VIEW_UNSPECIFIED: The default/unset value at API level.\nThe GetCorporateActions API defaults to FULL and FilterCorporateActions API defaults to DESC_ONLY on cam-server side.\n - CORPORATE_ACTION_VIEW_FULL: Includes full contents of the resource.",
+            "type": "string",
+            "default": "CORPORATE_ACTION_VIEW_UNSPECIFIED",
+            "enum": [
+                "CORPORATE_ACTION_VIEW_UNSPECIFIED",
+                "CORPORATE_ACTION_VIEW_FULL"
+            ]
+        },
+        "v1CorporateActionWorkflowState": {
+            "description": "Enumeration of workflow status.\n\n - CORPORATE_ACTION_WORKFLOW_STATE_UNSPECIFIED: Reserved value. Default value if not specified.\n - CORPORATE_ACTION_WORKFLOW_STATE_NEW: NEW.\n - CORPORATE_ACTION_WORKFLOW_STATE_UNREVIEWED: UNREVIEWED.\n - CORPORATE_ACTION_WORKFLOW_STATE_APPROVED: APPROVED.\n - CORPORATE_ACTION_WORKFLOW_STATE_CANCELLED: CANCELLED.\n - CORPORATE_ACTION_WORKFLOW_STATE_LOAD_FAILED: LOAD FAILED.\n - CORPORATE_ACTION_WORKFLOW_STATE_INFO_ONLY: INFORMATION ONLY.\n - CORPORATE_ACTION_WORKFLOW_STATE_MERGED: MERGED.\n - CORPORATE_ACTION_WORKFLOW_STATE_UPDATED: UPDATED.\n - CORPORATE_ACTION_WORKFLOW_STATE_LINKED: LINKED.\n - CORPORATE_ACTION_WORKFLOW_STATE_UNSUPPORTED: UNSUPPORTED.",
+            "type": "string",
+            "default": "CORPORATE_ACTION_WORKFLOW_STATE_UNSPECIFIED",
+            "enum": [
+                "CORPORATE_ACTION_WORKFLOW_STATE_UNSPECIFIED",
+                "CORPORATE_ACTION_WORKFLOW_STATE_NEW",
+                "CORPORATE_ACTION_WORKFLOW_STATE_UNREVIEWED",
+                "CORPORATE_ACTION_WORKFLOW_STATE_APPROVED",
+                "CORPORATE_ACTION_WORKFLOW_STATE_CANCELLED",
+                "CORPORATE_ACTION_WORKFLOW_STATE_LOAD_FAILED",
+                "CORPORATE_ACTION_WORKFLOW_STATE_INFO_ONLY",
+                "CORPORATE_ACTION_WORKFLOW_STATE_MERGED",
+                "CORPORATE_ACTION_WORKFLOW_STATE_UPDATED",
+                "CORPORATE_ACTION_WORKFLOW_STATE_LINKED",
+                "CORPORATE_ACTION_WORKFLOW_STATE_UNSUPPORTED"
+            ]
+        },
+        "v1FilterCorporateActionsRequest": {
+            "description": "The request message for CorporateActionAPI.FilterCorporateActions.",
+            "type": "object",
+            "properties": {
+                "corporateActionQuery": {
+                    "title": "Query used to filter CorporateActions.\n(-- api-linter: aladdin::9016::request-message-query=disabled\n aip.dev/not-precedent: We need to do this because the rule postdates the implementation --)",
+                    "$ref": "#/definitions/v1CorporateActionQuery"
+                },
+                "pageToken": {
+                    "description": "A page token, received from a previous 'FilterCorporateActions' call.\nProvide this to retrieve the subsequent page.\n\nWhen paginating, all other parameters provided to\n'FilterCorporateActions' must match the call that provided the page\ntoken.\nThis value is currently not being used.",
+                    "type": "string"
+                },
+                "pageSize": {
+                    "description": "The maximum number of CorporateActions to return. The service may\nreturn fewer than this value. If unspecified, at most 250\nCorporateActions will be returned. The maximum value is 250; values\nabove 250 will be coerced to 250.\nThis value is currently not being used.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "corporateActionView": {
+                    "description": "View of Corporate Action Resource to be returned.",
+                    "$ref": "#/definitions/v1CorporateActionView"
+                }
+            }
+        },
+        "v1FilterCorporateActionsResponse": {
+            "description": "The response message for CorporateActionAPI.FilterCorporateActions.",
+            "type": "object",
+            "properties": {
+                "corporateActions": {
+                    "description": "The entities that match the specified CorporateActionsRequest.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1CorporateAction"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "A token, which can be sent as 'pageToken' to retrieve the next page.\nIf this field is omitted, there are no subsequent pages.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1OptionAlignmentState": {
+            "description": "Enumeration of option alignment states.\n\n - OPTION_ALIGNMENT_STATE_UNSPECIFIED: Reserved value. Default value if not specified.\n - OPTION_ALIGNMENT_STATE_OPTION_MISMATCH: Option mismatch.\n - OPTION_ALIGNMENT_STATE_PENDING_APPROVAL: Pending approval in case state manually changed.",
+            "type": "string",
+            "default": "OPTION_ALIGNMENT_STATE_UNSPECIFIED",
+            "enum": [
+                "OPTION_ALIGNMENT_STATE_UNSPECIFIED",
+                "OPTION_ALIGNMENT_STATE_OPTION_MISMATCH",
+                "OPTION_ALIGNMENT_STATE_PENDING_APPROVAL"
+            ]
+        },
+        "v1Payout": {
+            "type": "object",
+            "title": "Payouts",
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "Aladdin asset identifier. An asset Id may also be assigned to a\nportfolio or an index.\n(-- api-linter: core::0122::resource-reference-type=disabled\n    aip.dev/not-precedent: We need to do this because this can be nullable  --)"
+                },
+                "payoutAmount": {
+                    "description": "Cash amount paid out.",
+                    "type": "number",
+                    "format": "double"
+                },
+                "payoutAmountCurrencyCode": {
+                    "description": "Currency of the amount paid out.",
+                    "type": "string"
+                },
+                "payoutPrice": {
+                    "description": "Amount to participate in a corporate action.",
+                    "type": "number",
+                    "format": "double"
+                },
+                "payoutPriceCurrencyCode": {
+                    "description": "Currency of the amount needed to participate in a corporate action.",
+                    "type": "string"
+                },
+                "payoutRate": {
+                    "description": "Ratio of security payout based on shares owned.",
+                    "type": "number",
+                    "format": "double"
+                },
+                "payoutType": {
+                    "description": "Type of Payout.",
+                    "$ref": "#/definitions/v1PayoutType"
+                }
+            }
+        },
+        "v1PayoutType": {
+            "description": "Enumeration of payout types.\n\n - PAYOUT_TYPE_UNSPECIFIED: Reserved value. Default value if not specified.\n - PAYOUT_TYPE_CASH: Cash.\n - PAYOUT_TYPE_PRINCIPAL_CASH: Principal Cash.\n - PAYOUT_TYPE_DIVIDEND: Dividend.\n - PAYOUT_TYPE_INTEREST: Interest.\n - PAYOUT_TYPE_SECURITY: Security.\n - PAYOUT_TYPE_LONG_TERM_CAPITAL_GAIN: Long Term Capital Gain.\n - PAYOUT_TYPE_SHORT_TERM_CAPITAL_GAIN: Short Term Capital Gain.\n - PAYOUT_TYPE_FRANKED: Franked.\n - PAYOUT_TYPE_UNFRANKED: Unfranked.\n - PAYOUT_TYPE_INCOME_DISTRIBUTION: Income Distribution.\n - PAYOUT_TYPE_FUND_EQUALIZATION: Fund Equalization.\n - PAYOUT_TYPE_MANAGEMENT_FEES: Management Fees.\n - PAYOUT_TYPE_OTHER_EXPENSES: Other Expenses.\n - PAYOUT_TYPE_TAX_DEFERRED: Tax Deferred.\n - PAYOUT_TYPE_TAX_EXEMPTED: Tax Exempted.\n - PAYOUT_TYPE_PROPERTY_INCOME_DISTRIBUTION: Property Income Distribution.\n - PAYOUT_TYPE_CAPITAL_GAIN_PROPERTY_CONCESSIONAL: Capital Gain Property - Concessional.\n - PAYOUT_TYPE_CAPITAL_GAIN_PROPERTY_DISCOUNTED: Capital Gain Property - Discounted.\n - PAYOUT_TYPE_CAPITAL_GAIN_PROPERTY_NON_TAX: Capital Gain Property - Non Tax.\n - PAYOUT_TYPE_CAPITAL_GAIN_PROPERTY_OTHER: Capital Gain Property - Other.\n - PAYOUT_TYPE_FOREIGN_INCOME: Foreign Income.\n - PAYOUT_TYPE_ROYALTIES: Royalties.\n - PAYOUT_TYPE_TAX_CREDIT: Tax Credit.\n - PAYOUT_TYPE_PREMIUM: Premium.\n - PAYOUT_TYPE_PRINCIPAL_PAYMENT: Principal Payment.\n - PAYOUT_TYPE_DRIP_CASH_FOR_SECURITY: Drip Cash for Security.",
+            "type": "string",
+            "default": "PAYOUT_TYPE_UNSPECIFIED",
+            "enum": [
+                "PAYOUT_TYPE_UNSPECIFIED",
+                "PAYOUT_TYPE_CASH",
+                "PAYOUT_TYPE_PRINCIPAL_CASH",
+                "PAYOUT_TYPE_DIVIDEND",
+                "PAYOUT_TYPE_INTEREST",
+                "PAYOUT_TYPE_SECURITY",
+                "PAYOUT_TYPE_LONG_TERM_CAPITAL_GAIN",
+                "PAYOUT_TYPE_SHORT_TERM_CAPITAL_GAIN",
+                "PAYOUT_TYPE_FRANKED",
+                "PAYOUT_TYPE_UNFRANKED",
+                "PAYOUT_TYPE_INCOME_DISTRIBUTION",
+                "PAYOUT_TYPE_FUND_EQUALIZATION",
+                "PAYOUT_TYPE_MANAGEMENT_FEES",
+                "PAYOUT_TYPE_OTHER_EXPENSES",
+                "PAYOUT_TYPE_TAX_DEFERRED",
+                "PAYOUT_TYPE_TAX_EXEMPTED",
+                "PAYOUT_TYPE_PROPERTY_INCOME_DISTRIBUTION",
+                "PAYOUT_TYPE_CAPITAL_GAIN_PROPERTY_CONCESSIONAL",
+                "PAYOUT_TYPE_CAPITAL_GAIN_PROPERTY_DISCOUNTED",
+                "PAYOUT_TYPE_CAPITAL_GAIN_PROPERTY_NON_TAX",
+                "PAYOUT_TYPE_CAPITAL_GAIN_PROPERTY_OTHER",
+                "PAYOUT_TYPE_FOREIGN_INCOME",
+                "PAYOUT_TYPE_ROYALTIES",
+                "PAYOUT_TYPE_TAX_CREDIT",
+                "PAYOUT_TYPE_PREMIUM",
+                "PAYOUT_TYPE_PRINCIPAL_PAYMENT",
+                "PAYOUT_TYPE_DRIP_CASH_FOR_SECURITY"
+            ]
+        },
+        "v1TaxCode": {
+            "description": "Enumeration of tax codes.\n\n - TAX_CODE_UNSPECIFIED: Reserved value. Default value if not specified.\n - TAX_CODE_TAXABLE: TAXABLE.\n - TAX_CODE_S302: Section 302.\n - TAX_CODE_NOT_TAXABLE: NON_TAXABLE.",
+            "type": "string",
+            "default": "TAX_CODE_UNSPECIFIED",
+            "enum": [
+                "TAX_CODE_UNSPECIFIED",
+                "TAX_CODE_TAXABLE",
+                "TAX_CODE_S302",
+                "TAX_CODE_NOT_TAXABLE"
+            ]
+        },
+        "v1VoluntaryMandatoryCode": {
+            "description": "Enumeration of corporate action category codes.\n\n - VOLUNTARY_MANDATORY_CODE_UNSPECIFIED: Reserved value. Default value if not specified.\n - VOLUNTARY_MANDATORY_CODE_VOLUNTARY: Voluntary action.\n - VOLUNTARY_MANDATORY_CODE_MANDATORY: Mandatory action.",
+            "type": "string",
+            "default": "VOLUNTARY_MANDATORY_CODE_UNSPECIFIED",
+            "enum": [
+                "VOLUNTARY_MANDATORY_CODE_UNSPECIFIED",
+                "VOLUNTARY_MANDATORY_CODE_VOLUNTARY",
+                "VOLUNTARY_MANDATORY_CODE_MANDATORY"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction": "This grants access to all endpoints in the investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction": "This grants access to all endpoints in the investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "investment_operations.asset_lifecycle.corporate_action.v1.CorporateAction",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

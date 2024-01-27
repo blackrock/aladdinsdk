@@ -1,0 +1,5 @@
+RUN_MODE: test
+
+API:
+  AUTH_TYPE: Basic Auth
+  TOKEN: "hippopotomonstrosesquippedaliophobia"

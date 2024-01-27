@@ -162,3 +162,38 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# IDEs
+.vscode
+
+# Python virtual environment
+venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+sdist/
+*.egg-info/
+*.egg
+resources/openapi-generator-cli.jar

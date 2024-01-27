@@ -1,0 +1,1251 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "The ESG Data API offers a centralized source of ESG data and meta data across multiple vendors. The API retrieves ESG data by asset and issuer from multiple vendors, providing the data in one digestible schema. Retrieve ESG data for selected assets and issuers by providing entity id, provider id, date(s) and measure name. Meta data on ESG data measures can be retrieved by selecting a provider, provider category and unique measure names. Time Series API in alpha version, changes may be made at any time.",
+        "title": "ESG Data",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.analytics.data.esg.EsgDataAPI",
+        "x-aladdin-api-stability": "stable",
+        "x-aladdin-spec-id": "agraph.analytics.data.esg.v1.EsgDataAPI"
+    },
+    "basePath": "/api/analytics/data/esg/v1/",
+    "paths": {
+        "/data:retrieve": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.data.esg.v1.EsgData:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.data.esg.v1.EsgData:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieve ESG data as of date\n(-- api-linter: core::0136::prepositions=disabled\n aip.dev/not-precedent: We need to do this because gives more idea about the API and differentiates from the other API --)\n(-- api-linter: aladdin::9016::rpc-name=disabled\naip.dev/not-precedent: We can't change this as this will break existing API --)\n(-- api-linter: aladdin::9016::query-custom-method-http=disabled\naip.dev/not-precedent: We can't change this as this will break existing API --)",
+                "summary": "Retrieve ESG data as of date",
+                "operationId": "EsgDataAPI_RetrieveEsgDataAsOfDate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1RetrieveEsgDataAsOfDateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1ESGDataSetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        },
+        "/metadata:retrieve": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.data.esg.v1.EsgData:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.data.esg.v1.EsgData:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieve ESG Measures for different providers\n(-- api-linter: aladdin::9016::rpc-name=disabled\naip.dev/not-precedent: We can't change this as this will break existing API --)\n(-- api-linter: aladdin::9016::query-custom-method-http=disabled\naip.dev/not-precedent: We can't change this as this will break existing API --)",
+                "summary": "Retrieve ESG Measures",
+                "operationId": "EsgDataAPI_RetrieveEsgMetadata",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Provider setting for the list of measures.  Examples = MSCI, SUST, ISS, REFINITIV, CLARITY_AI.",
+                        "name": "providerId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category setting for the list of measures. Example : `ESG`.",
+                        "name": "providerCategory",
+                        "in": "query"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "Optional list of measures.  If empty, will return all available measures for the source/category. Example : `ESG_IA_SCORE,ESG_FINAL_RATING`.",
+                        "name": "measures",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1ESGMetadataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        },
+        "/timeseriesdata:retrieve": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.data.esg.v1.EsgData:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.data.esg.v1.EsgData:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieve ESG Data as per time range in request\n(-- api-linter: core::0132::response-message-name=disabled\n aip.dev/not-precedent: We need to do this because this response is common across AsOfDate \u0026 TimeSeries endpoints --)\n(-- api-linter: aladdin::9016::rpc-name=disabled\naip.dev/not-precedent: We can't change this as this will break existing API --)\n(-- api-linter: aladdin::9016::query-custom-method-http=disabled\naip.dev/not-precedent: We can't change this as this will break existing API --)",
+                "summary": "Retrieve time series ESG Data",
+                "operationId": "EsgDataAPI_RetrieveEsgDataTimeSeries",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1RetrieveEsgDataTimeSeriesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1ESGDataSetResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "typesAnalyticDataValue": {
+            "type": "object",
+            "title": "Wrapper for security analytic value which could be one of many data types",
+            "properties": {
+                "valueString": {
+                    "type": "string",
+                    "title": "This field stores the data when it's in string data type"
+                },
+                "valueNumeric": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "This field stores the data when it's in a numeric data type"
+                },
+                "valueInteger": {
+                    "type": "string",
+                    "format": "int64",
+                    "title": "This field stores the data when it's in a integer data type"
+                },
+                "valueDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "This field stores the data when it's in date data type"
+                }
+            }
+        },
+        "v1DataType": {
+            "description": "enum for measure datatypes.\n\n - DATA_TYPE_UNSPECIFIED: Unspecified data type\n - DATA_TYPE_STRING: String based data\n - DATA_TYPE_NUMERIC: Numeric based data\n - DATA_TYPE_DATE: Date/time data\n - DATA_TYPE_INTEGER: Integer based data",
+            "type": "string",
+            "default": "DATA_TYPE_UNSPECIFIED",
+            "enum": [
+                "DATA_TYPE_UNSPECIFIED",
+                "DATA_TYPE_STRING",
+                "DATA_TYPE_NUMERIC",
+                "DATA_TYPE_DATE",
+                "DATA_TYPE_INTEGER"
+            ]
+        },
+        "v1ESGDataSet": {
+            "description": "Dataset response to request client.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Identifier passed by the client"
+                },
+                "idType": {
+                    "title": "Type of identifier, for BLK issuers id_type == ESG_ID_TYPE_ALADDIN_ISSUER",
+                    "$ref": "#/definitions/v1IdType"
+                },
+                "providerDataPoint": {
+                    "title": "ESG Provider data points",
+                    "$ref": "#/definitions/v1ESGProviderDataPoint"
+                },
+                "issuerId": {
+                    "type": "string",
+                    "title": "BLK Issuer id"
+                }
+            }
+        },
+        "v1ESGDataSetResponse": {
+            "type": "object",
+            "title": "The response message for EsgDataAPI.RetrieveEsgDataAsOfDate \u0026 EsgDataAPI.RetrieveEsgDataTimeSeries",
+            "required": [
+                "esgDataSets"
+            ],
+            "properties": {
+                "esgDataSets": {
+                    "type": "array",
+                    "title": "list of ESGDataSetResponse",
+                    "required": [
+                        "esg_data_sets"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1ESGDataSet"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "A token, which can be sent as `page_token` to retrieve the next page.\nIf this field is omitted, there are no subsequent pages.",
+                    "type": "string"
+                },
+                "esgExceptions": {
+                    "type": "array",
+                    "title": "list of ESGException",
+                    "items": {
+                        "$ref": "#/definitions/v1ESGException"
+                    }
+                }
+            }
+        },
+        "v1ESGException": {
+            "description": "(-- api-linter: aladdin::0901::dictionary-message-field=disabled\naip.dev/not-precedent: We can't change IdType name as this will break existing API --)\nException response to request client.",
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "title": "Identifiers with this exception",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "idType": {
+                    "title": "Type of identifier, for BLK issuers id_type == ESG_ID_TYPE_ALADDIN_ISSUER",
+                    "$ref": "#/definitions/v1IdType"
+                },
+                "esgExceptionStatus": {
+                    "title": "Exception information",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "providerMeasure": {
+                    "title": "ESG data provider \u0026 measures with exception",
+                    "$ref": "#/definitions/v1ProviderMeasure"
+                }
+            }
+        },
+        "v1ESGMeasurement": {
+            "type": "object",
+            "title": "Measurement message that describes the measurement field name and the value",
+            "properties": {
+                "measure": {
+                    "type": "string",
+                    "title": "measure field"
+                },
+                "dataPoint": {
+                    "title": "measure value",
+                    "$ref": "#/definitions/typesAnalyticDataValue"
+                }
+            }
+        },
+        "v1ESGMetadataResponse": {
+            "description": "Response message for ESG Entitlements/Metadata API.",
+            "type": "object",
+            "required": [
+                "providerId",
+                "providerCategory",
+                "esgMetadata"
+            ],
+            "properties": {
+                "providerId": {
+                    "description": "Source setting for the list of measures.",
+                    "type": "string",
+                    "required": [
+                        "provider_id"
+                    ]
+                },
+                "providerCategory": {
+                    "description": "Category setting for the list of measures.",
+                    "type": "string",
+                    "required": [
+                        "provider_category"
+                    ]
+                },
+                "esgMetadata": {
+                    "description": "Return list of entitled measures.",
+                    "type": "array",
+                    "required": [
+                        "esg_metadata"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1ProviderMeasureMetadata"
+                    }
+                }
+            }
+        },
+        "v1ESGProviderDataPoint": {
+            "type": "object",
+            "title": "Data points corresponding to each provider",
+            "required": [
+                "providerId",
+                "asOfDate",
+                "measurements",
+                "effectiveDate"
+            ],
+            "properties": {
+                "providerId": {
+                    "type": "string",
+                    "title": "provider info",
+                    "required": [
+                        "provider_id"
+                    ]
+                },
+                "asOfDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "as of date for data points",
+                    "required": [
+                        "as_of_date"
+                    ]
+                },
+                "measurements": {
+                    "type": "array",
+                    "title": "list of measures",
+                    "required": [
+                        "measurements"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1ESGMeasurement"
+                    }
+                },
+                "effectiveDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "effective date of data points",
+                    "required": [
+                        "effective_date"
+                    ]
+                },
+                "parentIssuerId": {
+                    "type": "string",
+                    "title": "id of the parent issuer, if traversal was done"
+                },
+                "issuerTraversal": {
+                    "type": "boolean",
+                    "title": "indicates whether traversal for parent issuer was done to get the ESG data"
+                }
+            }
+        },
+        "v1IdType": {
+            "description": "- ID_TYPE_UNSPECIFIED: Default Value - Error is thrown in this case\n - ID_TYPE_ALADDIN_ISSUER: ALADDIN_ISSUER - The id is an Aladdin issuer\n - ID_TYPE_ASSET_ID: ASSET_ID - This id is the id of the asset, could be a cusip, z_cusip\nor any other thing along those lines",
+            "type": "string",
+            "title": "Type of the ID that is being passed",
+            "default": "ID_TYPE_UNSPECIFIED",
+            "enum": [
+                "ID_TYPE_UNSPECIFIED",
+                "ID_TYPE_ALADDIN_ISSUER",
+                "ID_TYPE_ASSET_ID"
+            ]
+        },
+        "v1ProviderMeasure": {
+            "type": "object",
+            "title": "The message to hold the provider details and the measures to be fetched",
+            "required": [
+                "providerId",
+                "measures"
+            ],
+            "properties": {
+                "providerId": {
+                    "type": "string",
+                    "title": "Id/name of the provider. Examples = MSCI, SUST, ISS, REFINITIV, CLARITY_AI",
+                    "required": [
+                        "provider_id"
+                    ]
+                },
+                "measures": {
+                    "type": "array",
+                    "title": "Measures to be retrived",
+                    "required": [
+                        "measures"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1ProviderMeasureMetadata": {
+            "description": "Measure dataset response to request client.",
+            "type": "object",
+            "properties": {
+                "measureCode": {
+                    "description": "Blackrock specific measure code.",
+                    "type": "string"
+                },
+                "measureDescription": {
+                    "description": "Description of the measure.",
+                    "type": "string"
+                },
+                "externalSourceCode": {
+                    "description": "Vendor identifier for the measure.",
+                    "type": "string"
+                },
+                "dataType": {
+                    "description": "datatype of the measure.",
+                    "$ref": "#/definitions/v1DataType"
+                },
+                "measureExt": {
+                    "type": "array",
+                    "title": "Extension object for provider specific metadata.\n(-- api-linter: core::0144::message-field-plural=disabled\n aip.dev/not-precedent: Naming as plural is not necessary.  --)",
+                    "items": {
+                        "$ref": "#/definitions/v1ProviderMeasureMetadataExt"
+                    }
+                }
+            }
+        },
+        "v1ProviderMeasureMetadataExt": {
+            "type": "object",
+            "title": "Extension object containing key/value pair data\nSample data for key = EDS: measure_xref_id, split_adjusted, etc",
+            "properties": {
+                "sourceName": {
+                    "type": "string",
+                    "title": "Id/name of the provider"
+                },
+                "metadata": {
+                    "description": "Provider specific metadata.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/typesAnalyticDataValue"
+                    }
+                }
+            }
+        },
+        "v1ReportFrequency": {
+            "description": "- REPORT_FREQUENCY_UNSPECIFIED: Default Value - will return any data available in time range without any modifications\n - REPORT_FREQUENCY_WEEKLY: Weekly - return data split into weeks based on the time range\n - REPORT_FREQUENCY_MONTHLY: Monthly - return data split into months based on the time range\n - REPORT_FREQUENCY_QUARTERLY: Quarterly - return data split into quarters based on the time range\n - REPORT_FREQUENCY_ANNUALLY: Annually - return data split into years based on the time range",
+            "type": "string",
+            "title": "Report frequency period for time series data",
+            "default": "REPORT_FREQUENCY_UNSPECIFIED",
+            "enum": [
+                "REPORT_FREQUENCY_UNSPECIFIED",
+                "REPORT_FREQUENCY_WEEKLY",
+                "REPORT_FREQUENCY_MONTHLY",
+                "REPORT_FREQUENCY_QUARTERLY",
+                "REPORT_FREQUENCY_ANNUALLY"
+            ]
+        },
+        "v1RetrieveEsgDataAsOfDateRequest": {
+            "description": "The request message for EsgDataAPI.RetrieveEsgDataAsOfDate.",
+            "type": "object",
+            "required": [
+                "ids",
+                "asOfDate",
+                "providerMeasures"
+            ],
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "title": "Names of the identifiers. Example : `S60180858, SB3NB1P28`",
+                    "required": [
+                        "ids"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "idType": {
+                    "title": "Type of the identifiers provided",
+                    "$ref": "#/definitions/v1IdType"
+                },
+                "asOfDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date for which the data needs to be provided (`YYYY-MM-DD`). Example : `2021-08-17`",
+                    "required": [
+                        "as_of_date"
+                    ]
+                },
+                "providerMeasures": {
+                    "type": "array",
+                    "title": "Details of measures to be provided per provider. Example : `{\"measures\": [\"ESG_IA_SCORE\", \"ESG_FINAL_RATING\"],\"providerId\": \"MSCI\"}`",
+                    "required": [
+                        "provider_measures"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1ProviderMeasure"
+                    }
+                },
+                "issuerTraversal": {
+                    "description": "Should parent issuer traversal be done. NOTE: This feature is in ALPHA phase.",
+                    "type": "boolean"
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Maximum number of ids for which data will be returned in each\nresponse. If unspecified, limit is set to the default maximum.\nValues above this will be coerced to this maximum.\nThe maximum value is outlined in API documentation, as well as in BLK token ESG_ID_LIMIT"
+                },
+                "pageToken": {
+                    "description": "A page token, received from a previous `RetrieveEsgDataAsOfDateRequest` call.\nProvide this to retrieve the subsequent page.\n\nWhen paginating, all other parameters provided to\n`RetrieveEsgDataAsOfDateRequest` must match the call that provided the\npage token.",
+                    "type": "string"
+                },
+                "ignoreDefaultIssuerTraversal": {
+                    "type": "boolean",
+                    "title": "Should the default value, defined at provider level, be ignored for parent issuer traversal.\n(-- api-linter: core::0132::request-unknown-fields=disabled\n    aip.dev/not-precedent: We really need this field because we want to add this field as part of the request, along with other fields --)"
+                }
+            }
+        },
+        "v1RetrieveEsgDataTimeSeriesRequest": {
+            "description": "The request message for EsgDataAPI.RetrieveEsgDataTimeSeries.",
+            "type": "object",
+            "required": [
+                "ids",
+                "fromDate",
+                "toDate",
+                "providerId",
+                "measures"
+            ],
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "title": "Names of the identifiers. Example : `S60180858, SB3NB1P28`",
+                    "required": [
+                        "ids"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "idType": {
+                    "title": "Type of the identifiers provided",
+                    "$ref": "#/definitions/v1IdType"
+                },
+                "fromDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Start date for time series data that needs to be provided (`YYYY-MM-DD`). Example : `2021-08-17`\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We need to do this because we need to make the API more user friendly --)",
+                    "required": [
+                        "from_date"
+                    ]
+                },
+                "toDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "End date for time series data that needs to be provided (`YYYY-MM-DD`). Example : `2021-09-24`\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We need to do this because we need to make the API more user friendly --)",
+                    "required": [
+                        "to_date"
+                    ]
+                },
+                "providerId": {
+                    "type": "string",
+                    "title": "Id/name of the provider.  Examples = MSCI, SUST, ISS, REFINITIV, CLARITY_AI",
+                    "required": [
+                        "provider_id"
+                    ]
+                },
+                "measures": {
+                    "type": "array",
+                    "title": "Measures to be retrived. Example : [\"ESG_IA_SCORE\", \"ESG_FINAL_RATING\"]",
+                    "required": [
+                        "measures"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "rollupFlag": {
+                    "type": "boolean",
+                    "title": "To include all measures in list in one time series, set to true. Default is false"
+                },
+                "period": {
+                    "title": "Frequency of time series data returned",
+                    "$ref": "#/definitions/v1ReportFrequency"
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Maximum number of ids for which data will be returned in each\nresponse. If unspecified, limit is set to the default maximum.\nValues above this will be coerced to this maximum.\nThe maximum value is outlined in API documentation, as well as in BLK token ESG_TIME_SERIES_ID_LIMIT"
+                },
+                "pageToken": {
+                    "description": "A page token, received from a previous `RetrieveEsgDataTimeSeriesRequest` call.\nProvide this to retrieve the subsequent page.\n\nWhen paginating, all other parameters provided to\n`RetrieveEsgDataTimeSeriesRequest` must match the call that provided the\npage token.",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.data.esg.v1.EsgData:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.data.esg.v1.EsgData:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "analytics.data.esg.v1.EsgData:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "analytics.data.esg.v1.EsgData:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

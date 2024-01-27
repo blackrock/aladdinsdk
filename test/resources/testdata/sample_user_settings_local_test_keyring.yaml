@@ -1,0 +1,10 @@
+RUN_MODE: local
+
+defaultWebServer: http://dummy.dws.com
+
+API:
+  AUTH_TYPE: Basic Auth
+  TOKEN: "hippopotomonstrosesquippedaliophobia"
+
+user_credentials:
+  username: gvmoshastri
