@@ -1,0 +1,14 @@
+RUN_MODE: test
+
+defaultWebServer: http://dummy.dws.com
+
+API:
+  AUTH_TYPE: Basic Auth
+  TOKEN: "hippopotomonstrosesquippedaliophobia"
+
+user_credentials:
+  password: am_db9
+  username: jbond
+
+ERROR_HANDLER:
+  ACTIVE: False

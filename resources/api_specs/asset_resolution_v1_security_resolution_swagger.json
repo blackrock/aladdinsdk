@@ -1,0 +1,1553 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Service for security resolution.",
+        "title": "Security Resolution Service",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.investment_research.data_services.asset_resolution.SecurityResolutionAPI",
+        "x-aladdin-api-stability": "stable",
+        "x-aladdin-spec-id": "agraph.investment_research.data_services.asset_resolution.v1.SecurityResolutionAPI"
+    },
+    "basePath": "/api/investment-research/data-services/asset-resolution/v1/",
+    "paths": {
+        "/assets:resolveSecurity": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.asset_resolution.v1.SecurityResolution"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.asset_resolution.v1.SecurityResolution"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This service runs logic for security resolution",
+                "summary": "Resolve security",
+                "operationId": "SecurityResolutionAPI_ResolveSecurity",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1ResolveSecurityRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {
+                            "meta-data-type": {
+                                "$ref": "#/definitions/v1SecurityResolutionMetadata"
+                            },
+                            "response-type": {
+                                "$ref": "#/definitions/v1SecurityResolutionResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 10000
+            }
+        },
+        "/security/liveness:check": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.asset_resolution.v1.SecurityResolution"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.asset_resolution.v1.SecurityResolution"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This service runs logic to probe liveness",
+                "summary": "Liveness Probe",
+                "operationId": "SecurityResolutionAPI_CheckSecurityLiveness",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CheckLivenessResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 10000
+            }
+        },
+        "/securityresolution/longrunningoperations/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.asset_resolution.v1.SecurityResolution:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.asset_resolution.v1.SecurityResolution:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Get the latest state of a long-running operation from triggering the evaluator\n(-- api-linter: aladdin::9018::lro-accessor-method=disabled\n aip.dev/not-precedent: We need to do this because to explicitly declare the getURL to prevent duplication with other service --)",
+                "summary": "Get latest state of a long-running operation",
+                "operationId": "SecurityResolutionAPI_GetLongrunningOperation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the LongrunningOperation",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {
+                            "meta-data-type": {
+                                "$ref": "#/definitions/v1SecurityResolutionMetadata"
+                            },
+                            "response-type": {
+                                "$ref": "#/definitions/v1SecurityResolutionResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 10000
+            }
+        },
+        "/securityresolution/longrunningoperations/{id}:cancel": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_research.data_services.asset_resolution.v1.SecurityResolution"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_research.data_services.asset_resolution.v1.SecurityResolution"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Cancel the latest state of a long-running operation from triggering the evaluator\n(-- api-linter: aladdin::9018::lro-accessor-method=disabled\n aip.dev/not-precedent: We need to do this to explicitly declare the postURL to prevent duplication with other service --)",
+                "summary": "Cancel latest state of a long-running operation",
+                "operationId": "SecurityResolutionAPI_CancelLongrunningOperation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "The id of the operation resource to be cancelled.",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "description": "The request message for [LongrunningOperationAPI.CancelOperation].",
+                            "type": "object",
+                            "properties": {
+                                "cancellationReason": {
+                                    "description": "The reason for the lro cancellation.",
+                                    "$ref": "#/definitions/v1CancellationReason"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 10000
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "CheckLivenessResponseServingState": {
+            "description": "The state.\n\n - SERVING_STATE_UNSPECIFIED: SERVING_STATE_UNSPECIFIED\n - SERVING_STATE_SERVING: SERVING_STATE_SERVING\n - SERVING_STATE_NOT_SERVING: SERVING_STATE_NOT_SERVING\n - SERVING_STATE_SERVICE_UNKNOWN: SERVING_STATE_SERVICE_UNKNOWN",
+            "type": "string",
+            "default": "SERVING_STATE_UNSPECIFIED",
+            "enum": [
+                "SERVING_STATE_UNSPECIFIED",
+                "SERVING_STATE_SERVING",
+                "SERVING_STATE_NOT_SERVING",
+                "SERVING_STATE_SERVICE_UNKNOWN"
+            ]
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1AssetMaster": {
+            "description": "- ASSET_MASTER_UNSPECIFIED: UNSPECIFIED\n - ASSET_MASTER_BARRA: BARRA\n - ASSET_MASTER_BLOOMBERG: BLOOMBERG\n - ASSET_MASTER_FACTSET: FACTSET\n - ASSET_MASTER_REFINITIVE: REFINITIVE\n - ASSET_MASTER_SNP: SNP",
+            "type": "string",
+            "title": "Set of enums for representing AssetMaster",
+            "default": "ASSET_MASTER_UNSPECIFIED",
+            "enum": [
+                "ASSET_MASTER_UNSPECIFIED",
+                "ASSET_MASTER_BARRA",
+                "ASSET_MASTER_BLOOMBERG",
+                "ASSET_MASTER_FACTSET",
+                "ASSET_MASTER_REFINITIVE",
+                "ASSET_MASTER_SNP"
+            ]
+        },
+        "v1CancellationReason": {
+            "description": "- CANCELLATION_REASON_UNSPECIFIED: Default value\n - CANCELLATION_REASON_REQ_REJECTION: Cancelled due to service restart\n - CANCELLATION_REASON_EXHAUSTION_OF_ALLOTTED_TIME: Cancelled due to exhaustion of alotted time\n - CANCELLATION_REASON_CAPACITY_EXHAUSTION: Cancelled due to capacity exhaustion\n - CANCELLATION_REASON_RESOURCE_UNAVAILABILITY: Cancelled due to unavailabity of resource\n - CANCELLATION_REASON_RETRY_EXCEEDED: Cancelled due to retry exceeded",
+            "type": "string",
+            "title": "Reason for cancel",
+            "default": "CANCELLATION_REASON_UNSPECIFIED",
+            "enum": [
+                "CANCELLATION_REASON_UNSPECIFIED",
+                "CANCELLATION_REASON_REQ_REJECTION",
+                "CANCELLATION_REASON_EXHAUSTION_OF_ALLOTTED_TIME",
+                "CANCELLATION_REASON_CAPACITY_EXHAUSTION",
+                "CANCELLATION_REASON_RESOURCE_UNAVAILABILITY",
+                "CANCELLATION_REASON_RETRY_EXCEEDED"
+            ]
+        },
+        "v1CheckLivenessResponse": {
+            "type": "object",
+            "title": "Response for liveness probe",
+            "properties": {
+                "status": {
+                    "description": "The state.",
+                    "$ref": "#/definitions/CheckLivenessResponseServingState"
+                }
+            }
+        },
+        "v1FileSecurityResolutionParam": {
+            "type": "object",
+            "title": "FileSecurityResolutionParam represents parameters for file security resolution",
+            "required": [
+                "fileName",
+                "fileLoc",
+                "fileType",
+                "securityTypes",
+                "asofDateCol"
+            ],
+            "properties": {
+                "fileName": {
+                    "type": "string",
+                    "title": "name of the file to be resolved",
+                    "required": [
+                        "file_name"
+                    ]
+                },
+                "fileLoc": {
+                    "type": "string",
+                    "title": "location of the file",
+                    "required": [
+                        "file_loc"
+                    ]
+                },
+                "fileType": {
+                    "type": "string",
+                    "title": "type of the file",
+                    "required": [
+                        "file_type"
+                    ]
+                },
+                "fileHeaders": {
+                    "type": "array",
+                    "title": "column names of data in file",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "fileDelimiter": {
+                    "type": "string",
+                    "title": "column delimiter if any"
+                },
+                "fieldEnclosedCharacter": {
+                    "type": "string",
+                    "title": "character field is enclosed by if any"
+                },
+                "myDateFormat": {
+                    "type": "string",
+                    "title": "specific date format. default is auto"
+                },
+                "myTimeFormat": {
+                    "type": "string",
+                    "title": "specific time format. default is auto"
+                },
+                "myTimestampFormat": {
+                    "type": "string",
+                    "title": "specific timestamp format. default is auto"
+                },
+                "nullIf": {
+                    "type": "string",
+                    "title": "values that should be set to null. default is \\\\n NULL"
+                },
+                "skipHeaderCount": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "allow duplicate values. default is 1"
+                },
+                "encodingValue": {
+                    "type": "string",
+                    "title": "encoding value. default is utf-8"
+                },
+                "securityTypes": {
+                    "type": "object",
+                    "title": "map of security type and name of the columns to be used for resolution",
+                    "required": [
+                        "security_types"
+                    ],
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "asofDateCol": {
+                    "type": "string",
+                    "title": "asofdt column for security resolution",
+                    "required": [
+                        "asof_date_col"
+                    ]
+                },
+                "exchangeCodeCol": {
+                    "type": "string",
+                    "title": "column name of the exch code"
+                },
+                "countryIso2Col": {
+                    "type": "string",
+                    "title": "listing country of the security"
+                },
+                "currencyIso3Col": {
+                    "type": "string",
+                    "title": "cuurency denomination of the security"
+                },
+                "resolutionType": {
+                    "title": "type of resolution needed e.g. company, country/barra etc",
+                    "$ref": "#/definitions/v1ResolutionType"
+                },
+                "assetMaster": {
+                    "title": "Source of the asset master. e.g. bbg, barra, refinitive etc",
+                    "$ref": "#/definitions/v1AssetMaster"
+                }
+            }
+        },
+        "v1FileSecurityResolutionResponse": {
+            "type": "object",
+            "title": "The response message for Security FileResolution",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "title": "Resolution Message"
+                },
+                "exception": {
+                    "type": "string",
+                    "title": "Exception"
+                },
+                "resolutionError": {
+                    "title": "Resolution Error",
+                    "$ref": "#/definitions/v1ResolutionError"
+                }
+            }
+        },
+        "v1InteractiveSecurityResolutionParam": {
+            "type": "object",
+            "title": "InteractiveSecurityResolutionParam represents parameters for interative resolution",
+            "required": [
+                "securityResolutionRequests"
+            ],
+            "properties": {
+                "securityResolutionRequests": {
+                    "type": "array",
+                    "title": "list of security request for resolution",
+                    "required": [
+                        "security_resolution_requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1SecurityResolutionRequest"
+                    }
+                },
+                "resolutionType": {
+                    "title": "type of resolution needed e.g. company, country/barra etc",
+                    "$ref": "#/definitions/v1ResolutionType"
+                },
+                "assetMaster": {
+                    "title": "src of the asset master. e.g. bbg, barra, refinitive etc",
+                    "$ref": "#/definitions/v1AssetMaster"
+                }
+            }
+        },
+        "v1InteractiveSecurityResolutionResponse": {
+            "description": "SecurityResponse represents a resolution response for a given security resolution request.",
+            "type": "object",
+            "properties": {
+                "securityResponses": {
+                    "type": "array",
+                    "title": "Responses of security resolution",
+                    "items": {
+                        "$ref": "#/definitions/v1SecurityResponse"
+                    }
+                },
+                "resolutionError": {
+                    "title": "Errors that occur during resolution",
+                    "$ref": "#/definitions/v1ResolutionError"
+                }
+            }
+        },
+        "v1LongrunningOperation": {
+            "description": "LongrunningOperation represents a long-running operation that is the result\nof a network API call.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The server-assigned id, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`id` should have the format of `operations/some/unique/id`.",
+                    "type": "string"
+                },
+                "meta": {
+                    "description": "Service-specific metadata associated with the operation.  It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata.  Any method that returns a\nlong-running operation should document the metadata type, if any.",
+                    "$ref": "#/definitions/Any"
+                },
+                "done": {
+                    "description": "If the value is `false`, it means the operation is still in progress.\nIf true, the operation is completed, and either `error` or `response` is\navailable.",
+                    "type": "boolean"
+                },
+                "error": {
+                    "description": "The error result of the operation in case of failure or cancellation.",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "response": {
+                    "description": "The normal response of the operation in case of success.  If the original\nmethod returns no data on success, such as `Delete`, the response is\n`google.protobuf.Empty`.  If the original method is standard\n`Get`/`Create`/`Update`, the response should be the resource.  For other\nmethods, the response should have the type `XxxResponse`, where `Xxx`\nis the original method name.  For example, if the original method name\nis `TakeSnapshot()`, the inferred response type is\n`TakeSnapshotResponse`.",
+                    "$ref": "#/definitions/Any"
+                }
+            }
+        },
+        "v1ResolutionError": {
+            "type": "object",
+            "title": "ResolutionError describes errors from resolution",
+            "properties": {
+                "errorCode": {
+                    "type": "string",
+                    "title": "Error code from resolution"
+                },
+                "errorMessage": {
+                    "type": "string",
+                    "title": "Error message from resolution"
+                }
+            }
+        },
+        "v1ResolutionType": {
+            "description": "- RESOLUTION_TYPE_UNSPECIFIED: UNSPECIFIED\n - RESOLUTION_TYPE_LISTING: LISTING e.g. barra_id\n - RESOLUTION_TYPE_COMPANY: COMPANY e.g. id_bb_company",
+            "type": "string",
+            "title": "Resolution type enum",
+            "default": "RESOLUTION_TYPE_UNSPECIFIED",
+            "enum": [
+                "RESOLUTION_TYPE_UNSPECIFIED",
+                "RESOLUTION_TYPE_LISTING",
+                "RESOLUTION_TYPE_COMPANY"
+            ]
+        },
+        "v1ResolveSecurityRequest": {
+            "type": "object",
+            "title": "The request message for Resolution",
+            "properties": {
+                "interactiveResolutionParameter": {
+                    "title": "Params for security resolution",
+                    "$ref": "#/definitions/v1InteractiveSecurityResolutionParam"
+                },
+                "fileResolutionParameter": {
+                    "title": "Params for file security resolution",
+                    "$ref": "#/definitions/v1FileSecurityResolutionParam"
+                },
+                "tableResolutionParameter": {
+                    "title": "Params for table security resolution",
+                    "$ref": "#/definitions/v1TableSecurityResolutionParam"
+                },
+                "snowflakeSessionParameter": {
+                    "title": "Snowflake session parameters",
+                    "$ref": "#/definitions/v1SnowflakeSession"
+                }
+            }
+        },
+        "v1SecurityResolutionMetadata": {
+            "type": "object",
+            "title": "SecurityResolutionMetadata represents operational metadata for a resolution LRO",
+            "properties": {
+                "operationType": {
+                    "type": "string",
+                    "title": "Operation Type"
+                },
+                "resolutionStartTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Operation Create time"
+                },
+                "resolutionEndTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Operation end time"
+                },
+                "cancelRequested": {
+                    "type": "boolean",
+                    "title": "Cancelled requested"
+                },
+                "message": {
+                    "type": "string",
+                    "title": "Operation message"
+                }
+            }
+        },
+        "v1SecurityResolutionRequest": {
+            "type": "object",
+            "title": "SecurityResolutionRequest represents a single security request for interactive resolution",
+            "required": [
+                "securityTypes",
+                "asofDate"
+            ],
+            "properties": {
+                "securityTypes": {
+                    "type": "object",
+                    "title": "map of security type and security value",
+                    "required": [
+                        "security_types"
+                    ],
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "asofDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "date on which the value should be mapped",
+                    "required": [
+                        "asof_date"
+                    ]
+                },
+                "countryIso2": {
+                    "type": "string",
+                    "title": "listing country of the security"
+                },
+                "currencyIso3": {
+                    "type": "string",
+                    "title": "currency denomination of the security"
+                },
+                "exchangeCode": {
+                    "type": "string",
+                    "title": "exchange code for the ticker"
+                }
+            }
+        },
+        "v1SecurityResolutionResponse": {
+            "type": "object",
+            "title": "The response message for Resolution",
+            "properties": {
+                "interactiveResolutionResponse": {
+                    "title": "Parameters for security resolution response",
+                    "$ref": "#/definitions/v1InteractiveSecurityResolutionResponse"
+                },
+                "fileResolutionResponse": {
+                    "title": "Parameters for security resolution response",
+                    "$ref": "#/definitions/v1FileSecurityResolutionResponse"
+                },
+                "tableResolutionResponse": {
+                    "title": "Parameters for table security resolution response",
+                    "$ref": "#/definitions/v1TableSecurityResolutionResponse"
+                }
+            }
+        },
+        "v1SecurityResponse": {
+            "description": "SecurityResponse represents a resolution response for a given security.",
+            "type": "object",
+            "properties": {
+                "securityTypes": {
+                    "type": "object",
+                    "title": "map of security type and security value",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "asofDate": {
+                    "description": "date on which the id_value was resolved.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "resolutionKey": {
+                    "type": "string",
+                    "title": "in-variant id for the passed security"
+                },
+                "countryIso2": {
+                    "description": "listing country of the security.",
+                    "type": "string"
+                },
+                "currencyIso3": {
+                    "description": "cuurency denomination of the security.",
+                    "type": "string"
+                },
+                "exchangeCode": {
+                    "description": "exchange code for the ticker.",
+                    "type": "string"
+                },
+                "waterfallType": {
+                    "type": "string",
+                    "title": "waterfall if any used for doing resolution"
+                },
+                "exception": {
+                    "type": "string",
+                    "title": "Exception"
+                }
+            }
+        },
+        "v1SnowflakeSession": {
+            "type": "object",
+            "title": "User parameters for Snowflake session",
+            "properties": {
+                "snfRole": {
+                    "type": "string",
+                    "title": "Role to use for snowflake session"
+                },
+                "snfWarehouse": {
+                    "type": "string",
+                    "title": "Warehouse to use for snowflake session"
+                },
+                "snfDatabase": {
+                    "type": "string",
+                    "title": "Database to use for snowflake session"
+                },
+                "snfSchema": {
+                    "type": "string",
+                    "title": "Schema to use for snowflake session"
+                }
+            }
+        },
+        "v1TableSecurityResolutionParam": {
+            "description": "TableSecurityResolutionParam represents parameters for resolving an entire identifier column\npresent inside the src table.",
+            "type": "object",
+            "required": [
+                "srcTable",
+                "securityTypes",
+                "asofDateCol",
+                "resolutionKeyCol"
+            ],
+            "properties": {
+                "srcTable": {
+                    "type": "string",
+                    "title": "name of the fully qualified table",
+                    "required": [
+                        "src_table"
+                    ]
+                },
+                "securityTypes": {
+                    "type": "object",
+                    "title": "map of security type and table columns to be used for resolution",
+                    "required": [
+                        "security_types"
+                    ],
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
+                "asofDateCol": {
+                    "type": "string",
+                    "title": "asofdt column for security resolution",
+                    "required": [
+                        "asof_date_col"
+                    ]
+                },
+                "exchangeCodeCol": {
+                    "type": "string",
+                    "title": "column name of the exch code"
+                },
+                "countryIso2Col": {
+                    "type": "string",
+                    "title": "listing country of the security"
+                },
+                "currencyIso3Col": {
+                    "type": "string",
+                    "title": "cuurency denomination of the security"
+                },
+                "resolutionKeyCol": {
+                    "type": "string",
+                    "title": "column name where resolution value will be inserted",
+                    "required": [
+                        "resolution_key_col"
+                    ]
+                },
+                "resolutionType": {
+                    "title": "kind of resolution needed. e.g. company, listing etc",
+                    "$ref": "#/definitions/v1ResolutionType"
+                },
+                "assetMaster": {
+                    "title": "asset master. e.g. bbg, barra, refinitive etc",
+                    "$ref": "#/definitions/v1AssetMaster"
+                }
+            }
+        },
+        "v1TableSecurityResolutionResponse": {
+            "type": "object",
+            "title": "The response message for Security TableResolution",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "title": "Resolution Message"
+                },
+                "exception": {
+                    "type": "string",
+                    "title": "Exception"
+                },
+                "resolutionError": {
+                    "title": "Resolution Error",
+                    "$ref": "#/definitions/v1ResolutionError"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_research.data_services.asset_resolution.v1.SecurityResolution": "This grants access to all endpoints in the investment_research.data_services.asset_resolution.v1.SecurityResolution API",
+                "investment_research.data_services.asset_resolution.v1.SecurityResolution:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_research.data_services.asset_resolution.v1.SecurityResolution": "This grants access to all endpoints in the investment_research.data_services.asset_resolution.v1.SecurityResolution API",
+                "investment_research.data_services.asset_resolution.v1.SecurityResolution:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "investment_research.data_services.asset_resolution.v1.SecurityResolution",
+                "investment_research.data_services.asset_resolution.v1.SecurityResolution:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "investment_research.data_services.asset_resolution.v1.SecurityResolution",
+                "investment_research.data_services.asset_resolution.v1.SecurityResolution:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Internal"
+}

@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aladdinsdk"
+version = "0.0.1a1"
+authors = [
+  { name="Vedant Naik", email="naik.vedant@gmail.com" },
+]
+description = "AladdinSDK"
+readme = "README.md"
+requires-python = ">= 3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+# [project.urls]
+# Homepage = "https://github.com/pypa/aladdinsdk"
+# Issues = "https://github.com/pypa/aladdinsdk/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aladdinsdk*"]  # ["*"] by default
+
+[tool.setuptools.package-data]
+aladdinsdk = ["**/*.json", "api/codegen/codegen_allow_list.yaml"]

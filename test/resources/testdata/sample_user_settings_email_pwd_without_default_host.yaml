@@ -1,0 +1,17 @@
+RUN_MODE: test
+
+defaultWebServer: http://dummy.dws.com
+
+API:
+  AUTH_TYPE: Basic Auth
+  TOKEN: "hippopotomonstrosesquippedaliophobia"
+
+user_credentials:
+  password: am_db9
+  username: jbond
+  password_filepath: "test/resources/testdata/sample_encrypted_password.txt"
+  encryption_filepath: "test/resources/testdata/sample_encryption_key.txt"
+
+NOTIFICATIONS:
+    EMAIL:
+        EMAIL_PASSWORD: test_pwd

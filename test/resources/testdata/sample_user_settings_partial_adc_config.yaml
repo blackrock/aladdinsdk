@@ -1,0 +1,20 @@
+RUN_MODE: test
+
+defaultWebServer: http://dummy.dws.com
+
+API:
+  AUTH_TYPE: Basic Auth
+  TOKEN: "hippopotomonstrosesquippedaliophobia"
+
+user_credentials:
+  password: am_db9
+  username: jbond
+  
+ADC:
+  CONN:
+    ACCOUNT: "mi6-uke2sf.privatelink"
+    ROLE: SPY
+    WAREHOUSE: SPECTRE
+    DATABASE: MI_6_EMPS
+    SCHEMA: AGENTS
+
