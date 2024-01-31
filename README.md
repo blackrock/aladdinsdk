@@ -17,17 +17,49 @@ AladdinSDK allows developers to easily integrate Aladdin functionality into thei
 
 ## Installation
 
+### Using AladdinSDK in your environment
+
 - Ensure python virtual environment version is 3.9 or above
 - Install using pip
     ```sh
     pip install aladdinsdk
     ```
-    NOTE: for local development, it is also recommended to install keyring using for easier credential management
+    _For local development, installing `keyring` is recommended for easier credential management_
     ```sh
     pip install keyring
     ```
 - Set BlackRock's `defaultWebServer`
 - Optionally, create a local user configuration file or set essential environment variables. Refer [run-time configurations section](#run-time-configurations)
+
+### Setting up this repository for developing AladdinSDK
+
+- Clone the project locally:
+  ```sh
+  gh repo clone blackrock/aladdinsdk
+  ```
+- Create python venv. Ensure python virtual environment version is 3.9 or above.
+  ```
+  python -m venv venv
+  source venv/bin/activate
+  ```
+- Install dependencies
+  ```sh
+  pip install -r requirements.txt
+  ```
+- Set BlackRock's `defaultWebServer`
+
+### Managing APIs
+
+- The supported API specs are stored under [./resources/api_specs](./resources/api_specs/)
+- To test new APIs, perform the build steps locally, **but do not commit codegen changes**:
+  - Adding/deleting/updating APIs would require developers to simply update the contents of the api_specs folder appropriately.
+  - To test new APIs for local testing, run the following command:
+    ```sh
+    python devutils/asdk_agraph_api_codegen.py -osd resources/api_specs
+    ```
+  **NOTE:** 
+  - DO NOT commit any changes under `./alddinsdk/api/codegen`.
+  - Only API `./resources/api_specs` files need to be added to the code repository.
 
 ## Usage
 
