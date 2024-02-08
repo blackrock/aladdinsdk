@@ -3,6 +3,7 @@ import os
 from dynaconf import Dynaconf
 from pathlib import Path
 import logging
+from functools import wraps
 
 _logger = logging.getLogger(__name__)
 
@@ -29,6 +30,7 @@ def dynamic_asdk_config_reload(func):
     Args:
         func (_type_): Function to be decorated
     """
+    @wraps(func)
     def _handler_function(*args, **kwargs):
         global AsdkConf, config_file_md5
         _user_config_file_path = os.environ.get(ENV_VAR_ASDK_USER_CONFIG_FILE, None)
