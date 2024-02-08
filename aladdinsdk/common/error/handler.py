@@ -1,4 +1,5 @@
 import logging
+from functools import wraps
 from aladdinsdk.common.error.notifications.email_notifications_for_errors import email_notification_for_exception
 
 from aladdinsdk.config import user_settings
@@ -59,7 +60,7 @@ def asdk_exception_handler(func):
     Args:
         func (_type_): Any method in AladdinSDK which raises an exception that needs to be handled by the common AladdinSDK handler
     """
-
+    @wraps(func)
     def _handler_function(*args, **kwargs):
         try:
             return func(*args, **kwargs)  # Call decorated function
