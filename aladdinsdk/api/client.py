@@ -157,17 +157,28 @@ class AladdinAPI():
                 # map swagger endpoint path to API method from codegen client
                 swagger_path_to_api_method_map[end_point_op_ids[k]] = method
                 # map API method from codegen client to OAuth API scope
-                api_method_to_scopes_map[method] = self._fetch_scopes_from_swagger(json_object, end_point_op_ids[k])
+                api_method_to_scopes_map[method] = [] if not _api_oauth_scopes_enabled else \
+                    self._fetch_scopes_from_swagger(json_object, end_point_op_ids[k])
             else:
                 _logger.debug(f"Unable to map [{method}]. Method may not be callable via REST endpoint wrappers.")
         return swagger_path_to_api_method_map, api_method_to_scopes_map
 
     def _fetch_scopes_from_swagger(self, swagger_json_object, ep_path):
         scope_values = []
-        if _api_oauth_scopes_enabled:
-            raw_scopes = jsonpath_ng.parse('$.info.x-aladdin-spec-id').find(swagger_json_object)
-            scope_values = [x.value for x in raw_scopes]
-            _logger.debug(f"Fetching scope from swagger file for ({ep_path.http_method} - {ep_path.http_endpoint}): {scope_values}")
+
+        if self._api_auth_util.auth_flow_type == user_settings.CONF_API_AUTH_FLOW_TYPE_REFRESH_TOKEN:
+            _json_path_to_scopes = f'$.paths."{ep_path.http_endpoint}".{ep_path.http_method}.security.[*].OAuth2AccessCode'
+        elif self._api_auth_util.auth_flow_type == user_settings.CONF_API_AUTH_FLOW_TYPE_CLIENT_CREDENTIALS:
+            _json_path_to_scopes = f'$.paths."{ep_path.http_endpoint}".{ep_path.http_method}.security.[*].OAuth2ClientCredentials'
+        else:
+            return []
+
+        path_security_list = jsonpath_ng.parse(_json_path_to_scopes).find(swagger_json_object)
+        for _scope_datum_in_context in path_security_list:
+            for _scope in _scope_datum_in_context.value:
+                scope_values.append(_scope)
+
+        _logger.debug(f"Fetching scope from swagger file for ({ep_path.http_method} - {ep_path.http_endpoint}): {scope_values}")
         return scope_values
 
     def _read_swagger_json(self):
