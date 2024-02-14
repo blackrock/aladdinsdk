@@ -1,0 +1,561 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Retrieves start-of-day and intraday Compliance levels across portfolio and portfolio groups.",
+        "title": "Compliance Levels",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.compliance.state.level.LevelAPI",
+        "x-aladdin-api-stability": "stable",
+        "x-aladdin-spec-id": "agraph.compliance.state.level.v1.LevelAPI"
+    },
+    "basePath": "/api/compliance/state/level/v1/",
+    "paths": {
+        "/levels:filterLevel": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "compliance.state.level.v1.Level:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "compliance.state.level.v1.Level:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Find Level based on criteria\n(-- api-linter: aladdin::9016::query-custom-method-http=disabled\n    aip.dev/not-precedent: We need to do this because this is existing endpoint and we can't change the URL now --)",
+                "summary": "Filter Level",
+                "operationId": "LevelAPI_FilterLevel",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1LevelRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LevelResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 1000
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "enumsComplianceRuleState": {
+            "description": "- COMPLIANCE_RULE_STATE_UNSPECIFIED: Reserved Value\n - COMPLIANCE_RULE_STATE_PASSED: The given rule passed\n - COMPLIANCE_RULE_STATE_WARNING: The given rule passed but in warning\n - COMPLIANCE_RULE_STATE_RESTRICTION: The given rule was breached",
+            "type": "string",
+            "title": "Enumeration of possible state of a compliance rule",
+            "default": "COMPLIANCE_RULE_STATE_UNSPECIFIED",
+            "enum": [
+                "COMPLIANCE_RULE_STATE_UNSPECIFIED",
+                "COMPLIANCE_RULE_STATE_PASSED",
+                "COMPLIANCE_RULE_STATE_WARNING",
+                "COMPLIANCE_RULE_STATE_RESTRICTION"
+            ]
+        },
+        "enumsLimitType": {
+            "description": "- LIMIT_TYPE_UNSPECIFIED: Reserved Value\n - LIMIT_TYPE_LESS_THAN: The given `limit` is less than the given `level`.\n - LIMIT_TYPE_LESS_EQUALS: The given `limit` is less than or equal to the given `level`.\n - LIMIT_TYPE_GREATER_THAN: The given `limit` is greater than the given `level`.\n - LIMIT_TYPE_GREATER_EQUALS: The given `limit` is greater than or equal to the given `level`.\n - LIMIT_TYPE_EQUALS: The given `limit` is equal to the given `level`.\n - LIMIT_TYPE_NOT_LESS_THAN: The given `limit` is not less than the given `level`.\n - LIMIT_TYPE_NOT_GREATER_THAN: The given `limit` is not greater than the given `level`.\n - LIMIT_TYPE_NOT_EQUALS: The given `limit` is not equal to the given `level`.",
+            "type": "string",
+            "title": "Enumeration of possible limits",
+            "default": "LIMIT_TYPE_UNSPECIFIED",
+            "enum": [
+                "LIMIT_TYPE_UNSPECIFIED",
+                "LIMIT_TYPE_LESS_THAN",
+                "LIMIT_TYPE_LESS_EQUALS",
+                "LIMIT_TYPE_GREATER_THAN",
+                "LIMIT_TYPE_GREATER_EQUALS",
+                "LIMIT_TYPE_EQUALS",
+                "LIMIT_TYPE_NOT_LESS_THAN",
+                "LIMIT_TYPE_NOT_GREATER_THAN",
+                "LIMIT_TYPE_NOT_EQUALS"
+            ]
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1Level": {
+            "description": "Level resource...",
+            "type": "object",
+            "properties": {
+                "portfolioName": {
+                    "description": "Full name of a portfolio or portfolio group.",
+                    "type": "string"
+                },
+                "limitDefinition": {
+                    "type": "string",
+                    "title": "An expression representing the limit associated with the rule; this can be a numeric value, e.g., 5, a different measure, e.g., notional market value, or a mathematical expression, e.g., notional market value * 75.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n    aip.dev/not-precedent: We need to do this because cross domain limit_definition defined in exception/ConditionDefinition has no relation with compliance limit definition. --)"
+                },
+                "groupBy": {
+                    "description": "The specific data dimension e.g., issuer, sector, or currency used to aggregate holdings together for testing against the compliance limit, e.g., for a group by currency rule this would return CURRENCY.",
+                    "type": "string"
+                },
+                "levelDefinition": {
+                    "description": "An expression representing the measure associated with the rule; this can be a simple measure, e.g., notional market value, or a more complicated mathematical expression, e.g., market value divided by net asset value.",
+                    "type": "string"
+                },
+                "levelDefinitionDescription": {
+                    "description": "The description of the expression used to measure the portfolio or a group of holdings against the compliance limit.e.g. market value / NAV.",
+                    "type": "string"
+                },
+                "ruleName": {
+                    "description": "A unique name for a rule in Aladdin Compliance. To get all the features associated with a rule please refer to the Rule API.",
+                    "type": "string"
+                },
+                "ruleId": {
+                    "description": "Unique numeric identifier associated with the rule.",
+                    "type": "string"
+                },
+                "group": {
+                    "description": "This field represents the identifier for the group being evaluated specifically for compliance rules which aggregate holdings along a specific data dimension e.g., for a group by currency rule this may return USD.",
+                    "type": "string"
+                },
+                "complianceRuleState": {
+                    "description": "Rules can be in several states.",
+                    "$ref": "#/definitions/enumsComplianceRuleState"
+                },
+                "portfolioTicker": {
+                    "description": "A shorthand name which this portfolio was assigned in Aladdin.",
+                    "type": "string"
+                },
+                "ruleAssignmentId": {
+                    "description": "Unique primary key identifier of an Aladdin rule assignment.",
+                    "type": "string"
+                },
+                "level": {
+                    "description": "The rule's current numerical level, measured in terms of the rule's intended check, e.g., duration, percent of net asset value, market value, etc.",
+                    "type": "number",
+                    "format": "double"
+                },
+                "ruleAssignmentName": {
+                    "description": "Name of the rule assignment.",
+                    "type": "string"
+                },
+                "limitType": {
+                    "title": "Indicates the logical test being applied.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n    aip.dev/not-precedent: We need to do this because cross domain limit_type is referred in exception limit type is string type. However compliance limit type is of type enum . --)",
+                    "$ref": "#/definitions/enumsLimitType"
+                },
+                "modifyTime": {
+                    "description": "This records the latest timestamp when the item is entered or updated.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "portfolioId": {
+                    "description": "Aladdin unique numeric portfolio id, e.g. -1123.",
+                    "type": "string"
+                },
+                "roomToLimit": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Percentage difference between current level and limit value. Negative if limit has been surpassed.\n(-- api-linter: core::0140::prepositions=disabled\n    aip.dev/not-precedent: We need to do this because room to limit is the business name of the attribute. --)"
+                },
+                "roomToLimitValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Amount difference between current level and limit value. Negative if limit has been surpassed.\n(-- api-linter: core::0140::prepositions=disabled\n    aip.dev/not-precedent: We need to do this because room to limit value is the business name of the attribute. --)"
+                },
+                "conditionState": {
+                    "description": "Indicates the rule's state. If the rule is in violation condition state will be false otherwise it will return true.",
+                    "type": "boolean"
+                },
+                "triggeringEvent": {
+                    "description": "The event that triggered the compliance evaluation.  This can include a transaction, a new cash activity or the end of day position calculation.",
+                    "type": "string"
+                },
+                "levelDate": {
+                    "description": "As of date for this data set.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "limitValue": {
+                    "description": "The numerical minimum or maximum limit of the token.",
+                    "type": "number",
+                    "format": "double"
+                },
+                "asTradedLevel": {
+                    "description": "The rule's current as-traded numerical level, measured in terms of the rule's intended check, e.g., duration, percent of net asset value, market value, etc.",
+                    "type": "number",
+                    "format": "double"
+                },
+                "asTradedConditionState": {
+                    "description": "Indicates the rule's as-traded state. If the rule's as-traded level is in violation as-traded condition state will be false otherwise it will return true.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "v1LevelFilter": {
+            "type": "object",
+            "title": "LevelFilter describes input level  filter",
+            "required": [
+                "portfolioTicker"
+            ],
+            "properties": {
+                "portfolioTicker": {
+                    "description": "A shorthand name which this portfolio was assigned in Aladdin. This is a mandatory field.",
+                    "type": "string",
+                    "required": [
+                        "portfolio_ticker"
+                    ]
+                },
+                "includePortfolioGroupResult": {
+                    "description": "When set to true, results returned will be limited to rules assigned directly to the portfolio or portfolio group provided, and exclude rules assigned to underlying portfolios.",
+                    "type": "boolean"
+                },
+                "levelDate": {
+                    "description": "Date parameter to retrieve historical data. No supplied value will return the most recent data.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "ruleAssignmentIds": {
+                    "description": "Unique primary key identifiers of an Aladdin rule assignment.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "ruleIds": {
+                    "description": "Id associated with the rules.",
+                    "type": "array",
+                    "items": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                },
+                "conditionState": {
+                    "description": "Indicates the rule's state. If the rule is in violation condition state will be false otherwise it will return true.",
+                    "type": "boolean"
+                },
+                "groups": {
+                    "description": "This is a search parameter to filter down results to specific groups. Groups should be provided in array-format, e.g. ['USD','GBP','JPY'].",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "complianceRuleState": {
+                    "description": "Rules can be in several states.",
+                    "$ref": "#/definitions/enumsComplianceRuleState"
+                },
+                "asTraded": {
+                    "type": "boolean",
+                    "title": "Indicates if the levels are for asTraded view"
+                }
+            }
+        },
+        "v1LevelRequest": {
+            "type": "object",
+            "title": "LevelRequest",
+            "properties": {
+                "levelFilter": {
+                    "title": "Level criterion",
+                    "$ref": "#/definitions/v1LevelFilter"
+                }
+            }
+        },
+        "v1LevelResponse": {
+            "type": "object",
+            "title": "LevelResponse",
+            "properties": {
+                "levels": {
+                    "type": "array",
+                    "title": "Fetched level from the API handler",
+                    "items": {
+                        "$ref": "#/definitions/v1Level"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "compliance.state.level.v1.Level:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "compliance.state.level.v1.Level:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "compliance.state.level.v1.Level:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "compliance.state.level.v1.Level:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}
