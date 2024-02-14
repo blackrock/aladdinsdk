@@ -1,0 +1,1130 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Retrieve Tasks, as surfaced in Risk Radar, which are aggregates that comprise of related Exceptions, Rules, and Workflow items.",
+        "title": "Risk Governance - Tasks",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.analytics.oversight.governance.RiskTaskAPI",
+        "x-aladdin-api-stability": "beta",
+        "x-aladdin-spec-id": "agraph.analytics.oversight.governance.v1.RiskTaskAPI"
+    },
+    "basePath": "/api/analytics/oversight/governance/v1/",
+    "paths": {
+        "/tasks": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.oversight.governance.v1.RiskTask:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.oversight.governance.v1.RiskTask:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Provides list of tasks (workflow, exceptions and rule combined) matching to search parameters provided.",
+                "summary": "Retrieve list of Tasks",
+                "operationId": "RiskTaskAPI_ListRiskTasks",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
+                        "description": "A list of workflow states used to filter returned tasks.\nIf parameter value is not provided, only tasks with workflow items with non-terminal states will be returned.\nIf terminal states are provided and the begin range time is not provided, the workflow \nitems returned for these states will be restricted to a lookback period of 45 days.",
+                        "name": "workflowStates",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The workflow start date and time from which to apply the provided search parameters.",
+                        "name": "workflowBeginRangeTime",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The workflow end date and time to which to apply the provided search parameters.",
+                        "name": "workflowEndRangeTime",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1ListRiskTasksResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 300
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "oversightgovernancev1LookThroughConfig": {
+            "type": "object",
+            "title": "Configuration object for rule level look throughs",
+            "required": [
+                "lookThroughPortfolio",
+                "lookThroughBenchmark",
+                "lookThroughSecurityTypes"
+            ],
+            "properties": {
+                "lookThroughPortfolio": {
+                    "type": "boolean",
+                    "title": "Enable look through type for Portfolio",
+                    "required": [
+                        "look_through_portfolio"
+                    ]
+                },
+                "lookThroughBenchmark": {
+                    "type": "boolean",
+                    "title": "Enable look through type for Benchmark",
+                    "required": [
+                        "look_through_benchmark"
+                    ]
+                },
+                "lookThroughSecurityTypes": {
+                    "type": "array",
+                    "title": "LT security types",
+                    "required": [
+                        "look_through_security_types"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1LookThroughSecurityType"
+                    }
+                }
+            }
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1ConditionDefinition": {
+            "type": "object",
+            "title": "A more generalized condition definition",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Unique identifier"
+                },
+                "conditionDetail": {
+                    "title": "The additional information about the condition",
+                    "$ref": "#/definitions/v1ConditionDetail"
+                },
+                "limitDefinition": {
+                    "title": "The mandatory default limit for the condition\n(-- api-linter: aladdin::0901::prefix-required-field=disabled\n aip.dev/not-precedent: We need to do this naming predates this rule --)",
+                    "$ref": "#/definitions/v1LimitDefinition"
+                },
+                "metricDefinition": {
+                    "type": "string",
+                    "title": "The settings or additional configuration associated with the metric used within the condition"
+                }
+            }
+        },
+        "v1ConditionDetail": {
+            "type": "object",
+            "title": "The relevant information/definitions to be used in conjunction with\ncondition definitions ans results",
+            "required": [
+                "name",
+                "metric",
+                "containsBreakdown"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "title": "The name of the condition",
+                    "required": [
+                        "name"
+                    ]
+                },
+                "metric": {
+                    "type": "string",
+                    "title": "The metric name",
+                    "required": [
+                        "metric"
+                    ]
+                },
+                "metricUnit": {
+                    "title": "The metric unit to be used when evaluating the condition",
+                    "$ref": "#/definitions/v1MetricUnit"
+                },
+                "breakdownName": {
+                    "type": "string",
+                    "title": "The breakdown name"
+                },
+                "breakdownType": {
+                    "type": "string",
+                    "title": "The type of breakdown applied with this condition, specified by the evaluator"
+                },
+                "containsBreakdown": {
+                    "type": "boolean",
+                    "title": "Indicates whether the condition contains a breakdown",
+                    "required": [
+                        "contains_breakdown"
+                    ]
+                },
+                "ruleOverrideId": {
+                    "description": "Unique identifier of the RiskRuleOverride applied to this condition.\nIf present, it indicates some properties of the condition have been set from a RiskRuleOverride that is in effect.",
+                    "type": "string"
+                },
+                "ruleOverrideVersion": {
+                    "type": "string",
+                    "title": "The rule_override_version identifier for this particular revision of the rule override"
+                },
+                "metricSource": {
+                    "title": "Metric source to be used for evaluation",
+                    "$ref": "#/definitions/v1MetricSource"
+                }
+            }
+        },
+        "v1ConditionResult": {
+            "type": "object",
+            "title": "The condition definition for sector results related evaluations",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Unique identifier, which should map to the corresponding Rule condition id if applicable"
+                },
+                "conditionDetail": {
+                    "title": "The additional information about the condition",
+                    "$ref": "#/definitions/v1ConditionDetail"
+                },
+                "sectorResults": {
+                    "type": "array",
+                    "title": "The sector results resulting from the evaluation of the condition",
+                    "items": {
+                        "$ref": "#/definitions/v1SectorResult"
+                    }
+                },
+                "evaluationState": {
+                    "title": "The overall evaluation state resulting from the evaluation of the condition",
+                    "$ref": "#/definitions/v1EvaluationState"
+                }
+            }
+        },
+        "v1EvaluationState": {
+            "description": "- EVALUATION_STATE_UNSPECIFIED: No definition present (not a valid input value)\n - EVALUATION_STATE_BREACH: High severity state signalling that the evaluation has identified a BREACH\n - EVALUATION_STATE_WARNING: Lower severity state signalling that the valuation has identified a WARNING\n - EVALUATION_STATE_OK: OK state signalling that a prior exception is no longer an exception and is to\nbe closed out by the system",
+            "type": "string",
+            "title": "The possible outcomes from an evaluation",
+            "default": "EVALUATION_STATE_UNSPECIFIED",
+            "enum": [
+                "EVALUATION_STATE_UNSPECIFIED",
+                "EVALUATION_STATE_BREACH",
+                "EVALUATION_STATE_WARNING",
+                "EVALUATION_STATE_OK"
+            ]
+        },
+        "v1Evaluator": {
+            "description": "- EVALUATOR_UNSPECIFIED: No definition present\n - EVALUATOR_ANALYTICS: Rule evaluation conducted by the Analytics evaluator\n - EVALUATOR_EXTERNAL: Rule evaluation conducted by a process that is external to the system",
+            "type": "string",
+            "title": "The supported set of rule evaluators",
+            "default": "EVALUATOR_UNSPECIFIED",
+            "enum": [
+                "EVALUATOR_UNSPECIFIED",
+                "EVALUATOR_ANALYTICS",
+                "EVALUATOR_EXTERNAL"
+            ]
+        },
+        "v1Limit": {
+            "type": "object",
+            "title": "Defines the numerical thresholds associated with a Condition of a Rule",
+            "properties": {
+                "limitType": {
+                    "title": "Indicates how the numerical limits are being represented.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because lint error is for resource defined in other domain --)",
+                    "$ref": "#/definitions/v1LimitType"
+                },
+                "target": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "The target value for the metric bound to this limit.\nThis is optional if the limit type is Absolute, but required if it is Relative.\n(-- api-linter: core::0203::optional=disabled\n aip.dev/not-precedent: We need to do this because the required/optional behaviour is\n conditional on the limit_type property, which cannot be enforced at the schema-level --)\n(-- api-linter: core::0203::required=disabled\n aip.dev/not-precedent: We need to do this because the required/optional behaviour is\n conditional on the limit_type property, which cannot be enforced at the schema-level --)"
+                },
+                "thresholds": {
+                    "description": "Specifies the individual thresholds captured for this limit and their numerical values. \nThe permitted keys are 'upperBreach', 'upperWarning', 'lowerWarning', 'lowerBreach'. \nA limit has at least one entry specified.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            }
+        },
+        "v1LimitDefinition": {
+            "type": "object",
+            "title": "A more generalized condition definition",
+            "properties": {
+                "defaultLimit": {
+                    "title": "The mandatory default limit for a condition definition",
+                    "$ref": "#/definitions/v1Limit"
+                },
+                "sectorLimits": {
+                    "type": "object",
+                    "title": "The set of sector limits, if specified, to be used in conjunction with the\ndefault limit to provide sector-specific limit overrides",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/v1Limit"
+                    }
+                }
+            }
+        },
+        "v1LimitType": {
+            "description": "- LIMIT_TYPE_UNSPECIFIED: No definition present\n - LIMIT_TYPE_ABSOLUTE: An absolute threshold level, e.g. 250 bps tracking error\n - LIMIT_TYPE_RELATIVE: A relative threshold level, e.g. 1.2 which is then multiplied with the target value",
+            "type": "string",
+            "title": "The limit type indicating whether thresholds are specified in absolute terms\nor relative to the target value",
+            "default": "LIMIT_TYPE_UNSPECIFIED",
+            "enum": [
+                "LIMIT_TYPE_UNSPECIFIED",
+                "LIMIT_TYPE_ABSOLUTE",
+                "LIMIT_TYPE_RELATIVE"
+            ]
+        },
+        "v1ListRiskTasksResponse": {
+            "type": "object",
+            "title": "Response for the List Tasks requests\n(-- api-linter: core::0158::response-next-page-token-field=disabled\n aip.dev/not-precedent: We need to do this because the tasks API doesn't offer such functionality at this moment --)",
+            "properties": {
+                "workflowTaskDetails": {
+                    "type": "array",
+                    "title": "A list of tasks that satisfied the request criteria",
+                    "items": {
+                        "$ref": "#/definitions/v1WorkflowTaskDetail"
+                    }
+                }
+            }
+        },
+        "v1LookThroughSecurityType": {
+            "description": "- LOOK_THROUGH_SECURITY_TYPE_UNSPECIFIED: Look through Security is Unspecified\n - LOOK_THROUGH_SECURITY_TYPE_FUNDS: Look through for Funds\n - LOOK_THROUGH_SECURITY_TYPE_ETF: Look through for ETF\n - LOOK_THROUGH_SECURITY_TYPE_INDEX_FUTURES: Look through for Index Futures\n - LOOK_THROUGH_SECURITY_TYPE_SYNTHETIC_INSTRUMENTS: Look through for Synthetic Instruments\n - LOOK_THROUGH_SECURITY_TYPE_CDX: Look through for CDX\n - LOOK_THROUGH_SECURITY_TYPE_BOND_FORWARD: Look through for Bond Forward\n - LOOK_THROUGH_SECURITY_TYPE_EQUITY_FORWARD: Look through for Equity Forward\n - LOOK_THROUGH_SECURITY_TYPE_EQUITY_OPTION: Look through for Equity Option\n - LOOK_THROUGH_SECURITY_TYPE_EQUITY_PRIVATE: Look through for Equity Private",
+            "type": "string",
+            "title": "Look Security Type",
+            "default": "LOOK_THROUGH_SECURITY_TYPE_UNSPECIFIED",
+            "enum": [
+                "LOOK_THROUGH_SECURITY_TYPE_UNSPECIFIED",
+                "LOOK_THROUGH_SECURITY_TYPE_FUNDS",
+                "LOOK_THROUGH_SECURITY_TYPE_ETF",
+                "LOOK_THROUGH_SECURITY_TYPE_INDEX_FUTURES",
+                "LOOK_THROUGH_SECURITY_TYPE_SYNTHETIC_INSTRUMENTS",
+                "LOOK_THROUGH_SECURITY_TYPE_CDX",
+                "LOOK_THROUGH_SECURITY_TYPE_BOND_FORWARD",
+                "LOOK_THROUGH_SECURITY_TYPE_EQUITY_FORWARD",
+                "LOOK_THROUGH_SECURITY_TYPE_EQUITY_OPTION",
+                "LOOK_THROUGH_SECURITY_TYPE_EQUITY_PRIVATE"
+            ]
+        },
+        "v1MetricSource": {
+            "description": "- METRIC_SOURCE_UNSPECIFIED: No definition present\n - METRIC_SOURCE_ALADDIN_ANALYTICS: Evaluator will use Aladdin Analytics as metric source\n - METRIC_SOURCE_CUSTOM: Evaluator will use CUSTOM DATA as metric source",
+            "type": "string",
+            "title": "Allowed metric sources",
+            "default": "METRIC_SOURCE_UNSPECIFIED",
+            "enum": [
+                "METRIC_SOURCE_UNSPECIFIED",
+                "METRIC_SOURCE_ALADDIN_ANALYTICS",
+                "METRIC_SOURCE_CUSTOM"
+            ]
+        },
+        "v1MetricUnit": {
+            "description": "- METRIC_UNIT_UNSPECIFIED: No definition present\n - METRIC_UNIT_BPS: Basis Points\n - METRIC_UNIT_PCT: Percent\n - METRIC_UNIT_NONE: Comment placeholder",
+            "type": "string",
+            "title": "The units in which the metric and its thresholds are specified",
+            "default": "METRIC_UNIT_UNSPECIFIED",
+            "enum": [
+                "METRIC_UNIT_UNSPECIFIED",
+                "METRIC_UNIT_BPS",
+                "METRIC_UNIT_PCT",
+                "METRIC_UNIT_NONE"
+            ]
+        },
+        "v1PortfolioAnalyticsBenchmarkConfig": {
+            "type": "object",
+            "title": "PortfolioAnalyticsBenchmarkConfig represents the benchmark to be used for analysis\nThis currently represents a benchmark type and order",
+            "properties": {
+                "benchmarkType": {
+                    "type": "string",
+                    "title": "Specifies benchmark type like RISK, PERFORMANCE, FORWARD, OTHER, NONE"
+                },
+                "benchmarkOrder": {
+                    "title": "Specifies which benchmark should be used \n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because this is aligned with Explore UI --)",
+                    "$ref": "#/definitions/v1PortfolioAnalyticsBenchmarkOrder"
+                },
+                "benchmarkTicker": {
+                    "type": "string",
+                    "title": "Specifies benchmark ticker. This field is only needed when BenchmarkType = OTHER"
+                }
+            }
+        },
+        "v1PortfolioAnalyticsBenchmarkOrder": {
+            "description": "- PORTFOLIO_ANALYTICS_BENCHMARK_ORDER_UNSPECIFIED: Unspecfied value\n - PORTFOLIO_ANALYTICS_BENCHMARK_ORDER_PRIMARY: Represents the primary order benchmark\n - PORTFOLIO_ANALYTICS_BENCHMARK_ORDER_SECONDARY: Represents the secondary order benchmark",
+            "type": "string",
+            "title": "BenchmarkOrder represents which benchmark should be chosen\nif multiple are avaialble. Default is BENCHMARK_ORDER_PRIMARY",
+            "default": "PORTFOLIO_ANALYTICS_BENCHMARK_ORDER_UNSPECIFIED",
+            "enum": [
+                "PORTFOLIO_ANALYTICS_BENCHMARK_ORDER_UNSPECIFIED",
+                "PORTFOLIO_ANALYTICS_BENCHMARK_ORDER_PRIMARY",
+                "PORTFOLIO_ANALYTICS_BENCHMARK_ORDER_SECONDARY"
+            ]
+        },
+        "v1RiskException": {
+            "description": "Representation of Risk Exception, its available fields and the flexible one \"exceptionDetail\" to store more specific details.",
+            "type": "object",
+            "required": [
+                "externalId",
+                "scopeId",
+                "scopeType",
+                "entityId",
+                "entityType",
+                "ruleId",
+                "ruleVersion"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Unique identifier"
+                },
+                "externalId": {
+                    "type": "string",
+                    "title": "The unique user-specified identifier for the exception (not used by the system)",
+                    "required": [
+                        "external_id"
+                    ]
+                },
+                "validBeginDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "The date on which the exception record is valid. Dictated by the date of the \nunderlying positions used to calculate the exception. In most instances, \nthe beginning date of the exceptions may precede the creation date (e.g. T-1 or T-2)"
+                },
+                "validEndDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "The date at which the exception record stops being valid, e.g. it is superseded by a new \nrecord on the following day or because it has been closed out"
+                },
+                "entryTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The timestamp when the record entered the system"
+                },
+                "expiryTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The INTERNAL timestamp when the record expires"
+                },
+                "createTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The timestamp when the first time-series risk entry was first created"
+                },
+                "modifier": {
+                    "type": "string",
+                    "title": "Identifies the modifier of the exception"
+                },
+                "workflowId": {
+                    "type": "string",
+                    "title": "The workflow Id which the exception is associated with"
+                },
+                "scopeId": {
+                    "type": "string",
+                    "title": "The unique identifier of the scope of the exception. E.g. for a portfolio, this should be the portoflio code",
+                    "required": [
+                        "scope_id"
+                    ]
+                },
+                "scopeType": {
+                    "type": "string",
+                    "title": "The scope of the exception e.g. one of 'GLOBAL', 'PORTFOLIO_GROUP', 'PORTFOLIO', 'OTHER'",
+                    "required": [
+                        "scope_type"
+                    ]
+                },
+                "scope": {
+                    "type": "string",
+                    "title": "The name of the scope, e.g. the porfolio name"
+                },
+                "entityId": {
+                    "type": "string",
+                    "title": "The unique identifier of the entity the exception refers to. E.g. for an issuer, this should be the issuer code",
+                    "required": [
+                        "entity_id"
+                    ]
+                },
+                "entityType": {
+                    "type": "string",
+                    "title": "Used to determine the type of entity the exception refers to, e.g. one of \n'PORTFOLIO_GROUP', 'PORTFOLIO', 'SECTOR', 'FACTOR', 'ISSUER', 'SECURITY', 'OTHER'",
+                    "required": [
+                        "entity_type"
+                    ]
+                },
+                "entity": {
+                    "type": "string",
+                    "title": "The name of the entity that the exception is concerned with"
+                },
+                "evaluationState": {
+                    "title": "The status set by the evaluation process. Currently supported: BREACH, WARNING and OK",
+                    "$ref": "#/definitions/v1EvaluationState"
+                },
+                "rulePriority": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "The priority as provided by the rule that generated the exception and used as a common way to rank exceptions across rules"
+                },
+                "ruleId": {
+                    "type": "string",
+                    "title": "The ID of the Rule that the exception is based on",
+                    "required": [
+                        "rule_id"
+                    ]
+                },
+                "ruleVersion": {
+                    "type": "string",
+                    "title": "The ID of the specific version of the Rule that the exception is based on",
+                    "required": [
+                        "rule_version"
+                    ]
+                },
+                "exceptionTier": {
+                    "type": "string",
+                    "title": "Visibility tier/level of the exception e.g. Prime/Prod, Beta, Testing, Local, Team etc"
+                },
+                "evaluationResults": {
+                    "type": "array",
+                    "title": "The results from evaluating the Rule Conditions the exception is based on",
+                    "items": {
+                        "$ref": "#/definitions/v1ConditionResult"
+                    }
+                },
+                "exceptionDetails": {
+                    "type": "object",
+                    "title": "Any additional details that custom exception producers may store alongside the exception to provide additional context",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1RiskRule": {
+            "type": "object",
+            "title": "A rule definition which captures common attributes and limit definitions",
+            "required": [
+                "name",
+                "tierKey",
+                "splitExceptions",
+                "priority"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Unique identifier"
+                },
+                "evaluator": {
+                    "title": "The evaluator indicates the type of process used for evaluation",
+                    "$ref": "#/definitions/v1Evaluator"
+                },
+                "name": {
+                    "type": "string",
+                    "title": "The name of the rule",
+                    "required": [
+                        "name"
+                    ]
+                },
+                "tierKey": {
+                    "type": "string",
+                    "title": "The key of the rule tier, which maps onto the Tier definition configured in the system",
+                    "required": [
+                        "tier_key"
+                    ]
+                },
+                "conditions": {
+                    "type": "array",
+                    "title": "The conditions to be evaluated as part of this rule",
+                    "items": {
+                        "$ref": "#/definitions/v1ConditionDefinition"
+                    }
+                },
+                "splitExceptions": {
+                    "type": "boolean",
+                    "title": "This flag determines whether a rule containing a breakdown should create a joint exception or multiple \nexceptions, one for each violating sector\n(-- api-linter: core::0144::message-field-plural=disabled\n aip.dev/not-precedent: We need to do this because it better describes the goal of this flag.\n A rule can be applied to a set of exceptions, making it singular or giving a generic name\n instead of exceptions will maybe make the name ambiguous --)",
+                    "required": [
+                        "split_exceptions"
+                    ]
+                },
+                "priority": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "A priority indicator that can be used to rank Rules it's exceptions",
+                    "required": [
+                        "priority"
+                    ]
+                },
+                "ruleState": {
+                    "title": "The rule's current state",
+                    "$ref": "#/definitions/v1RiskRuleState"
+                },
+                "finalSignOffAuthor": {
+                    "type": "string",
+                    "title": "The user who approved the Rule"
+                },
+                "finalSignOffTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The time at which the Rule was approved"
+                },
+                "modifier": {
+                    "type": "string",
+                    "title": "Identifies the modifier of this rule"
+                },
+                "modifyTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The time this rule was modified"
+                },
+                "version": {
+                    "type": "string",
+                    "title": "The version identifier for this particular revision of the rule\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because version in this context means a point in a modifications timeline --)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because the dictionary already contains two different versions, string and int32\n and independently of the choice, disabling the linter is necessary --)"
+                },
+                "effectiveDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "The date on which this particular rule version is effective from"
+                },
+                "categoryKey": {
+                    "type": "string",
+                    "title": "The key of the rule category, which maps on to the Category definition configured in the system\n(-- aip.dev/beta-blocker: see if there is a way to add the type association for a filtered resource --)"
+                },
+                "versionTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The internal version timestamp for Rule version",
+                    "readOnly": true
+                },
+                "subCategoryKey": {
+                    "type": "string",
+                    "title": "The key of the rule sub-category, which maps on to the Sub-Category definition configured in the system \n(-- aip.dev/beta-blocker: see if there is a way to add the type association for a filtered resource --)"
+                },
+                "permissionScopes": {
+                    "type": "array",
+                    "title": "This parameter will be used to control permissions to create/modify exceptions related to this rule",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ruleSetting": {
+                    "title": "The settings or additional configuration for the rule",
+                    "$ref": "#/definitions/v1RuleSetting"
+                }
+            }
+        },
+        "v1RiskRuleState": {
+            "description": "- RISK_RULE_STATE_UNSPECIFIED: No definition present\n - RISK_RULE_STATE_DRAFT: DRAFT status means that user can update the existing rule version\n - RISK_RULE_STATE_APPROVED: APPROVED status means user can't update the existing rule version \nbut while editing APPROVED rule, it will generate new rule version with DRAFT state",
+            "type": "string",
+            "title": "This is the actual rule state. \nThere will be only 2 states, that is DRAFT or APPROVED both are described below",
+            "default": "RISK_RULE_STATE_UNSPECIFIED",
+            "enum": [
+                "RISK_RULE_STATE_UNSPECIFIED",
+                "RISK_RULE_STATE_DRAFT",
+                "RISK_RULE_STATE_APPROVED"
+            ]
+        },
+        "v1RiskWorkflow": {
+            "description": "Representation of Risk Workflow.",
+            "type": "object",
+            "required": [
+                "ruleId",
+                "scopeId",
+                "scopeType"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "The unique workflow identifier"
+                },
+                "workflowActivity": {
+                    "title": "The abstraction of an activity related to a workflow",
+                    "$ref": "#/definitions/v1RiskWorkflowActivity"
+                },
+                "exceptionId": {
+                    "type": "string",
+                    "title": "The exception's unique identifier"
+                },
+                "workflowDescription": {
+                    "type": "string",
+                    "title": "The description privided to give context to this item"
+                },
+                "workflowPriority": {
+                    "title": "The priority scale for given to this task",
+                    "$ref": "#/definitions/v1RiskWorkflowPriority"
+                },
+                "workflowFailureMessage": {
+                    "type": "string",
+                    "title": "Failure messages related to this item",
+                    "readOnly": true
+                },
+                "workflowAvailableActions": {
+                    "type": "array",
+                    "title": "The next allowd steps for this item",
+                    "items": {
+                        "type": "string"
+                    },
+                    "readOnly": true
+                },
+                "ruleId": {
+                    "type": "string",
+                    "title": "The ID of the Rule associated with this workflow item",
+                    "required": [
+                        "rule_id"
+                    ]
+                },
+                "scopeId": {
+                    "type": "string",
+                    "title": "The unique scope identifier of the exception associated to this workflow item. E.g. for a portfolio, this should be the portfolio code\n(-- api-linter: core::0124::required-reference=disabled\n    aip.dev/not-precedent: We need to do this because this is an existing attribute in risk_exception.proto and has to be same --)",
+                    "required": [
+                        "scope_id"
+                    ]
+                },
+                "scopeType": {
+                    "type": "string",
+                    "title": "The scope type of the exception associated with this workflow item e.g. one of 'GLOBAL', 'PORTFOLIO_GROUP', 'PORTFOLIO', 'OTHER'",
+                    "required": [
+                        "scope_type"
+                    ]
+                }
+            }
+        },
+        "v1RiskWorkflowActivity": {
+            "description": "Representation of Risk Workflow Activity.",
+            "type": "object",
+            "required": [
+                "id",
+                "workflowId"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "The unique activity identifier",
+                    "required": [
+                        "id"
+                    ]
+                },
+                "workflowId": {
+                    "type": "string",
+                    "title": "The unique workflow identifier",
+                    "required": [
+                        "workflow_id"
+                    ]
+                },
+                "workflowAssignee": {
+                    "type": "string",
+                    "title": "The user to who a workflow item (task) is assigned to"
+                },
+                "workflowComment": {
+                    "type": "string",
+                    "title": "A comment placed by a user"
+                },
+                "workflowAction": {
+                    "type": "string",
+                    "title": "The action taken on this item"
+                },
+                "workflowState": {
+                    "type": "string",
+                    "title": "The state of this particular item, e.g. In Review",
+                    "readOnly": true
+                },
+                "workflowResolutionCategoryKey": {
+                    "type": "string",
+                    "title": "The key of the workflow resolution category, which maps onto the Resolution Category definition configured in the system\n(-- aip.dev/beta-blocker: see if there is a way to add the type association for a filtered resource --)"
+                },
+                "workflowResolutionKey": {
+                    "type": "string",
+                    "title": "The key of the workflow resolution, which maps onto the Resolution definition configured in the system\n(-- aip.dev/beta-blocker: see if there is a way to add the type association for a filtered resource --)"
+                },
+                "modifier": {
+                    "type": "string",
+                    "title": "Identifies the modifier that performed the activity",
+                    "readOnly": true
+                },
+                "modifyTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The time the workflow activity was performed",
+                    "readOnly": true
+                },
+                "createTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The time the underlying workflow item was created",
+                    "readOnly": true
+                },
+                "dueDate": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "The date by which the current workflow state should be actioned\n(-- api-linter: core::0142::time-field-type=disabled aip.dev/not-precedent: We need to do this because due date is the more natural term the business would use to describe this--)\n(-- api-linter: core::0142::time-field-names=disabled aip.dev/not-precedent: We need to do this because due date is the more natural term the business would use to describe this --)"
+                }
+            }
+        },
+        "v1RiskWorkflowPriority": {
+            "description": "- RISK_WORKFLOW_PRIORITY_UNSPECIFIED: No definition present\n - RISK_WORKFLOW_PRIORITY_HIGH: The item has been identified as a high priority actionable task\n - RISK_WORKFLOW_PRIORITY_MEDIUM: The item has been identified as a medium priority actionable task\n - RISK_WORKFLOW_PRIORITY_LOW: The item has been identified as a low priority actionable task",
+            "type": "string",
+            "title": "Priority scale for Risk Governance Workflow Items",
+            "default": "RISK_WORKFLOW_PRIORITY_UNSPECIFIED",
+            "enum": [
+                "RISK_WORKFLOW_PRIORITY_UNSPECIFIED",
+                "RISK_WORKFLOW_PRIORITY_HIGH",
+                "RISK_WORKFLOW_PRIORITY_MEDIUM",
+                "RISK_WORKFLOW_PRIORITY_LOW"
+            ]
+        },
+        "v1RuleSetting": {
+            "type": "object",
+            "title": "A more generalized rule settings",
+            "properties": {
+                "benchmarkConfig": {
+                    "title": "Benchmark configuration",
+                    "$ref": "#/definitions/v1PortfolioAnalyticsBenchmarkConfig"
+                },
+                "lookThroughConfig": {
+                    "title": "Lookthrough configuration",
+                    "$ref": "#/definitions/oversightgovernancev1LookThroughConfig"
+                }
+            }
+        },
+        "v1SectorResult": {
+            "type": "object",
+            "title": "It represents the evaluation results\nfor specific category values for the selected breakdown",
+            "properties": {
+                "sector": {
+                    "type": "string",
+                    "title": "The name of the sector"
+                },
+                "lastThresholdCrossed": {
+                    "title": "The most severe predefined threshold crossed when performing an evaluation",
+                    "$ref": "#/definitions/v1Threshold"
+                },
+                "evaluationState": {
+                    "title": "The evaluated state of the sector result indicating the exception severity (or OK)",
+                    "$ref": "#/definitions/v1EvaluationState"
+                },
+                "actualValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "The actual value of the underlying metric being validated against the Rule Condition limits"
+                },
+                "limit": {
+                    "title": "The numerical thresholds associated with the corresponding Rule Condition",
+                    "$ref": "#/definitions/v1Limit"
+                }
+            }
+        },
+        "v1Threshold": {
+            "description": "- THRESHOLD_UNSPECIFIED: No definition present\n - THRESHOLD_UPPER_BREACH: An evaluation has identified a scenario which the values are beyond any pre-defined limit\n - THRESHOLD_LOWER_BREACH: An evaluation has identified a scenario which the values are somewhere\nin betewen OK and UPPER_BREACH\n - THRESHOLD_UPPER_WARNING: An evaluation has identified a scenario where the values are close \nbut not yet to be considered a breach\n - THRESHOLD_LOWER_WARNING: An evaluation has identified a scenario where the values are on\nthe way to be considered a breach",
+            "type": "string",
+            "title": "The available threshold levels to be used in order to better identify\nthe most severe problems",
+            "default": "THRESHOLD_UNSPECIFIED",
+            "enum": [
+                "THRESHOLD_UNSPECIFIED",
+                "THRESHOLD_UPPER_BREACH",
+                "THRESHOLD_LOWER_BREACH",
+                "THRESHOLD_UPPER_WARNING",
+                "THRESHOLD_LOWER_WARNING"
+            ]
+        },
+        "v1WorkflowTaskDetail": {
+            "type": "object",
+            "title": "A representation of a workflow task details data structure",
+            "properties": {
+                "riskWorkflow": {
+                    "title": "The workflow item representing a actionable task",
+                    "$ref": "#/definitions/v1RiskWorkflow"
+                },
+                "riskException": {
+                    "title": "The exception related to the given task",
+                    "$ref": "#/definitions/v1RiskException"
+                },
+                "riskRule": {
+                    "title": "The rule related to the given task",
+                    "$ref": "#/definitions/v1RiskRule"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.oversight.governance.v1.RiskTask:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.oversight.governance.v1.RiskTask:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "analytics.oversight.governance.v1.RiskTask:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "analytics.oversight.governance.v1.RiskTask:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

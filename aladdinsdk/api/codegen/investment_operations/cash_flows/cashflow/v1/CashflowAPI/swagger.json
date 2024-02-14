@@ -1,0 +1,1783 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "This API allows users to create, update and cancel miscellaneous cashflows. There are three endpoints to create, update, and cancel cashflows with SSI, and three other endpoints to create, update, and cancel cashflows without SSI. For full details on this API including permissions required and sample calls, please check out the Cashflows API Release Note available in the Release Note section on Studio or on your client site homepage.",
+        "title": "Cashflows",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.investment_operations.cash_flows.cashflow.CashflowAPI",
+        "x-aladdin-api-stability": "sunset",
+        "x-aladdin-spec-id": "agraph.investment_operations.cash_flows.cashflow.v1.CashflowAPI"
+    },
+    "basePath": "/api/investment-operations/cash-flows/cashflow/v1/",
+    "paths": {
+        "/cashflows": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This endpoint allows for the creation of cashflows without a Standard Settlement Instruction\n(SSI) attached. Note, to create a cashflow with SSI, please use the Create a cashflow with SSI\nendpoint. Before posting a cashflow, you may use the validateOnly parameter to confirm\nwhether the cashflow passes validations or not. When set to true, only validations will run,\ncashflow will not be posted. The request will be validated based on the cashflowTransactionType and\ncashflowSubTransactionType.",
+                "summary": "Create a cashflow",
+                "operationId": "CashflowAPI_CreateCashflow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Cashflow to post",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1Cashflow"
+                        }
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "If this field is set to true, the server will only perform validation\nwithout executing any side effects.",
+                        "name": "validateOnly",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1Cashflow"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/cashflows:cancel": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This endpoint can be used to cancel cashflows without SSI by setting the status to 'C'. Note, to\ncancel cashflows with SSI, use the Cancel a cashflow with SSI endpoint. A cashflow can be\nidentified in two ways, by the combination of (portfolioId + cashflowInvestmentNumber + seriesNumber)\nor by the combination of (externalId1 + externalIdOrganization) if it has a cashflowExternalId. A valid combination\nof either of these must be provided on the request. The request will be validated based on the\ncashflowTransactionType and status of the cashflow and all validations must pass for the request to be\nsuccessful. Once a cashflow has been marked as cancelled no further updates will be allowed.",
+                "summary": "Cancel a cashflow",
+                "operationId": "CashflowAPI_CancelCashflow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1CancelCashflowRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1Cashflow"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/cashflows:cancelCashflowAndSendTransmission": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This endpoint can be used to cancel cashflows with SSI by setting the status to 'C'. Note, to\ncancel cashflows without SSI, use the Cancel a cashflow endpoint. A cashflow can be\nidentified in two ways, by the combination of (portfolioId + cashflowInvestmentNumber + seriesNumber)\nor by the combination of (externalId1 + externalIdOrganization) if it has a cashflowExternalId. A valid combination\nof either of these must be provided on the request. The request will be validated based on the\ncashflowTransactionType and status of the cashflow and all validations must pass for the request to be\nsuccessful. Once a cashflow has been marked as cancelled no further updates will be allowed.",
+                "summary": "Cancel a cashflow with SSI",
+                "operationId": "CashflowAPI_CancelCashflowAndSendTransmission",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1CancelCashflowAndSendTransmissionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CancelCashflowAndSendTransmissionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/cashflows:createCashflowAndSendTransmission": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This endpoint allows for the creation of cashflows with a Standard Settlement Instruction (SSI)\nattached and sends money out through the transmission framework (confirmedBy and\nreviewedBy parameters are required in order for the transmission to be generated).\nSSI can be specified using the brokerId and settlementInstructionId parameters. If not provided\nsettlementInstructionId will be defaulted based on brokerId and cashflow information. Before\nposting a cashflow, you may use the validateOnly parameter to confirm whether the cashflow\npasses validations or not. When set to true, only validations will run, cashflow will not be\nposted. The request will be validated based on the cashflowTransactionType and cashflowSubTransactionType.\n(-- api-linter: core::0133::http-body=disabled\n aip.dev/not-precedent: We need to do this because this is what the request will return; a response containing cashflows --)\n(-- api-linter: core::0133::response-message-name=disabled\n aip.dev/not-precedent: We need to do this because the response is defined with the matching name below--)\n(-- api-linter: aladdin::9002::wordslist-custom-method-http=disabled\n    aip.dev/not-precedent: Method is update, but it is not recognized because there is no id in the uri. --)",
+                "summary": "Create a cashflow with SSI",
+                "operationId": "CashflowAPI_CreateCashflowAndSendTransmission",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1CreateCashflowAndSendTransmissionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CreateCashflowAndSendTransmissionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/cashflows:updateCashflow": {
+            "patch": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This endpoint can be used to update cashflows that does not include SSI. To update a record and\nadd SSI, please use the Update a cashflow to include SSI endpoint. A cashflow can be identified\nin two ways, by the combination of (portfolioId + cashflowInvestmentNumber + seriesNumber) or by the\ncombination of (externalId1 + externalIdOrganization), if it has a cashflowExternalId. A valid combination of either\nof these must be provided on the request. The request will be validated based on the cashflowTransactionType\nand status of the cashflow and all validations must pass for the request to be successful. If any\nvalidation fails, an exception will be thrown.\n(-- api-linter: core::0134::http-uri-id=disabled\n    aip.dev/not-precedent: The id is derived from multiple cashflow attributes. --)\n(-- api-linter: aladdin::9002::wordslist-custom-method-http=disabled\n    aip.dev/not-precedent: Method is update, but it is not recognized because there is no id in the uri. --)",
+                "summary": "Update a cashflow",
+                "operationId": "CashflowAPI_UpdateCashflow",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Cashflow to update",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1Cashflow"
+                        }
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "If this field is set to true, the server will only perform validation\nwithout executing any side effects.",
+                        "name": "validateOnly",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1Cashflow"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/cashflows:updateCashflowAndSendTransmission": {
+            "patch": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.cash_flows.cashflow.v1.Cashflow"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "This endpoint can be used to add Standard Settlement Instruction (SSI) i.e. brokerId or\nsettlementInstructionId to a record that does not have one attached and sends money out\nthrough transmission framework (confirmedBy and reviewedBy parameters are required in order\nfor the transmission to be generated). Note that records that already have SSI attached cannot be\nupdated via this endpoint. A cashflow can be identified in two ways, by the combination of\n(portfolioId + cashflowInvestmentNumber + seriesNumber) by the combination of (externalId1 + externalIdOrganization),\nif it has a cashflowExternalId. A valid combination of either these must be provided on the\nrequest. The request will be validated based on the cashflowTransactionType and status of the cashflow and all\nvalidations must pass for the request to be successful. If any validation fails an exception will be\nthrown.\n(-- api-linter: core::0134::http-body=disabled\n    aip.dev/not-precedent: The resource updated is a cashflow, not a cashflowAndSendTransmission. --)\n(-- api-linter: core::0136::http-body=disabled\n    aip.dev/not-precedent: The resource updated is a cashflow, not a cashflowAndSendTransmission. --)\n(-- api-linter: core::0134::http-uri-id=disabled\n    aip.dev/not-precedent: The id is derived from multiple cashflow attributes. --)\n(-- api-linter: core::0134::response-message-name=disabled\n    aip.dev/not-precedent: The response should be a cashlow, defined below. --)\n(-- api-linter: aladdin::9002::wordslist-custom-method-http=disabled\n    aip.dev/not-precedent: Method is update, but it is not recognized because there is no id in the uri. --)",
+                "summary": "Update a cashflow to include SSI",
+                "operationId": "CashflowAPI_UpdateCashflowAndSendTransmission",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Cashflow to update",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1Cashflow"
+                        }
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "If this field is set to true, the server will only perform validation\nwithout executing any side effects.",
+                        "name": "validateOnly",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1UpdateCashflowAndSendTransmissionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1CancelCashflowAndSendTransmissionRequest": {
+            "type": "object",
+            "title": "The request message for CashflowTransmissionAPI.CancelCashflowAndSendTransmission.\nUnique identifier for a Cashflow can be (portfolioId, investmentNumber, seriesNumber) or (externalId1, organization)",
+            "properties": {
+                "cashflow": {
+                    "title": "Cashflow to cancel",
+                    "$ref": "#/definitions/v1Cashflow"
+                },
+                "validateOnly": {
+                    "type": "boolean",
+                    "title": "If this field is set to true, the server will only perform validation\nwithout executing any side effects"
+                },
+                "updateExternId1": {
+                    "type": "boolean",
+                    "title": "If this field is set to true, extern_id1 will be updated by appending a timestamp to it\nto allow for reuse on the future"
+                }
+            }
+        },
+        "v1CancelCashflowAndSendTransmissionResponse": {
+            "type": "object",
+            "title": "Response message for CancelCashflowAndSendTransmission",
+            "properties": {
+                "cashflow": {
+                    "title": "Cashflow that was cancelled",
+                    "$ref": "#/definitions/v1Cashflow"
+                }
+            }
+        },
+        "v1CancelCashflowRequest": {
+            "type": "object",
+            "title": "The request message for CashflowAPI.CancelCashflow.\nUnique identifier for a Cashflow can be (portfolioId, investmentNumber, seriesNumber) or (externalId1, organization)",
+            "properties": {
+                "cashflow": {
+                    "title": "Cashflow to cancel",
+                    "$ref": "#/definitions/v1Cashflow"
+                },
+                "validateOnly": {
+                    "type": "boolean",
+                    "title": "If this field is set to true, the server will only perform validation\nwithout executing any side effects"
+                },
+                "updateExternId1": {
+                    "type": "boolean",
+                    "title": "If this field is set to true, extern_id1 will be updated by appending a timestamp to it\nto allow for reuse on the future"
+                }
+            }
+        },
+        "v1Cashflow": {
+            "type": "object",
+            "title": "Cashflow describes the data and information relating to a recorded cashflow",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Unique identifier -  portfolioId:cashflowInvestmentNumber:seriesNum"
+                },
+                "portfolioId": {
+                    "description": "Represents string value of Portfolio Code as id.",
+                    "type": "string"
+                },
+                "cashflowInvestmentNumber": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Invnum"
+                },
+                "seriesNumber": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Series number"
+                },
+                "currencyCode": {
+                    "type": "string",
+                    "title": "Currency against which the cashflow is made"
+                },
+                "brokerId": {
+                    "description": "Counterparty code for settlement.",
+                    "type": "string"
+                },
+                "principal": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Principal"
+                },
+                "interest": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Interest"
+                },
+                "commission": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Commission"
+                },
+                "otherFee": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Fee amount"
+                },
+                "originalFace": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Original face"
+                },
+                "assetId": {
+                    "type": "string",
+                    "title": "Asset id or cusip representing similar security"
+                },
+                "cashflowTradeDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Represents trade date"
+                },
+                "cashflowSettleDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Represents settle date"
+                },
+                "cashflowStatus": {
+                    "type": "string",
+                    "title": "Character that represents status of the cashflow"
+                },
+                "cashflowTransactionType": {
+                    "title": "Transaction Type",
+                    "$ref": "#/definitions/v1TransactionType"
+                },
+                "cashflowSubTransactionType": {
+                    "type": "string",
+                    "title": "Represents cashflow sub tran type\nCheck MISC_CASH decodes for valid values"
+                },
+                "enteredBy": {
+                    "type": "string",
+                    "title": "User id for cashflow enterer\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We need to do this because we want consitency with trade proto --)"
+                },
+                "trader": {
+                    "type": "string",
+                    "title": "User that executed the trade"
+                },
+                "confirmedBy": {
+                    "type": "string",
+                    "title": "Cashflow Confirmed by user id\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We need to do this because we want consitency with trade proto --)"
+                },
+                "reviewedBy": {
+                    "type": "string",
+                    "title": "User id for cashflow reviewer (review_by on db)\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We need to do this because we want consitency with trade proto --)"
+                },
+                "entryTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Entry time. Set automatically during cashflow creation"
+                },
+                "modifyTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Last time entry was touched"
+                },
+                "authorizeTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Represents cashflow authorize time. Set automatically when trader is provided"
+                },
+                "reviewTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Represents cashflow review time.  Set automatically when confirmed_by is provided"
+                },
+                "cashflowStrategyId": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Strategy code. See table: strategy.\nUseful for portfolio managers to differentiate between trading strategies and themes for a portfolio"
+                },
+                "cashflowExchangeRate": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Exchange Rate. \nuseful for trades that settle in a currency other than the portfolio base currency"
+                },
+                "actualSettleDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date transaction settled at custodian"
+                },
+                "settledAmount": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Actual amount settled"
+                },
+                "settlementInstructionId": {
+                    "description": "String value Settle Code.",
+                    "type": "string"
+                },
+                "clientPaymentReference": {
+                    "type": "string",
+                    "title": "Field that maps to tag 72 in a swift file"
+                },
+                "cashflowCommentText": {
+                    "type": "string",
+                    "title": "Comment represent as a string"
+                },
+                "cashflowCommentByte": {
+                    "type": "string",
+                    "format": "byte",
+                    "title": "Comment represented in bytes"
+                },
+                "cashflowExternalId": {
+                    "title": "External Cashflow Id",
+                    "$ref": "#/definitions/v1ExternalCashflowId"
+                },
+                "factor": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Factor"
+                },
+                "cashflowPrice": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Principal / 1000 of face (PNI)"
+                },
+                "tradePar": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Current face at time of settlement of the trade (orig_face * factor)"
+                },
+                "shortIndicator": {
+                    "type": "string",
+                    "title": "Character that represents if this trade opened a short position"
+                },
+                "structuredBy": {
+                    "type": "string",
+                    "title": "For COLL records from financing trades, this stores certain flags for FES. \nB=bonds borrowed, M=moneyfill, X=non-USD, etc\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We need to do this because we want consitency with trade proto --)"
+                },
+                "settlementConfirmed": {
+                    "type": "string",
+                    "title": "Character that corresponds to one of 3 trade values that determine trade type.\nThe 3 values are: tran_type, seg_flag, and sign of orig_face. \nValid combinations of these 3 values are documented in the TRANTYPES decode"
+                },
+                "duplicateNumber": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Used with portfolioId and investmentNumber to identify a unique row in trd (N/A)"
+                },
+                "source": {
+                    "type": "string",
+                    "title": "Character that represents the underlying source of the cashflow\nCheck CFTRD_SOURCE decode for values"
+                },
+                "cashflowVersion": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Version of the cashflow"
+                }
+            }
+        },
+        "v1CreateCashflowAndSendTransmissionRequest": {
+            "description": "The request message for CashflowTransmissionAPI.CreateCashflowAndSendTransmission.",
+            "type": "object",
+            "properties": {
+                "cashflow": {
+                    "title": "Cashflow to create",
+                    "$ref": "#/definitions/v1Cashflow"
+                },
+                "validateOnly": {
+                    "type": "boolean",
+                    "title": "If this field is set to true, the server will only perform validation\nwithout executing any side effects"
+                }
+            }
+        },
+        "v1CreateCashflowAndSendTransmissionResponse": {
+            "type": "object",
+            "title": "Response message for CreateCashflowAndSendTransmission",
+            "properties": {
+                "cashflow": {
+                    "title": "Cashflow that was created",
+                    "$ref": "#/definitions/v1Cashflow"
+                }
+            }
+        },
+        "v1ExternalCashflowId": {
+            "type": "object",
+            "title": "ExternalCashflowId describes the external id for a cashflow\n(-- api-linter: core::0123::resource-variables=disabled\n aip.dev/not-precedent: We need to do this because we want to keed the name of the resource and pattern consistent--)",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "Unique identifier"
+                },
+                "externalId1": {
+                    "type": "string",
+                    "title": "Represents external id 1"
+                },
+                "externalIdOrganization": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Represents organization"
+                },
+                "externalId2": {
+                    "type": "string",
+                    "title": "Represents external id 2"
+                },
+                "memo": {
+                    "type": "string",
+                    "title": "Represents memo"
+                },
+                "entryTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Represents external id entry time"
+                }
+            }
+        },
+        "v1TransactionType": {
+            "description": "- TRANSACTION_TYPE_UNSPECIFIED: unspecified\n - TRANSACTION_TYPE_MISC: Miscellaneous",
+            "type": "string",
+            "title": "Cashflow tran type",
+            "default": "TRANSACTION_TYPE_UNSPECIFIED",
+            "enum": [
+                "TRANSACTION_TYPE_UNSPECIFIED",
+                "TRANSACTION_TYPE_MISC"
+            ]
+        },
+        "v1UpdateCashflowAndSendTransmissionResponse": {
+            "type": "object",
+            "title": "Response message for UpdateCashflowAndSendTransmission",
+            "properties": {
+                "cashflow": {
+                    "title": "Cashflow that was updated",
+                    "$ref": "#/definitions/v1Cashflow"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.cash_flows.cashflow.v1.Cashflow": "This grants access to all endpoints in the investment_operations.cash_flows.cashflow.v1.Cashflow API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.cash_flows.cashflow.v1.Cashflow": "This grants access to all endpoints in the investment_operations.cash_flows.cashflow.v1.Cashflow API",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "investment_operations.cash_flows.cashflow.v1.Cashflow",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "investment_operations.cash_flows.cashflow.v1.Cashflow",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}
