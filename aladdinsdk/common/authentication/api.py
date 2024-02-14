@@ -356,6 +356,10 @@ def inflate_api_kwargs(kwargs):
         kwargs['auth_type'] = user_settings.get_api_auth_type()
     if 'username' not in kwargs and user_settings.get_username() is not None:
         kwargs['username'] = user_settings.get_username()
+
+    if kwargs['auth_type'] == user_settings.CONF_API_AUTH_TYPE_OAUTH and 'auth_flow_type' not in kwargs:
+        kwargs['auth_flow_type'] = user_settings.CONF_API_AUTH_FLOW_TYPE_REFRESH_TOKEN
+
     return kwargs
 
 

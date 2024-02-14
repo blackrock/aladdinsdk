@@ -71,9 +71,6 @@ def _retrieve_token_details(client_id, client_secret, refresh_token, auth_flow_t
     if scopes is None:
         scopes = []
 
-    if "offline_access" not in scopes:
-        scopes.append("offline_access")
-
     data = _construct_data_for_token_request(auth_flow_type, client_id, client_secret, refresh_token, scopes)
     url = _get_token_url_for_auth_server(auth_server_url)
     _proxies = _get_proxy_for_auth_server(auth_server_proxy)
@@ -149,7 +146,7 @@ def _get_proxy_for_auth_server(auth_server_proxy=None):
     return _proxies
 
 
-def _construct_data_for_token_request(auth_flow_type, client_id, client_secret, refresh_token=None, scopes=None):
+def _construct_data_for_token_request(auth_flow_type, client_id, client_secret, refresh_token=None, scopes=[]):
     """
     Given oauth client and user secrets, construct a request for an access token
 

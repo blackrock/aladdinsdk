@@ -29,8 +29,6 @@ def get_access_token_ttl_from_okta_sidecar(scopes=None):
     """
     if scopes is None:
         scopes = []
-    if "offline_access" not in scopes:
-        scopes.append("offline_access")
 
     developer_uid_from_header = ""
     if _COMPUTE_APP_TYPE == "streamlit":
