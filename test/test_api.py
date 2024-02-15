@@ -4,9 +4,7 @@ import os
 import asyncio
 
 import pandas as pd
-from aladdinsdk.common.authentication.api import ApiAuthUtil
 
-from aladdinsdk.common.error.asdkerrors import AsdkApiException
 from test.resources.testutils import utils
 
 
@@ -43,7 +41,7 @@ class TestApiRegistry(TestCase):
 
     def test_get_api_details_failure_non_existent_api(self):
         from aladdinsdk.api.registry import get_api_details
-
+        from aladdinsdk.common.error.asdkerrors import AsdkApiException
         with self.assertRaises(AsdkApiException) as context:
             get_api_details('NonExistentTestAsdkAPI')
             self.assertTrue("API not supported for SDK calls at the moment." in context.exception)
@@ -481,6 +479,7 @@ class TestApiClientLroCalls(TestCase):
 
     def test_call_lro_api_none_response(self):
         from aladdinsdk.api.client import AladdinAPI
+        from aladdinsdk.common.error.asdkerrors import AsdkApiException
         test_subject = AladdinAPI('TrainJourneyAPI')
         with mock.patch.object(test_subject, 'call_api') as mock_call_api:
             mock_call_api_response_1 = None
@@ -575,6 +574,7 @@ class TestApiClientLroCalls(TestCase):
     @mock.patch("asyncio.wait_for")
     def test_call_lro_status_api_timeout_error(self, mock_wait_for):
         from aladdinsdk.api.client import AladdinAPI
+        from aladdinsdk.common.error.asdkerrors import AsdkApiException
         test_subject = AladdinAPI('TrainJourneyAPI')
 
         mock_wait_for.side_effect = asyncio.TimeoutError()
@@ -625,6 +625,7 @@ class TestApiClientSwaggerExtension(TestCase):
 
     @mock.patch('aladdinsdk.api.registry.AladdinAPICodegenDetails')
     def test_swagger_location_mapped_incorrectly(self, mock_codegen_details):
+        from aladdinsdk.common.error.asdkerrors import AsdkApiException
         mock_codegen_details.api_name = 'TrainJourneyAPI'
         mock_codegen_details.api_module_path = 'fake_path'
         mock_codegen_details.host_url_path = '/no-path'
@@ -657,6 +658,7 @@ class TestApiClientSwaggerExtension(TestCase):
 
     @mock.patch('aladdinsdk.api.registry.AladdinAPICodegenDetails')
     def test_swagger_location_incorrect(self, mock_codegen_details):
+        from aladdinsdk.common.error.asdkerrors import AsdkApiException
         mock_codegen_details.api_name = 'TrainJourneyAPI'
         mock_codegen_details.api_module_path = 'fake_path'
         mock_codegen_details.host_url_path = '/no-path'
@@ -672,6 +674,7 @@ class TestApiClientSwaggerExtension(TestCase):
 
     @mock.patch('aladdinsdk.api.registry.AladdinAPICodegenDetails')
     def test_methods_not_exist(self, mock_codegen_details):
+        from aladdinsdk.common.error.asdkerrors import AsdkApiException
         mock_codegen_details.api_name = 'TrainJourneyAPI'
         mock_codegen_details.api_module_path = 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey'
         mock_codegen_details.host_url_path = 'api/reference-architecture/demo/train-journey/v1'
@@ -736,6 +739,7 @@ class TestApiClientRestEndpointMethodMappings(TestCase):
 
     def test_put_mapping_non_existent(self):
         from aladdinsdk.api.client import AladdinAPI
+        from aladdinsdk.common.error.asdkerrors import AsdkApiException
         test_subject = AladdinAPI('TrainJourneyAPI')
         with self.assertRaises(AsdkApiException) as context:
             test_subject.put("/trainJourneys/{trainJourney.id}", "foo", "bar")
@@ -844,6 +848,8 @@ class TestGetOauthToken(TestCase):
     @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server',
                 return_value=['ACCESS_TOKEN123', 3600])
     def test_api_client_get_oauth_token_from_server(self, oauth_token):
+        from aladdinsdk.common.authentication.api import ApiAuthUtil
+
         api_auth_util = ApiAuthUtil(configuration={}, client_id='id', client_secret='secret', refresh_token='token')
         result = api_auth_util._request_oauth_access_token_tuple(scopes="test.scope")
         self.assertEqual(result, ['ACCESS_TOKEN123', 3600])
@@ -867,6 +873,8 @@ class TestGetOauthTokenMissingSecret(TestCase):
 
     @mock.patch('aladdinsdk.common.secrets.fsutil.read_secret_from_file', return_value=None)
     def test_api_client_get_oauth_token_exception_missing_secret(self, oauth_param):
+        from aladdinsdk.common.authentication.api import ApiAuthUtil
+
         api_auth_util = ApiAuthUtil(configuration={}, client_id='id', client_secret='secret')
         resp_access_token, resp_ttl = api_auth_util._request_oauth_access_token_tuple(scopes=None)
         self.assertIsNone(resp_access_token)
@@ -875,6 +883,9 @@ class TestGetOauthTokenMissingSecret(TestCase):
     @mock.patch('aladdinsdk.common.secrets.fsutil.read_secret_from_file', return_value=None)
     def test_api_client_get_basic_auth_exception_missing_pwd(self, param):
         from aladdinsdk.common.authentication.basicauth import basicauthutil
+        from aladdinsdk.common.authentication.api import ApiAuthUtil
+        from aladdinsdk.common.error.asdkerrors import AsdkApiException
+
         ApiAuthUtil(configuration={}, username='user')
         with self.assertRaises(AsdkApiException) as context:
             basicauthutil.fetch_password_from_user_settings()

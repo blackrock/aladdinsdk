@@ -41,6 +41,16 @@ _conf_key_adc_connection_type = "adc.connection_type"
 CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON = "snowflake-connector-python"
 CONF_ADC_CONN_TYPE_SNOWFLAKE_SNOWPARK_PYTHON = "snowflake-snowpark-python"
 
+_conf_key_adc_conn_authenticator = "adc.conn.authenticator"
+CONF_ADC_CONN_AUTHENTICATOR_OAUTH = "oauth"
+CONF_ADC_CONN_AUTHENTICATOR_SNOWFLAKE_JWT = "snowflake_jwt"
+
+_conf_key_adc_conn_oauth_access_token = "adc.conn.oauth.access_token"
+
+_conf_key_adc_conn_rsa_private_key_passphrase = "adc.conn.rsa.private_key_passphrase"
+_conf_key_adc_conn_rsa_private_key_filepath = "adc.conn.rsa.private_key_filepath"
+_conf_key_adc_conn_rsa_private_key = "adc.conn.rsa.private_key"
+
 _conf_key_adc_conn_account = "adc.conn.account"
 _conf_key_adc_conn_role = "adc.conn.role"
 _conf_key_adc_conn_warehouse = "adc.conn.warehouse"
@@ -220,6 +230,31 @@ def get_api_lro_status_check_timeout():
 @dynamic_asdk_config_reload
 def get_adc_connection_type():
     return AsdkConf.get(_conf_key_adc_connection_type, CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON)
+
+
+@dynamic_asdk_config_reload
+def get_adc_conn_authenticator():
+    return AsdkConf.get(_conf_key_adc_conn_authenticator, CONF_ADC_CONN_AUTHENTICATOR_OAUTH)
+
+
+@dynamic_asdk_config_reload
+def get_adc_conn_oauth_access_token():
+    return AsdkConf.get(_conf_key_adc_conn_oauth_access_token)
+
+
+@dynamic_asdk_config_reload
+def get_adc_conn_rsa_private_key_passphrase():
+    return AsdkConf.get(_conf_key_adc_conn_rsa_private_key_passphrase)
+
+
+@dynamic_asdk_config_reload
+def get_adc_conn_rsa_private_key_filepath():
+    return AsdkConf.get(_conf_key_adc_conn_rsa_private_key_filepath)
+
+
+@dynamic_asdk_config_reload
+def get_adc_conn_rsa_private_key():
+    return AsdkConf.get(_conf_key_adc_conn_rsa_private_key)
 
 
 @dynamic_asdk_config_reload
