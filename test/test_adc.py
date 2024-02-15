@@ -3,7 +3,6 @@ from unittest.mock import MagicMock, Mock
 import os
 import importlib
 
-from aladdinsdk.common.error.asdkerrors import AsdkAdcException
 from test.resources.testutils import utils, extmocks
 import pandas.testing as pandastesting
 
@@ -162,6 +161,7 @@ class TestAdcClientInit(TestCase):
     @mock.patch('aladdinsdk.common.authentication.adc.AladdinAPI')
     @mock.patch('requests.get', side_effect=extmocks.mocked_successful_requests_get)
     def test_get_adc_connection_failed_to_get_valid_access_token(self, requests_mock, api_patch):
+        from aladdinsdk.common.error.asdkerrors import AsdkAdcException
         # Create a mock to return for Token AladdinAPI
         token_response_body = MagicMock()
         delattr(token_response_body, 'access_token')  # API response missing access token
@@ -498,6 +498,7 @@ class TestAdcClientSnowparkConnectivity(TestCase):
         import aladdinsdk.adc.client
         importlib.reload(aladdinsdk.adc.client)
         from aladdinsdk.adc.client import ADCClient
+        from aladdinsdk.common.error.asdkerrors import AsdkAdcException
 
         with self.assertRaises(AsdkAdcException) as context:
             ADCClient(connection_type="INCORRECT_TYPE")
