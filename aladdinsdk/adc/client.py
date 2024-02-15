@@ -2,8 +2,7 @@ import snowflake.connector
 from snowflake.snowpark import Session
 from snowflake.connector.pandas_tools import write_pandas
 from typing import Literal
-from aladdinsdk.common.authentication.api import inflate_api_kwargs
-from aladdinsdk.common.authentication.adc import fetch_adc_connection_access_token
+from aladdinsdk.common.authentication.adc import AdcAuthUtil
 from aladdinsdk.common.error.asdkerrors import AsdkAdcException
 from aladdinsdk.common.error.handler import asdk_exception_handler
 from aladdinsdk.config import user_settings
@@ -13,8 +12,6 @@ import pandas as pd
 import logging
 
 _logger = logging.getLogger(__name__)
-
-_snowflake_connector_authenticator_oauth = "oauth"
 
 
 class ADCClient():
@@ -54,6 +51,18 @@ class ADCClient():
                 "ASDK_ADC__CONN__DATABASE", or "adc.conn.database" in settings yaml, None if not configured.
             schema (string, optional): Snowflake schema to be used. Defaults to value set as
                 "ASDK_ADC__CONN__SCHEMA", or "adc.conn.schema" in settings yaml, None if not configured.
+            adc_conn_authenticator (string, optional): Authenticator type for snowflake connection.
+                Should be one of ["snowflake_jwt", "oauth"]. Defaults to "oauth".
+            adc_conn_rsa_private_key_passphrase (string, optional): Passphrase for RSA key authentication used for snowflake_jwt
+                connection authentication. To be provided as private key filepath and passphrase combination (instead of private key).
+                For empty passphrase provide empty string, not None.
+                Defaults to None.
+            adc_conn_rsa_private_key_filepath (string, optional): Filepath to RSA private key file used for snowflake_jwt
+                connection authentication. To be provided as private key filepath and passphrase combination (instead of private key).
+                Defaults to None.
+            adc_conn_rsa_private_key (string, optional): RSA private key to be used for snowflake_jwt
+                connection authentication. To be provided instead of private key filepath and passphrase combination.
+                Defaults to None.
             api_key (string, optional): API Key. Defaults to value set as "ASDK_API__TOKEN" environment
                 variable, or "api.token" in settings yaml, None if not configured.
             auth_type (_type_, optional): API Authentication Type. Must be in ["Basic Auth", "OAuth"].
@@ -89,8 +98,7 @@ class ADCClient():
                 "ASDK_USER_CREDENTIALS__ENCRYPTED_FILEPATH" environment variable, or
                 "user_credentials.encryption_filepath" in settings yaml, None if not configured.
         """
-        adc_oauth_access_token = kwargs['adc_oauth_access_token'] if 'adc_oauth_access_token' in kwargs else \
-            None
+        self._adc_auth_util = AdcAuthUtil(**kwargs)
 
         self._connection_type = connection_type if connection_type is not None else \
             user_settings.get_adc_connection_type()
@@ -106,8 +114,6 @@ class ADCClient():
         self._warehouse = warehouse
         self._database = database
         self._schema = schema
-        self._adc_oauth_access_token = adc_oauth_access_token
-        self._inflated_api_init_kwargs = inflate_api_kwargs(kwargs)
         self._connection = self._generate_adc_connection()
 
     @asdk_exception_handler
@@ -339,25 +345,7 @@ class ADCClient():
         Returns:
             snowflake connector: A Snowflake or Snowpark connection object
         """
-        adc_oauth_access_token = self._adc_oauth_access_token
-        if adc_oauth_access_token is None:
-            # If OAuth access token not set during ADC client initialization, fetch a token from AccessTokenService using API call
-            adc_oauth_access_token = fetch_adc_connection_access_token(self._inflated_api_init_kwargs)
-
-        sf_connection_params = {
-            'account': self._account,
-            'authenticator': _snowflake_connector_authenticator_oauth,
-            'user': self._inflated_api_init_kwargs['username'],
-            'token': adc_oauth_access_token,
-            'role': self._role,
-            'warehouse': self._warehouse,
-            'database': self._database,
-            'schema': self._schema,
-            'session_parameters': {
-                'QUERY_TAG': 'QueryViaSDK',
-            }
-        }
-
+        sf_connection_params = self._adc_auth_util.generate_sf_connection_params(self)
         if self._connection_type == user_settings.CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON:
             adc_conn = snowflake.connector.connect(**sf_connection_params)
         elif self._connection_type == user_settings.CONF_ADC_CONN_TYPE_SNOWFLAKE_SNOWPARK_PYTHON:

@@ -121,7 +121,12 @@ aladdinsdk.config.print_current_user_config()
 | API.RETRY.STOP_AFTER_ATTEMPT / <br /> ASDK_API__RETRY__STOP_AFTER_ATTEMPT                                                                  | Retry up to certain amount of attempts for API retry logic.                                                                                                                                                                                                                                 |    No     |                                        -                                        | - |
 | API.RETRY.WAIT_FIXED / <br /> ASDK_API__RETRY__WAIT_FIXED                                                                                  | Wait time in seconds before retry for API retry logic.                                                                                                                                                                                                                                      |    No     |                                        -                                        | - |
 | API.RETRY.STOP_AFTER_DELAY / <br /> ASDK_API__RETRY__STOP_AFTER_DELAY                                                                      | Retry up to certain amount of delay for API retry logic.                                                                                                                                                                                                                                    |    No     |                                        -                                        | - |
-| ADC.CONNECTION_TYPE / <br /> ASDK_ADC__CONNECTION_TYPE                                                                                     | Type of connector to use for Snowflake connection. Defaults to Snowflake's python connector, but users can choose to use Snowpark connection object as well.                                                                                                                                |    No     |                          `snowflake-connector-python`                           | `snowflake-connector-python` / `snowflake-snowpark-python`
+| ADC.CONNECTION_TYPE / <br /> ASDK_ADC__CONNECTION_TYPE                                                                                     | Type of connector to use for Snowflake connection. Defaults to Snowflake's python connector, but users can choose to use Snowpark connection object as well.                                                                                                                                |    No     |                          `snowflake-connector-python`                           | `snowflake-connector-python` / `snowflake-snowpark-python` |
+| ADC.CONN.AUTHENTICATOR / <br /> ASDK_ADC__CONN__AUTHENTICATOR                                                                              | Snowflake connection authenticator type                                                                                                                                                                                                                                                     |    No     |                                      `oauth`                                    | `oauth` / `snowflake_jwt` |
+| ADC.CONN.OAUTH.ACCESS_TOKEN / <br /> ASDK_ADC__CONN__OAUTH__ACCESS_TOKEN                                                                   | If using oauth authenticator, and not relying on TokenAPI, users can provide the oauth access token for ADC connections here.                                                                                                                                                               |    No     |                                        -                                        | - |
+| ADC.CONN.RSA.PRIVATE_KEY_FILEPATH / <br /> ASDK_ADC__CONN__RSA__PRIVATE_KEY_FILEPATH                                                       | If using snowflake_jwt authenticator, provide RSA key details. This attribute is path to file containing RSA private key. Should be provided with passphrase.                                                                                                                               |    No     |                                        -                                        | - |
+| ADC.CONN.RSA.PRIVATE_KEY_PASSPHRASE / <br /> ASDK_ADC__CONN__RSA__PRIVATE_KEY_PASSPHRASE                                                   | If using snowflake_jwt authenticator, provide RSA key details. This attribute is passphrase to be used to decrypt private key file. Should be provided with private key file path.                                                                                                          |    No     |                                        -                                        | - |
+| ADC.CONN.RSA.PRIVATE_KEY / <br /> ASDK_ADC__CONN__RSA__PRIVATE_KEY                                                                         | If using snowflake_jwt authenticator, provide RSA key details. This attribute is the private key value itself. Can be used instead of private key filepath and passphrase combination.                                                                                                      |    No     |                                        -                                        | - |
 | ADC.CONN.ACCOUNT / <br /> ASDK_ADC__CONN__ACCOUNT                                                                                          | Snowflake Account, used to create private URL for connection. Mandatory only for ADC connections.                                                                                                                                                                                           |    No     |                                        -                                        | - |
 | ADC.CONN.ROLE / <br /> ASDK_ADC__CONN__ROLE                                                                                                | Snowflake user role to be used. Mandatory only for ADC connections.                                                                                                                                                                                                                         |    No     |                                        -                                        | - |
 | ADC.CONN.WAREHOUSE / <br /> ASDK_ADC__CONN__WAREHOUSE                                                                                      | Snowflake virtual warehouse to be used. Mandatory only for ADC connections.                                                                                                                                                                                                                 |    No     |                                        -                                        | - |
@@ -228,7 +233,7 @@ _Additional examples under [`resources/sample_code_snippets/sample_api_calls.md`
 ADC (Snowflake) access is provided via the ADCClient. This is a wrapper around snowflake-connector-python or snowflake-snowpark-python (connection type is configurable).
 
 The ADC Client provides the following capabilities:
-- Authentication: OAuth
+- Authentication: OAuth, RSA Keys
 - Session management:
     - connection establish, close, re-connect
     - update role, database, schema, warehouse
@@ -246,6 +251,43 @@ df = adc_client.query_sql('SELECT * FROM "CASH_ENTRY" LIMIT 10')
 is_success, chunks_count, ingested_row_count = adc_client.write_frame(df=df, table_name='TARGET_TABLE_NAME')
 ```
 _Additional examples under [`resources/sample_code_snippets/sample_adc_calls.md`](resources/sample_code_snippets/sample_adc_calls.md)_
+
+#### ADC Connection Authentication Types
+
+##### OAuth
+
+In the above simple example, ADCClient will attempt to fetch an OAuth AccessToken from Aladdin's TokenAPI.
+Here, the assumptions are:
+- User has provided API connection details as part of the configuration or ADCClient initialization.
+- User has authenticated with the ADC OAuth client application by logging into Aladdin Studio UI.
+
+##### RSA Keys
+
+In this type, the user is required to follow steps to generate keys in PEM format.
+
+1. Generate a private-public key pair under 'Keys' directory. Note: Remember the `passphrase` entered during these steps:
+
+    ```sh
+    mkdir Keys
+    cd Keys
+    openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out rsa_key.p8
+    openssl rsa -in rsa_key.p8 -pubout -out rsa_key.pub
+    ```
+
+2. From Snowflake UI, call Stored Procedure to append the public key to Aladdin user account:
+
+    ```sql
+    CALL ALADDIN.PUBLIC.UPDATE_PUB_KEY_SP('<Contents of rsa_key.pub file without BEGIN/END line>','KEY1');
+    ```
+
+3. Using the AladdinSDK configurations provide one of the following details:
+    - Private Key value to be added to snowflake connection - ADC.CONN.RSA.PRIVATE_KEY   
+    
+    OR
+    
+    - Private key passphrase - ADC.CONN.RSA.PRIVATE_KEY_PASSPHRASE
+    - Path to file containing private key file - ADC.CONN.RSA.PRIVATE_KEY_FILEPATH
+
 
 ### Utilities
 
