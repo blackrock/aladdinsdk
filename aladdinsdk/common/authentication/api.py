@@ -332,9 +332,10 @@ def add_api_key_header_to_configuration(configuration, api_key=None):
         Exception: _description_
         Exception: _description_
     """
-    configuration.api_key = {
-        'APIKeyHeader': api_key
-    }
+    if api_key is not None:
+        configuration.api_key = {
+            'APIKeyHeader': api_key
+        }
 
 
 def inflate_api_kwargs(kwargs):
