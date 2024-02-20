@@ -5,7 +5,7 @@
 This is an example of an exception class defined in your code. 
 The class type is added to a "supported exception modules" list in the handler, as shown later in this document.
 
-Note: An existing exception type can also be added here, but may result in other registered handlers to match for raised exceptions. Therefore, it is recommended that domain SDK developers define their own exception classes where possible.
+Note: An existing exception type can also be added here, but may result in other registered handlers to match for raised exceptions. Therefore, it is recommended that domain SDK developers define their own exception classes where needed.
 
 ```py
 class DomainException(Exception):
