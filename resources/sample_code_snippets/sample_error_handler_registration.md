@@ -1,8 +1,8 @@
-# Error Handler Registration for DomainSDKs
+# Error Handler Registration
 
 ## Sample domain specific exception
 
-This is an example of an exception class defined in your domain SDK. 
+This is an example of an exception class defined in your code. 
 The class type is added to a "supported exception modules" list in the handler, as shown later in this document.
 
 Note: An existing exception type can also be added here, but may result in other registered handlers to match for raised exceptions. Therefore, it is recommended that domain SDK developers define their own exception classes where possible.
@@ -40,7 +40,7 @@ class DomainExceptionHandler(AbstractAsdkExceptionHandler):
         self.original_exception = original_exception
     
     def handle_error(self):
-        # DomainSDK developers to add special logic here to handle exceptions
+        # Developers to add specific logic here to handle exceptions
         print(f"{self.original_exception} occurred. Error code {self.error_code}")
 
 ```
@@ -56,7 +56,7 @@ handler.register_handler_class(DomainExceptionHandler)
 
 ## Decorator
 
-Decorate any internal DomainSDK methods with the `asdk_exception_handler` decorator.
+Decorate any method with the `asdk_exception_handler` decorator.
 With this addition, all raised exceptions are checked in the decorator and mapped to appropriate handlers.
 
 Most AladdinSDK core utility and API-ADC wrapper methods are similarly decorated.
@@ -75,3 +75,4 @@ def domain_func():
 - Follow best practices for error handling
 - Do not silence errors, provide meaningful logs at the very least.
 - Do not add same exception in two separate error handler's support_exception_modules list
+- Be mindful of AladdinSDK's internal error handlers
