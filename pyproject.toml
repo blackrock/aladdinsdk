@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aladdinsdk"
-version = "0.0.1a1"
+version = "0.0.1a2"
 authors = [
   { name="Vedant Naik", email="naik.vedant@gmail.com" },
 ]
@@ -17,6 +17,9 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dynamic = ["dependencies"]
+
+[project.scripts]
+aladdinsdk-cli = "aladdinsdk.config.utils.user_settings_file_util:create_user_config_file_template"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
