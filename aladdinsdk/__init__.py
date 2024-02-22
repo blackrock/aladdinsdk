@@ -16,7 +16,6 @@ limitations under the License.
 
 import logging
 import os
-from aladdinsdk.common.blkutils.blkutils import SDK_HELP_MESSAGE_SUFFIX
 from aladdinsdk.config import user_settings
 from aladdinsdk.config.asdkconf import ENV_VAR_ASDK_USER_CONFIG_FILE
 
@@ -84,9 +83,5 @@ def zen():
 
 # If user hasn't set a config file
 if os.environ.get(ENV_VAR_ASDK_USER_CONFIG_FILE, None) is None:
-    logger.info(f"SDK {ENV_VAR_ASDK_USER_CONFIG_FILE} environment variable for config file "
-                f"not provided. Defaulting to preloaded configuration file."
-                f"{SDK_HELP_MESSAGE_SUFFIX} on available options to create/set a config file.")
-    logger.info(f"You may use aladdinsdk.config.print_user_config_file_template() to get a "
-                f"template. Copy that content into a file and set {ENV_VAR_ASDK_USER_CONFIG_FILE} "
-                "environment variable to point to that file and restart your notebook kernel.")
+    logger.debug(f"{ENV_VAR_ASDK_USER_CONFIG_FILE} environment variable not set.")
+    logger.debug("Hint: Use aladdinsdk.config.create_user_config_file_template() to get started.")

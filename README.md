@@ -1,10 +1,10 @@
-# Open Source Template
+# AladdinSDK
 
 AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionality into their own applications and systems. The goal is to make it easier for everyone to efficiently access and utilize Aladdin APIs and Data Cloud.
 
 ## Table of Contents
 
-- [Open Source Template](#open-source-template)
+- [AladdinSDK](#aladdinsdk)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -61,7 +61,7 @@ AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionali
 
 ## Usage
 
-### Environemnt Variables
+### Environment Variables
 
 | Environment Variable Name | Description                                                              | Mandatory | Default | Permitted Values |
 |:--------------------------|:-------------------------------------------------------------------------|:---------:|:-------:|:----------------:|
@@ -88,6 +88,12 @@ Under the hood, configuration management is performed using Dynaconf. Custom env
 
 - The SDK offers the ability to set a default configuration file to be preloaded at initialization. Set the environment variable `DEFAULT_ASDK_CONFIG_FILE` to point to the configuration file path. This is intended for curated notebook owners and domain SDK developers to dictate the default SDK experience.
 - End users can set (or override the default) configurations by providing their own config file and setting the environment variable `ASDK_USER_CONFIG_FILE`
+  - The SDK provides a utility to get started with building this configuration file. Installing `aladdinsdk` installs a `aladdinsdk-cli` CLI. Running this in your terminal will walk you through the steps to get started.
+    ```sh
+    pip install aladdinsdk
+    aladdinsdk-cli
+    ```
+
 
 To see configurations currently picked by the SDK, invoke this utility:
 
@@ -364,11 +370,14 @@ The license for the project:
 
 ## Credits
 
-Contributors:
+Core Contributors:
 - Vedant Naik
 - Harshita Das
 - Eli Kalish
 - Infant Vasanth
+
+Special Thanks:
+- Mike Bowen
 - Ginsiu Cheng
 - Oleg Zakrevskiy
 - David Li
