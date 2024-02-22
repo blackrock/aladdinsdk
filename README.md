@@ -370,11 +370,14 @@ The license for the project:
 
 ## Credits
 
-Contributors:
+Core Contributors:
 - Vedant Naik
 - Harshita Das
 - Eli Kalish
 - Infant Vasanth
+
+Special Thanks:
+- Mike Bowen
 - Ginsiu Cheng
 - Oleg Zakrevskiy
 - David Li
