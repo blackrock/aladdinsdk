@@ -104,7 +104,7 @@ class ApiAuthUtil():
         if self.configuration is None:
             _logger.warning("Python code generated API client configuration object must be provided. Required for adding mandatory auth headers.")
 
-        if self.api_key is None:
+        if self.api_key is None and self.auth_type == user_settings.CONF_API_AUTH_TYPE_BASIC_AUTH:
             _logger.warning("API Key not provided. API calls may not succeed.")
 
         # check if user has provided access token inline or via user settings yaml file
