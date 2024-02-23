@@ -37,7 +37,7 @@ Thank you for your understanding and cooperation! We look forward to your contri
 - Follow PEP8, unless otherwise noted 
 
 ### Branching, versioning and releases
-- Follow the gitflow pattern, where we will have one main branch, one dev branch and other supporting branches. 
+- Follow the gitflow pattern, where we will have one main branch, one dev branch and other supporting branches.
     - Main branch
     - Dev branch
         - Feature branch
