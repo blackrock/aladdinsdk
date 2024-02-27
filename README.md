@@ -361,7 +361,7 @@ Core AladdinSDK provides generic solutions for SDK development, so DomainSDK dev
 Guidelines for contributing to the project:
   - [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
   - [CONTRIBUTING.md](./CONTRIBUTING.md)
-  - [Adding an Aladdin Graph API](./APIOnboardingCodegen.md)
+  - [Adding an Aladdin Graph API](./docs/API_ONBOARDING.md)
 
 ## License
 
