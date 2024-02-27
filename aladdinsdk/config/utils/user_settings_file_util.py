@@ -105,7 +105,8 @@ def create_user_config_file_template(print_only=False):
     settings_data = {}
 
     confirmation_resp = _read_input_or_default_str(f"Create AladdinSDK user settings file template to get started.\n{SDK_HELP_MESSAGE_SUFFIX}\n"
-                                                   "This will clear console output. Proceed? (y/n)",
+                                                   "This may clear console output.\n"
+                                                   "Proceed? (y/n)",
                                                    default_value="y")
     if confirmation_resp.lower() == "n":
         return
@@ -432,8 +433,23 @@ def _read_input_or_default_str(input_prompt: str, default_value: str):
 
 
 def _read_input_from_options(input_prompt: str, options: list, default_index: int = 0):
-    value_read, _ = pick(options, f"{input_prompt}: ", indicator='=>', default_index=default_index)
-    return value_read
+    try:
+        value_read, _ = pick(options, f"{input_prompt}: ", indicator='=>', default_index=default_index)
+        return value_read
+    except Exception:
+        # potentially running in a notebook environment where curses based 'pick' library is not supported
+        print("\n(Note: Open terminal and run 'aladdinsdk-cli' command for a better experience)")
+        ind = 1
+        options_with_index = {}
+        for op in options:
+            options_with_index[ind] = op
+            ind += 1
+        try:
+            value_read_index = int(_read_input_or_none(f"{input_prompt}\n\nSelect index number for option:\n{options_with_index}\n "))
+            return options_with_index[value_read_index]
+        except Exception as e:
+            print(f"\nInvalid option selected. Available options {[x for x in options_with_index.keys()]}. Exiting.")
+            raise e
 
 
 def _read_input_or_none(input_prompt: str):
