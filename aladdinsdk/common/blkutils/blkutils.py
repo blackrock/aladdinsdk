@@ -21,6 +21,8 @@ import logging
 _logger = logging.getLogger(__name__)
 
 _adc_primary_location_files_dat_key = "SNOWFLAKE_DSWRITE"
+_aladdin_studio_kc_sources_file_dat_key = "ALADDIN_STUDIO_KC_SOURCES"
+STUDIO_KC_SOURCE_ALADDINSDK = "ALADDINSDK"
 KC_GUIDE_PATH = "{}/apps/studio/knowledge-center/get-started-with-aladdinsdk"
 DEFAULT_WEB_SERVER = os.environ.get('defaultWebServer')
 
@@ -64,8 +66,8 @@ def get_files_dat_token_value(token_key, default=None):
 
 def render_help_documentation_message():
     kc_guide_link = KC_GUIDE_PATH.format(DEFAULT_WEB_SERVER)
-    token_list = get_files_dat_token_value("ALADDIN_STUDIO_KC_SOURCES")
-    if token_list is not None and "COMPUTE" in token_list.split(","):
+    token_list = get_files_dat_token_value(_aladdin_studio_kc_sources_file_dat_key)
+    if token_list is not None and STUDIO_KC_SOURCE_ALADDINSDK in token_list.upper().split(","):
         return f"Please check [knowledge center guide] {kc_guide_link} or README.md for more information"
     else:
         return "Please check README.md for more information"
