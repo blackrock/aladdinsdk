@@ -163,8 +163,8 @@ class AladdinAPI():
         # Create interim map for methods to swagger endpoint paths
         end_point_op_ids = {}
         for obj in operation_id_objects:
-            end_point_op_ids[obj.value.replace("_", "").lower()] = _HttpEndpointDescription(str(obj.full_path.left.left.right),
-                                                                                            str(obj.full_path.left.right))
+            end_point_op_ids[obj.value.replace("_", "").lower()] = _HttpEndpointDescription(str(obj.full_path.left.left.right).strip("'"),
+                                                                                            str(obj.full_path.left.right).strip("'"))
 
         # For each endpoint method, populate appropriate mappings
         for method in self._details.api_class_methods:
