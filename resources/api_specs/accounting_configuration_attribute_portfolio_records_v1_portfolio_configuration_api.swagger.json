@@ -1,0 +1,1111 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Configurations API for Aladdin Accounting allows you to access accounting configuration attributes for process types that portfolios are setup on. Data can be sourced in aggregate and filtered to improve oversight and scale of configuration monitoring. This API allows for retrieval of key data points for portfolio configurations by various parameters, including portfolio tickers, processCodes, and more.",
+        "title": "Portfolio Configuration Record For Accounting",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.accounting.configuration.attribute.portfolio.records.PortfolioConfigurationAPI",
+        "x-aladdin-api-stability": "beta",
+        "x-aladdin-spec-id": "agraph.accounting.configuration.attribute.portfolio.records.v1.PortfolioConfigurationAPI"
+    },
+    "basePath": "/api/accounting/configuration/attribute/portfolio/records/v1/",
+    "paths": {
+        "/configurations/{id}:longRunningPortfolioConfigurationRecordStatus": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieve the status and output from the \"Long Running Configuration Filter\" endpoint by providing a request ID.\n(-- api-linter: core::0131::response-message-name=disabled\n aip.dev/not-precedent: We need to do this because need to consistent with backend --)\n(-- api-linter: aladdin::9002::wordslist-custom-method-http=disabled\n aip.dev/not-precedent: We need to do this because to be consistent with api --)\n(-- api-linter: core::0131::request-message-name=disabled\n aip.dev/not-precedent: We need to do this because using exiting long running request object --)",
+                "summary": "Get Long Running Configuration Filter Status",
+                "operationId": "PortfolioConfigurationAPI_GetLongRunningPortfolioConfigurationRecordStatus",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Id of the LongrunningOperation",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {
+                            "meta-data-type": {
+                                "$ref": "#/definitions/v1ConfigurationLongRunningMetaData"
+                            },
+                            "response-type": {
+                                "$ref": "#/definitions/v1PortfolioConfigurationRecordsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 750
+            }
+        },
+        "/configurations:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Filter for portfolio configuration records based on a number of parameters including tickers, processCodes, and more.\nFor large requests that may result in timeout, it is recommended to use long running endpoint.\nBelow are some best practices/guidelines to limit the size of the query -\n   a) Keep includeHistory as false\n   b) Restrict the number of process code in the request\n   c) Keep the number of portfolio tickers to 350 per process code\n   d) Restricting the records by the providing the attribute names\n(-- api-linter: aladdin::9016::rpc-name=disabled\n aip.dev/not-precedent: We need to do this because keeping generic endpoint --)\n(-- api-linter: aladdin::9016::query-custom-method-http=disabled\n aip.dev/not-precedent: We need to do this because using custom method name --)",
+                "summary": "Filter Portfolio Configurations",
+                "operationId": "PortfolioConfigurationAPI_FilterPortfolioConfigurationRecords",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterPortfolioConfigurationRecordsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterPortfolioConfigurationRecordsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 750
+            }
+        },
+        "/configurations:submitPortfolioConfigurationRecordsRequest": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Filter for portfolio configuration records for large requests that includes a bigger set of portfolio tickers or a port group. \nOption to include expansionType parameter to retrieve output for requests that specify a portfolio group.\nResponse provided is a request ID that can be passed in the \"Get Long Running Configuation Filter Status\" endpoint to retrieve the output.\nIf system analyzes query to be too broad, appropriate exception would be thrown. Below are some best practices/guidelines to limit the size of the query -\n   a) Keep includeHistory as false\n   b) Restrict the number of process code in the request\n   c) Keep the number of portfolio tickers or portfolios in a port group limited to below 7500 per process code\n   d) Restricting the records by the providing the attribute names\n(-- api-linter: aladdin::9002::wordslist-custom-method-rpc=disabled\n aip.dev/not-precedent: We need to do this because customised name to be consistent with backend api's --)\n(-- api-linter: aladdin::9002::wordslist-custom-method-http=disabled\n aip.dev/not-precedent: We need to do this because to be consistent with backend api's --)",
+                "summary": "Long Running Configuration Filter Request",
+                "operationId": "PortfolioConfigurationAPI_SubmitPortfolioConfigurationRecordsRequest",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1PortfolioConfigurationRecordsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1LongrunningOperation"
+                        },
+                        "x-aladdin-lro": {
+                            "meta-data-type": {
+                                "$ref": "#/definitions/v1ConfigurationLongRunningMetaData"
+                            },
+                            "response-type": {
+                                "$ref": "#/definitions/v1PortfolioConfigurationRecordsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 750
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "enumsTickerExpansionType": {
+            "description": "- TICKER_EXPANSION_TYPE_UNSPECIFIED: Default value\n - TICKER_EXPANSION_TYPE_PORT_GROUP: The port group ticker\n - TICKER_EXPANSION_TYPE_REPORTING_GROUP: The reporting group ticker",
+            "type": "string",
+            "title": "Types of Configuration ticker expansion",
+            "default": "TICKER_EXPANSION_TYPE_UNSPECIFIED",
+            "enum": [
+                "TICKER_EXPANSION_TYPE_UNSPECIFIED",
+                "TICKER_EXPANSION_TYPE_PORT_GROUP",
+                "TICKER_EXPANSION_TYPE_REPORTING_GROUP"
+            ]
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1ConfigurationFilterQuery": {
+            "type": "object",
+            "title": "The portfolio configuraions record filter operation is performed as per the filter query provided by the user.\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because to be consistent with APIs --)",
+            "required": [
+                "tickers",
+                "processCodes"
+            ],
+            "properties": {
+                "tickers": {
+                    "description": "List of tickers in the request. It is a required field.",
+                    "type": "array",
+                    "required": [
+                        "tickers"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "processCodes": {
+                    "description": "List of process codes. A maximum of 5 process codes can be specified in a single request. For the list of processCodes that can be denoted, please refer to the ALPHA_FLAGFINAL decodes table and use the cde value.",
+                    "type": "array",
+                    "required": [
+                        "process_codes"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "accountingAttributeNames": {
+                    "type": "array",
+                    "title": "Specify and limit the attributes to return in the response. If not provided, all attributes available will be returned. Example: basis, alpha_price_group, run_profile_total_nav_type, etc.\n(-- api-linter: aladdin::9016::query-message-criterion=disabled\n aip.dev/not-precedent: We need to do this because we don't want to put any limit to attributes  --)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "accountingAttributesValueCriteria": {
+                    "type": "object",
+                    "title": "Filter the request and return data that matches specific attributes and corresponding values.\n(-- api-linter: aladdin::9016::query-message-criterion=disabled\n aip.dev/not-precedent: We need to do this because to be consistent with our api --)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because to be consistent with other attributes --)",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/v1ValueList"
+                    }
+                },
+                "asOfDate": {
+                    "description": "It is an optional field. By default it takes current date.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "includeHistory": {
+                    "description": "History flag is an optional field. By default its value is false. It is used when user needs to see the history of the attributes in the record.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "v1ConfigurationLongRunningFilterQuery": {
+            "type": "object",
+            "title": "The portfolio configuraions record filter operation is performed as per the filter query provided by the user.\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because to be consistent within APIs --)",
+            "required": [
+                "tickers",
+                "processCodes"
+            ],
+            "properties": {
+                "tickers": {
+                    "description": "List of tickers in the request. It is a required field.",
+                    "type": "array",
+                    "required": [
+                        "tickers"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "processCodes": {
+                    "description": "List of process codes. A maximum of 5 process codes can be specified in a single request. For the list of processCodes that can be denoted, please refer to the ALPHA_FLAGFINAL decodes table and use the cde value.",
+                    "type": "array",
+                    "required": [
+                        "process_codes"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "accountingAttributeNames": {
+                    "type": "array",
+                    "title": "Specify and limit the attributes to return in the response. If not provided, all attributes available will be returned. Example: basis, alpha_price_group, run_profile_total_nav_type, etc. \n(-- api-linter: aladdin::9016::query-message-criterion=disabled\n aip.dev/not-precedent: We need to do this because we don't want to put any limit to attributes  --)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "accountingAttributesValueCriteria": {
+                    "type": "object",
+                    "title": "Filter the request and return data that matches specific attributes and corresponding values.\n(-- api-linter: aladdin::9016::query-message-criterion=disabled\n aip.dev/not-precedent: We need to do this because to be consistent with our api --)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because to be consistent with other attributes --)",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/v1ValueList"
+                    }
+                },
+                "asOfDate": {
+                    "description": "It is an optional field. By default it takes current date.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "includeHistory": {
+                    "description": "History flag is an optional field. By default its value is false. It is used when user needs to see the history of the attributes in the record.",
+                    "type": "boolean"
+                },
+                "expansionType": {
+                    "description": "Configration ticker expantion type.  It is an optional field. If this is not set then it will treat ticker name as portfolio.",
+                    "$ref": "#/definitions/enumsTickerExpansionType"
+                }
+            }
+        },
+        "v1ConfigurationLongRunningMetaData": {
+            "type": "object",
+            "title": "Metadata for longrunning filter request.\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because we need to be consistent with our APIs --)",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "title": "status of operation that can be PENDING, IN_PROGRESS or COMPLETED"
+                }
+            }
+        },
+        "v1FilterPortfolioConfigurationRecordsRequest": {
+            "type": "object",
+            "title": "The request body of the portfolio configuraions record filter request.\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because config refers to another resource in our api --)\n(-- api-linter: aladdin::9016::request-message-name=disabled\n aip.dev/not-precedent: We need to do this because custom response name is being used --)",
+            "properties": {
+                "query": {
+                    "title": "The query used to filter against  portfolios",
+                    "$ref": "#/definitions/v1ConfigurationFilterQuery"
+                },
+                "pageSize": {
+                    "description": "The maximum number of tickers to be return. The service may\nreturn fewer than this value. The maximum value is 100. If unspecified, the default value is 100.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "pageToken": {
+                    "description": "Describes the token to be retrieved.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1FilterPortfolioConfigurationRecordsResponse": {
+            "type": "object",
+            "title": "The response for portfolio configuration records.\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because config maps to a diffrent resource in our apis --)\n(-- api-linter: aladdin::9016::response-message-name=disabled\n aip.dev/not-precedent: We need to do this because we are using custom response name --)",
+            "properties": {
+                "portfolioConfigurationRecords": {
+                    "description": "Portfolio configuration records retrieved as per the request.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1PortfolioConfigurationRecord"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "It defines the next page token to get more results.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1LongrunningOperation": {
+            "description": "LongrunningOperation represents a long-running operation that is the result\nof a network API call.",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The server-assigned id, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`id` should have the format of `operations/some/unique/id`.",
+                    "type": "string"
+                },
+                "meta": {
+                    "description": "Service-specific metadata associated with the operation.  It typically\ncontains progress information and common metadata such as create time.\nSome services might not provide such metadata.  Any method that returns a\nlong-running operation should document the metadata type, if any.",
+                    "$ref": "#/definitions/Any"
+                },
+                "done": {
+                    "description": "If the value is `false`, it means the operation is still in progress.\nIf true, the operation is completed, and either `error` or `response` is\navailable.",
+                    "type": "boolean"
+                },
+                "error": {
+                    "description": "The error result of the operation in case of failure or cancellation.",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "response": {
+                    "description": "The normal response of the operation in case of success.  If the original\nmethod returns no data on success, such as `Delete`, the response is\n`google.protobuf.Empty`.  If the original method is standard\n`Get`/`Create`/`Update`, the response should be the resource.  For other\nmethods, the response should have the type `XxxResponse`, where `Xxx`\nis the original method name.  For example, if the original method name\nis `TakeSnapshot()`, the inferred response type is\n`TakeSnapshotResponse`.",
+                    "$ref": "#/definitions/Any"
+                }
+            }
+        },
+        "v1PortfolioConfigurationAttribute": {
+            "type": "object",
+            "title": "Defines PortfolioConfigurationAttribute which contains the attribute details like name, value,effective_date,modified time etc.\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because config maps to another resource in our apis --)",
+            "properties": {
+                "accountingAttributeName": {
+                    "description": "It defines the attribute name.",
+                    "type": "string"
+                },
+                "accountingAttributeValue": {
+                    "description": "It defines attribute value.",
+                    "type": "string"
+                },
+                "effectiveDate": {
+                    "description": "It defines attribute's effective date.",
+                    "type": "string",
+                    "format": "date"
+                },
+                "modifier": {
+                    "description": "It defines who last modified the attribute.",
+                    "type": "string"
+                },
+                "modificationTime": {
+                    "description": "It defines when the attribute was modified.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "isDefault": {
+                    "description": "It defines attribute if attirbute has this value by default or it is a modified value.",
+                    "type": "boolean"
+                },
+                "category": {
+                    "description": "It defines category in which the attribute belong in accounting portal.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1PortfolioConfigurationRecord": {
+            "type": "object",
+            "title": "PortfolioConfigurationRecord describes the configuration of the portfolio(ticker). It provide the configuration having attributes with its detail for a portfolio and process code in accounting. \n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because config maps to another resource in our api's --)",
+            "properties": {
+                "id": {
+                    "description": "It is the unique identifier for this record.",
+                    "type": "string"
+                },
+                "portfolioTicker": {
+                    "description": "It is the ticker or portfolio name.",
+                    "type": "string"
+                },
+                "processCode": {
+                    "description": "It is the process code like W,D etc.",
+                    "type": "string"
+                },
+                "configurationAttributes": {
+                    "description": "It is the list of attributes for the configuration record.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1PortfolioConfigurationAttribute"
+                    }
+                },
+                "keys": {
+                    "description": "It contains the list of key attributes for one configuration record.",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1PortfolioConfigurationRecordsRequest": {
+            "type": "object",
+            "title": "The request body of the portfolio configuraions record filter.\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because config refers to another resource in our api --)",
+            "properties": {
+                "query": {
+                    "description": "The query used to filter against  portfolios, such as keyword, location filters, etc.",
+                    "$ref": "#/definitions/v1ConfigurationLongRunningFilterQuery"
+                },
+                "pageSize": {
+                    "description": "The maximum number of tickers to be return. The service may\nreturn fewer than this value. The maximum value is 100. If unspecified, the default value is 100.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "pageToken": {
+                    "description": "Describes the token to be retrieved.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1PortfolioConfigurationRecordsResponse": {
+            "type": "object",
+            "title": "The response for portfolio configuration records.\n(-- api-linter: core::0140::abbreviations=disabled\n aip.dev/not-precedent: We need to do this because config maps to a diffrent resource in our apis --)",
+            "properties": {
+                "portfolioConfigurationRecords": {
+                    "description": "Portfolio configuration records retrieved as per the request.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1PortfolioConfigurationRecord"
+                    }
+                }
+            }
+        },
+        "v1ValueList": {
+            "description": "Denote the attribute name to filter by here. For example, update \"property1\" in the call body to be \"alpha_price_group\" if you'd like to filter by this attribute, or any other attributes. Add more attributes as needed if you would like to filter on more attributes.",
+            "type": "object",
+            "properties": {
+                "values": {
+                    "type": "array",
+                    "title": "criteria values",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:read": "non-sensitive read",
+                "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:read": "non-sensitive read",
+                "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:read",
+                "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:read",
+                "accounting.configuration.attribute.portfolio.records.v1.PortfolioConfiguration:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

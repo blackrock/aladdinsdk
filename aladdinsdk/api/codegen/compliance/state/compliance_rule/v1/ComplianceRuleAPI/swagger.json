@@ -1,0 +1,1140 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Compliance Rules are used to automatically monitor whether a fund adheres to a regulation, client mandate, or internal guideline.",
+        "title": "Compliance Rule",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.compliance.state.compliance_rule.ComplianceRuleAPI",
+        "x-aladdin-api-stability": "alpha",
+        "x-aladdin-spec-id": "agraph.compliance.state.compliance_rule.v1.ComplianceRuleAPI"
+    },
+    "basePath": "/api/compliance/state/compliance-rule/v1/",
+    "paths": {
+        "/complianceRules:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "compliance.state.compliance_rule.v1.ComplianceRule:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "compliance.state.compliance_rule.v1.ComplianceRule:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Clients can use this method to filter multiple compliance rules by providing ruleName.",
+                "summary": "Filter ComplianceRules",
+                "operationId": "ComplianceRuleAPI_FilterComplianceRules",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterComplianceRulesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterComplianceRulesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "enumsComplianceDeadline": {
+            "description": "- COMPLIANCE_DEADLINE_UNSPECIFIED: Unspecified.\n - COMPLIANCE_DEADLINE_TODAYS_DATE: Today's date.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_ONE: Today's date plus one.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_TWO: Today's date plus two.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_THREE: Today's date plus three.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_FOUR: Today's date plus four.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_FIVE: Today's date plus five.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_SIX: Today's date plus six.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_SEVEN: Today's date plus seven.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_EIGHT: Today's date plus eight.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_NINE: Today's date plus nine.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_TEN: Today's date plus ten.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_FOURTEEN: Today's date plus fourteen.\n - COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_FIFTEEN: Today's date plus fifteen.\n - COMPLIANCE_DEADLINE_QUARTER_END_PLUS_FOURTY_FIVE: Quarter end plus forty five",
+            "type": "string",
+            "title": "Enumeration of possible deadlines",
+            "default": "COMPLIANCE_DEADLINE_UNSPECIFIED",
+            "enum": [
+                "COMPLIANCE_DEADLINE_UNSPECIFIED",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_ONE",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_TWO",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_THREE",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_FOUR",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_FIVE",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_SIX",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_SEVEN",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_EIGHT",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_NINE",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_TEN",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_FOURTEEN",
+                "COMPLIANCE_DEADLINE_TODAYS_DATE_PLUS_FIFTEEN",
+                "COMPLIANCE_DEADLINE_QUARTER_END_PLUS_FOURTY_FIVE"
+            ]
+        },
+        "enumsComplianceRuleLabel": {
+            "description": "- COMPLIANCE_RULE_LABEL_UNSPECIFIED: Unspecified.\n - COMPLIANCE_RULE_LABEL_PROHIBITED_INVESTMENTS: Prohibited Investments.\n - COMPLIANCE_RULE_LABEL_RESTRICTED_ISSUERS: Restricted Issuers.\n - COMPLIANCE_RULE_LABEL_TRANSACTION_TYPE: Transaction type.\n - COMPLIANCE_RULE_LABEL_SECTOR_OR_INDUSTRY: Sector or Industry.\n - COMPLIANCE_RULE_LABEL_CURRENCY: Currency.\n - COMPLIANCE_RULE_LABEL_CREDIT_QUALITY: Credit Quality.\n - COMPLIANCE_RULE_LABEL_CASH_AND_LEVERAGE: Cash and Leverage.\n - COMPLIANCE_RULE_LABEL_DURATION_OR_MATURITY: Duration or maturity.\n - COMPLIANCE_RULE_LABEL_ISSUER_OR_ISSUER_LEVEL: Issuer or issuer level.\n - COMPLIANCE_RULE_LABEL_GEOGRAPHICAL: Geographical.\n - COMPLIANCE_RULE_LABEL_GAIN_OR_LOSS: Gain or loss.\n - COMPLIANCE_RULE_LABEL_PORTFOLIO_RISK: Portfolio Risk.\n - COMPLIANCE_RULE_LABEL_COUNTERPARTY_RESTRICTIONS: Counterparty restrictions.\n - COMPLIANCE_RULE_LABEL_OPERATIONAL: Operational.\n - COMPLIANCE_RULE_LABEL_CHECKLIST_OR_STRATEGY: Checklist or Strategy.\n - COMPLIANCE_RULE_LABEL_PROSPECTUS: Prospectus.\n - COMPLIANCE_RULE_LABEL_INTERNALLY_REQUESTED_RULE: Internally requested rule.\n - COMPLIANCE_RULE_LABEL_CONCENTRATION_TEST: Concentration test.\n - COMPLIANCE_RULE_LABEL_SALE_CRITERIA: Sale criteria.\n - COMPLIANCE_RULE_LABEL_ASSET_QUALITY_TEST: Asset Quality test.\n - COMPLIANCE_RULE_LABEL_OTHER: Other label.\n - COMPLIANCE_RULE_LABEL_WAREHOUSE_TEST: Warehouse test.\n - COMPLIANCE_RULE_LABEL_COVERAGE_RATIO_TEST: Coverage ratio test.\n - COMPLIANCE_RULE_LABEL_PROHIBITED_INVESTMENT: Prohibited investment.\n - COMPLIANCE_RULE_LABEL_OTHER_STRATEGY: Other strategy.\n - COMPLIANCE_RULE_LABEL_PREFERRED_SHARE_AGREEMENT: Preferred share agreement.\n - COMPLIANCE_RULE_LABEL_PRINCIPAL_STRATEGY: Principal strategy.",
+            "type": "string",
+            "title": "Enumeration of possible rule labels",
+            "default": "COMPLIANCE_RULE_LABEL_UNSPECIFIED",
+            "enum": [
+                "COMPLIANCE_RULE_LABEL_UNSPECIFIED",
+                "COMPLIANCE_RULE_LABEL_PROHIBITED_INVESTMENTS",
+                "COMPLIANCE_RULE_LABEL_RESTRICTED_ISSUERS",
+                "COMPLIANCE_RULE_LABEL_TRANSACTION_TYPE",
+                "COMPLIANCE_RULE_LABEL_SECTOR_OR_INDUSTRY",
+                "COMPLIANCE_RULE_LABEL_CURRENCY",
+                "COMPLIANCE_RULE_LABEL_CREDIT_QUALITY",
+                "COMPLIANCE_RULE_LABEL_CASH_AND_LEVERAGE",
+                "COMPLIANCE_RULE_LABEL_DURATION_OR_MATURITY",
+                "COMPLIANCE_RULE_LABEL_ISSUER_OR_ISSUER_LEVEL",
+                "COMPLIANCE_RULE_LABEL_GEOGRAPHICAL",
+                "COMPLIANCE_RULE_LABEL_GAIN_OR_LOSS",
+                "COMPLIANCE_RULE_LABEL_PORTFOLIO_RISK",
+                "COMPLIANCE_RULE_LABEL_COUNTERPARTY_RESTRICTIONS",
+                "COMPLIANCE_RULE_LABEL_OPERATIONAL",
+                "COMPLIANCE_RULE_LABEL_CHECKLIST_OR_STRATEGY",
+                "COMPLIANCE_RULE_LABEL_PROSPECTUS",
+                "COMPLIANCE_RULE_LABEL_INTERNALLY_REQUESTED_RULE",
+                "COMPLIANCE_RULE_LABEL_CONCENTRATION_TEST",
+                "COMPLIANCE_RULE_LABEL_SALE_CRITERIA",
+                "COMPLIANCE_RULE_LABEL_ASSET_QUALITY_TEST",
+                "COMPLIANCE_RULE_LABEL_OTHER",
+                "COMPLIANCE_RULE_LABEL_WAREHOUSE_TEST",
+                "COMPLIANCE_RULE_LABEL_COVERAGE_RATIO_TEST",
+                "COMPLIANCE_RULE_LABEL_PROHIBITED_INVESTMENT",
+                "COMPLIANCE_RULE_LABEL_OTHER_STRATEGY",
+                "COMPLIANCE_RULE_LABEL_PREFERRED_SHARE_AGREEMENT",
+                "COMPLIANCE_RULE_LABEL_PRINCIPAL_STRATEGY"
+            ]
+        },
+        "enumsComplianceSeverity": {
+            "description": "- COMPLIANCE_SEVERITY_UNSPECIFIED: Reserved Value\n - COMPLIANCE_SEVERITY_WARNING: The severity is warning\n - COMPLIANCE_SEVERITY_RESTRICTION: The severity is restriction\n - COMPLIANCE_SEVERITY_SILENT_ALARM: The severity is silent alarm.\n - COMPLIANCE_SEVERITY_SECURITY_LANDING: The severity is security landing.\n - COMPLIANCE_SEVERITY_TIMING_ISSUE: The severity is timing issue.\n - COMPLIANCE_SEVERITY_GAIN_LOSS_SENSITIVE: The severity is Gain/Loss sensitive.",
+            "type": "string",
+            "title": "Enumeration of possible severity",
+            "default": "COMPLIANCE_SEVERITY_UNSPECIFIED",
+            "enum": [
+                "COMPLIANCE_SEVERITY_UNSPECIFIED",
+                "COMPLIANCE_SEVERITY_WARNING",
+                "COMPLIANCE_SEVERITY_RESTRICTION",
+                "COMPLIANCE_SEVERITY_SILENT_ALARM",
+                "COMPLIANCE_SEVERITY_SECURITY_LANDING",
+                "COMPLIANCE_SEVERITY_TIMING_ISSUE",
+                "COMPLIANCE_SEVERITY_GAIN_LOSS_SENSITIVE"
+            ]
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1AbacusMode": {
+            "description": "Enumeration of AbacusMode.\n\n - ABACUS_MODE_UNSPECIFIED: Unspecified.\n - ABACUS_MODE_PARALLEL: Parallel.\n - ABACUS_MODE_LIVE: Live.",
+            "type": "string",
+            "default": "ABACUS_MODE_UNSPECIFIED",
+            "enum": [
+                "ABACUS_MODE_UNSPECIFIED",
+                "ABACUS_MODE_PARALLEL",
+                "ABACUS_MODE_LIVE"
+            ]
+        },
+        "v1ComplianceRule": {
+            "description": "Represents set of rules or instructions applicable to portfolios.",
+            "type": "object",
+            "required": [
+                "id",
+                "description"
+            ],
+            "properties": {
+                "id": {
+                    "description": "The unique name of the rule.\n Max length of rule name is 20 characters.",
+                    "type": "string",
+                    "required": [
+                        "id"
+                    ]
+                },
+                "description": {
+                    "type": "string",
+                    "title": "A detailed description of the rule's intended functionality.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: False alarm, `description` is NOT a Cross-Domain Field. --)\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: False alarm, `description` is NOT a resource. --)",
+                    "required": [
+                        "description"
+                    ]
+                },
+                "category": {
+                    "description": "This is documentation field for rule.\nIt represents compliance categories e.g Contingent Liability tags, Money Market: Rated Funds - S\u0026P.",
+                    "type": "string"
+                },
+                "ruleUsage": {
+                    "description": "This is documentation field for rule.\nIt represents usage of rule.",
+                    "type": "string"
+                },
+                "codingNote": {
+                    "description": "It is the working of the specific rule.",
+                    "type": "string"
+                },
+                "jurisdictionCountryCode": {
+                    "description": "Jurisdiction country code.\nIt is a two digit code for a country e.g UK for United Kingdom.",
+                    "type": "string"
+                },
+                "regulation": {
+                    "description": "The regulation of a rule.",
+                    "type": "string"
+                },
+                "complianceDeadline": {
+                    "description": "Regulatory deadline for disclosure rule, e.g 4 for Germany.",
+                    "$ref": "#/definitions/enumsComplianceDeadline"
+                },
+                "labels": {
+                    "description": "ComplianceRuleLabel for a rule e.g Prohibited Investments, Restricted Issuers etc.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/enumsComplianceRuleLabel"
+                    }
+                },
+                "documentation": {
+                    "description": "A detailed documentation of the rule.",
+                    "type": "string"
+                },
+                "prohibitionRule": {
+                    "description": "ProhibitionRule Rule Type.",
+                    "$ref": "#/definitions/v1ProhibitionRule"
+                },
+                "concentrationRule": {
+                    "description": "ConcentrationRule Rule Type.",
+                    "$ref": "#/definitions/v1ConcentrationRule"
+                },
+                "valueAtRiskRule": {
+                    "title": "Value at Risk Rule Type.\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We qualify the meaning of this field with the preposition 'at'  --)",
+                    "$ref": "#/definitions/v1ValueAtRiskRule"
+                },
+                "disclosureRule": {
+                    "description": "DisclosureRule Rule Type.",
+                    "$ref": "#/definitions/v1DisclosureRule"
+                },
+                "scriptedRule": {
+                    "description": "ScriptedRule Rule Type.",
+                    "$ref": "#/definitions/v1ScriptedRule"
+                },
+                "lookThroughDefinitionRule": {
+                    "description": "LookThroughDefinitionRule Rule Type.",
+                    "$ref": "#/definitions/v1LookThroughDefinitionRule"
+                },
+                "informationRule": {
+                    "title": "InformationRule Rule Type.\n(-- api-linter: core::0140::abbreviations=disabled\n    aip.dev/not-precedent: we need full name of the rule type. --)",
+                    "$ref": "#/definitions/v1InformationRule"
+                },
+                "tradeRule": {
+                    "description": "TradeRule Rule Type.",
+                    "$ref": "#/definitions/v1TradeRule"
+                },
+                "counterpartyRule": {
+                    "description": "CounterpartyRule Rule Type.",
+                    "$ref": "#/definitions/v1CounterpartyRule"
+                },
+                "counterpartyExposureLimitRule": {
+                    "description": "CounterpartyExposureLimitRule Rule Type.",
+                    "$ref": "#/definitions/v1CounterpartyExposureLimitRule"
+                },
+                "state": {
+                    "description": "The rule status, mapped to the unique ruleName.",
+                    "$ref": "#/definitions/v1State"
+                },
+                "modifyTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "time stamp when this rule was last modified"
+                },
+                "modifier": {
+                    "type": "string",
+                    "title": "login of the individual who had last modified the rule"
+                }
+            }
+        },
+        "v1ComplianceRuleQuery": {
+            "type": "object",
+            "title": "The query message for ComplianceRuleAPI.FilterComplianceRules",
+            "properties": {
+                "ruleNames": {
+                    "type": "array",
+                    "title": "List of Rule names (maximum is 2000, recommended value is up to 500)",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "v1ConcentrationRule": {
+            "description": "ConcentrationRule Rule type.",
+            "type": "object",
+            "required": [
+                "filter",
+                "runOvernight",
+                "runIntraday"
+            ],
+            "properties": {
+                "severity": {
+                    "title": "The rule's severity instructs the system on what to do if the rule generates an exception.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because severity is a common attribute --)",
+                    "$ref": "#/definitions/enumsComplianceSeverity"
+                },
+                "filter": {
+                    "description": "The rule's filter is the condition, which identifies the securities that are subject to the rule's test.",
+                    "type": "string",
+                    "required": [
+                        "filter"
+                    ]
+                },
+                "ruleCondition": {
+                    "type": "string",
+                    "title": "The rule's restriction test condition representing the numerical or logical test associated with the rule.\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because no rule_condition proto --)"
+                },
+                "ruleWarning": {
+                    "description": "The rule's warning test condition representing the numerical or logical test associated with the rule.",
+                    "type": "string"
+                },
+                "groupByValues": {
+                    "type": "array",
+                    "title": "The specific data dimension (e.g., issuer, sector, currency, etc.) used to aggregate holdings together for testing against the compliance limit.\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We qualify the meaning of this field with the preposition 'by'  --)",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "ruleLookThrough": {
+                    "description": "The field indicating how look-through will be applied during the rule's evaluation.",
+                    "type": "string"
+                },
+                "runActiveComplianceType": {
+                    "description": "Settings for running active rules.",
+                    "$ref": "#/definitions/v1RunActiveComplianceType"
+                },
+                "manual": {
+                    "description": "A Boolean field identifying that a compliance guideline is implemented manually.",
+                    "type": "boolean"
+                },
+                "settledPositionsOnly": {
+                    "description": "A Boolean flag to remove positions that have yet to settle from rule evaluation on an overnight basis.",
+                    "type": "boolean"
+                },
+                "includeNonInvestmentPosition": {
+                    "description": "A Boolean flag to include non-investment positions such as collateral and security lending positions.",
+                    "type": "boolean"
+                },
+                "suppressViolation": {
+                    "description": "A Boolean flag that indicates that violations on positions of zero will be suppressed.",
+                    "type": "boolean"
+                },
+                "disaggregatePositions": {
+                    "title": "The field is indicating that disaggregation has been enabled at the rule level. \nIt contains Position disaggregation options for compliance rules.\n(-- api-linter: core::0144::message-field-plural=disabled\n aip.dev/not-precedent: Name of enum and field should be in plural form --)",
+                    "$ref": "#/definitions/v1DisaggregatePositions"
+                },
+                "runOvernight": {
+                    "description": "The rule's run_overnight field instructs the system that rule should be applied overnight.",
+                    "type": "boolean",
+                    "required": [
+                        "run_overnight"
+                    ]
+                },
+                "runIntraday": {
+                    "description": "The rule's run_intraday field instructs the system that rule should be applied intraday.",
+                    "type": "boolean",
+                    "required": [
+                        "run_intraday"
+                    ]
+                },
+                "ruleToken": {
+                    "description": "The rule's test token field.",
+                    "type": "string"
+                },
+                "disablePassiveViolation": {
+                    "type": "boolean",
+                    "title": "This field is used to either disable or enable passive violations"
+                },
+                "disableDirectionality": {
+                    "type": "boolean",
+                    "title": "This field is used to either disable or enable directionality"
+                },
+                "abacusMode": {
+                    "description": "Field indicating if the rule is being invoked Live or Parallel.",
+                    "$ref": "#/definitions/v1AbacusMode"
+                },
+                "customizable": {
+                    "description": "Field indicating if the rule is customizable or not.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "v1CounterpartyExposureLimitRule": {
+            "type": "object",
+            "title": "Counterparty Exposure Limit Rule type",
+            "required": [
+                "filter",
+                "listName"
+            ],
+            "properties": {
+                "severity": {
+                    "title": "The rule's severity instructs the system on what to do if the rule generates an exception.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because severity is a common attribute --)",
+                    "$ref": "#/definitions/enumsComplianceSeverity"
+                },
+                "filter": {
+                    "description": "The rule's filter is the condition, which identifies the securities that are subject to the rule's test.",
+                    "type": "string",
+                    "required": [
+                        "filter"
+                    ]
+                },
+                "listName": {
+                    "description": "The list name defines the actual broker/portfolio list that contains either a list of APPROVED or RESTRICTED brokers.",
+                    "type": "string",
+                    "required": [
+                        "list_name"
+                    ]
+                }
+            }
+        },
+        "v1CounterpartyRule": {
+            "description": "CounterpartyRule Rule type.",
+            "type": "object",
+            "required": [
+                "filter",
+                "listToken",
+                "listName"
+            ],
+            "properties": {
+                "severity": {
+                    "title": "The rule's severity instructs the system on what to do if the rule generates an exception.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because severity is a common attribute --)",
+                    "$ref": "#/definitions/enumsComplianceSeverity"
+                },
+                "filter": {
+                    "description": "The rule's filter is the condition, which identifies the securities that are subject to the rule's test.",
+                    "type": "string",
+                    "required": [
+                        "filter"
+                    ]
+                },
+                "descriptionToken": {
+                    "description": "Description which is displayed to whomever is entering the offending trade.",
+                    "type": "string"
+                },
+                "listToken": {
+                    "description": "Condition Token to be used in conjuction with the port list.",
+                    "type": "string",
+                    "required": [
+                        "list_token"
+                    ]
+                },
+                "listName": {
+                    "description": "The list name defines the actual broker/portfolio list that contains either a list of APPROVED or RESTRICTED brokers.",
+                    "type": "string",
+                    "required": [
+                        "list_name"
+                    ]
+                }
+            }
+        },
+        "v1Direction": {
+            "description": "Enumeration of Direction.\n\n - DIRECTION_UNSPECIFIED: Unspecified.\n - DIRECTION_BOTH: Both.\n - DIRECTION_UP_ONLY: Up only.\n - DIRECTION_UP_ONLY_ONCE: Up only once.\n - DIRECTION_DOWN_ONLY: Down only.",
+            "type": "string",
+            "default": "DIRECTION_UNSPECIFIED",
+            "enum": [
+                "DIRECTION_UNSPECIFIED",
+                "DIRECTION_BOTH",
+                "DIRECTION_UP_ONLY",
+                "DIRECTION_UP_ONLY_ONCE",
+                "DIRECTION_DOWN_ONLY"
+            ]
+        },
+        "v1DisaggregatePositions": {
+            "description": "Enumeration of DisaggregatePositions.\n\n - DISAGGREGATE_POSITIONS_UNSPECIFIED: Unspecified.\n - DISAGGREGATE_POSITIONS_ALL_POSITION_LOTS: All Position lots.\n - DISAGGREGATE_POSITIONS_AUTOMATIC: Automatic.\n - DISAGGREGATE_POSITIONS_UNSETTLED_LOTS: Unsettled lots.\n - DISAGGREGATE_POSITIONS_STRATEGY: Strategy.\n - DISAGGREGATE_POSITIONS_GREEN_PACKAGE_SETTING: Green Package Setting.",
+            "type": "string",
+            "default": "DISAGGREGATE_POSITIONS_UNSPECIFIED",
+            "enum": [
+                "DISAGGREGATE_POSITIONS_UNSPECIFIED",
+                "DISAGGREGATE_POSITIONS_ALL_POSITION_LOTS",
+                "DISAGGREGATE_POSITIONS_AUTOMATIC",
+                "DISAGGREGATE_POSITIONS_UNSETTLED_LOTS",
+                "DISAGGREGATE_POSITIONS_STRATEGY",
+                "DISAGGREGATE_POSITIONS_GREEN_PACKAGE_SETTING"
+            ]
+        },
+        "v1DisclosureRule": {
+            "description": "DisclosureRule Rule type.",
+            "type": "object",
+            "required": [
+                "filter",
+                "groupByValues",
+                "testToken"
+            ],
+            "properties": {
+                "filter": {
+                    "description": "The rule's filter is the condition, which identifies the securities that are subject to the rule's test.",
+                    "type": "string",
+                    "required": [
+                        "filter"
+                    ]
+                },
+                "groupByValues": {
+                    "type": "array",
+                    "title": "The specific data dimension (e.g., issuer, sector, currency, etc.) used to aggregate holdings together for testing against the compliance limit.\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We qualify the meaning of this field with the preposition 'by'  --)",
+                    "required": [
+                        "group_by_values"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "lookThroughCondition": {
+                    "description": "The field indicating how look-through will be applied during the rule's evaluation.",
+                    "type": "string"
+                },
+                "frequency": {
+                    "type": "string",
+                    "title": "Used by rules only in RTC Server. This expression contains the state of the rule.\nIt is used for insurance funds.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because frequency is a common attribute --)"
+                },
+                "additionalArgument": {
+                    "description": "This field is used in Disclosure rules to get the threshold results.",
+                    "type": "string"
+                },
+                "includeNonInvestmentPosition": {
+                    "description": "A Boolean flag to include non-investment positions such as collateral and security lending positions.",
+                    "type": "boolean"
+                },
+                "abacusMode": {
+                    "description": "Field indicating if the rule is being invoked Live or Parallel.",
+                    "$ref": "#/definitions/v1AbacusMode"
+                },
+                "testToken": {
+                    "description": "The rule's test token, which represents the rule's exposure calculation but not the limit, which will be dictated at the assignment level.\ne.g., in #pct_of_equity\u003e10 the testToken is #pct_of_equity.",
+                    "type": "string",
+                    "required": [
+                        "test_token"
+                    ]
+                },
+                "testLimitParameters": {
+                    "description": "Test Limit Parameters for validating the threshold limits.The various attributes to describe test limits are severity,limit,direction,increment and test token.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1TestLimitParameter"
+                    }
+                },
+                "disableDirectionality": {
+                    "type": "boolean",
+                    "title": "This field is used to either disable or enable directionality"
+                }
+            }
+        },
+        "v1FilterComplianceRulesRequest": {
+            "description": "The request message for ComplianceRuleAPI.FilterComplianceRules.",
+            "type": "object",
+            "properties": {
+                "query": {
+                    "description": "Compliance rule name.",
+                    "$ref": "#/definitions/v1ComplianceRuleQuery"
+                },
+                "pageToken": {
+                    "type": "string",
+                    "title": "A page token, received from a previous 'FilterComplianceRules' call. Provide this to retrieve \nthe subsequent page. When paginating, all other parameters provided to 'FilterComplianceRules' \nmust match the call that provided the page token.\nCurrently not implemented"
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "The maximum number of ComplianceRules to return. The service may return fewer than this value.\nIf unspecified, at most 100 ComplianceRules will be returned. Values above 100 will be coerced to 100.\nCurrently not implemented"
+                }
+            }
+        },
+        "v1FilterComplianceRulesResponse": {
+            "description": "The response message for ComplianceRuleAPI.FilterComplianceRules.",
+            "type": "object",
+            "properties": {
+                "complianceRules": {
+                    "description": "The entities that match the specified FilterComplianceRulesRequest.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1ComplianceRule"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "A token, which can be sent as 'page_token' to retrieve the next page.\nIf this field is omitted, there are no subsequent pages.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1InformationRule": {
+            "type": "object",
+            "title": "InformationRule Rule Type.\n(-- api-linter: core::0140::abbreviations=disabled\n    aip.dev/not-precedent: we need full name of the rule type. --)"
+        },
+        "v1LookThroughDefinitionRule": {
+            "description": "LookThroughDefinitionRule Rule type.",
+            "type": "object",
+            "required": [
+                "filter"
+            ],
+            "properties": {
+                "filter": {
+                    "description": "The rule's filter is the condition, which identifies the securities that are subject to the rule's test.",
+                    "type": "string",
+                    "required": [
+                        "filter"
+                    ]
+                }
+            }
+        },
+        "v1NextThresholdType": {
+            "description": "Enumeration of NextThresholdType.\n\n - NEXT_THRESHOLD_TYPE_UNSPECIFIED: Unspecified.\n - NEXT_THRESHOLD_TYPE_NOT_APPLICABLE: Not Applicable.\n - NEXT_THRESHOLD_TYPE_RELATIVE_TO_BREACH: Relative to breach.\n - NEXT_THRESHOLD_TYPE_RELATIVE_TO_LIMIT: Relative to limit.\n - NEXT_THRESHOLD_TYPE_ALWAYS_RESET: Always reset.",
+            "type": "string",
+            "default": "NEXT_THRESHOLD_TYPE_UNSPECIFIED",
+            "enum": [
+                "NEXT_THRESHOLD_TYPE_UNSPECIFIED",
+                "NEXT_THRESHOLD_TYPE_NOT_APPLICABLE",
+                "NEXT_THRESHOLD_TYPE_RELATIVE_TO_BREACH",
+                "NEXT_THRESHOLD_TYPE_RELATIVE_TO_LIMIT",
+                "NEXT_THRESHOLD_TYPE_ALWAYS_RESET"
+            ]
+        },
+        "v1ProhibitionRule": {
+            "description": "ProhibitionRule Rule type.",
+            "type": "object",
+            "required": [
+                "filter",
+                "runOvernight",
+                "runIntraday"
+            ],
+            "properties": {
+                "severity": {
+                    "title": "The rule's severity instructs the system on what to do if the rule generates an exception.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because severity is a common attribute --)",
+                    "$ref": "#/definitions/enumsComplianceSeverity"
+                },
+                "filter": {
+                    "description": "The rule's filter is the condition, which identifies the securities that are subject to the rule's test.",
+                    "type": "string",
+                    "required": [
+                        "filter"
+                    ]
+                },
+                "runOvernight": {
+                    "description": "The rule's run_overnight field instructs the system that rule should be applied overnight.",
+                    "type": "boolean",
+                    "required": [
+                        "run_overnight"
+                    ]
+                },
+                "runIntraday": {
+                    "description": "The rule's run_intraday field instructs the system that rule should be applied intraday.",
+                    "type": "boolean",
+                    "required": [
+                        "run_intraday"
+                    ]
+                },
+                "manual": {
+                    "description": "A Boolean flag identifying that a compliance guideline is implemented manually.",
+                    "type": "boolean"
+                },
+                "settledPositionsOnly": {
+                    "description": "A Boolean flag to remove positions that have yet to settle from rule evaluation on an overnight basis.",
+                    "type": "boolean"
+                },
+                "includeNonInvestmentPosition": {
+                    "description": "A Boolean flag to include non-investment positions such as collateral and security lending positions.",
+                    "type": "boolean"
+                },
+                "suppressViolation": {
+                    "description": "A Boolean flag that indicates that violations on positions of zero will be suppressed.",
+                    "type": "boolean"
+                },
+                "disaggregatePositions": {
+                    "title": "The field is indicating that disaggregation has been enabled at the rule level. \nIt contains Position disaggregation options for compliance rules.\n(-- api-linter: core::0144::message-field-plural=disabled\n aip.dev/not-precedent: Name of enum and field should be in plural form --)",
+                    "$ref": "#/definitions/v1DisaggregatePositions"
+                },
+                "abacusMode": {
+                    "description": "Field indicating if the rule is being invoked Live or Parallel.",
+                    "$ref": "#/definitions/v1AbacusMode"
+                },
+                "disableDirectionality": {
+                    "type": "boolean",
+                    "title": "This field is used to either disable or enable directionality"
+                }
+            }
+        },
+        "v1RunActiveComplianceType": {
+            "description": "Enumeration of RunActiveComplianceType.\n\n - RUN_ACTIVE_COMPLIANCE_TYPE_UNSPECIFIED: Unspecified.\n - RUN_ACTIVE_COMPLIANCE_TYPE_FUND_DIVIDED_BY_BENCHMARK: Fund divided by bechmark.\n - RUN_ACTIVE_COMPLIANCE_TYPE_FUND_MINUS_BENCHMARK: Fund minus benchmark.\n - RUN_ACTIVE_COMPLIANCE_TYPE_FUND_MINUS_BENCHMARK_OVER_BENCHMARK: Fund minus benchmark over benchmark.",
+            "type": "string",
+            "default": "RUN_ACTIVE_COMPLIANCE_TYPE_UNSPECIFIED",
+            "enum": [
+                "RUN_ACTIVE_COMPLIANCE_TYPE_UNSPECIFIED",
+                "RUN_ACTIVE_COMPLIANCE_TYPE_FUND_DIVIDED_BY_BENCHMARK",
+                "RUN_ACTIVE_COMPLIANCE_TYPE_FUND_MINUS_BENCHMARK",
+                "RUN_ACTIVE_COMPLIANCE_TYPE_FUND_MINUS_BENCHMARK_OVER_BENCHMARK"
+            ]
+        },
+        "v1ScriptedRule": {
+            "description": "ScriptedRule Rule type.",
+            "type": "object",
+            "required": [
+                "script"
+            ],
+            "properties": {
+                "script": {
+                    "type": "string",
+                    "title": "Actual script that will run for a rule.\n(-- aip.dev/beta-blocker: Its dynamic sub fields needs analysed.--)",
+                    "required": [
+                        "script"
+                    ]
+                },
+                "ruleLookThrough": {
+                    "description": "The field indicating how look-through will be applied during the rule's evaluation.",
+                    "type": "string"
+                },
+                "runActiveComplianceType": {
+                    "description": "Settings for running active rules.",
+                    "$ref": "#/definitions/v1RunActiveComplianceType"
+                },
+                "runOvernight": {
+                    "description": "The rule's run_overnight field instructs the system that rule should be applied overnight.",
+                    "type": "boolean"
+                },
+                "runIntraday": {
+                    "description": "The rule's run_intraday field instructs the system that rule should be applied intraday.",
+                    "type": "boolean"
+                },
+                "settledPositionsOnly": {
+                    "description": "A Boolean flag to remove positions that have yet to settle from rule evaluation on an overnight basis.",
+                    "type": "boolean"
+                },
+                "includeNonInvestmentPosition": {
+                    "description": "A Boolean flag to include non-investment positions such as collateral and security lending positions.",
+                    "type": "boolean"
+                },
+                "splitFxLeg": {
+                    "description": "A Boolean flag indicating that split FX, the splitting of securities into their respective pay and receive legs, has been enabled.",
+                    "type": "boolean"
+                },
+                "disaggregatePositions": {
+                    "title": "The field is indicating that disaggregation has been enabled at the rule level. \nIt contains Position disaggregation options for compliance rules.\n(-- api-linter: core::0144::message-field-plural=disabled\n aip.dev/not-precedent: Name of enum and field should be in plural form --)",
+                    "$ref": "#/definitions/v1DisaggregatePositions"
+                },
+                "disablePassiveViolation": {
+                    "type": "boolean",
+                    "title": "This field is used to either disable or enable passive violations"
+                },
+                "disableDirectionality": {
+                    "type": "boolean",
+                    "title": "This field is used to either disable or enable directionality"
+                },
+                "severity": {
+                    "title": "The rule's severity instructs the system on what to do if the rule generates an exception.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because severity is a common attribute --)",
+                    "$ref": "#/definitions/enumsComplianceSeverity"
+                }
+            }
+        },
+        "v1State": {
+            "description": "Enumeration of State.\n\n - STATE_UNSPECIFIED: Unspecified.\n - STATE_DRAFT: Draft.\n - STATE_READY_FOR_TESTING: Testing.\n - STATE_REVIEW_REQUIRED: Required.\n - STATE_REVIEW_REJECTED: Rejected.\n - STATE_APPROVED: Approved.",
+            "type": "string",
+            "default": "STATE_UNSPECIFIED",
+            "enum": [
+                "STATE_UNSPECIFIED",
+                "STATE_DRAFT",
+                "STATE_READY_FOR_TESTING",
+                "STATE_REVIEW_REQUIRED",
+                "STATE_REVIEW_REJECTED",
+                "STATE_APPROVED"
+            ]
+        },
+        "v1TestLimitParameter": {
+            "description": "TestLimitParameter of DisclosureRule Rule type.",
+            "type": "object",
+            "properties": {
+                "tokenSeverity": {
+                    "description": "This specifies the severity of the rule (warning or violation).",
+                    "$ref": "#/definitions/v1TokenSeverity"
+                },
+                "direction": {
+                    "title": "Direction is used for threshold rows.The possible values are BOTH,UP ONLY,UP ONCE,DOWN ONLY.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: Conflict is with field in different domain and different semantics --)",
+                    "$ref": "#/definitions/v1Direction"
+                },
+                "testLimit": {
+                    "description": "Maximal (upper) value of the parameter.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "nextThresholdType": {
+                    "description": "Describes how the next reporting threshold is calculated.",
+                    "$ref": "#/definitions/v1NextThresholdType"
+                },
+                "increment": {
+                    "description": "Disclosable threshold increment value.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "inclusive": {
+                    "description": "Inclusive threshold Rule Flag is the field used for threshold rows means include-non-Investment positions rows.\nIt can be populated on any limit row.The possible values could be true/false.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "v1TokenSeverity": {
+            "description": "Enumeration of TokenSeverity.\n\n - TOKEN_SEVERITY_UNSPECIFIED: Unspecified.\n - TOKEN_SEVERITY_WARNING: Warning.\n - TOKEN_SEVERITY_RESTRICTION: Restriction.",
+            "type": "string",
+            "default": "TOKEN_SEVERITY_UNSPECIFIED",
+            "enum": [
+                "TOKEN_SEVERITY_UNSPECIFIED",
+                "TOKEN_SEVERITY_WARNING",
+                "TOKEN_SEVERITY_RESTRICTION"
+            ]
+        },
+        "v1TradeRule": {
+            "description": "TradeRule Rule type.",
+            "type": "object",
+            "required": [
+                "filter"
+            ],
+            "properties": {
+                "severity": {
+                    "title": "The rule's severity instructs the system on what to do if the rule generates an exception.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because severity is a common attribute --)",
+                    "$ref": "#/definitions/enumsComplianceSeverity"
+                },
+                "filter": {
+                    "description": "The rule's filter is the condition, which identifies the securities that are subject to the rule's test.",
+                    "type": "string",
+                    "required": [
+                        "filter"
+                    ]
+                },
+                "descriptionToken": {
+                    "description": "Description which is displayed to whomever is entering the offending trade.",
+                    "type": "string"
+                },
+                "listToken": {
+                    "description": "Condition Token to be used in conjuction with the port list.",
+                    "type": "string"
+                },
+                "listName": {
+                    "description": "The list name defines the actual broker/portfolio list that contains either a list of APPROVED or RESTRICTED brokers.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1ValueAtRiskRule": {
+            "description": "ValueAtRiskRule Rule type.",
+            "type": "object",
+            "required": [
+                "filter",
+                "ruleCondition",
+                "groupByValues"
+            ],
+            "properties": {
+                "severity": {
+                    "title": "The rule's severity instructs the system on what to do if the rule generates an exception.\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because severity is a common attribute --)",
+                    "$ref": "#/definitions/enumsComplianceSeverity"
+                },
+                "filter": {
+                    "description": "The rule's filter is the condition, which identifies the securities that are subject to the rule's test.",
+                    "type": "string",
+                    "required": [
+                        "filter"
+                    ]
+                },
+                "ruleCondition": {
+                    "type": "string",
+                    "title": "The rule's restriction test condition representing the numerical or logical test associated with the rule.\n(-- api-linter: core::0124::required-reference=disabled\n aip.dev/not-precedent: We need to do this because no rule_condition proto --)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because rule_condition is common attribute --)",
+                    "required": [
+                        "rule_condition"
+                    ]
+                },
+                "ruleWarning": {
+                    "description": "The rule's warning test condition representing the numerical or logical test associated with the rule.",
+                    "type": "string"
+                },
+                "groupByValues": {
+                    "type": "array",
+                    "title": "The specific data dimension (e.g., issuer, sector, currency, etc.) used to aggregate holdings together for testing against the compliance limit.\n(-- api-linter: core::0140::prepositions=disabled\n aip.dev/not-precedent: We qualify the meaning of this field with the preposition 'by'  --)",
+                    "required": [
+                        "group_by_values"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "compliance.state.compliance_rule.v1.ComplianceRule:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "compliance.state.compliance_rule.v1.ComplianceRule:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "compliance.state.compliance_rule.v1.ComplianceRule:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "compliance.state.compliance_rule.v1.ComplianceRule:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

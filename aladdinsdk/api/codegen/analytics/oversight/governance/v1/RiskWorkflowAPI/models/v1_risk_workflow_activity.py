@@ -20,6 +20,7 @@ import json
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictStr
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskWorkflowAPI.models.v1_risk_workflow_priority import V1RiskWorkflowPriority
 
 class V1RiskWorkflowActivity(BaseModel):
     """
@@ -37,7 +38,8 @@ class V1RiskWorkflowActivity(BaseModel):
     modify_time: Optional[datetime] = Field(None, alias="modifyTime")
     create_time: Optional[datetime] = Field(None, alias="createTime")
     due_date: Optional[datetime] = Field(None, alias="dueDate")
-    __properties = ["id", "workflowId", "workflowAssignee", "workflowComment", "workflowAction", "workflowState", "workflowResolutionCategoryKey", "workflowResolutionKey", "modifier", "modifyTime", "createTime", "dueDate"]
+    workflow_priority: Optional[V1RiskWorkflowPriority] = Field(None, alias="workflowPriority")
+    __properties = ["id", "workflowId", "workflowAssignee", "workflowComment", "workflowAction", "workflowState", "workflowResolutionCategoryKey", "workflowResolutionKey", "modifier", "modifyTime", "createTime", "dueDate", "workflowPriority"]
 
     class Config:
         """Pydantic configuration"""
@@ -90,7 +92,8 @@ class V1RiskWorkflowActivity(BaseModel):
             "modifier": obj.get("modifier"),
             "modify_time": obj.get("modifyTime"),
             "create_time": obj.get("createTime"),
-            "due_date": obj.get("dueDate")
+            "due_date": obj.get("dueDate"),
+            "workflow_priority": obj.get("workflowPriority")
         })
         return _obj
 

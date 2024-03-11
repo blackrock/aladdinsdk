@@ -37,7 +37,7 @@ class TestApiRegistry(TestCase):
     def test_get_api_names(self):
         from aladdinsdk.api.registry import get_api_names
         api_list = get_api_names()
-        self.assertIn('TrainJourneyAPI', api_list)
+        self.assertIn('TokenAPI', api_list)
 
     def test_get_api_details_failure_non_existent_api(self):
         from aladdinsdk.api.registry import get_api_details
@@ -50,11 +50,11 @@ class TestApiRegistry(TestCase):
         from aladdinsdk.api.registry import get_api_details, AladdinAPICodegenDetails
 
         expected = AladdinAPICodegenDetails(
-            'TrainJourneyAPI',
-            'v2',
-            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey',
-            '/api/reference-architecture/demo/train-journey/v1/',
-            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v1/train_journey/swagger.json'
+            'TokenAPI',
+            'v1',
+            'aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI',
+            '/api/platform/infrastructure/token/v1/',
+            'aladdinsdk/api/codegen/platform/infrastructure/token/v1/TokenAPI/swagger.json'
         )
 
         test_case = TestCase()
@@ -69,31 +69,31 @@ class TestApiRegistry(TestCase):
                                       and first.api_default_class == second.api_default_class
                                       and first.api_class_methods == second.api_class_methods)
 
-        resp = get_api_details('TrainJourneyAPI')
+        resp = get_api_details('TokenAPI')
         test_case.assertEqual(resp, expected)
 
     @mock.patch('aladdinsdk.config.internal_settings')
     def test_get_api_details_multiple_versions(self, mock_internal_settings):
         # Currently v2 does not exist, so mock the imports here
         import sys
-        from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1 import train_journey
-        sys.modules['aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey'] = train_journey
+        from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1 import TrainJourneyAPI
+        sys.modules['aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.TrainJourneyAPI'] = TrainJourneyAPI
 
         mock_internal_settings.get_api_allow_list.return_value = [
             {
-                'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
+                'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI',
                 'api_name': 'TokenAPI',
                 'api_version': 'v1',
                 'host_url_path': '/api/platform/infrastructure/token/v1/'
             },
             {
-                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey',
+                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.TrainJourneyAPI',
                 'api_name': 'TrainJourneyAPI',
                 'api_version': 'v2',
                 'host_url_path': '/api/reference-architecture/demo/train-journey/v2/'
             },
             {
-                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey',
+                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.TrainJourneyAPI',
                 'api_name': 'TrainJourneyAPI',
                 'api_version': 'v1',
                 'host_url_path': '/api/reference-architecture/demo/train-journey/v1/'
@@ -110,7 +110,7 @@ class TestApiRegistry(TestCase):
         expected_latest = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v2',
-            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey',
+            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.TrainJourneyAPI',
             '/api/reference-architecture/demo/train-journey/v2/',
             'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v2/train_journey/swagger.json'
         )
@@ -118,25 +118,25 @@ class TestApiRegistry(TestCase):
         expected_v1 = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v1',
-            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey',
+            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.TrainJourneyAPI',
             '/api/reference-architecture/demo/train-journey/v1/',
-            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v1/train_journey/swagger.json'
+            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v1/TrainJourneyAPI/swagger.json'
         )
 
         expected_v2 = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v2',
-            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey',
+            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.TrainJourneyAPI',
             '/api/reference-architecture/demo/train-journey/v2/',
-            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v2/train_journey/swagger.json'
+            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v2/TrainJourneyAPI/swagger.json'
         )
 
         expected_token_v1 = AladdinAPICodegenDetails(
             'TokenAPI',
             'v1',
-            'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
+            'aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI',
             '/api/platform/infrastructure/token/v1/',
-            'aladdinsdk/api/codegen/platform/infrastructure/token/v1/token/swagger.json',
+            'aladdinsdk/api/codegen/platform/infrastructure/token/v1/TokenAPI/swagger.json',
         )
 
         test_case = TestCase()
@@ -172,15 +172,9 @@ class TestApiRegistry(TestCase):
 
         mock_internal_settings.get_api_allow_list.return_value = [
             {
-                'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
+                'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI',
                 'api_version': 'v1',
                 'host_url_path': '/api/platform/infrastructure/token/v1/'
-            },
-            {
-                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey',
-                'api_name': 'TrainJourneyAPI',
-                'api_version': 'v1',
-                'host_url_path': '/api/reference-architecture/demo/train-journey/v1/'
             }
         ]
         delattr(mock_internal_settings.get_api_allow_list[0].return_value, 'api_name')
@@ -199,7 +193,7 @@ class TestApiRegistry(TestCase):
             {
                 'api_name': 'TestAPIShouldNotExist',
                 'api_version': 'v1',
-                'host_url_path': '/api/reference-architecture/demo/train-journey/v1/'
+                'host_url_path': '/dummy/hostpath/v1/'
             }
         ]
 
@@ -233,21 +227,21 @@ class TestApiClient(TestCase):
     def test_api_client_init_success(self):
         from aladdinsdk.api.client import AladdinAPI
 
-        test_subject = AladdinAPI('TrainJourneyAPI')
+        test_subject = AladdinAPI('TokenAPI')
         self.assertIsNotNone(test_subject)
 
     def test_api_client_endpoint_introspection_success(self):
         from aladdinsdk.api.client import AladdinAPI
 
-        test_subject = AladdinAPI('TrainJourneyAPI')
+        test_subject = AladdinAPI('TokenAPI')
 
         endpoint_methods = test_subject.get_api_endpoint_methods()
-        self.assertIn('train_journey_api_filter_train_journeys', endpoint_methods)
+        self.assertIn('token_api_generate_token', endpoint_methods)
 
         endpoint_methods = test_subject.get_api_endpoint_path_tuples()
-        self.assertIn(('/trainJourneys/{id}', 'get'), endpoint_methods)
+        self.assertIn(('/token:generate', 'get'), endpoint_methods)
 
-        endpoint_signature = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
+        endpoint_signature = test_subject.get_api_endpoint_signature('token_api_generate_token')
 
         self.assertIsNotNone(endpoint_signature)
 
@@ -255,7 +249,7 @@ class TestApiClient(TestCase):
         from aladdinsdk.api.client import AladdinAPI
         from aladdinsdk.common.error.asdkerrors import AsdkApiException
 
-        test_subject = AladdinAPI('TrainJourneyAPI')
+        test_subject = AladdinAPI('TokenAPI')
 
         with self.assertRaises(AsdkApiException) as context:
             test_subject.get_api_endpoint_signature('non_existent_endpoint')

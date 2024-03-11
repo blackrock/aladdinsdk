@@ -26,7 +26,7 @@ class V2FilterResearchNotesResponse(BaseModel):
     """
     V2FilterResearchNotesResponse
     """
-    research_notes: Optional[conlist(V2ResearchNote)] = Field(None, alias="researchNotes", description="researchs to be returned.")
+    research_notes: Optional[conlist(V2ResearchNote)] = Field(None, alias="researchNotes", description="research notes to be returned.")
     __properties = ["researchNotes"]
 
     class Config:

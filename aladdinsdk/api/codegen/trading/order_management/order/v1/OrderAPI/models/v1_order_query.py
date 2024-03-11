@@ -25,6 +25,7 @@ from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_external_id_list_criterion import V1ExternalIdListCriterion
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_order_ids_criterion import V1OrderIdsCriterion
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_portfolio_group_criterion import V1PortfolioGroupCriterion
+from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_portfolio_modified_time_criterion import V1PortfolioModifiedTimeCriterion
 
 class V1OrderQuery(BaseModel):
     """
@@ -36,7 +37,8 @@ class V1OrderQuery(BaseModel):
     external_id_list_criterion: Optional[V1ExternalIdListCriterion] = Field(None, alias="externalIdListCriterion")
     portfolio_group_criterion: Optional[V1PortfolioGroupCriterion] = Field(None, alias="portfolioGroupCriterion")
     basket_id_criterion: Optional[V1BasketIdCriterion] = Field(None, alias="basketIdCriterion")
-    __properties = ["retrieveOrderReservations", "orderIdCriterion", "externalIdCriterion", "externalIdListCriterion", "portfolioGroupCriterion", "basketIdCriterion"]
+    portfolio_modified_time_criterion: Optional[V1PortfolioModifiedTimeCriterion] = Field(None, alias="portfolioModifiedTimeCriterion")
+    __properties = ["retrieveOrderReservations", "orderIdCriterion", "externalIdCriterion", "externalIdListCriterion", "portfolioGroupCriterion", "basketIdCriterion", "portfolioModifiedTimeCriterion"]
 
     class Config:
         """Pydantic configuration"""
@@ -77,6 +79,9 @@ class V1OrderQuery(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of basket_id_criterion
         if self.basket_id_criterion:
             _dict['basketIdCriterion'] = self.basket_id_criterion.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of portfolio_modified_time_criterion
+        if self.portfolio_modified_time_criterion:
+            _dict['portfolioModifiedTimeCriterion'] = self.portfolio_modified_time_criterion.to_dict()
         return _dict
 
     @classmethod
@@ -94,7 +99,8 @@ class V1OrderQuery(BaseModel):
             "external_id_criterion": V1ExternalIdCriterion.from_dict(obj.get("externalIdCriterion")) if obj.get("externalIdCriterion") is not None else None,
             "external_id_list_criterion": V1ExternalIdListCriterion.from_dict(obj.get("externalIdListCriterion")) if obj.get("externalIdListCriterion") is not None else None,
             "portfolio_group_criterion": V1PortfolioGroupCriterion.from_dict(obj.get("portfolioGroupCriterion")) if obj.get("portfolioGroupCriterion") is not None else None,
-            "basket_id_criterion": V1BasketIdCriterion.from_dict(obj.get("basketIdCriterion")) if obj.get("basketIdCriterion") is not None else None
+            "basket_id_criterion": V1BasketIdCriterion.from_dict(obj.get("basketIdCriterion")) if obj.get("basketIdCriterion") is not None else None,
+            "portfolio_modified_time_criterion": V1PortfolioModifiedTimeCriterion.from_dict(obj.get("portfolioModifiedTimeCriterion")) if obj.get("portfolioModifiedTimeCriterion") is not None else None
         })
         return _obj
 

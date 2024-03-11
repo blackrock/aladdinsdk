@@ -26,6 +26,8 @@ from pydantic import Field, StrictInt, StrictStr, conlist
 from typing import Optional
 
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_batch_create_risk_exceptions_request import V1BatchCreateRiskExceptionsRequest
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_filter_risk_exceptions_request import V1FilterRiskExceptionsRequest
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_filter_risk_exceptions_response import V1FilterRiskExceptionsResponse
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_list_risk_exceptions_response import V1ListRiskExceptionsResponse
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_longrunning_operation import V1LongrunningOperation
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_retrieve_risk_exceptions_by_id_request import V1RetrieveRiskExceptionsByIdRequest
@@ -393,6 +395,172 @@ class DefaultRiskExceptionAPI(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
+    def risk_exception_api_filter_risk_exceptions(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], body : V1FilterRiskExceptionsRequest, **kwargs) -> V1FilterRiskExceptionsResponse:  # noqa: E501
+        """Retrives risk exceptions  # noqa: E501
+
+        Retrieves the results of risk exceptions based on the provided query. (-- api-linter: aladdin::9016::query-custom-method-http=disabled     aip.dev/not-precedent: We need to keep the name consistent with existing exceptions endpoint. --)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.risk_exception_api_filter_risk_exceptions(vnd_com_blackrock_request_id, vnd_com_blackrock_origin_timestamp, body, async_req=True)
+        >>> result = thread.get()
+
+        :param vnd_com_blackrock_request_id: A unique identifier for this request. (required)
+        :type vnd_com_blackrock_request_id: str
+        :param vnd_com_blackrock_origin_timestamp: Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231. (required)
+        :type vnd_com_blackrock_origin_timestamp: datetime
+        :param body: (required)
+        :type body: V1FilterRiskExceptionsRequest
+        :param async_req: Whether to execute the request asynchronously.
+        :type async_req: bool, optional
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :return: Returns the result object.
+                 If the method is called asynchronously,
+                 returns the request thread.
+        :rtype: V1FilterRiskExceptionsResponse
+        """
+        kwargs['_return_http_data_only'] = True
+        if '_preload_content' in kwargs:
+            raise ValueError("Error! Please call the risk_exception_api_filter_risk_exceptions_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
+        return self.risk_exception_api_filter_risk_exceptions_with_http_info(vnd_com_blackrock_request_id, vnd_com_blackrock_origin_timestamp, body, **kwargs)  # noqa: E501
+
+    @validate_arguments
+    def risk_exception_api_filter_risk_exceptions_with_http_info(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], body : V1FilterRiskExceptionsRequest, **kwargs) -> ApiResponse:  # noqa: E501
+        """Retrives risk exceptions  # noqa: E501
+
+        Retrieves the results of risk exceptions based on the provided query. (-- api-linter: aladdin::9016::query-custom-method-http=disabled     aip.dev/not-precedent: We need to keep the name consistent with existing exceptions endpoint. --)  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = api.risk_exception_api_filter_risk_exceptions_with_http_info(vnd_com_blackrock_request_id, vnd_com_blackrock_origin_timestamp, body, async_req=True)
+        >>> result = thread.get()
+
+        :param vnd_com_blackrock_request_id: A unique identifier for this request. (required)
+        :type vnd_com_blackrock_request_id: str
+        :param vnd_com_blackrock_origin_timestamp: Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231. (required)
+        :type vnd_com_blackrock_origin_timestamp: datetime
+        :param body: (required)
+        :type body: V1FilterRiskExceptionsRequest
+        :param async_req: Whether to execute the request asynchronously.
+        :type async_req: bool, optional
+        :param _preload_content: if False, the ApiResponse.data will
+                                 be set to none and raw_data will store the 
+                                 HTTP response body without reading/decoding.
+                                 Default is True.
+        :type _preload_content: bool, optional
+        :param _return_http_data_only: response data instead of ApiResponse
+                                       object with status code, headers, etc
+        :type _return_http_data_only: bool, optional
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the authentication
+                              in the spec for a single request.
+        :type _request_auth: dict, optional
+        :type _content_type: string, optional: force content-type for the request
+        :return: Returns the result object.
+                 If the method is called asynchronously,
+                 returns the request thread.
+        :rtype: tuple(V1FilterRiskExceptionsResponse, status_code(int), headers(HTTPHeaderDict))
+        """
+
+        _params = locals()
+
+        _all_params = [
+            'vnd_com_blackrock_request_id',
+            'vnd_com_blackrock_origin_timestamp',
+            'body'
+        ]
+        _all_params.extend(
+            [
+                'async_req',
+                '_return_http_data_only',
+                '_preload_content',
+                '_request_timeout',
+                '_request_auth',
+                '_content_type',
+                '_headers'
+            ]
+        )
+
+        # validate the arguments
+        for _key, _val in _params['kwargs'].items():
+            if _key not in _all_params:
+                raise ApiTypeError(
+                    "Got an unexpected keyword argument '%s'"
+                    " to method risk_exception_api_filter_risk_exceptions" % _key
+                )
+            _params[_key] = _val
+        del _params['kwargs']
+
+        _collection_formats = {}
+
+        # process the path parameters
+        _path_params = {}
+
+        # process the query parameters
+        _query_params = []
+        # process the header parameters
+        _header_params = dict(_params.get('_headers', {}))
+        if _params['vnd_com_blackrock_request_id']:
+            _header_params['VND.com.blackrock.Request-ID'] = _params['vnd_com_blackrock_request_id']
+
+        if _params['vnd_com_blackrock_origin_timestamp']:
+            _header_params['VND.com.blackrock.Origin-Timestamp'] = _params['vnd_com_blackrock_origin_timestamp']
+
+        # process the form parameters
+        _form_params = []
+        _files = {}
+        # process the body parameter
+        _body_params = None
+        if _params['body'] is not None:
+            _body_params = _params['body']
+
+        # set the HTTP header `Accept`
+        _header_params['Accept'] = self.api_client.select_header_accept(
+            ['application/json'])  # noqa: E501
+
+        # set the HTTP header `Content-Type`
+        _content_types_list = _params.get('_content_type',
+            self.api_client.select_header_content_type(
+                ['application/json']))
+        if _content_types_list:
+                _header_params['Content-Type'] = _content_types_list
+
+        # authentication setting
+        _auth_settings = ['APIKeyHeader', 'OAuth2ClientCredentials', 'basicAuth', 'OAuth2AccessCode', 'ClientKeyHeader']  # noqa: E501
+
+        _response_types_map = {
+            '200': "V1FilterRiskExceptionsResponse",
+            '400': "RiskExceptionAPIListRiskExceptions400Response",
+            '401': "RiskExceptionAPIListRiskExceptions400Response",
+            '403': "RiskExceptionAPIListRiskExceptions400Response",
+            '404': "RiskExceptionAPIListRiskExceptions400Response",
+        }
+
+        return self.api_client.call_api(
+            '/exceptions:filter', 'POST',
+            _path_params,
+            _query_params,
+            _header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            response_types_map=_response_types_map,
+            auth_settings=_auth_settings,
+            async_req=_params.get('async_req'),
+            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
+            _preload_content=_params.get('_preload_content', True),
+            _request_timeout=_params.get('_request_timeout'),
+            collection_formats=_collection_formats,
+            _request_auth=_params.get('_request_auth'))
+
+    @validate_arguments
     def risk_exception_api_get_longrunning_operation(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], id : Annotated[StrictStr, Field(..., description="Id of the LongrunningOperation")], **kwargs) -> V1LongrunningOperation:  # noqa: E501
         """Get latest state of a long-running operation  # noqa: E501
 
@@ -552,7 +720,7 @@ class DefaultRiskExceptionAPI(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def risk_exception_api_list_risk_exceptions(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], report_time : Annotated[Optional[datetime], Field(description="When provided, retrieves exceptions as they appeared at the specified point in time, expressed in UTC.   If absent, the current UTC server time will be used instead and exceptions will be returned on an as-is rather than as-was basis.")] = None, begin_range_date : Annotated[Optional[date], Field(description="When provided, retrieves historical exception records with business validity after the specified date (exclusive).  This parameter is used in conjunction with the endRangeDate parameter, typically to retrieve a time series of exception records.   This time series is uses as-is data - combining date range parameters with the reportTime parameter is not supported.")] = None, end_range_date : Annotated[Optional[date], Field(description="When provided, retrieves historical exception records with business validity up to and including the specified date (inclusive). This parameter is used in conjunction with the beginRangeDate parameter, typically to retrieve a time series of exception records. This time series is uses as-is data - combining date range parameters with the reportTime parameter is not supported.")] = None, read_mask : Annotated[Optional[StrictStr], Field(description="A field mask to restrict which fields on the exception are returned.  By default, all fields of the exception are returned.  Field names should be specified in camelCase.  In addition to the fields specified, the response will contain scopeId, scopeType, entityId, entityType and ruleId.")] = None, page_token : Annotated[Optional[StrictStr], Field(description="The offset value used to set the starting point into the result set found at the repository.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response.")] = None, filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities.")] = None, order_by : Annotated[Optional[StrictStr], Field(description="Used to provide with ordering to the returned entries. The supported syntax (for now): [target field]:asc or [target field]:desc.")] = None, facet_fields : Annotated[Optional[conlist(StrictStr)], Field(description="Used to provide with facet search capabilities by simply specifiying the fields to be used as base and by consequence, returned with an array for each of the specified fields and it's terms and matches for each of the entries.")] = None, **kwargs) -> V1ListRiskExceptionsResponse:  # noqa: E501
+    def risk_exception_api_list_risk_exceptions(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], report_time : Annotated[Optional[datetime], Field(description="When provided, retrieves exceptions as they appeared at the specified point in time, expressed in UTC.   If absent, the current UTC server time will be used instead and exceptions will be returned on an as-is rather than as-was basis.")] = None, begin_range_date : Annotated[Optional[date], Field(description="When provided, retrieves historical exception records with business validity after the specified date (exclusive).  This parameter is used in conjunction with the endRangeDate parameter, typically to retrieve a time series of exception records.   This time series is uses as-is data - combining date range parameters with the reportTime parameter is not supported.")] = None, end_range_date : Annotated[Optional[date], Field(description="When provided, retrieves historical exception records with business validity up to and including the specified date (inclusive). This parameter is used in conjunction with the beginRangeDate parameter, typically to retrieve a time series of exception records. This time series is uses as-is data - combining date range parameters with the reportTime parameter is not supported.")] = None, read_mask : Annotated[Optional[StrictStr], Field(description="A field mask to restrict which fields on the exception are returned.  By default, all fields of the exception are returned.  Field names should be specified in camelCase.  In addition to the fields specified, the response will contain scopeId, scopeType, entityId, entityType and ruleId.")] = None, page_token : Annotated[Optional[StrictStr], Field(description="The offset value used to set the starting point into the result set found at the repository.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.")] = None, filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities.")] = None, order_by : Annotated[Optional[StrictStr], Field(description="Used to provide with ordering to the returned entries. The supported syntax (for now): [target field]:asc or [target field]:desc.")] = None, facet_fields : Annotated[Optional[conlist(StrictStr)], Field(description="Used to provide with facet search capabilities by simply specifiying the fields to be used as base and by consequence, returned with an array for each of the specified fields and it's terms and matches for each of the entries.")] = None, **kwargs) -> V1ListRiskExceptionsResponse:  # noqa: E501
         """Lists the latest state of ongoing exceptions  # noqa: E501
 
         Retrieve exceptions matching the parameters provided.  # noqa: E501
@@ -576,7 +744,7 @@ class DefaultRiskExceptionAPI(object):
         :type read_mask: str
         :param page_token: The offset value used to set the starting point into the result set found at the repository.
         :type page_token: str
-        :param page_size: The number of entries to be returned as a response.
+        :param page_size: The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.
         :type page_size: int
         :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities.
         :type filter: str
@@ -601,7 +769,7 @@ class DefaultRiskExceptionAPI(object):
         return self.risk_exception_api_list_risk_exceptions_with_http_info(vnd_com_blackrock_request_id, vnd_com_blackrock_origin_timestamp, report_time, begin_range_date, end_range_date, read_mask, page_token, page_size, filter, order_by, facet_fields, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def risk_exception_api_list_risk_exceptions_with_http_info(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], report_time : Annotated[Optional[datetime], Field(description="When provided, retrieves exceptions as they appeared at the specified point in time, expressed in UTC.   If absent, the current UTC server time will be used instead and exceptions will be returned on an as-is rather than as-was basis.")] = None, begin_range_date : Annotated[Optional[date], Field(description="When provided, retrieves historical exception records with business validity after the specified date (exclusive).  This parameter is used in conjunction with the endRangeDate parameter, typically to retrieve a time series of exception records.   This time series is uses as-is data - combining date range parameters with the reportTime parameter is not supported.")] = None, end_range_date : Annotated[Optional[date], Field(description="When provided, retrieves historical exception records with business validity up to and including the specified date (inclusive). This parameter is used in conjunction with the beginRangeDate parameter, typically to retrieve a time series of exception records. This time series is uses as-is data - combining date range parameters with the reportTime parameter is not supported.")] = None, read_mask : Annotated[Optional[StrictStr], Field(description="A field mask to restrict which fields on the exception are returned.  By default, all fields of the exception are returned.  Field names should be specified in camelCase.  In addition to the fields specified, the response will contain scopeId, scopeType, entityId, entityType and ruleId.")] = None, page_token : Annotated[Optional[StrictStr], Field(description="The offset value used to set the starting point into the result set found at the repository.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response.")] = None, filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities.")] = None, order_by : Annotated[Optional[StrictStr], Field(description="Used to provide with ordering to the returned entries. The supported syntax (for now): [target field]:asc or [target field]:desc.")] = None, facet_fields : Annotated[Optional[conlist(StrictStr)], Field(description="Used to provide with facet search capabilities by simply specifiying the fields to be used as base and by consequence, returned with an array for each of the specified fields and it's terms and matches for each of the entries.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def risk_exception_api_list_risk_exceptions_with_http_info(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], report_time : Annotated[Optional[datetime], Field(description="When provided, retrieves exceptions as they appeared at the specified point in time, expressed in UTC.   If absent, the current UTC server time will be used instead and exceptions will be returned on an as-is rather than as-was basis.")] = None, begin_range_date : Annotated[Optional[date], Field(description="When provided, retrieves historical exception records with business validity after the specified date (exclusive).  This parameter is used in conjunction with the endRangeDate parameter, typically to retrieve a time series of exception records.   This time series is uses as-is data - combining date range parameters with the reportTime parameter is not supported.")] = None, end_range_date : Annotated[Optional[date], Field(description="When provided, retrieves historical exception records with business validity up to and including the specified date (inclusive). This parameter is used in conjunction with the beginRangeDate parameter, typically to retrieve a time series of exception records. This time series is uses as-is data - combining date range parameters with the reportTime parameter is not supported.")] = None, read_mask : Annotated[Optional[StrictStr], Field(description="A field mask to restrict which fields on the exception are returned.  By default, all fields of the exception are returned.  Field names should be specified in camelCase.  In addition to the fields specified, the response will contain scopeId, scopeType, entityId, entityType and ruleId.")] = None, page_token : Annotated[Optional[StrictStr], Field(description="The offset value used to set the starting point into the result set found at the repository.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.")] = None, filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities.")] = None, order_by : Annotated[Optional[StrictStr], Field(description="Used to provide with ordering to the returned entries. The supported syntax (for now): [target field]:asc or [target field]:desc.")] = None, facet_fields : Annotated[Optional[conlist(StrictStr)], Field(description="Used to provide with facet search capabilities by simply specifiying the fields to be used as base and by consequence, returned with an array for each of the specified fields and it's terms and matches for each of the entries.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """Lists the latest state of ongoing exceptions  # noqa: E501
 
         Retrieve exceptions matching the parameters provided.  # noqa: E501
@@ -625,7 +793,7 @@ class DefaultRiskExceptionAPI(object):
         :type read_mask: str
         :param page_token: The offset value used to set the starting point into the result set found at the repository.
         :type page_token: str
-        :param page_size: The number of entries to be returned as a response.
+        :param page_size: The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.
         :type page_size: int
         :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities.
         :type filter: str

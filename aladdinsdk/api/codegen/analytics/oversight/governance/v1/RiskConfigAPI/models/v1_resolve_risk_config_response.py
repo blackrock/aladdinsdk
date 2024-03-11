@@ -19,7 +19,7 @@ import json
 
 
 from typing import List, Optional
-from pydantic import BaseModel, Field, StrictInt, conlist
+from pydantic import BaseModel, Field, StrictInt, StrictStr, conlist
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskConfigAPI.models.v1_risk_config import V1RiskConfig
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskConfigAPI.models.v1_risk_navigation_links import V1RiskNavigationLinks
 
@@ -31,7 +31,9 @@ class V1ResolveRiskConfigResponse(BaseModel):
     risk_configs: Optional[conlist(V1RiskConfig)] = Field(None, alias="riskConfigs")
     count: Optional[StrictInt] = None
     total: Optional[StrictInt] = None
-    __properties = ["navigation", "riskConfigs", "count", "total"]
+    next_page_token: Optional[StrictStr] = Field(None, alias="nextPageToken", description="A token that can be sent as `pageToken` to retrieve the next page. If this field is omitted, there are no subsequent pages.")
+    total_size: Optional[StrictInt] = Field(None, alias="totalSize")
+    __properties = ["navigation", "riskConfigs", "count", "total", "nextPageToken", "totalSize"]
 
     class Config:
         """Pydantic configuration"""
@@ -82,7 +84,9 @@ class V1ResolveRiskConfigResponse(BaseModel):
             "navigation": V1RiskNavigationLinks.from_dict(obj.get("navigation")) if obj.get("navigation") is not None else None,
             "risk_configs": [V1RiskConfig.from_dict(_item) for _item in obj.get("riskConfigs")] if obj.get("riskConfigs") is not None else None,
             "count": obj.get("count"),
-            "total": obj.get("total")
+            "total": obj.get("total"),
+            "next_page_token": obj.get("nextPageToken"),
+            "total_size": obj.get("totalSize")
         })
         return _obj
 

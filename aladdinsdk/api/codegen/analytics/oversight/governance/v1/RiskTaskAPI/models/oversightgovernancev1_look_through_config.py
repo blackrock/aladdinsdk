@@ -18,8 +18,9 @@ import re  # noqa: F401
 import json
 
 
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel, Field, StrictBool, conlist
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_look_through_proxy_type import V1LookThroughProxyType
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_look_through_security_type import V1LookThroughSecurityType
 
 class Oversightgovernancev1LookThroughConfig(BaseModel):
@@ -29,7 +30,9 @@ class Oversightgovernancev1LookThroughConfig(BaseModel):
     look_through_portfolio: StrictBool = Field(..., alias="lookThroughPortfolio")
     look_through_benchmark: StrictBool = Field(..., alias="lookThroughBenchmark")
     look_through_security_types: conlist(V1LookThroughSecurityType) = Field(..., alias="lookThroughSecurityTypes")
-    __properties = ["lookThroughPortfolio", "lookThroughBenchmark", "lookThroughSecurityTypes"]
+    look_through_proxy_types: Optional[conlist(V1LookThroughProxyType)] = Field(None, alias="lookThroughProxyTypes")
+    look_through_inheritance: Optional[StrictBool] = Field(None, alias="lookThroughInheritance")
+    __properties = ["lookThroughPortfolio", "lookThroughBenchmark", "lookThroughSecurityTypes", "lookThroughProxyTypes", "lookThroughInheritance"]
 
     class Config:
         """Pydantic configuration"""
@@ -69,7 +72,9 @@ class Oversightgovernancev1LookThroughConfig(BaseModel):
         _obj = Oversightgovernancev1LookThroughConfig.parse_obj({
             "look_through_portfolio": obj.get("lookThroughPortfolio"),
             "look_through_benchmark": obj.get("lookThroughBenchmark"),
-            "look_through_security_types": obj.get("lookThroughSecurityTypes")
+            "look_through_security_types": obj.get("lookThroughSecurityTypes"),
+            "look_through_proxy_types": obj.get("lookThroughProxyTypes"),
+            "look_through_inheritance": obj.get("lookThroughInheritance")
         })
         return _obj
 

@@ -41,6 +41,8 @@ from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.m
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_create_risk_exception_request import V1CreateRiskExceptionRequest
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_create_risk_exception_result import V1CreateRiskExceptionResult
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_evaluation_state import V1EvaluationState
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_filter_risk_exceptions_request import V1FilterRiskExceptionsRequest
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_filter_risk_exceptions_response import V1FilterRiskExceptionsResponse
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_limit import V1Limit
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_limit_type import V1LimitType
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_list_risk_exceptions_response import V1ListRiskExceptionsResponse
@@ -50,6 +52,7 @@ from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.m
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_retrieve_risk_exceptions_by_id_request import V1RetrieveRiskExceptionsByIdRequest
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_retrieve_risk_exceptions_by_id_response import V1RetrieveRiskExceptionsByIdResponse
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_risk_exception import V1RiskException
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_risk_exceptions_query import V1RiskExceptionsQuery
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_risk_facet_search_entry import V1RiskFacetSearchEntry
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_risk_facet_search_list import V1RiskFacetSearchList
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_risk_navigation_links import V1RiskNavigationLinks
