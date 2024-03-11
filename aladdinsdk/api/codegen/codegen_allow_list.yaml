@@ -13,6 +13,10 @@ CODEGEN_API_SETTINGS:
     api_name: AccountInfoAPI
     api_version: v1
     host_url_path: /api/investment-operations/reference-data/account-info/v1/
+  - api_module_path: aladdinsdk.api.codegen.platform.studio.adc.adc_dataset.v1.AdcDatasetAPI
+    api_name: AdcDatasetAPI
+    api_version: v1
+    host_url_path: /api/platform/studio/adc/adc-dataset/v1/
   - api_module_path: aladdinsdk.api.codegen.investment_research.analyst.coverage.v1.AnalystCoverageAPI
     api_name: AnalystCoverageAPI
     api_version: v1
