@@ -159,7 +159,7 @@ class TestCommonErrorHandlerApiHandler(TestCase):
     def test_api_handle_error(self):
         from aladdinsdk.api.client import AladdinAPI
         from pydantic.error_wrappers import ValidationError
-        from aladdinsdk.api.codegen.platform.infrastructure.token.v1.token.exceptions import UnauthorizedException
+        from aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI.exceptions import UnauthorizedException
 
         test_subject = AladdinAPI('TrainJourneyAPI')
 
