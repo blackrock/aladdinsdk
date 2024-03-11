@@ -30,13 +30,13 @@ class V1ComplianceRuleAssignment(BaseModel):
     V1ComplianceRuleAssignment
     """
     id: Optional[StrictStr] = None
-    prohibition_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="prohibitionRuleConfigurations", description="Rule names and associated customizable components of each Prohibition Rule.")
-    concentration_rule_configurations: Optional[Dict[str, V1CustomizableRuleConfig]] = Field(None, alias="concentrationRuleConfigurations", description="Rule names and associated customizable components of each Concentration Rule.")
-    value_at_risk_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="valueAtRiskRuleConfigurations")
-    scripted_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="scriptedRuleConfigurations", description="Rule names and associated customizable components of each Scripted Rule.")
-    trade_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="tradeRuleConfigurations", description="Rule names and associated customizable components of each Trade Rule.")
-    counterparty_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="counterpartyRuleConfigurations", description="Rule names and associated customizable components of each Counterparty Rule.")
-    portfolio_names: Optional[conlist(StrictStr)] = Field(None, alias="portfolioNames", description="Portfolio name(s) to which rule is assigned.")
+    prohibition_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="prohibitionRuleConfigurations", description="Rule names and associated customizable components of each Prohibition Rule. Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
+    concentration_rule_configurations: Optional[Dict[str, V1CustomizableRuleConfig]] = Field(None, alias="concentrationRuleConfigurations", description="Rule names and associated customizable components of each Concentration Rule. Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
+    value_at_risk_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="valueAtRiskRuleConfigurations", description="Rule names and associated customizable components of each VaR Rule. (-- api-linter: aladdin::0901::prefix-required-field=disabled  aip.dev/not-precedent: We need to do this because 'Value at Risk' is the name of the rule type --) (-- api-linter: core::0140::prepositions=disabled  aip.dev/not-precedent: We need to do this because 'Value at Risk' is the name of the rule type --) Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
+    scripted_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="scriptedRuleConfigurations", description="Rule names and associated customizable components of each Scripted Rule. Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
+    trade_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="tradeRuleConfigurations", description="Rule names and associated customizable components of each Trade Rule. Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
+    counterparty_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="counterpartyRuleConfigurations", description="Rule names and associated customizable components of each Counterparty Rule. Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
+    portfolio_names: Optional[conlist(StrictStr)] = Field(None, alias="portfolioNames", description="Portfolio name(s) to which rule is assigned. Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
     approval_category: Optional[StrictStr] = Field(None, alias="approvalCategory")
     rule_assignment_source: Optional[StrictStr] = Field(None, alias="ruleAssignmentSource")
     category: Optional[StrictStr] = None
@@ -47,9 +47,9 @@ class V1ComplianceRuleAssignment(BaseModel):
     excerpt: Optional[StrictStr] = Field(None, description="This is a documentation field used for the rule assignment excerpt.")
     reference: Optional[StrictStr] = Field(None, description="This is a documentation field used for the rule assignment reference links.")
     labels: Optional[conlist(StrictStr)] = None
-    regulator: Optional[StrictStr] = Field(None, description="(-- api-linter: core::0203::required=disabled  aip.dev/not-precedent: We need to do this because it is only required when a different field is set and the given description is for informational use --) Regulating body of the the rule assignment. It is a required field when rule assignment source is 'REGULATORY'.")
+    regulator: Optional[StrictStr] = Field(None, description="Regulating body of the the rule assignment. It is a field when rule assignment source is 'REGULATORY'.")
     deadline: Optional[StrictStr] = None
-    jurisdiction_country_code: Optional[StrictStr] = Field(None, alias="jurisdictionCountryCode", description="(-- api-linter: core::0203::required=disabled  aip.dev/not-precedent: We need to do this because it is only required when a different field is set and the given description is for informational use --) Jurisdiction country code. It is a required field when rule assignment source is 'REGULATORY'.")
+    jurisdiction_country_code: Optional[StrictStr] = Field(None, alias="jurisdictionCountryCode", description="Jurisdiction country code. It is a field when rule assignment source is 'REGULATORY'.")
     documentation_link: Optional[StrictStr] = Field(None, alias="documentationLink", description="This is a documentation field used for the rule assignment documentation links.")
     override_action: Optional[StrictStr] = Field(None, alias="overrideAction", description="This is a documentation field used for the rule assignment override action.")
     resolution_action: Optional[StrictStr] = Field(None, alias="resolutionAction", description="This is a documentation field used for the rule assignment resolution action.")
@@ -57,7 +57,9 @@ class V1ComplianceRuleAssignment(BaseModel):
     constraint_applicability_type: Optional[EnumsComplianceRuleApplicabilityType] = Field(None, alias="constraintApplicabilityType")
     assignment_name: Optional[StrictStr] = Field(None, alias="assignmentName")
     resolution_requires_four_eyes_approval: Optional[StrictBool] = Field(None, alias="resolutionRequiresFourEyesApproval", description="The rule assignment's violation4EyesFlag flag. By default it is false.")
-    __properties = ["id", "prohibitionRuleConfigurations", "concentrationRuleConfigurations", "valueAtRiskRuleConfigurations", "scriptedRuleConfigurations", "tradeRuleConfigurations", "counterpartyRuleConfigurations", "portfolioNames", "approvalCategory", "ruleAssignmentSource", "category", "effectiveDate", "effective", "reviewState", "implementationNote", "excerpt", "reference", "labels", "regulator", "deadline", "jurisdictionCountryCode", "documentationLink", "overrideAction", "resolutionAction", "terminationDate", "constraintApplicabilityType", "assignmentName", "resolutionRequiresFourEyesApproval"]
+    disclosure_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="disclosureRuleConfigurations", description="Rule names and associated customizable components of each Disclosure Rule. Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
+    info_rule_configurations: Optional[Dict[str, V1SimpleRuleConfig]] = Field(None, alias="infoRuleConfigurations", description="Rule names and associated customizable components of each Information Rule. Warning: Portfolios and rules configurations are linked and cannot therefore be updated separately. In order to publish a change on either portfolios or rule configurations, please ensure you provide all portfolios and rules configurations you want the system to retain.")
+    __properties = ["id", "prohibitionRuleConfigurations", "concentrationRuleConfigurations", "valueAtRiskRuleConfigurations", "scriptedRuleConfigurations", "tradeRuleConfigurations", "counterpartyRuleConfigurations", "portfolioNames", "approvalCategory", "ruleAssignmentSource", "category", "effectiveDate", "effective", "reviewState", "implementationNote", "excerpt", "reference", "labels", "regulator", "deadline", "jurisdictionCountryCode", "documentationLink", "overrideAction", "resolutionAction", "terminationDate", "constraintApplicabilityType", "assignmentName", "resolutionRequiresFourEyesApproval", "disclosureRuleConfigurations", "infoRuleConfigurations"]
 
     class Config:
         """Pydantic configuration"""
@@ -125,6 +127,20 @@ class V1ComplianceRuleAssignment(BaseModel):
                 if self.counterparty_rule_configurations[_key]:
                     _field_dict[_key] = self.counterparty_rule_configurations[_key].to_dict()
             _dict['counterpartyRuleConfigurations'] = _field_dict
+        # override the default output from pydantic by calling `to_dict()` of each value in disclosure_rule_configurations (dict)
+        _field_dict = {}
+        if self.disclosure_rule_configurations:
+            for _key in self.disclosure_rule_configurations:
+                if self.disclosure_rule_configurations[_key]:
+                    _field_dict[_key] = self.disclosure_rule_configurations[_key].to_dict()
+            _dict['disclosureRuleConfigurations'] = _field_dict
+        # override the default output from pydantic by calling `to_dict()` of each value in info_rule_configurations (dict)
+        _field_dict = {}
+        if self.info_rule_configurations:
+            for _key in self.info_rule_configurations:
+                if self.info_rule_configurations[_key]:
+                    _field_dict[_key] = self.info_rule_configurations[_key].to_dict()
+            _dict['infoRuleConfigurations'] = _field_dict
         return _dict
 
     @classmethod
@@ -194,7 +210,19 @@ class V1ComplianceRuleAssignment(BaseModel):
             "termination_date": obj.get("terminationDate"),
             "constraint_applicability_type": obj.get("constraintApplicabilityType"),
             "assignment_name": obj.get("assignmentName"),
-            "resolution_requires_four_eyes_approval": obj.get("resolutionRequiresFourEyesApproval")
+            "resolution_requires_four_eyes_approval": obj.get("resolutionRequiresFourEyesApproval"),
+            "disclosure_rule_configurations": dict(
+                (_k, V1SimpleRuleConfig.from_dict(_v))
+                for _k, _v in obj.get("disclosureRuleConfigurations").items()
+            )
+            if obj.get("disclosureRuleConfigurations") is not None
+            else None,
+            "info_rule_configurations": dict(
+                (_k, V1SimpleRuleConfig.from_dict(_v))
+                for _k, _v in obj.get("infoRuleConfigurations").items()
+            )
+            if obj.get("infoRuleConfigurations") is not None
+            else None
         })
         return _obj
 

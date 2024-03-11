@@ -20,7 +20,7 @@ import json
 from datetime import datetime
 from typing import Dict, List, Optional
 from pydantic import BaseModel, Field, StrictInt, StrictStr, conlist
-from aladdinsdk.api.codegen.investment_research.content.research_note.v2.ResearchNoteAPI.models.types_data_value import TypesDataValue
+from aladdinsdk.api.codegen.investment_research.content.research_note.v2.ResearchNoteAPI.models.types_custom_field_value import TypesCustomFieldValue
 from aladdinsdk.api.codegen.investment_research.content.research_note.v2.ResearchNoteAPI.models.types_entity_id import TypesEntityId
 from aladdinsdk.api.codegen.investment_research.content.research_note.v2.ResearchNoteAPI.models.v2_expiring_permission_group import V2ExpiringPermissionGroup
 from aladdinsdk.api.codegen.investment_research.content.research_note.v2.ResearchNoteAPI.models.v2_note_state import V2NoteState
@@ -43,11 +43,11 @@ class V2ResearchNote(BaseModel):
     broker_id: Optional[StrictStr] = Field(None, alias="brokerId")
     expiring_permission_groups: Optional[conlist(V2ExpiringPermissionGroup)] = Field(None, alias="expiringPermissionGroups")
     note_html: Optional[StrictStr] = Field(None, alias="noteHtml")
-    template_name: Optional[StrictStr] = Field(None, alias="templateName")
+    template_id: Optional[StrictStr] = Field(None, alias="templateId")
     template_version: Optional[StrictInt] = Field(None, alias="templateVersion")
-    custom_fields: Optional[Dict[str, TypesDataValue]] = Field(None, alias="customFields")
+    custom_fields: Optional[Dict[str, TypesCustomFieldValue]] = Field(None, alias="customFields")
     update_time: Optional[datetime] = Field(None, alias="updateTime", description="The update time.")
-    __properties = ["id", "author", "creator", "subject", "noteCategory", "keywords", "publishTime", "note", "noteState", "selectedPermissionGroups", "entities", "brokerId", "expiringPermissionGroups", "noteHtml", "templateName", "templateVersion", "customFields", "updateTime"]
+    __properties = ["id", "author", "creator", "subject", "noteCategory", "keywords", "publishTime", "note", "noteState", "selectedPermissionGroups", "entities", "brokerId", "expiringPermissionGroups", "noteHtml", "templateId", "templateVersion", "customFields", "updateTime"]
 
     class Config:
         """Pydantic configuration"""
@@ -120,10 +120,10 @@ class V2ResearchNote(BaseModel):
             "broker_id": obj.get("brokerId"),
             "expiring_permission_groups": [V2ExpiringPermissionGroup.from_dict(_item) for _item in obj.get("expiringPermissionGroups")] if obj.get("expiringPermissionGroups") is not None else None,
             "note_html": obj.get("noteHtml"),
-            "template_name": obj.get("templateName"),
+            "template_id": obj.get("templateId"),
             "template_version": obj.get("templateVersion"),
             "custom_fields": dict(
-                (_k, TypesDataValue.from_dict(_v))
+                (_k, TypesCustomFieldValue.from_dict(_v))
                 for _k, _v in obj.get("customFields").items()
             )
             if obj.get("customFields") is not None

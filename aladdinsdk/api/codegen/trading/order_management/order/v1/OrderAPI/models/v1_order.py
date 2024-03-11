@@ -95,7 +95,7 @@ class V1Order(BaseModel):
     touch_count: Optional[StrictInt] = Field(None, alias="touchCount", description="This number will be incremented every time the order is touched.")
     urgency: Optional[StrictStr] = Field(None, description="Urgency of the order. Examples: \"1\", \"2\". Contact Aladdin Support for full list of accepted values.")
     order_comments: Optional[conlist(V1OrderComment)] = Field(None, alias="orderComments", description="Comments on the order.")
-    flags: Optional[conlist(V1OrderFlag)] = Field(None, description="Order Flags. Please refer to BQL ord_flags.")
+    flags: Optional[conlist(V1OrderFlag)] = None
     reference_asset_id: Optional[StrictStr] = Field(None, alias="referenceAssetId")
     reference_haircut: Optional[Union[StrictFloat, StrictInt]] = Field(None, alias="referenceHaircut")
     reference_price: Optional[Union[StrictFloat, StrictInt]] = Field(None, alias="referencePrice")

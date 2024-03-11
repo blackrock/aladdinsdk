@@ -43,6 +43,7 @@ from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_filter_orders_request import V1FilterOrdersRequest
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_filter_orders_response import V1FilterOrdersResponse
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_longrunning_operation import V1LongrunningOperation
+from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_modified_time_range import V1ModifiedTimeRange
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_order import V1Order
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_order_asset_reference import V1OrderAssetReference
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_order_comment import V1OrderComment
@@ -55,8 +56,12 @@ from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_order_reservation_id import V1OrderReservationID
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_portfolio_and_order_status_filter_option import V1PortfolioAndOrderStatusFilterOption
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_portfolio_group_criterion import V1PortfolioGroupCriterion
+from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_portfolio_modified_time_criterion import V1PortfolioModifiedTimeCriterion
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_post_order_config import V1PostOrderConfig
+from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_post_order_request import V1PostOrderRequest
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_post_order_response import V1PostOrderResponse
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_post_order_result import V1PostOrderResult
+from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_single_post_order_response import V1SinglePostOrderResponse
+from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_time_range_parameter import V1TimeRangeParameter
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_violation import V1Violation
 from aladdinsdk.api.codegen.trading.order_management.order.v1.OrderAPI.models.v1_violation_contribution import V1ViolationContribution

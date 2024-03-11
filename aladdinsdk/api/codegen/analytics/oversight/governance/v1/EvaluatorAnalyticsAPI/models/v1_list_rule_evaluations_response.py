@@ -19,7 +19,7 @@ import json
 
 
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field, StrictInt, conlist
+from pydantic import BaseModel, Field, StrictInt, StrictStr, conlist
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.EvaluatorAnalyticsAPI.models.v1_risk_facet_search_list import V1RiskFacetSearchList
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.EvaluatorAnalyticsAPI.models.v1_risk_navigation_links import V1RiskNavigationLinks
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.EvaluatorAnalyticsAPI.models.v1_rule_evaluation import V1RuleEvaluation
@@ -33,7 +33,9 @@ class V1ListRuleEvaluationsResponse(BaseModel):
     total: StrictInt = Field(...)
     search_facets: Optional[Dict[str, V1RiskFacetSearchList]] = Field(None, alias="searchFacets")
     rule_evaluations: Optional[conlist(V1RuleEvaluation)] = Field(None, alias="ruleEvaluations")
-    __properties = ["navigation", "count", "total", "searchFacets", "ruleEvaluations"]
+    next_page_token: Optional[StrictStr] = Field(None, alias="nextPageToken", description="A token that can be sent as `pageToken` to retrieve the next page. If this field is omitted, there are no subsequent pages.")
+    total_size: Optional[StrictInt] = Field(None, alias="totalSize")
+    __properties = ["navigation", "count", "total", "searchFacets", "ruleEvaluations", "nextPageToken", "totalSize"]
 
     class Config:
         """Pydantic configuration"""
@@ -97,7 +99,9 @@ class V1ListRuleEvaluationsResponse(BaseModel):
             )
             if obj.get("searchFacets") is not None
             else None,
-            "rule_evaluations": [V1RuleEvaluation.from_dict(_item) for _item in obj.get("ruleEvaluations")] if obj.get("ruleEvaluations") is not None else None
+            "rule_evaluations": [V1RuleEvaluation.from_dict(_item) for _item in obj.get("ruleEvaluations")] if obj.get("ruleEvaluations") is not None else None,
+            "next_page_token": obj.get("nextPageToken"),
+            "total_size": obj.get("totalSize")
         })
         return _obj
 

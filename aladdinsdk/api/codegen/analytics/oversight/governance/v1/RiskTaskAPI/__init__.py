@@ -44,6 +44,7 @@ from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_limit_definition import V1LimitDefinition
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_limit_type import V1LimitType
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_list_risk_tasks_response import V1ListRiskTasksResponse
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_look_through_proxy_type import V1LookThroughProxyType
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_look_through_security_type import V1LookThroughSecurityType
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_metric_source import V1MetricSource
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskTaskAPI.models.v1_metric_unit import V1MetricUnit

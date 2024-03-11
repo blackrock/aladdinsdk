@@ -23,7 +23,7 @@ from aenum import Enum, no_arg
 
 class V1RuleExecutionState(str, Enum):
     """
-    - RULE_EXECUTION_STATE_UNSPECIFIED: No definition present (not a valid input value)  - RULE_EXECUTION_STATE_SUCCESS: Rule evaluation completed successfully  - RULE_EXECUTION_STATE_PARTIAL_FAILURE: Rule evaluation completed with failures  - RULE_EXECUTION_STATE_FAILURE: Unable to evaluate rule
+    - RULE_EXECUTION_STATE_UNSPECIFIED: No definition present (not a valid input value)  - RULE_EXECUTION_STATE_SUCCESS: Rule evaluation completed successfully  - RULE_EXECUTION_STATE_PARTIAL_FAILURE: Rule evaluation completed with failures, check errorMessage for reason  - RULE_EXECUTION_STATE_FAILURE: Failure encountered during the evaluation of the rule, check errorMessage for reason  - RULE_EXECUTION_STATE_DEFERRED: Rule Evaluation has been deferred and will be retried later, e.g. benchmark is not ready, check errorMessage for reason
     """
 
     """
@@ -33,6 +33,7 @@ class V1RuleExecutionState(str, Enum):
     RULE_EXECUTION_STATE_SUCCESS = 'RULE_EXECUTION_STATE_SUCCESS'
     RULE_EXECUTION_STATE_PARTIAL_FAILURE = 'RULE_EXECUTION_STATE_PARTIAL_FAILURE'
     RULE_EXECUTION_STATE_FAILURE = 'RULE_EXECUTION_STATE_FAILURE'
+    RULE_EXECUTION_STATE_DEFERRED = 'RULE_EXECUTION_STATE_DEFERRED'
 
     @classmethod
     def from_json(cls, json_str: str) -> V1RuleExecutionState:

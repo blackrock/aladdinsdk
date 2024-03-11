@@ -1,0 +1,2161 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Coupon in Aladdin are generated internally by Aladdin's Bulk Rate Mechanism (BRM) module or sourced from external vendors. This API allows for retrieval of coupon reset records based on a number of criteria including assetId, dates and more.",
+        "title": "Coupon Reset",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.investment_operations.asset_lifecycle.coupon_reset.CouponResetAPI",
+        "x-aladdin-api-stability": "stable",
+        "x-aladdin-spec-id": "agraph.investment_operations.asset_lifecycle.coupon_reset.v1.CouponResetAPI"
+    },
+    "basePath": "/api/investment-operations/asset-lifecycle/coupon-reset/v1/",
+    "paths": {
+        "/couponResets": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for retrieval of a single Coupon Reset for a specified reset date.\n(-- api-linter: core::0131::http-uri-id=disabled\n aip.dev/not-precedent: We need to do this because the resource doesn't have a non-composite id --)",
+                "summary": "Retrieve a Coupon Reset record",
+                "operationId": "CouponResetAPI_GetCouponReset",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Asset Identifier\n(-- api-linter: core::0131::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because we want to get a CouponReset using an asset-id. --).",
+                        "name": "assetId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Reset date\n(-- api-linter: core::0131::request-unknown-fields=disabled\n aip.dev/not-precedent: We need to do this because we want to get a CouponReset using reset date. --).",
+                        "name": "resetDate",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CouponReset"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            },
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for creation of a new Coupon Reset",
+                "summary": "Create a new Coupon Reset record",
+                "operationId": "CouponResetAPI_CreateCouponReset",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "CouponReset to create",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1CouponReset"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CouponReset"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            },
+            "patch": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for update of certain fields of a single, given Coupon Reset\n(-- api-linter: core::0134::http-uri-id=disabled\n aip.dev/not-precedent: We need to do this because the resource doesn't have a non-composite id --)",
+                "summary": "Update a Coupon Reset Record",
+                "operationId": "CouponResetAPI_UpdateCouponReset",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "CouponReset record to be updated",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1CouponReset"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "List of fields to be updated.",
+                        "name": "updateMask",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1CouponReset"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            }
+        },
+        "/couponResets:batchCreate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for one to create multiple Coupon Resets.",
+                "summary": "Batch create Coupon Reset records",
+                "operationId": "CouponResetAPI_BatchCreateCouponResets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchCreateCouponResetsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchCreateCouponResetsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            }
+        },
+        "/couponResets:batchUpdate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for one to update multiple Coupon Resets.",
+                "summary": "Batch update Coupon Reset records",
+                "operationId": "CouponResetAPI_BatchUpdateCouponResets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchUpdateCouponResetsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchUpdateCouponResetsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            }
+        },
+        "/couponResets:filter": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for retreival of coupon resets by asset id, acrrual start date and accrual end date.",
+                "summary": "Filter for Coupon Reset records",
+                "operationId": "CouponResetAPI_FilterCouponResets",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Asset Identifier.",
+                        "name": "query.assetId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Accrual range beginning.",
+                        "name": "query.accrualStartDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Accrual range end.",
+                        "name": "query.accrualEndDate",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterCouponResetsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        },
+        "/couponResets:filterByParameters": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for retreival of coupon resets by various parameters.",
+                "summary": "Filter for Coupon Reset records By Parameters",
+                "operationId": "CouponResetAPI_FilterCouponResetsByParameters",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterCouponResetsByParametersRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterCouponResetsByParametersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "CouponResetState": {
+            "description": "- STATE_UNSPECIFIED: Unspecified state\n - STATE_DONE: Calculation for this reset are complete\n - STATE_ERROR: Coupon or index calculation failed\n - STATE_WAIT: Calculation is incomplete due to missing index/security data\n - STATE_MANUAL: Manually amended coupon value",
+            "type": "string",
+            "title": "Possible states for a couponReset",
+            "default": "STATE_UNSPECIFIED",
+            "enum": [
+                "STATE_UNSPECIFIED",
+                "STATE_DONE",
+                "STATE_ERROR",
+                "STATE_WAIT",
+                "STATE_MANUAL"
+            ]
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "typesRangeValue": {
+            "type": "object",
+            "title": "Range values\nField end_date is ignored if used with a comparison operator",
+            "required": [
+                "beginDate"
+            ],
+            "properties": {
+                "beginDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Begin date value",
+                    "required": [
+                        "begin_date"
+                    ]
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "End date value"
+                }
+            }
+        },
+        "typesRepeatedValue": {
+            "type": "object",
+            "title": "Repeated values",
+            "properties": {
+                "stringValues": {
+                    "type": "array",
+                    "title": "List of string objects",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "typesSingleValue": {
+            "type": "object",
+            "title": "Single non-repeated values",
+            "properties": {
+                "stringValue": {
+                    "type": "string",
+                    "title": "string value"
+                }
+            }
+        },
+        "v1AssetFilter": {
+            "type": "object",
+            "title": "Asset filter",
+            "required": [
+                "securityGroup"
+            ],
+            "properties": {
+                "securityGroup": {
+                    "type": "string",
+                    "title": "Security group",
+                    "required": [
+                        "security_group"
+                    ]
+                },
+                "securityType": {
+                    "type": "string",
+                    "title": "Security type"
+                }
+            }
+        },
+        "v1BatchCreateCouponResetsRequest": {
+            "type": "object",
+            "title": "BatchCreateCouponResetsRequest",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "requests": {
+                    "type": "array",
+                    "title": "CouponResets to create",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1CreateCouponResetRequest"
+                    }
+                }
+            }
+        },
+        "v1BatchCreateCouponResetsResponse": {
+            "type": "object",
+            "title": "BatchCreateCouponResetsResponse",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "title": "Results for each CouponReset to be created",
+                    "items": {
+                        "$ref": "#/definitions/v1CreateCouponResetResult"
+                    }
+                }
+            }
+        },
+        "v1BatchUpdateCouponResetsRequest": {
+            "type": "object",
+            "title": "BatchUpdateCouponResetsRequest",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "requests": {
+                    "type": "array",
+                    "title": "CouponResets to update",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1UpdateCouponResetRequest"
+                    }
+                }
+            }
+        },
+        "v1BatchUpdateCouponResetsResponse": {
+            "type": "object",
+            "title": "BatchUpdateCouponResetsResponse",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "title": "Results of each CouponReset to be updated",
+                    "items": {
+                        "$ref": "#/definitions/v1UpdateCouponResetResult"
+                    }
+                }
+            }
+        },
+        "v1Comparison": {
+            "description": "Comparison operators compare two operands and yield a boolean value. Unlike\nin most programming languages, field names must appear on the left-hand side\nof a comparison operator; the right-hand side only accepts literals and\nlogical operators.\n\n - COMPARISON_UNSPECIFIED: Default value\n - COMPARISON_LESS_EQUALS: The given `field` is less than the given `value`.\n - COMPARISON_LESS_THAN: The given `field` is less than or equal to the given `value`.\n - COMPARISON_GREATER_EQUALS: The given `field` is greater than or equal to the given `value`.\n - COMPARISON_GREATER_THAN: The given `field` is greater than the given `value`.\n - COMPARISON_NOT_EQUALS: The given `field` is not equal to the given `value`.\n - COMPARISON_EQUALS: The given `field` is equal to the given `value`.",
+            "type": "string",
+            "default": "COMPARISON_UNSPECIFIED",
+            "enum": [
+                "COMPARISON_UNSPECIFIED",
+                "COMPARISON_LESS_EQUALS",
+                "COMPARISON_LESS_THAN",
+                "COMPARISON_GREATER_EQUALS",
+                "COMPARISON_GREATER_THAN",
+                "COMPARISON_NOT_EQUALS",
+                "COMPARISON_EQUALS"
+            ]
+        },
+        "v1CouponReset": {
+            "type": "object",
+            "title": "CouponReset describes coupons calculated internally in ALADDIN",
+            "properties": {
+                "id": {
+                    "description": "Resources must have a 'id' field.\n\nId describes the computer or human assigned resource identifier.",
+                    "type": "string"
+                },
+                "assetId": {
+                    "type": "string",
+                    "title": "Asset Identifier"
+                },
+                "determinationDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Index lookup date"
+                },
+                "resetDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Reset date"
+                },
+                "coupon": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Coupon value"
+                },
+                "indexValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Index value used for coupon calculation"
+                },
+                "nextDeterminationDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Next determination date"
+                },
+                "nextResetDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Next reset date"
+                },
+                "status": {
+                    "title": "Reset status",
+                    "$ref": "#/definitions/CouponResetState"
+                },
+                "couponSource": {
+                    "type": "string",
+                    "title": "Source of the reset, i.e., who made the entry\nThis could either be system generated (BRM, TradeEntry, RepoTrader etc.) or manually entered by a user"
+                },
+                "calculationDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Calculation date"
+                },
+                "confirmer": {
+                    "type": "string",
+                    "title": "Represents user-id of the confirmer"
+                },
+                "quotedDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Coupon date as quoted by data provider"
+                }
+            }
+        },
+        "v1CouponResetParameterName": {
+            "description": "- COUPON_RESET_PARAMETER_NAME_UNSPECIFIED: Unspecified parameter name\n - COUPON_RESET_PARAMETER_NAME_ASSET_IDS: Represents one or more asset identifiers on which filtering should be applied\n - COUPON_RESET_PARAMETER_NAME_RESET_DATE: Represents reset date of the Coupon Reset\n - COUPON_RESET_PARAMETER_NAME_NEXT_RESET_DATE: Represents next reset date of the Coupon Reset\n - COUPON_RESET_PARAMETER_NAME_DETERMINATION_DATE: Represents determination date of the Coupon Reset\n - COUPON_RESET_PARAMETER_NAME_NEXT_DETERMINATION_DATE: Represents next determination date of the Coupon Reset\n - COUPON_RESET_PARAMETER_NAME_MODIFY_DATE: Represents modify date of the Coupon Reset\n - COUPON_RESET_PARAMETER_NAME_SECURITY_GROUP_AND_TYPE: Represents the security group and type\n - COUPON_RESET_PARAMETER_NAME_POS_DATE: Represents pos date of the Coupon Reset\n - COUPON_RESET_PARAMETER_NAME_CURRENCIES: Represents one or more currencies on which filtering should be applied\n - COUPON_RESET_PARAMETER_NAME_SOURCE: Source against which this coupon needs to be filtered\n - COUPON_RESET_PARAMETER_NAME_STATUS: Represents status of the Coupon Reset\n - COUPON_RESET_PARAMETER_NAME_CONFIRMED_STATUS: Represents confirmed status of the Coupon Reset\n - COUPON_RESET_PARAMETER_NAME_CONFIRMED_BY: Represents confirmed by of the Coupon Reset",
+            "type": "string",
+            "title": "Name of the parameter on basis of which Coupon Resets will be filtered",
+            "default": "COUPON_RESET_PARAMETER_NAME_UNSPECIFIED",
+            "enum": [
+                "COUPON_RESET_PARAMETER_NAME_UNSPECIFIED",
+                "COUPON_RESET_PARAMETER_NAME_ASSET_IDS",
+                "COUPON_RESET_PARAMETER_NAME_RESET_DATE",
+                "COUPON_RESET_PARAMETER_NAME_NEXT_RESET_DATE",
+                "COUPON_RESET_PARAMETER_NAME_DETERMINATION_DATE",
+                "COUPON_RESET_PARAMETER_NAME_NEXT_DETERMINATION_DATE",
+                "COUPON_RESET_PARAMETER_NAME_MODIFY_DATE",
+                "COUPON_RESET_PARAMETER_NAME_SECURITY_GROUP_AND_TYPE",
+                "COUPON_RESET_PARAMETER_NAME_POS_DATE",
+                "COUPON_RESET_PARAMETER_NAME_CURRENCIES",
+                "COUPON_RESET_PARAMETER_NAME_SOURCE",
+                "COUPON_RESET_PARAMETER_NAME_STATUS",
+                "COUPON_RESET_PARAMETER_NAME_CONFIRMED_STATUS",
+                "COUPON_RESET_PARAMETER_NAME_CONFIRMED_BY"
+            ]
+        },
+        "v1CouponResetQuery": {
+            "type": "object",
+            "title": "Query to filter Couponresets",
+            "required": [
+                "assetId",
+                "accrualStartDate",
+                "accrualEndDate"
+            ],
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "Asset Identifier",
+                    "required": [
+                        "asset_id"
+                    ]
+                },
+                "accrualStartDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Accrual range beginning",
+                    "required": [
+                        "accrual_start_date"
+                    ]
+                },
+                "accrualEndDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Accrual range end",
+                    "required": [
+                        "accrual_end_date"
+                    ]
+                }
+            }
+        },
+        "v1CreateCouponResetRequest": {
+            "type": "object",
+            "title": "CreateCouponResetRequest",
+            "properties": {
+                "couponReset": {
+                    "title": "CouponReset to create",
+                    "$ref": "#/definitions/v1CouponReset"
+                }
+            }
+        },
+        "v1CreateCouponResetResult": {
+            "type": "object",
+            "title": "CreateCouponResetResult",
+            "properties": {
+                "error": {
+                    "title": "Error message in case of failed create operation",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "output": {
+                    "title": "Created CouponReset in case of successful operation",
+                    "$ref": "#/definitions/v1CouponReset"
+                }
+            }
+        },
+        "v1FilterCouponResetsByParametersRequest": {
+            "type": "object",
+            "title": "The request message for CouponResetAPI.FilterCouponResets.\n(-- api-linter: core::0158::request-page-token-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)\n(-- api-linter: core::0158::request-page-size-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)",
+            "properties": {
+                "query": {
+                    "title": "Query to filter for CouponResets",
+                    "$ref": "#/definitions/v1FilterQuery"
+                }
+            }
+        },
+        "v1FilterCouponResetsByParametersResponse": {
+            "type": "object",
+            "title": "The response message for CouponResetAPI.FilterCouponResets.\n(-- api-linter: core::0158::response-next-page-token-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)",
+            "properties": {
+                "couponResets": {
+                    "type": "array",
+                    "title": "Retrieved CouponReset record(s)",
+                    "items": {
+                        "$ref": "#/definitions/v1CouponReset"
+                    }
+                },
+                "message": {
+                    "description": "Status message. This will also indicate completeness of the result set.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1FilterCouponResetsResponse": {
+            "type": "object",
+            "title": "The response message for CouponResetAPI.FilterCouponResets.\n(-- api-linter: core::0158::response-next-page-token-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)",
+            "properties": {
+                "couponResets": {
+                    "type": "array",
+                    "title": "Retrieved CouponReset record(s)",
+                    "items": {
+                        "$ref": "#/definitions/v1CouponReset"
+                    }
+                }
+            }
+        },
+        "v1FilterCriteria": {
+            "type": "object",
+            "title": "Contains filter parameters along with logical operator for predicates",
+            "required": [
+                "filterParams"
+            ],
+            "properties": {
+                "filterParams": {
+                    "type": "array",
+                    "title": "List of parameters on basis of which Coupon Resets will be filtered",
+                    "required": [
+                        "filter_params"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1FilterParameter"
+                    }
+                },
+                "predicatesOperator": {
+                    "title": "Logical operation for the predicates",
+                    "$ref": "#/definitions/v1Logical"
+                }
+            }
+        },
+        "v1FilterParameter": {
+            "type": "object",
+            "title": "Parameter used to generated the builder condition for filter",
+            "properties": {
+                "parameterName": {
+                    "title": "Name of the filter parameter",
+                    "$ref": "#/definitions/v1CouponResetParameterName"
+                },
+                "parameterValue": {
+                    "title": "Value of the parameter",
+                    "$ref": "#/definitions/v1ParameterValue"
+                },
+                "selfOperator": {
+                    "title": "Comparison operation to be performed",
+                    "$ref": "#/definitions/v1Comparison"
+                }
+            }
+        },
+        "v1FilterQuery": {
+            "type": "object",
+            "title": "Query to filter Couponresets",
+            "required": [
+                "filterCriteria"
+            ],
+            "properties": {
+                "filterCriteria": {
+                    "type": "array",
+                    "title": "Filter criteria for Coupon Resets (will be AND'ed together and maximum 10 criteria can be created)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because this is local field for filtering Coupon Reset's. --)",
+                    "required": [
+                        "filter_criteria"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1FilterCriteria"
+                    }
+                }
+            }
+        },
+        "v1Logical": {
+            "description": "Logical operators apply to boolean values and yield a result of the same type\nas the operands. The right operand is evaluated conditionally. To match\ncommon patterns of speech, the OR operator has higher precedence than AND,\nunlike what is found in most programming languages. The expression a AND b OR\nc evaluates: a AND (b OR c).\n\n - LOGICAL_UNSPECIFIED: Default value\n - LOGICAL_OR: LOGICAL_OR indicates an OR condition. If any of the two operands is true,\nthen condition becomes true, otherwise it is false.\n - LOGICAL_AND: LOGICAL_AND indicates an AND condition. If both the operands are true, then\ncondition becomes true, othwerwise it is false.\n - LOGICAL_NOT: LOGICAL_NOT indicates a NOT condition. Use to reverses the logical state of\nits operand. If a condition is true then Logical NOT operator will make\nfalse.",
+            "type": "string",
+            "default": "LOGICAL_UNSPECIFIED",
+            "enum": [
+                "LOGICAL_UNSPECIFIED",
+                "LOGICAL_OR",
+                "LOGICAL_AND",
+                "LOGICAL_NOT"
+            ]
+        },
+        "v1ParameterValue": {
+            "type": "object",
+            "title": "Value that the parameter in filter criteria possess",
+            "properties": {
+                "singleValue": {
+                    "title": "Non repeated value",
+                    "$ref": "#/definitions/typesSingleValue"
+                },
+                "repeatedValue": {
+                    "title": "Repeated values i.e., list of objects",
+                    "$ref": "#/definitions/typesRepeatedValue"
+                },
+                "rangeValue": {
+                    "title": "Range values",
+                    "$ref": "#/definitions/typesRangeValue"
+                },
+                "assetFilter": {
+                    "title": "Asset filters",
+                    "$ref": "#/definitions/v1AssetFilter"
+                }
+            }
+        },
+        "v1UpdateCouponResetRequest": {
+            "type": "object",
+            "title": "UpdateCouponResetRequest",
+            "properties": {
+                "couponReset": {
+                    "title": "CouponReset record to be updated",
+                    "$ref": "#/definitions/v1CouponReset"
+                },
+                "updateMask": {
+                    "type": "string",
+                    "title": "List of fields to be updated"
+                }
+            }
+        },
+        "v1UpdateCouponResetResult": {
+            "type": "object",
+            "title": "UpdateCouponResetResult",
+            "properties": {
+                "error": {
+                    "title": "Error message in case of failed update operation",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "output": {
+                    "title": "Updated CouponReset in case of successful operation",
+                    "$ref": "#/definitions/v1CouponReset"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read": "non-sensitive read",
+                "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read": "non-sensitive read",
+                "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read",
+                "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:read",
+                "investment_operations.asset_lifecycle.coupon_reset.v1.CouponReset:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

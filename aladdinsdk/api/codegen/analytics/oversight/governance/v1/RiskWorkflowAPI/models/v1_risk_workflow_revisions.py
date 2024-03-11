@@ -21,7 +21,6 @@ import json
 from typing import List, Optional
 from pydantic import BaseModel, Field, StrictStr, conlist
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskWorkflowAPI.models.v1_risk_workflow_activity import V1RiskWorkflowActivity
-from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskWorkflowAPI.models.v1_risk_workflow_priority import V1RiskWorkflowPriority
 
 class V1RiskWorkflowRevisions(BaseModel):
     """
@@ -31,11 +30,10 @@ class V1RiskWorkflowRevisions(BaseModel):
     workflow_activities: Optional[conlist(V1RiskWorkflowActivity)] = Field(None, alias="workflowActivities")
     exception_id: Optional[StrictStr] = Field(None, alias="exceptionId")
     workflow_description: Optional[StrictStr] = Field(None, alias="workflowDescription")
-    workflow_priority: Optional[V1RiskWorkflowPriority] = Field(None, alias="workflowPriority")
     rule_id: StrictStr = Field(..., alias="ruleId")
     scope_id: StrictStr = Field(..., alias="scopeId")
     scope_type: StrictStr = Field(..., alias="scopeType")
-    __properties = ["id", "workflowActivities", "exceptionId", "workflowDescription", "workflowPriority", "ruleId", "scopeId", "scopeType"]
+    __properties = ["id", "workflowActivities", "exceptionId", "workflowDescription", "ruleId", "scopeId", "scopeType"]
 
     class Config:
         """Pydantic configuration"""
@@ -84,7 +82,6 @@ class V1RiskWorkflowRevisions(BaseModel):
             "workflow_activities": [V1RiskWorkflowActivity.from_dict(_item) for _item in obj.get("workflowActivities")] if obj.get("workflowActivities") is not None else None,
             "exception_id": obj.get("exceptionId"),
             "workflow_description": obj.get("workflowDescription"),
-            "workflow_priority": obj.get("workflowPriority"),
             "rule_id": obj.get("ruleId"),
             "scope_id": obj.get("scopeId"),
             "scope_type": obj.get("scopeType")
