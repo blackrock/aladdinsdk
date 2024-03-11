@@ -20,17 +20,21 @@ import json
 
 from typing import List, Optional
 from pydantic import BaseModel, Field, StrictStr, conlist
+from aladdinsdk.api.codegen.investment_research.content.research_note.v2.ResearchNoteAPI.models.v2_date_range import V2DateRange
+from aladdinsdk.api.codegen.investment_research.content.research_note.v2.ResearchNoteAPI.models.v2_template_info import V2TemplateInfo
 
 class V2ResearchNoteQuery(BaseModel):
     """
     ResearchNote Query describes different filter parameters that can be used to filter research notes.
     """
-    filter_criteria: Optional[conlist(StrictStr)] = Field(None, alias="filterCriteria", description="Multiple criteria can also be joined by AND and OR logic operator Other supported logic operator includes ! means not equal, IN for a list of value terms, etc. e.g. note.author:\"user\" AND (note.entities.asset_id:\"123456789\" OR note.entities.issuer:\"*ABC*\") , etc. Valid field name could be referered in the ResearchNote message type (-- api-linter: aladdin::0901::dictionary-message-field=disabled  aip.dev/not-precedent: We need to do this because user can pass multiple criteria to filter results. --)")
+    filter_criteria: Optional[conlist(StrictStr)] = Field(None, alias="filterCriteria", description="Multiple criteria can also be joined by AND and OR logic operator Other supported logic operator includes ! means not equal, IN for a list of value terms, etc. e.g. note.author:\"user\" AND (note.entities.asset_id:\"123456789\" OR note.entities.issuer:\"*ABC*\") , etc. Valid field name could be referred in the ResearchNote message type (-- api-linter: aladdin::0901::dictionary-message-field=disabled  aip.dev/not-precedent: We need to do this because user can pass multiple criteria to filter results. --)")
     order_by: Optional[StrictStr] = Field(None, alias="orderBy")
     facet_fields: Optional[conlist(StrictStr)] = Field(None, alias="facetFields")
     field_lists: Optional[conlist(StrictStr)] = Field(None, alias="fieldLists", description="When the field list is provided, only retrieve specified fields.")
-    template_names: Optional[conlist(StrictStr)] = Field(None, alias="templateNames", description="When the template name list is provided, only retrieve specified templates.")
-    __properties = ["filterCriteria", "orderBy", "facetFields", "fieldLists", "templateNames"]
+    templates: Optional[conlist(V2TemplateInfo)] = Field(None, description="When the template info list is provided, only retrieve specified templates.")
+    date_range: Optional[V2DateRange] = Field(None, alias="dateRange")
+    entities: Optional[conlist(StrictStr)] = None
+    __properties = ["filterCriteria", "orderBy", "facetFields", "fieldLists", "templates", "dateRange", "entities"]
 
     class Config:
         """Pydantic configuration"""
@@ -56,6 +60,16 @@ class V2ResearchNoteQuery(BaseModel):
                           exclude={
                           },
                           exclude_none=True)
+        # override the default output from pydantic by calling `to_dict()` of each item in templates (list)
+        _items = []
+        if self.templates:
+            for _item in self.templates:
+                if _item:
+                    _items.append(_item.to_dict())
+            _dict['templates'] = _items
+        # override the default output from pydantic by calling `to_dict()` of date_range
+        if self.date_range:
+            _dict['dateRange'] = self.date_range.to_dict()
         return _dict
 
     @classmethod
@@ -72,7 +86,9 @@ class V2ResearchNoteQuery(BaseModel):
             "order_by": obj.get("orderBy"),
             "facet_fields": obj.get("facetFields"),
             "field_lists": obj.get("fieldLists"),
-            "template_names": obj.get("templateNames")
+            "templates": [V2TemplateInfo.from_dict(_item) for _item in obj.get("templates")] if obj.get("templates") is not None else None,
+            "date_range": V2DateRange.from_dict(obj.get("dateRange")) if obj.get("dateRange") is not None else None,
+            "entities": obj.get("entities")
         })
         return _obj
 

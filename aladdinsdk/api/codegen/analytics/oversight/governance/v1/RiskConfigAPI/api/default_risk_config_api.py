@@ -219,7 +219,7 @@ class DefaultRiskConfigAPI(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def risk_config_api_list_risk_config(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities  (-- api-linter: core::0124::required-reference=disabled  aip.dev/not-precedent: this is in comply with https://google.aip.dev/160 filtering capabilities --).")] = None, page_token : Annotated[Optional[StrictStr], Field(description="The offset value used to set the starting point into the result set found at the repository.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response.")] = None, **kwargs) -> V1ListRiskConfigResponse:  # noqa: E501
+    def risk_config_api_list_risk_config(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities.")] = None, page_token : Annotated[Optional[StrictStr], Field(description="A page token, received from a previous `ListRiskConfig` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to `ListRiskConfig` must match the call that provided the page token.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.")] = None, **kwargs) -> V1ListRiskConfigResponse:  # noqa: E501
         """List configurations  # noqa: E501
 
         Retrieve a list of configurations matching the specified filter criteria.  Based on https://google.aip.dev/160 , this operation provides a flexible way to filter records. This complements the bulk retrieval operation which filters specifically using the configuration records natural unique identifiers.  # noqa: E501
@@ -233,11 +233,11 @@ class DefaultRiskConfigAPI(object):
         :type vnd_com_blackrock_request_id: str
         :param vnd_com_blackrock_origin_timestamp: Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231. (required)
         :type vnd_com_blackrock_origin_timestamp: datetime
-        :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities  (-- api-linter: core::0124::required-reference=disabled  aip.dev/not-precedent: this is in comply with https://google.aip.dev/160 filtering capabilities --).
+        :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities.
         :type filter: str
-        :param page_token: The offset value used to set the starting point into the result set found at the repository.
+        :param page_token: A page token, received from a previous `ListRiskConfig` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to `ListRiskConfig` must match the call that provided the page token.
         :type page_token: str
-        :param page_size: The number of entries to be returned as a response.
+        :param page_size: The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.
         :type page_size: int
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
@@ -256,7 +256,7 @@ class DefaultRiskConfigAPI(object):
         return self.risk_config_api_list_risk_config_with_http_info(vnd_com_blackrock_request_id, vnd_com_blackrock_origin_timestamp, filter, page_token, page_size, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def risk_config_api_list_risk_config_with_http_info(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities  (-- api-linter: core::0124::required-reference=disabled  aip.dev/not-precedent: this is in comply with https://google.aip.dev/160 filtering capabilities --).")] = None, page_token : Annotated[Optional[StrictStr], Field(description="The offset value used to set the starting point into the result set found at the repository.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def risk_config_api_list_risk_config_with_http_info(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities.")] = None, page_token : Annotated[Optional[StrictStr], Field(description="A page token, received from a previous `ListRiskConfig` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to `ListRiskConfig` must match the call that provided the page token.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """List configurations  # noqa: E501
 
         Retrieve a list of configurations matching the specified filter criteria.  Based on https://google.aip.dev/160 , this operation provides a flexible way to filter records. This complements the bulk retrieval operation which filters specifically using the configuration records natural unique identifiers.  # noqa: E501
@@ -270,11 +270,11 @@ class DefaultRiskConfigAPI(object):
         :type vnd_com_blackrock_request_id: str
         :param vnd_com_blackrock_origin_timestamp: Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231. (required)
         :type vnd_com_blackrock_origin_timestamp: datetime
-        :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities  (-- api-linter: core::0124::required-reference=disabled  aip.dev/not-precedent: this is in comply with https://google.aip.dev/160 filtering capabilities --).
+        :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities.
         :type filter: str
-        :param page_token: The offset value used to set the starting point into the result set found at the repository.
+        :param page_token: A page token, received from a previous `ListRiskConfig` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to `ListRiskConfig` must match the call that provided the page token.
         :type page_token: str
-        :param page_size: The number of entries to be returned as a response.
+        :param page_size: The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.
         :type page_size: int
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
@@ -569,7 +569,7 @@ class DefaultRiskConfigAPI(object):
             _request_auth=_params.get('_request_auth'))
 
     @validate_arguments
-    def risk_config_api_resolve_risk_config(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities (-- api-linter: core::0124::required-reference=disabled  aip.dev/not-precedent: this is in comply with https://google.aip.dev/160 filtering capabilities --).")] = None, page_token : Annotated[Optional[StrictStr], Field(description="The offset value used to set the starting point into the result set found at the repository.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response.")] = None, **kwargs) -> V1ResolveRiskConfigResponse:  # noqa: E501
+    def risk_config_api_resolve_risk_config(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities.")] = None, page_token : Annotated[Optional[StrictStr], Field(description="A page token, received from a previous `ResolveRiskConfig` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to `ResolveRiskConfig` must match the call that provided the page token.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.")] = None, **kwargs) -> V1ResolveRiskConfigResponse:  # noqa: E501
         """List resolved configurations  # noqa: E501
 
         Retrieve a resolved list of configurations matching the specified filter criteria  # noqa: E501
@@ -583,11 +583,11 @@ class DefaultRiskConfigAPI(object):
         :type vnd_com_blackrock_request_id: str
         :param vnd_com_blackrock_origin_timestamp: Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231. (required)
         :type vnd_com_blackrock_origin_timestamp: datetime
-        :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities (-- api-linter: core::0124::required-reference=disabled  aip.dev/not-precedent: this is in comply with https://google.aip.dev/160 filtering capabilities --).
+        :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities.
         :type filter: str
-        :param page_token: The offset value used to set the starting point into the result set found at the repository.
+        :param page_token: A page token, received from a previous `ResolveRiskConfig` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to `ResolveRiskConfig` must match the call that provided the page token.
         :type page_token: str
-        :param page_size: The number of entries to be returned as a response.
+        :param page_size: The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.
         :type page_size: int
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
@@ -606,7 +606,7 @@ class DefaultRiskConfigAPI(object):
         return self.risk_config_api_resolve_risk_config_with_http_info(vnd_com_blackrock_request_id, vnd_com_blackrock_origin_timestamp, filter, page_token, page_size, **kwargs)  # noqa: E501
 
     @validate_arguments
-    def risk_config_api_resolve_risk_config_with_http_info(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities (-- api-linter: core::0124::required-reference=disabled  aip.dev/not-precedent: this is in comply with https://google.aip.dev/160 filtering capabilities --).")] = None, page_token : Annotated[Optional[StrictStr], Field(description="The offset value used to set the starting point into the result set found at the repository.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def risk_config_api_resolve_risk_config_with_http_info(self, vnd_com_blackrock_request_id : Annotated[StrictStr, Field(..., description="A unique identifier for this request.")], vnd_com_blackrock_origin_timestamp : Annotated[datetime, Field(..., description="Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.")], filter : Annotated[Optional[StrictStr], Field(description="Used to provide with https://google.aip.dev/160 filtering capabilities.")] = None, page_token : Annotated[Optional[StrictStr], Field(description="A page token, received from a previous `ResolveRiskConfig` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to `ResolveRiskConfig` must match the call that provided the page token.")] = None, page_size : Annotated[Optional[StrictInt], Field(description="The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
         """List resolved configurations  # noqa: E501
 
         Retrieve a resolved list of configurations matching the specified filter criteria  # noqa: E501
@@ -620,11 +620,11 @@ class DefaultRiskConfigAPI(object):
         :type vnd_com_blackrock_request_id: str
         :param vnd_com_blackrock_origin_timestamp: Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231. (required)
         :type vnd_com_blackrock_origin_timestamp: datetime
-        :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities (-- api-linter: core::0124::required-reference=disabled  aip.dev/not-precedent: this is in comply with https://google.aip.dev/160 filtering capabilities --).
+        :param filter: Used to provide with https://google.aip.dev/160 filtering capabilities.
         :type filter: str
-        :param page_token: The offset value used to set the starting point into the result set found at the repository.
+        :param page_token: A page token, received from a previous `ResolveRiskConfig` call. Provide this to retrieve the subsequent page.  When paginating, all other parameters provided to `ResolveRiskConfig` must match the call that provided the page token.
         :type page_token: str
-        :param page_size: The number of entries to be returned as a response.
+        :param page_size: The number of entries to be returned as a response. The service may return fewer than this value. The maximum value is 1000. If unspecified, at most 1000 entries will be returned.
         :type page_size: int
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional

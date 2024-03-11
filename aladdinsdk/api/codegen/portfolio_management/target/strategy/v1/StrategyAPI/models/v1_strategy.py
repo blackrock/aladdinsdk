@@ -29,7 +29,8 @@ class V1Strategy(BaseModel):
     strategy_name: Optional[StrictStr] = Field(None, alias="strategyName", description="The name of the strategy. If the strategy has a parent, it has to be prefixed and separated by colon. Example strategy name - US : BONDS (US is parent strategy and US : BONDS together is the strategy name).")
     strategy_description: Optional[StrictStr] = Field(None, alias="strategyDescription", description="The description of the strategy.")
     expire_date: Optional[date] = Field(None, alias="expireDate", description="The expiration date of the Strategy. If omitted this will default to 2222-12-31.")
-    __properties = ["id", "strategyName", "strategyDescription", "expireDate"]
+    start_date: Optional[date] = Field(None, alias="startDate")
+    __properties = ["id", "strategyName", "strategyDescription", "expireDate", "startDate"]
 
     class Config:
         """Pydantic configuration"""
@@ -70,7 +71,8 @@ class V1Strategy(BaseModel):
             "id": obj.get("id"),
             "strategy_name": obj.get("strategyName"),
             "strategy_description": obj.get("strategyDescription"),
-            "expire_date": obj.get("expireDate")
+            "expire_date": obj.get("expireDate"),
+            "start_date": obj.get("startDate")
         })
         return _obj
 

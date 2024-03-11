@@ -19,7 +19,7 @@ import json
 
 
 from typing import Dict, List, Optional
-from pydantic import BaseModel, Field, StrictInt, conlist
+from pydantic import BaseModel, Field, StrictInt, StrictStr, conlist
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_risk_exception import V1RiskException
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_risk_facet_search_list import V1RiskFacetSearchList
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskExceptionAPI.models.v1_risk_navigation_links import V1RiskNavigationLinks
@@ -31,9 +31,11 @@ class V1ListRiskExceptionsResponse(BaseModel):
     navigation: Optional[V1RiskNavigationLinks] = None
     count: Optional[StrictInt] = None
     total: Optional[StrictInt] = None
+    next_page_token: Optional[StrictStr] = Field(None, alias="nextPageToken", description="A token that can be sent as `pageToken` to retrieve the next page. If this field is omitted, there are no subsequent pages.")
     search_facets: Optional[Dict[str, V1RiskFacetSearchList]] = Field(None, alias="searchFacets")
     exceptions: Optional[conlist(V1RiskException)] = None
-    __properties = ["navigation", "count", "total", "searchFacets", "exceptions"]
+    total_size: Optional[StrictInt] = Field(None, alias="totalSize")
+    __properties = ["navigation", "count", "total", "nextPageToken", "searchFacets", "exceptions", "totalSize"]
 
     class Config:
         """Pydantic configuration"""
@@ -91,13 +93,15 @@ class V1ListRiskExceptionsResponse(BaseModel):
             "navigation": V1RiskNavigationLinks.from_dict(obj.get("navigation")) if obj.get("navigation") is not None else None,
             "count": obj.get("count"),
             "total": obj.get("total"),
+            "next_page_token": obj.get("nextPageToken"),
             "search_facets": dict(
                 (_k, V1RiskFacetSearchList.from_dict(_v))
                 for _k, _v in obj.get("searchFacets").items()
             )
             if obj.get("searchFacets") is not None
             else None,
-            "exceptions": [V1RiskException.from_dict(_item) for _item in obj.get("exceptions")] if obj.get("exceptions") is not None else None
+            "exceptions": [V1RiskException.from_dict(_item) for _item in obj.get("exceptions")] if obj.get("exceptions") is not None else None,
+            "total_size": obj.get("totalSize")
         })
         return _obj
 

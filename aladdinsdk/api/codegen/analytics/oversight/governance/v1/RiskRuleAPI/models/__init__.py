@@ -53,6 +53,7 @@ from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskRuleAPI.models
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskRuleAPI.models.v1_list_risk_rules_response import V1ListRiskRulesResponse
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskRuleAPI.models.v1_list_subscribed_risk_rules_by_portfolio_response import V1ListSubscribedRiskRulesByPortfolioResponse
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskRuleAPI.models.v1_longrunning_operation import V1LongrunningOperation
+from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskRuleAPI.models.v1_look_through_proxy_type import V1LookThroughProxyType
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskRuleAPI.models.v1_look_through_security_type import V1LookThroughSecurityType
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskRuleAPI.models.v1_metric_source import V1MetricSource
 from aladdinsdk.api.codegen.analytics.oversight.governance.v1.RiskRuleAPI.models.v1_metric_unit import V1MetricUnit

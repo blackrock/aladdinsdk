@@ -1,0 +1,545 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Retrieve daily time-series of security level returns",
+        "title": "Security Returns",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.analytics.security_analytics.returns.SecurityReturnsAPI",
+        "x-aladdin-api-stability": "stable",
+        "x-aladdin-spec-id": "agraph.analytics.security_analytics.returns.v1.SecurityReturnsAPI"
+    },
+    "basePath": "/api/analytics/security-analytics/returns/v1/",
+    "paths": {
+        "/securities:retrieveDailyReturns": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "analytics.security_analytics.returns.v1.SecurityReturns:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "analytics.security_analytics.returns.v1.SecurityReturns:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieve daily time-series of security level returns for single or multiple securities\n(-- api-linter: aladdin::9016::query-custom-method-http=disabled\n aip.dev/not-precedent: We need to do this because we are creating another version of an existing API --)",
+                "summary": "Retrieve security level returns",
+                "operationId": "SecurityReturnsAPI_RetrieveDailyReturns",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1RetrieveDailyReturnsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1RetrieveDailyReturnsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "rpcStatus": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1DailyReturn": {
+            "type": "object",
+            "title": "DailyReturn represents the returns data for a single security and price\nhierarchy for a single dates",
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "Aladdin security identifier"
+                },
+                "priceHierarchy": {
+                    "type": "string",
+                    "title": "Price hierarchy"
+                },
+                "returnDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date for returns"
+                },
+                "currencyCode": {
+                    "type": "string",
+                    "title": "Currency"
+                },
+                "notionalWeight": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Begin weight per 1 unit of current face / shares"
+                },
+                "totalReturn": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Total return"
+                },
+                "principalReturn": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Principal return"
+                },
+                "incomeReturn": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Income percent return from dividends and interest"
+                },
+                "priceReturn": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Price percent return"
+                },
+                "paydownReturn": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Paydown percent return"
+                },
+                "currencyReturn": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Currency return"
+                },
+                "beginMarketValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Begin market value"
+                },
+                "beginPrice": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Begin price"
+                },
+                "endPrice": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "End of day price"
+                },
+                "endMarketValue": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "End of day market value"
+                },
+                "incomePayment": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Cash from income payments"
+                },
+                "principalPayment": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Cash from principal payments"
+                },
+                "beginAccruedInterest": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Begin accrued interest"
+                },
+                "endAccruedInterest": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "End of day accrued interest"
+                },
+                "beginFactor": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Begin factor"
+                },
+                "endFactor": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Factor or shares"
+                },
+                "withholdingTaxReturn": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Estimated withholding tax return"
+                }
+            }
+        },
+        "v1DailyReturnSeries": {
+            "type": "object",
+            "title": "DailyReturnSeries represents the returns data for a single security and price\nhierarchy across multiple dates",
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "Aladdin security identifier"
+                },
+                "priceHierarchy": {
+                    "type": "string",
+                    "title": "Price hierarchy"
+                },
+                "dailyReturns": {
+                    "type": "array",
+                    "title": "Returns data across multiple dates.\nThe asset id and price hierarhcy in this message will match the values in\nthis field",
+                    "items": {
+                        "$ref": "#/definitions/v1DailyReturn"
+                    }
+                }
+            }
+        },
+        "v1RetrieveDailyReturnsRequest": {
+            "type": "object",
+            "title": "RetrieveDailySecurityReturnsRequest describes request to retrieve Daily Security\nReturns for multiple securities identified by asset id for a specific price\nhierarchy and date interval",
+            "required": [
+                "assetIds",
+                "priceHierarchy",
+                "startDate",
+                "endDate"
+            ],
+            "properties": {
+                "assetIds": {
+                    "description": "The name/ids of the asset to Retrieve the DailySecurityReturnsSeries.",
+                    "type": "array",
+                    "required": [
+                        "asset_ids"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "priceHierarchy": {
+                    "type": "string",
+                    "title": "Price Hierarchy of the SecurityReturn",
+                    "required": [
+                        "price_hierarchy"
+                    ]
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Start Date for retrieving Security Returns",
+                    "required": [
+                        "start_date"
+                    ]
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "End Date for retrieving Security Returns",
+                    "required": [
+                        "end_date"
+                    ]
+                },
+                "pageSize": {
+                    "description": "Maximum number of securities for which data will be returned in each\nresponse. If unspecified, data for at most 1,000 securities will be returned \nin a single response.\nThe maximum value is 1,000; values above 1,000 will be coerced to 1,000.",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "pageToken": {
+                    "description": "A page token, received from a previous `RetrieveDailyReturnsRequest` call.\nProvide this to retrieve the subsequent page.\n\nWhen paginating, all other parameters provided to\n`RetrieveDailyReturnsRequest` must match the call that provided the\npage token.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1RetrieveDailyReturnsResponse": {
+            "description": "RetrieveDailyReturnsResponse describes ...",
+            "type": "object",
+            "properties": {
+                "dailyReturnSeries": {
+                    "type": "array",
+                    "title": "Daily Returns for multiple securities",
+                    "items": {
+                        "$ref": "#/definitions/v1DailyReturnSeries"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "A token, which can be sent as `page_token` to retrieve the next page.\nIf this field is omitted, there are no subsequent pages.",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.security_analytics.returns.v1.SecurityReturns:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "analytics.security_analytics.returns.v1.SecurityReturns:read": "non-sensitive read",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "analytics.security_analytics.returns.v1.SecurityReturns:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "analytics.security_analytics.returns.v1.SecurityReturns:read",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

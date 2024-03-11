@@ -1,0 +1,2984 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Principal and Interest Factors (PIFs) generally represent the amount of payment per 1000 of Original Face currency units value you currently hold in the given asset, and are used in conjunction with position data to generate cashflows. This API allows for filtering and retrieval of PIF records based on a number of criteria including assetId, dates, security groups, currency and more.",
+        "title": "Principal and Interest Factor",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.investment_operations.asset_lifecycle.principal_interest_factor.PrincipalInterestFactorAPI",
+        "x-aladdin-api-stability": "stable",
+        "x-aladdin-spec-id": "agraph.investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactorAPI"
+    },
+    "basePath": "/api/investment-operations/asset-lifecycle/principal-interest-factor/v1/",
+    "paths": {
+        "/principalInterestFactor": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieves unique PIF record\n(-- api-linter: core::0131::http-uri-id=disabled\n aip.dev/not-precedent: We need to do this because the resource doesn't have a non-composite id --)",
+                "summary": "Gets a Principal Interest Factor record",
+                "operationId": "PrincipalInterestFactorAPI_GetPrincipalInterestFactor",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Asset Identifier.",
+                        "name": "key.assetId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "represents record date of the PIF (i.e. trade date).",
+                        "name": "key.recordDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "represents payment date of the PIF (i.e. settle date).",
+                        "name": "key.paymentDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Currency code.",
+                        "name": "key.currencyCode",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1PrincipalInterestFactor"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            },
+            "delete": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for one to delete a principal and interest factor (PIF)\n(-- api-linter: core::0135::http-uri-id=disabled\n aip.dev/not-precedent: We need to do this because the resource doesn't have a non-composite id --)",
+                "summary": "Delete Principal Interest Factor",
+                "operationId": "PrincipalInterestFactorAPI_DeletePrincipalInterestFactor",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Asset Identifier.",
+                        "name": "key.assetId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "represents record date of the PIF (i.e. trade date).",
+                        "name": "key.recordDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date",
+                        "description": "represents payment date of the PIF (i.e. settle date).",
+                        "name": "key.paymentDate",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Currency code.",
+                        "name": "key.currencyCode",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {}
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            }
+        },
+        "/principalInterestFactorAuditTrails:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows user to get Audit Trails for a specific PIF\n(-- api-linter: aladdin::9016::rpc-name=disabled\n aip.dev/not-precedent: Trails is plural. --)",
+                "summary": "Filter PIF's audit trails",
+                "operationId": "PrincipalInterestFactorAPI_FilterPrincipalInterestFactorAuditTrails",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterPrincipalInterestFactorAuditTrailsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterPrincipalInterestFactorAuditTrailsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 500
+            }
+        },
+        "/principalInterestFactors": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for one to create new principal and interest factor (PIF)",
+                "summary": "Create new Principal Interest Factor",
+                "operationId": "PrincipalInterestFactorAPI_CreatePrincipalInterestFactor",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "PIF to create",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1PrincipalInterestFactor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1PrincipalInterestFactor"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            },
+            "patch": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for one to update various attributes of a given principal and interest factor (PIF)\n(-- api-linter: core::0134::http-uri-id=disabled\n aip.dev/not-precedent: We need to do this because the resource doesn't have a non-composite id --)",
+                "summary": "Update Principal Interest Factor records",
+                "operationId": "PrincipalInterestFactorAPI_UpdatePrincipalInterestFactor",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "PIF record to be updated",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1PrincipalInterestFactor"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "List of fields to be updated.",
+                        "name": "updateMask",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1PrincipalInterestFactor"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            }
+        },
+        "/principalInterestFactors:batchCreate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for one to create multiple principal and interest factors (PIFs)",
+                "summary": "Batch create Principal Interest Factor records",
+                "operationId": "PrincipalInterestFactorAPI_BatchCreatePrincipalInterestFactors",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchCreatePrincipalInterestFactorsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchCreatePrincipalInterestFactorsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            }
+        },
+        "/principalInterestFactors:batchUpdate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for one to update multiple principal and interest factors (PIFs)",
+                "summary": "Batch update Principal Interest Factor records",
+                "operationId": "PrincipalInterestFactorAPI_BatchUpdatePrincipalInterestFactors",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchUpdatePrincipalInterestFactorsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchUpdatePrincipalInterestFactorsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "WRITE",
+                "x-quota-limit": 500
+            }
+        },
+        "/principalInterestFactors:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Allows for retrieval of principal and interest factors (PIFs) by various criteria.",
+                "summary": "Filter Principal Interest Factor records",
+                "operationId": "PrincipalInterestFactorAPI_FilterPrincipalInterestFactors",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterPrincipalInterestFactorsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterPrincipalInterestFactorsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        },
+        "/principalInterestFactors:list": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Lists PIF records per given unique keys",
+                "summary": "Lists Principal Interest Factor records",
+                "operationId": "PrincipalInterestFactorAPI_ListPrincipalInterestFactors",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1ListPrincipalInterestFactorsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1ListPrincipalInterestFactorsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-access-type": "READ",
+                "x-quota-limit": 500
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "PrincipalInterestFactorPrincipalInterestFactorDetail": {
+            "type": "object",
+            "title": "PrincipalInterestFactorDetail refers to the accrual breakdown for multi-accrual assets over fixed or varying balance",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "The id of the factor detail"
+                },
+                "pifSequenceNumber": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "The sequence number of the pif for this factor detail"
+                },
+                "assetId": {
+                    "type": "string",
+                    "title": "Asset Identifier"
+                },
+                "accrualType": {
+                    "type": "string",
+                    "title": "Represents the type of fee or interest being accrued"
+                },
+                "principal": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Principal value"
+                },
+                "principalState": {
+                    "title": "Principal state",
+                    "$ref": "#/definitions/PrincipalInterestFactorState"
+                },
+                "principalAccrualDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Principal accrual date"
+                },
+                "interest": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Interest value"
+                },
+                "interestState": {
+                    "title": "Interest state",
+                    "$ref": "#/definitions/PrincipalInterestFactorState"
+                },
+                "interestAccrualDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Start of the interest accrual range"
+                },
+                "interestAccrualEndDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "End of the interest accrual range"
+                },
+                "entryDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Entry date of the factor detail"
+                },
+                "calculationDaysConvention": {
+                    "type": "string",
+                    "title": "Date calc basis used in calculations"
+                },
+                "coupon": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Coupon value used in calculations"
+                },
+                "couponSource": {
+                    "type": "string",
+                    "title": "Source of coupon (controlled by decode PMT_CPN_SOURCE)"
+                },
+                "currentFactor": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Factor used for p/i calculation"
+                },
+                "previousFactor": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "previous period's factor"
+                },
+                "periodDayCount": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Number of days in the period"
+                },
+                "nextPaymentDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Next payment date"
+                },
+                "nominalPaymentDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Nominal payment date (i.e. Unadjusted payment date)"
+                },
+                "finalPayment": {
+                    "description": "Represents whether this is the final payment.\nFinal payments are ignored by gen_pni and the amount is posted as a trade by rm_mat.",
+                    "type": "boolean"
+                },
+                "userPrincipal": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "User specified principal value"
+                },
+                "userInterest": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "User specified interest value"
+                },
+                "pifDetailComment": {
+                    "type": "string",
+                    "title": "Comment (aka notation)"
+                },
+                "currencyCode": {
+                    "type": "string",
+                    "title": "Currency code"
+                }
+            }
+        },
+        "PrincipalInterestFactorState": {
+            "description": "- STATE_UNSPECIFIED: Unspecified state\n - STATE_PROJECTED: The calculated amount may change and is not final yet\n - STATE_DONE: Calculations for this reset are complete\n - STATE_ERROR: Accrual calculation failed\n - STATE_FACTOR_WAIT: Calculation is incomplete due to missing Factor data\n - STATE_MANUAL: Manually amended accrual values",
+            "type": "string",
+            "title": "Possible status for principal and interest",
+            "default": "STATE_UNSPECIFIED",
+            "enum": [
+                "STATE_UNSPECIFIED",
+                "STATE_PROJECTED",
+                "STATE_DONE",
+                "STATE_ERROR",
+                "STATE_FACTOR_WAIT",
+                "STATE_MANUAL"
+            ]
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "typesRangeValue": {
+            "type": "object",
+            "title": "Range values\nField end_date is ignored if used with a comparison operator",
+            "required": [
+                "beginDate"
+            ],
+            "properties": {
+                "beginDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Begin date value",
+                    "required": [
+                        "begin_date"
+                    ]
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "End date value"
+                }
+            }
+        },
+        "typesRepeatedValue": {
+            "type": "object",
+            "title": "Repeated values",
+            "properties": {
+                "stringValues": {
+                    "type": "array",
+                    "title": "List of string objects",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "typesSingleValue": {
+            "type": "object",
+            "title": "Single non-repeated values",
+            "properties": {
+                "stringValue": {
+                    "type": "string",
+                    "title": "string value"
+                }
+            }
+        },
+        "v1AssetFilter": {
+            "type": "object",
+            "title": "Asset filter",
+            "required": [
+                "securityGroup"
+            ],
+            "properties": {
+                "securityGroup": {
+                    "type": "string",
+                    "title": "Security group",
+                    "required": [
+                        "security_group"
+                    ]
+                },
+                "securityType": {
+                    "type": "string",
+                    "title": "Security type"
+                }
+            }
+        },
+        "v1Audit": {
+            "type": "object",
+            "title": "Audit refers to the change history",
+            "properties": {
+                "modifier": {
+                    "type": "string",
+                    "title": "Represents user-id of the user who changed"
+                },
+                "modifyTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "Time it was changed"
+                },
+                "changeType": {
+                    "title": "Type of change",
+                    "$ref": "#/definitions/v1ChangeType"
+                },
+                "modifiedVia": {
+                    "type": "string",
+                    "title": "Application that changed it\n(-- api-linter: core::0142::time-field-names=disabled\n aip.dev/not-precedent: Agraph team said to keep the word modify consistent. --)"
+                }
+            }
+        },
+        "v1AuditQuery": {
+            "type": "object",
+            "title": "Query for Principal Interest Factor Audit Filter",
+            "properties": {
+                "key": {
+                    "title": "Retrieve Principal Interest Factor for this key\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: key is a local field for Principal Interest Factor api --)",
+                    "$ref": "#/definitions/v1Key"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "startDate for when revision was made"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "endDate for when revision was made"
+                }
+            }
+        },
+        "v1BatchCreatePrincipalInterestFactorsRequest": {
+            "type": "object",
+            "title": "BatchCreatePrincipalInterestFactorsRequest",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "requests": {
+                    "type": "array",
+                    "title": "PIFs to create",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1CreatePrincipalInterestFactorRequest"
+                    }
+                }
+            }
+        },
+        "v1BatchCreatePrincipalInterestFactorsResponse": {
+            "type": "object",
+            "title": "BatchCreatePrincipalInterestFactorsResponse",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "title": "Results for each PIF to be created",
+                    "items": {
+                        "$ref": "#/definitions/v1CreatePrincipalInterestFactorResult"
+                    }
+                }
+            }
+        },
+        "v1BatchUpdatePrincipalInterestFactorsRequest": {
+            "type": "object",
+            "title": "BatchUpdatePrincipalInterestFactorsRequest",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "requests": {
+                    "type": "array",
+                    "title": "PIFs to update",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1UpdatePrincipalInterestFactorRequest"
+                    }
+                }
+            }
+        },
+        "v1BatchUpdatePrincipalInterestFactorsResponse": {
+            "type": "object",
+            "title": "BatchUpdatePrincipalInterestFactorsResponse",
+            "properties": {
+                "results": {
+                    "type": "array",
+                    "title": "Results of each PIF to be updated",
+                    "items": {
+                        "$ref": "#/definitions/v1UpdatePrincipalInterestFactorResult"
+                    }
+                }
+            }
+        },
+        "v1ChangeType": {
+            "description": "- CHANGE_TYPE_UNSPECIFIED: Unspecidied\n - CHANGE_TYPE_INSERT: Insert\n - CHANGE_TYPE_UPDATE: Update\n - CHANGE_TYPE_DELETE: Delete",
+            "type": "string",
+            "title": "Type of change",
+            "default": "CHANGE_TYPE_UNSPECIFIED",
+            "enum": [
+                "CHANGE_TYPE_UNSPECIFIED",
+                "CHANGE_TYPE_INSERT",
+                "CHANGE_TYPE_UPDATE",
+                "CHANGE_TYPE_DELETE"
+            ]
+        },
+        "v1Comparison": {
+            "description": "Comparison operators compare two operands and yield a boolean value. Unlike\nin most programming languages, field names must appear on the left-hand side\nof a comparison operator; the right-hand side only accepts literals and\nlogical operators.\n\n - COMPARISON_UNSPECIFIED: Default value\n - COMPARISON_LESS_EQUALS: The given `field` is less than the given `value`.\n - COMPARISON_LESS_THAN: The given `field` is less than or equal to the given `value`.\n - COMPARISON_GREATER_EQUALS: The given `field` is greater than or equal to the given `value`.\n - COMPARISON_GREATER_THAN: The given `field` is greater than the given `value`.\n - COMPARISON_NOT_EQUALS: The given `field` is not equal to the given `value`.\n - COMPARISON_EQUALS: The given `field` is equal to the given `value`.",
+            "type": "string",
+            "default": "COMPARISON_UNSPECIFIED",
+            "enum": [
+                "COMPARISON_UNSPECIFIED",
+                "COMPARISON_LESS_EQUALS",
+                "COMPARISON_LESS_THAN",
+                "COMPARISON_GREATER_EQUALS",
+                "COMPARISON_GREATER_THAN",
+                "COMPARISON_NOT_EQUALS",
+                "COMPARISON_EQUALS"
+            ]
+        },
+        "v1CreatePrincipalInterestFactorRequest": {
+            "type": "object",
+            "title": "CreatePrincipalInterestFactorRequest",
+            "properties": {
+                "principalInterestFactor": {
+                    "title": "PIF to create",
+                    "$ref": "#/definitions/v1PrincipalInterestFactor"
+                }
+            }
+        },
+        "v1CreatePrincipalInterestFactorResult": {
+            "type": "object",
+            "title": "CreatePrincipalInterestFactorResult",
+            "properties": {
+                "error": {
+                    "title": "Error message in case of failed create operation",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "output": {
+                    "title": "Created PIF in case of successful operation",
+                    "$ref": "#/definitions/v1PrincipalInterestFactor"
+                }
+            }
+        },
+        "v1FilterCriteria": {
+            "type": "object",
+            "title": "Contains filter parameters along with logical operator for predicates",
+            "required": [
+                "filterParams"
+            ],
+            "properties": {
+                "filterParams": {
+                    "type": "array",
+                    "title": "List of parameters on basis of which PIFs will be filtered",
+                    "required": [
+                        "filter_params"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1FilterParameter"
+                    }
+                },
+                "predicatesOperator": {
+                    "title": "Logical operation for the predicates",
+                    "$ref": "#/definitions/v1Logical"
+                }
+            }
+        },
+        "v1FilterParameter": {
+            "type": "object",
+            "title": "Parameter used to generated the builder condition for filter",
+            "properties": {
+                "parameterName": {
+                    "title": "Name of the filter parameter",
+                    "$ref": "#/definitions/v1ParameterName"
+                },
+                "parameterValue": {
+                    "title": "Value of the parameter",
+                    "$ref": "#/definitions/v1ParameterValue"
+                },
+                "selfOperator": {
+                    "title": "Comparison operation to be performed",
+                    "$ref": "#/definitions/v1Comparison"
+                }
+            }
+        },
+        "v1FilterPrincipalInterestFactorAuditTrailsRequest": {
+            "type": "object",
+            "title": "Principal Interest Factor Audit Trails Request\n(-- api-linter: aladdin::9016::request-message-name=disabled\n aip.dev/not-precedent: This does follow the Filter\u003cPluralResource\u003e pattern. --)",
+            "properties": {
+                "query": {
+                    "title": "Query",
+                    "$ref": "#/definitions/v1AuditQuery"
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Maxiumum number of audits to be returned\nDefault is 5000"
+                },
+                "pageToken": {
+                    "description": "Describes the token to be retrieved.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1FilterPrincipalInterestFactorAuditTrailsResponse": {
+            "type": "object",
+            "title": "Principal Interest Factor Audit Trails Response\n(-- api-linter: aladdin::9016::response-message=disabled\n aip.dev/not-precedent: This is the message to be returned. --)\n(-- api-linter: aladdin::9016::response-message-name=disabled\n aip.dev/not-precedent:This does follow the Filter\u003cPluralResource\u003e pattern. --)",
+            "properties": {
+                "principalInterestFactorAuditTrails": {
+                    "type": "array",
+                    "title": "Principal Interest Factor Audit",
+                    "items": {
+                        "$ref": "#/definitions/v1PrincipalInterestFactorAuditTrails"
+                    }
+                },
+                "message": {
+                    "description": "Status message. This will also indicate completeness of the result set.",
+                    "type": "string"
+                },
+                "nextPageToken": {
+                    "description": "It defines the next page token to get more results.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1FilterPrincipalInterestFactorsRequest": {
+            "type": "object",
+            "title": "Filter for PrincipalInterestFactor\n(-- api-linter: core::0158::request-page-token-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)\n(-- api-linter: core::0158::request-page-size-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)",
+            "properties": {
+                "query": {
+                    "title": "Query to filter for PIFs",
+                    "$ref": "#/definitions/v1FilterQuery"
+                }
+            }
+        },
+        "v1FilterPrincipalInterestFactorsResponse": {
+            "type": "object",
+            "title": "Response containing a list of PrincipalInterestFactor\n(-- api-linter: core::0158::response-next-page-token-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)",
+            "properties": {
+                "principalInterestFactors": {
+                    "description": "PIF record(s) which meet the filter criteria. The result could be truncated per client limit.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1PrincipalInterestFactor"
+                    }
+                },
+                "message": {
+                    "description": "Status message. This will also indicate completeness of the result set.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1FilterQuery": {
+            "type": "object",
+            "title": "Query to filter PIFs",
+            "required": [
+                "filterCriteria"
+            ],
+            "properties": {
+                "filterCriteria": {
+                    "type": "array",
+                    "title": "Filter criteria for PIFs (will be AND'ed together and maximum 10 criteria can be created)\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: We need to do this because this is local field for filtering PIF's. --)",
+                    "required": [
+                        "filter_criteria"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1FilterCriteria"
+                    }
+                }
+            }
+        },
+        "v1Key": {
+            "type": "object",
+            "title": "Key to get PrincipalInterestFactor",
+            "required": [
+                "assetId",
+                "recordDate",
+                "paymentDate",
+                "currencyCode"
+            ],
+            "properties": {
+                "assetId": {
+                    "type": "string",
+                    "title": "Asset Identifier",
+                    "required": [
+                        "asset_id"
+                    ]
+                },
+                "recordDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "represents record date of the PIF (i.e. trade date)",
+                    "required": [
+                        "record_date"
+                    ]
+                },
+                "paymentDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "represents payment date of the PIF (i.e. settle date)",
+                    "required": [
+                        "payment_date"
+                    ]
+                },
+                "currencyCode": {
+                    "type": "string",
+                    "title": "Currency code",
+                    "required": [
+                        "currency_code"
+                    ]
+                }
+            }
+        },
+        "v1ListPrincipalInterestFactorsRequest": {
+            "type": "object",
+            "title": "ListPrincipalInterestFactorsRequest\n(-- api-linter: core::0158::request-page-token-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)\n(-- api-linter: core::0158::request-page-size-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)",
+            "properties": {
+                "keys": {
+                    "type": "array",
+                    "title": "Retrieve PIF for this key\n(-- api-linter: aladdin::0901::dictionary-message-field=disabled\n aip.dev/not-precedent: key is a local field for PIF api --)\n(-- api-linter: core::0132::request-unknown-fields=disabled\n aip.dev/not-precedent: Key is the composite key of a PIF. --)",
+                    "items": {
+                        "$ref": "#/definitions/v1Key"
+                    }
+                }
+            }
+        },
+        "v1ListPrincipalInterestFactorsResponse": {
+            "type": "object",
+            "title": "ListPrincipalInterestFactorsResponse\n(-- api-linter: core::0158::response-next-page-token-field=disabled\n aip.dev/not-precedent: Pagination is not supported. --)",
+            "properties": {
+                "principalInterestFactors": {
+                    "type": "array",
+                    "title": "Fetched PrincipalInterestFactor from the API handler",
+                    "items": {
+                        "$ref": "#/definitions/v1PrincipalInterestFactor"
+                    }
+                }
+            }
+        },
+        "v1Logical": {
+            "description": "Logical operators apply to boolean values and yield a result of the same type\nas the operands. The right operand is evaluated conditionally. To match\ncommon patterns of speech, the OR operator has higher precedence than AND,\nunlike what is found in most programming languages. The expression a AND b OR\nc evaluates: a AND (b OR c).\n\n - LOGICAL_UNSPECIFIED: Default value\n - LOGICAL_OR: LOGICAL_OR indicates an OR condition. If any of the two operands is true,\nthen condition becomes true, otherwise it is false.\n - LOGICAL_AND: LOGICAL_AND indicates an AND condition. If both the operands are true, then\ncondition becomes true, othwerwise it is false.\n - LOGICAL_NOT: LOGICAL_NOT indicates a NOT condition. Use to reverses the logical state of\nits operand. If a condition is true then Logical NOT operator will make\nfalse.",
+            "type": "string",
+            "default": "LOGICAL_UNSPECIFIED",
+            "enum": [
+                "LOGICAL_UNSPECIFIED",
+                "LOGICAL_OR",
+                "LOGICAL_AND",
+                "LOGICAL_NOT"
+            ]
+        },
+        "v1ParameterName": {
+            "description": "- PARAMETER_NAME_UNSPECIFIED: Unspecified parameter name\n - PARAMETER_NAME_ASSET_IDS: Represents one or more asset identifiers on which filtering should be applied\n - PARAMETER_NAME_RECORD_DATE: Represents starting range of record date of the PIF\n - PARAMETER_NAME_PAYMENT_DATE: Represents starting range of payment date of the PIF\n - PARAMETER_NAME_MODIFY_DATE: Represents starting range of modify date of the PIF (i.e. entry date)\n - PARAMETER_NAME_CURRENCY_CODES: Represents one or more currencies on which filtering should be applied\n - PARAMETER_NAME_SECURITY_GROUP_AND_TYPE: Represents security group and type\n - PARAMETER_NAME_REC_SOURCE: Source against which this PIF has been reconciled\n - PARAMETER_NAME_PRINCIPAL_ACCRUAL_DATE: Represents starting range of principal accrual date of the PIF\n - PARAMETER_NAME_INTEREST_ACCRUAL_DATE: Represents starting range of interest accrual date of the PIF\n - PARAMETER_NAME_COUPON_TYPE: Represents coupon type of the PIF\n - PARAMETER_NAME_PAYMENT_SETTLE_LOCATION: Represents payment settle location of the PIF\n - PARAMETER_NAME_PRINCIPAL_STATUS: Represents principal status of the PIF\n - PARAMETER_NAME_INTEREST_STATUS: Represents interest status of the PIF\n - PARAMETER_NAME_CONFIRMED_STATUS: Represents confirmed status of the PIF\n - PARAMETER_NAME_CONFIRMED_BY: Represents confirmed by of the PIF\n - PARAMETER_NAME_PAYMENT_SOURCE: Represents payment source by of the PIF",
+            "type": "string",
+            "title": "Name of the parameter on basis of which PIFs will be filtered",
+            "default": "PARAMETER_NAME_UNSPECIFIED",
+            "enum": [
+                "PARAMETER_NAME_UNSPECIFIED",
+                "PARAMETER_NAME_ASSET_IDS",
+                "PARAMETER_NAME_RECORD_DATE",
+                "PARAMETER_NAME_PAYMENT_DATE",
+                "PARAMETER_NAME_MODIFY_DATE",
+                "PARAMETER_NAME_CURRENCY_CODES",
+                "PARAMETER_NAME_SECURITY_GROUP_AND_TYPE",
+                "PARAMETER_NAME_REC_SOURCE",
+                "PARAMETER_NAME_PRINCIPAL_ACCRUAL_DATE",
+                "PARAMETER_NAME_INTEREST_ACCRUAL_DATE",
+                "PARAMETER_NAME_COUPON_TYPE",
+                "PARAMETER_NAME_PAYMENT_SETTLE_LOCATION",
+                "PARAMETER_NAME_PRINCIPAL_STATUS",
+                "PARAMETER_NAME_INTEREST_STATUS",
+                "PARAMETER_NAME_CONFIRMED_STATUS",
+                "PARAMETER_NAME_CONFIRMED_BY",
+                "PARAMETER_NAME_PAYMENT_SOURCE"
+            ]
+        },
+        "v1ParameterValue": {
+            "type": "object",
+            "title": "Value that the parameter in filter criteria possess",
+            "properties": {
+                "singleValue": {
+                    "title": "Non repeated value",
+                    "$ref": "#/definitions/typesSingleValue"
+                },
+                "repeatedValue": {
+                    "title": "Repeated values i.e., list of objects",
+                    "$ref": "#/definitions/typesRepeatedValue"
+                },
+                "rangeValue": {
+                    "title": "Range values",
+                    "$ref": "#/definitions/typesRangeValue"
+                },
+                "assetFilter": {
+                    "title": "Asset filters",
+                    "$ref": "#/definitions/v1AssetFilter"
+                }
+            }
+        },
+        "v1PrincipalInterestFactor": {
+            "type": "object",
+            "title": "PrincipalInterestFactor refers Principal and Interest Factor (PIF) data object",
+            "properties": {
+                "id": {
+                    "description": "Name describes the computer or human assigned resource identifier.",
+                    "type": "string"
+                },
+                "assetId": {
+                    "type": "string",
+                    "title": "Asset Identifier"
+                },
+                "recordDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "represents record date of the PIF (i.e. trade date)"
+                },
+                "paymentDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "represents payment date of the PIF (i.e. settle date)"
+                },
+                "principalState": {
+                    "title": "principal state",
+                    "$ref": "#/definitions/PrincipalInterestFactorState"
+                },
+                "interestState": {
+                    "title": "interest state",
+                    "$ref": "#/definitions/PrincipalInterestFactorState"
+                },
+                "principal": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "principal value"
+                },
+                "principalAccrualDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Principal accrual date"
+                },
+                "factor": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Factor used for p/i calculation"
+                },
+                "previousFactor": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "previous period's factor"
+                },
+                "interest": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "interest value"
+                },
+                "interestAccrualDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "interest accrual date"
+                },
+                "coupon": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "coupon value used for p/i calculation"
+                },
+                "periodDayCount": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "number of days in this period"
+                },
+                "dateCalcBasis": {
+                    "type": "string",
+                    "title": "DCB used for calculations"
+                },
+                "entryDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Entry date of the PIF"
+                },
+                "source": {
+                    "type": "string",
+                    "title": "source of this PIF (controlled by decode PMT_SOURCE)"
+                },
+                "nextPaymentDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Next payment date"
+                },
+                "userPrincipal": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "User specified principal value"
+                },
+                "userInterest": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "User specified interest value"
+                },
+                "pifComment": {
+                    "type": "string",
+                    "title": "Comment"
+                },
+                "nominalPaymentDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Nominal payment date (aka unadjusted payment date)"
+                },
+                "confirmer": {
+                    "type": "string",
+                    "title": "Represents user-id of the confirmer"
+                },
+                "reconSource": {
+                    "type": "string",
+                    "title": "Source against which this PIF has been reconciled (controlled by decode REMIT_SOURCE)"
+                },
+                "interestAccrualEndDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "End of interest accrual range"
+                },
+                "suspensionDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Factor/Coupon Suspension date"
+                },
+                "couponSource": {
+                    "type": "string",
+                    "title": "Source of coupon (controlled by decode PMT_CPN_SOURCE)"
+                },
+                "settlementCode": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Settlement code"
+                },
+                "finalPayment": {
+                    "description": "Represents whether this is the final payment.\nFinal payments are ignored by gen_pni and the amount is posted as a trade by rm_mat.",
+                    "type": "boolean"
+                },
+                "fixingRate": {
+                    "type": "number",
+                    "format": "double",
+                    "title": "Fixing rate"
+                },
+                "fixingDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Fixing date"
+                },
+                "currencyCode": {
+                    "type": "string",
+                    "title": "Currency code"
+                },
+                "sequenceNumber": {
+                    "type": "integer",
+                    "format": "int32",
+                    "title": "Sequence number"
+                },
+                "principalInterestFactorDetails": {
+                    "type": "array",
+                    "title": "Represents the list of factor details associated with this principal interest factor",
+                    "items": {
+                        "$ref": "#/definitions/PrincipalInterestFactorPrincipalInterestFactorDetail"
+                    }
+                }
+            }
+        },
+        "v1PrincipalInterestFactorAuditTrails": {
+            "type": "object",
+            "title": "Audit Principal Interest Factor",
+            "properties": {
+                "principalInterestFactor": {
+                    "title": "Principal Interest Factor record",
+                    "$ref": "#/definitions/v1PrincipalInterestFactor"
+                },
+                "audit": {
+                    "title": "Audit detail",
+                    "$ref": "#/definitions/v1Audit"
+                }
+            }
+        },
+        "v1UpdatePrincipalInterestFactorRequest": {
+            "type": "object",
+            "title": "UpdatePrincipalInterestFactorRequest",
+            "properties": {
+                "principalInterestFactor": {
+                    "title": "PIF record to be updated",
+                    "$ref": "#/definitions/v1PrincipalInterestFactor"
+                },
+                "updateMask": {
+                    "type": "string",
+                    "title": "List of fields to be updated"
+                }
+            }
+        },
+        "v1UpdatePrincipalInterestFactorResult": {
+            "type": "object",
+            "title": "UpdatePrincipalInterestFactorResult",
+            "properties": {
+                "error": {
+                    "title": "Error message in case of failed update operation",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "output": {
+                    "title": "Updated PIF in case of successful operation",
+                    "$ref": "#/definitions/v1PrincipalInterestFactor"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor": "This grants access to all endpoints in the investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor API",
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read": "non-sensitive read",
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor": "This grants access to all endpoints in the investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor API",
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read": "non-sensitive read",
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write": "non-sensitive write",
+                "offline_access": "This keeps you signed in to the app, even when you are not using it."
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor",
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read",
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor",
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:read",
+                "investment_operations.asset_lifecycle.principal_interest_factor.v1.PrincipalInterestFactor:write",
+                "offline_access"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Public"
+}

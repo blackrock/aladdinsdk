@@ -28,8 +28,9 @@ class V1ListRiskCustomEvaluationMetricResponse(BaseModel):
     """
     risk_custom_evaluation_metrics: Optional[conlist(V1RiskCustomEvaluationMetric)] = Field(None, alias="riskCustomEvaluationMetrics")
     total: Optional[StrictInt] = None
-    next_page_token: Optional[StrictStr] = Field(None, alias="nextPageToken", description="A token that can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no subsequent pages.")
-    __properties = ["riskCustomEvaluationMetrics", "total", "nextPageToken"]
+    next_page_token: Optional[StrictStr] = Field(None, alias="nextPageToken", description="A token that can be sent as `pageToken` to retrieve the next page. If this field is omitted, there are no subsequent pages.")
+    total_size: Optional[StrictInt] = Field(None, alias="totalSize")
+    __properties = ["riskCustomEvaluationMetrics", "total", "nextPageToken", "totalSize"]
 
     class Config:
         """Pydantic configuration"""
@@ -76,7 +77,8 @@ class V1ListRiskCustomEvaluationMetricResponse(BaseModel):
         _obj = V1ListRiskCustomEvaluationMetricResponse.parse_obj({
             "risk_custom_evaluation_metrics": [V1RiskCustomEvaluationMetric.from_dict(_item) for _item in obj.get("riskCustomEvaluationMetrics")] if obj.get("riskCustomEvaluationMetrics") is not None else None,
             "total": obj.get("total"),
-            "next_page_token": obj.get("nextPageToken")
+            "next_page_token": obj.get("nextPageToken"),
+            "total_size": obj.get("totalSize")
         })
         return _obj
 
