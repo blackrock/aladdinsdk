@@ -272,7 +272,7 @@ In this type, the user is required to follow steps to generate keys in PEM forma
 2. From Snowflake UI, call Stored Procedure to append the public key to Aladdin user account:
 
     ```sql
-    CALL ALADDIN.PUBLIC.UPDATE_PUB_KEY_SP('<Contents of rsa_key.pub file without BEGIN/END line>','KEY1');
+    CALL ALADDINDB.PUBLIC.UPDATE_PUB_KEY_SP('<Contents of rsa_key.pub file without BEGIN/END line>','KEY1');
     ```
 
 3. Using the AladdinSDK configurations provide one of the following details:
