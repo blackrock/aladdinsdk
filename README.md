@@ -287,7 +287,8 @@ In this type, the user is required to follow steps to generate keys in PEM forma
     ```
 
 3. Using the AladdinSDK configurations provide one of the following details:
-    - Private Key value to be added to snowflake connection - ADC.CONN.RSA.PRIVATE_KEY   
+    - Private key passphrase - ADC.CONN.RSA.PRIVATE_KEY_PASSPHRASE
+    - Private Key encrypted value (including BEGIN and END lines, and new line characters) to be added to snowflake connection - ADC.CONN.RSA.PRIVATE_KEY
     
     OR
     
