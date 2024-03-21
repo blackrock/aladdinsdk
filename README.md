@@ -133,7 +133,7 @@ aladdinsdk.config.print_current_user_config()
 | ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; OAUTH: <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ACCESS_TOKEN:             | If using oauth authenticator, and not relying on TokenAPI, users can provide <br />  the oauth access token for ADC connections here. <br /> (ASDK_ADC__CONN__OAUTH__ACCESS_TOKEN)                                                                                                                         |                    -                | - |
 | ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; RSA: <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRIVATE_KEY_FILEPATH:       | If using snowflake_jwt authenticator, provide RSA key details.  <br /> This attribute is path to file containing RSA private key.  <br /> Should be provided with passphrase. <br /> (ASDK_ADC__CONN__RSA__PRIVATE_KEY_FILEPATH)                                                                           |                    -                | - |
 | ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; RSA: <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRIVATE_KEY_PASSPHRASE:     | If using snowflake_jwt authenticator, provide RSA key details.  <br /> This attribute is passphrase to be used to decrypt private key file.  <br /> Should be provided with private key file path. <br /> (ASDK_ADC__CONN__RSA__PRIVATE_KEY_PASSPHRASE)                                                    |                    -                | - |
-| ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; RSA: <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRIVATE_KEY:                | If using snowflake_jwt authenticator, provide RSA key details.  <br /> This attribute is the private key value itself.  <br /> Can be used instead of private key filepath and passphrase combination. <br /> (ASDK_ADC__CONN__RSA__PRIVATE_KEY)                                                           |                    -                | - |
+| ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; RSA: <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRIVATE_KEY:                | If using snowflake_jwt authenticator, provide RSA key details.  <br /> This attribute is the private key value (including BEGIN and END lines, and new line characters). <br /> Can be used instead of private key filepath. Should be provided with passphrase. <br /> (ASDK_ADC__CONN__RSA__PRIVATE_KEY) |                    -                | - |
 | ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; ACCOUNT:                                                                   | Snowflake Account, used to create private URL for connection.  <br /> Mandatory only for ADC connections. <br /> (ASDK_ADC__CONN__ACCOUNT)                                                                                                                                                                 |                    -                | - |
 | ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; ROLE:                                                                      | Snowflake user role to be used. Mandatory only for ADC connections. <br /> (ASDK_ADC__CONN__ROLE)                                                                                                                                                                                                          |                    -                | - |
 | ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; WAREHOUSE:                                                                 | Snowflake virtual warehouse to be used. Mandatory only for ADC connections. <br /> (ASDK_ADC__CONN__WAREHOUSE)                                                                                                                                                                                             |                    -                | - |
@@ -163,7 +163,7 @@ aladdinsdk.config.print_current_user_config()
 
 ### Sample files
 
-- Sample YAML configuration make API calls (OAuth):
+- Sample YAML configuration for API (OAuth) and ADC (RSA) connectivity:
   ```yaml
   RUN_MODE: local
   API:
@@ -172,6 +172,17 @@ aladdinsdk.config.print_current_user_config()
       ACCESS_TOKEN: <access token for API calls>
   USER_CREDENTIALS:
     USERNAME: <user name>
+  ADC:
+    CONN:
+      AUTHENTICATOR: "snowflake_jwt"
+      RSA:
+        PRIVATE_KEY_FILEPATH: "/location/to/secret/rsa_key.p8"
+        PRIVATE_KEY_PASSPHRASE: "passphrase_for_rsa_key"
+      ACCOUNT: "<ADC account URL, up to and including '.privatelink'>"
+      ROLE: <User role to be used for connection>
+      WAREHOUSE: <Virtual warehouse to be used to perform query>
+      DATABASE: <Database>
+      SCHEMA: <Schema>
   ```
 - Sample code snippets and user configuration files are provided under [`resources/sample_code_snippets`](resources/sample_code_snippets) directory in this code repository.
 
