@@ -13,7 +13,7 @@ ADC:
   CONN:
     AUTHENTICATOR: "snowflake_jwt"
     RSA:
-      PRIVATE_KEY_FILEPATH: "some/file/location.p8"
+      PRIVATE_KEY: "dummyprivatekeyval"
       PRIVATE_KEY_PASSPHRASE: "testpassphrase"
     ACCOUNT: "mi6-uke2sf.privatelink"
     ROLE: SPY

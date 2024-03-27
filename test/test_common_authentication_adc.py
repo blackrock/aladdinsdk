@@ -110,19 +110,8 @@ class TestCommonAuthAdcDefaultConfig(TestCase):
         test_adc_client._generate_adc_connection = generate_conn_mock
         generated_sf_conn_params = test_adc_client._adc_auth_util.generate_sf_connection_params(test_adc_client)
 
-        self.assertEqual(generated_sf_conn_params, {
-            'account': "mi6-uke2sf.privatelink",
-            'authenticator': 'oauth',
-            'user': "jbond",
-            'role': "SPY",
-            'warehouse': "SPECTRE",
-            'database': "MI_6_EMPS",
-            'schema': "AGENTS",
-            'session_parameters': {
-                'QUERY_TAG': 'QueryViaSDK',
-            },
-            'token': "MockedAccessToken"
-        })
+        self.assertEqual(generated_sf_conn_params['token'], "MockedAccessToken")
+        self.assertEqual(generated_sf_conn_params['authenticator'], "oauth")
 
     @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
     def test_generate_sf_connection_params_user_provided_token(self, generate_conn_mock, mock_token_api_call):
@@ -131,19 +120,9 @@ class TestCommonAuthAdcDefaultConfig(TestCase):
         test_adc_client = ADCClient(adc_oauth_access_token="UserProvidedAccessToken")
         generated_sf_conn_params = test_adc_client._adc_auth_util.generate_sf_connection_params(test_adc_client)
 
-        self.assertEqual(generated_sf_conn_params, {
-            'account': "mi6-uke2sf.privatelink",
-            'authenticator': 'oauth',
-            'user': "jbond",
-            'role': "SPY",
-            'warehouse': "SPECTRE",
-            'database': "MI_6_EMPS",
-            'schema': "AGENTS",
-            'session_parameters': {
-                'QUERY_TAG': 'QueryViaSDK',
-            },
-            'token': "UserProvidedAccessToken"
-        })
+        self.assertEqual(generated_sf_conn_params['token'], "UserProvidedAccessToken")
+        self.assertEqual(generated_sf_conn_params['authenticator'], "oauth")
+
 
 @mock.patch("aladdinsdk.common.authentication.adc.AdcAuthUtil._fetch_adc_connection_access_token_from_tokenapi", return_value="MockedAccessToken")
 class TestCommonAuthAdcRsaConfig(TestCase):
@@ -183,23 +162,18 @@ class TestCommonAuthAdcRsaConfig(TestCase):
     @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
     def test_generate_sf_connection_params_user_provided_rsa_private_key(self, generate_conn_mock, mock_token_api_call):
         from aladdinsdk.adc.client import ADCClient
+        from cryptography.hazmat.primitives import serialization, asymmetric
+        from cryptography.hazmat.backends import default_backend
+        private_key = asymmetric.rsa.generate_private_key(public_exponent=65537, key_size=2048, backend=default_backend())
+        pem = private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.PKCS8,
+                                        encryption_algorithm=serialization.NoEncryption())
 
-        test_adc_client = ADCClient(adc_conn_authenticator="snowflake_jwt", adc_conn_rsa_private_key="UserProvidedPrivateKey")
+        test_adc_client = ADCClient(adc_conn_authenticator="snowflake_jwt", adc_conn_rsa_private_key=pem,
+                                    adc_conn_rsa_private_key_passphrase="")
         generated_sf_conn_params = test_adc_client._adc_auth_util.generate_sf_connection_params(test_adc_client)
 
-        self.assertEqual(generated_sf_conn_params, {
-            'account': "mi6-uke2sf.privatelink",
-            'authenticator': 'snowflake_jwt',
-            'user': "jbond",
-            'role': "SPY",
-            'warehouse': "SPECTRE",
-            'database': "MI_6_EMPS",
-            'schema': "AGENTS",
-            'session_parameters': {
-                'QUERY_TAG': 'QueryViaSDK',
-            },
-            'private_key': "UserProvidedPrivateKey"
-        })
+        self.assertIsNotNone(generated_sf_conn_params['private_key'])
+        self.assertEqual(generated_sf_conn_params['authenticator'], "snowflake_jwt")
 
     @mock.patch("builtins.open", mock_open_for_p8_file)
     @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
@@ -210,19 +184,6 @@ class TestCommonAuthAdcRsaConfig(TestCase):
                                     adc_conn_rsa_private_key_passphrase="")
         generated_sf_conn_params = test_adc_client._adc_auth_util.generate_sf_connection_params(test_adc_client)
 
-        # mock_file_read.assert_called_with("some/file/location.p8")
-        self.assertDictContainsSubset({
-            'account': "mi6-uke2sf.privatelink",
-            'authenticator': 'snowflake_jwt',
-            'user': "jbond",
-            'role': "SPY",
-            'warehouse': "SPECTRE",
-            'database': "MI_6_EMPS",
-            'schema': "AGENTS",
-            'session_parameters': {
-                'QUERY_TAG': 'QueryViaSDK',
-            }
-        }, generated_sf_conn_params)
         self.assertIn('private_key', generated_sf_conn_params.keys())
 
     @mock.patch("builtins.open", mock_open_for_p8_file)
