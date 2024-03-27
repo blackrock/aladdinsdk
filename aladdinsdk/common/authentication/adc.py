@@ -140,29 +140,37 @@ class AdcAuthUtil():
         Returns:
             _type_: _description_
         """
-        if (self.adc_conn_rsa_private_key is None) and \
-           (self.adc_conn_rsa_private_key_filepath is None or self.adc_conn_rsa_private_key_passphrase is None):
+        private_key_data = None
+        if self.adc_conn_rsa_private_key is not None and self.adc_conn_rsa_private_key_passphrase is not None:
+            if isinstance(self.adc_conn_rsa_private_key, str):
+                private_key_data = self.adc_conn_rsa_private_key.encode()
+            else:
+                private_key_data = self.adc_conn_rsa_private_key
+        elif self.adc_conn_rsa_private_key_filepath is not None and self.adc_conn_rsa_private_key_passphrase is not None:
+            # Else read private key from provided file
+            try:
+                with open(self.adc_conn_rsa_private_key_filepath, "rb") as key:
+                    private_key_data = key.read()
+            except Exception as e:
+                raise AsdkAdcException(f"Unable to read private key file. Error: {e}")
+        else:
             raise AsdkAdcException("Attempting to connect using RSA key pair, but private key details not configured. "
-                                   "Either private key or private key filepath with passphrase needed.")
+                                   "Provide passphrase with either private key or private key filepath.")
 
-        if self.adc_conn_rsa_private_key is not None:
-            return self.adc_conn_rsa_private_key
-
-        # Else read private key from provided file
         try:
-            with open(self.adc_conn_rsa_private_key_filepath, "rb") as key:
-                p_key = serialization.load_pem_private_key(
-                    key.read(),
-                    password=self.adc_conn_rsa_private_key_passphrase.encode() if self.adc_conn_rsa_private_key_passphrase != "" else None,
-                    backend=default_backend()
-                )
+            # Private key data with passphrase provided
+            p_key = serialization.load_pem_private_key(
+                private_key_data,
+                password=self.adc_conn_rsa_private_key_passphrase.encode() if self.adc_conn_rsa_private_key_passphrase != "" else None,
+                backend=default_backend()
+            )
 
-                private_key = p_key.private_bytes(
-                    encoding=serialization.Encoding.DER,
-                    format=serialization.PrivateFormat.PKCS8,
-                    encryption_algorithm=serialization.NoEncryption())
+            private_key = p_key.private_bytes(
+                encoding=serialization.Encoding.DER,
+                format=serialization.PrivateFormat.PKCS8,
+                encryption_algorithm=serialization.NoEncryption())
 
-                return private_key
+            return private_key
         except Exception as e:
             raise AsdkAdcException(f"Unable to read configured private key. Error: {e}")
 
@@ -185,7 +193,6 @@ def inflate_adc_kwargs(kwargs):
         kwargs['adc_conn_rsa_private_key_passphrase'] = user_settings.get_adc_conn_rsa_private_key_passphrase()
     if 'adc_conn_rsa_private_key_filepath' not in kwargs and user_settings.get_adc_conn_rsa_private_key_filepath() is not None:
         kwargs['adc_conn_rsa_private_key_filepath'] = user_settings.get_adc_conn_rsa_private_key_filepath()
-
     if 'adc_conn_rsa_private_key' not in kwargs and user_settings.get_adc_conn_rsa_private_key() is not None:
         kwargs['adc_conn_rsa_private_key'] = user_settings.get_adc_conn_rsa_private_key()
 
