@@ -193,7 +193,6 @@ def inflate_adc_kwargs(kwargs):
         kwargs['adc_conn_rsa_private_key_passphrase'] = user_settings.get_adc_conn_rsa_private_key_passphrase()
     if 'adc_conn_rsa_private_key_filepath' not in kwargs and user_settings.get_adc_conn_rsa_private_key_filepath() is not None:
         kwargs['adc_conn_rsa_private_key_filepath'] = user_settings.get_adc_conn_rsa_private_key_filepath()
-
     if 'adc_conn_rsa_private_key' not in kwargs and user_settings.get_adc_conn_rsa_private_key() is not None:
         kwargs['adc_conn_rsa_private_key'] = user_settings.get_adc_conn_rsa_private_key()
 

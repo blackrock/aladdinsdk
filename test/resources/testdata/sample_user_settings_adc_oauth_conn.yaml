@@ -11,10 +11,9 @@ user_credentials:
 
 ADC:
   CONN:
-    AUTHENTICATOR: "snowflake_jwt"
-    RSA:
-      PRIVATE_KEY_FILEPATH: "some/file/location.p8"
-      PRIVATE_KEY_PASSPHRASE: "testpassphrase"
+    AUTHENTICATOR: "oauth"
+    OAUTH:
+      ACCESS_TOKEN: "dummyaccesstoken"
     ACCOUNT: "mi6-uke2sf.privatelink"
     ROLE: SPY
     WAREHOUSE: SPECTRE
