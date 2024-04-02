@@ -11,7 +11,7 @@ def mock_open_for_p8_file(*args, **kwargs):
         from cryptography.hazmat.backends import default_backend
         private_key = asymmetric.rsa.generate_private_key(public_exponent=65537, key_size=2048, backend=default_backend())
         pem = private_key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.PKCS8,
-                                        encryption_algorithm=serialization.NoEncryption())
+                                        encryption_algorithm=serialization.BestAvailableEncryption(b"testpassphrase"))
         return mock.mock_open(read_data=pem)(*args, **kwargs)
     # unpatched version for every other path
     return builtin_open(*args, **kwargs)
@@ -181,7 +181,7 @@ class TestCommonAuthAdcRsaConfig(TestCase):
         from aladdinsdk.adc.client import ADCClient
 
         test_adc_client = ADCClient(adc_conn_authenticator="snowflake_jwt", adc_conn_rsa_private_key_filepath="some/file/location.p8",
-                                    adc_conn_rsa_private_key_passphrase="")
+                                    adc_conn_rsa_private_key_passphrase="testpassphrase")
         generated_sf_conn_params = test_adc_client._adc_auth_util.generate_sf_connection_params(test_adc_client)
 
         self.assertIn('private_key', generated_sf_conn_params.keys())
@@ -210,3 +210,77 @@ class TestCommonAuthAdcRsaConfig(TestCase):
                                         adc_conn_rsa_private_key_passphrase="invalidpass")
             test_adc_client._adc_auth_util.generate_sf_connection_params(test_adc_client)
             self.assertEqual("Unable to read configured private key. Error: Password was given but private key is not encrypted.", context.exception)
+
+
+class TestCommonAuthAdcRsaConfigWithKeys(TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.env_patcher = mock.patch.dict(os.environ, {
+            "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_adc_rsa_conn_with_key.yaml",
+            })
+        self.env_patcher.start()
+        utils.reload_modules()
+        super().setUpClass()
+
+    def test_adc_auth_util_init_rsa_key_with_passphrase(self):
+        from aladdinsdk.common.authentication.adc import AdcAuthUtil
+        from aladdinsdk.config import user_settings
+
+        test_adc_auth_util = AdcAuthUtil()
+
+        self.assertEqual(test_adc_auth_util.adc_conn_authenticator, user_settings.CONF_ADC_CONN_AUTHENTICATOR_SNOWFLAKE_JWT)
+        self.assertIsNone(test_adc_auth_util.user_provided_oauth_access_token)
+        self.assertEqual(test_adc_auth_util.adc_conn_rsa_private_key_passphrase, "testpassphrase")
+        self.assertIsNone(test_adc_auth_util.adc_conn_rsa_private_key_filepath)
+        self.assertEqual(test_adc_auth_util.adc_conn_rsa_private_key, "dummyprivatekeyval")
+
+    @mock.patch("builtins.open", mock_open_for_p8_file)
+    @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
+    def test_generate_sf_connection_params_rsa_private_key(self, generate_conn_mock):
+        from aladdinsdk.adc.client import ADCClient
+        from cryptography.hazmat.backends import default_backend
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import rsa
+
+        mock_private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048,
+            backend=default_backend()
+        )
+
+        mock_passphrase = b"my_passphrase"
+
+        mock_private_key_pem = mock_private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.BestAvailableEncryption(mock_passphrase)
+        )
+
+        test_adc_client = ADCClient(adc_conn_authenticator="snowflake_jwt", adc_conn_rsa_private_key=mock_private_key_pem.decode(),
+                                    adc_conn_rsa_private_key_passphrase="my_passphrase")
+        generated_sf_conn_params = test_adc_client._adc_auth_util.generate_sf_connection_params(test_adc_client)
+
+        self.assertIn('private_key', generated_sf_conn_params.keys())
+
+
+class TestCommonAuthAdcOauthConfigWithToken(TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.env_patcher = mock.patch.dict(os.environ, {
+            "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_adc_oauth_conn.yaml",
+            })
+        self.env_patcher.start()
+        utils.reload_modules()
+        super().setUpClass()
+
+    def test_adc_auth_util_init_rsa_key_with_passphrase(self):
+        from aladdinsdk.common.authentication.adc import AdcAuthUtil
+        from aladdinsdk.config import user_settings
+
+        test_adc_auth_util = AdcAuthUtil()
+
+        self.assertEqual(test_adc_auth_util.adc_conn_authenticator, user_settings.CONF_ADC_CONN_AUTHENTICATOR_OAUTH)
+        self.assertEqual(test_adc_auth_util.user_provided_oauth_access_token, "dummyaccesstoken")
+        self.assertIsNone(test_adc_auth_util.adc_conn_rsa_private_key_passphrase)
+        self.assertIsNone(test_adc_auth_util.adc_conn_rsa_private_key_filepath)
+        self.assertIsNone(test_adc_auth_util.adc_conn_rsa_private_key)
