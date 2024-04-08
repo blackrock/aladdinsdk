@@ -48,16 +48,18 @@ AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionali
   ```
 - Set BlackRock's `defaultWebServer`
 
-#### Managing APIs (Note: This section is temporary and API management will be decoupled from core SDK)
+#### Managing APIs
 
-- The supported API specs are stored under [./resources/api_specs](./resources/api_specs/)
-- To add/update/delete APIs, perform the code generation steps locally:
-  - Update the contents of the api_specs folder appropriately.
-  - Run the code generation utility script using this command:
-    ```sh
-    python devutils/asdk_agraph_api_codegen.py -osd resources/api_specs
+- AladdinSDK comes with a couple of pre-packaged APIs:
+  - TokenAPI: For Aladdin Data Cloud's OAuth connectivity
+  - TrainJourneyAPI: for reference/testing.
+- Additional APIs can be added separately using AladdinSDK's API Plugins.:
+  - These plugins are separate packages that can be installed as follows:
+    ```py
+    pip install asdk_plugin_investment_research
     ```
-  - Verify changes by running API calls locally, then create a PR to add these changes to the repository
+  - AladdinSDK will scan all installed python packages to find compatible plugins. All APIs in these plugins will be available via AladdinSDK without any additional setup steps.
+  - For more details, refer [aladdinsdk-plugin-builder](https://github.com/blackrock/aladdinsdk-plugin-builder) project.
 
 ## Usage
 
