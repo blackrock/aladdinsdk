@@ -48,16 +48,18 @@ AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionali
   ```
 - Set BlackRock's `defaultWebServer`
 
-#### Managing APIs (Note: This section is temporary and API management will be decoupled from core SDK)
+#### Managing APIs
 
-- The supported API specs are stored under [./resources/api_specs](./resources/api_specs/)
-- To add/update/delete APIs, perform the code generation steps locally:
-  - Update the contents of the api_specs folder appropriately.
-  - Run the code generation utility script using this command:
-    ```sh
-    python devutils/asdk_agraph_api_codegen.py -osd resources/api_specs
+- AladdinSDK comes with a couple of pre-packaged APIs:
+  - TokenAPI: For Aladdin Data Cloud's OAuth connectivity
+  - TrainJourneyAPI: for reference/testing.
+- Additional APIs can be added separately using AladdinSDK's API Plugins.:
+  - These plugins are separate packages that can be installed as follows:
+    ```py
+    pip install asdk_plugin_investment_research
     ```
-  - Verify changes by running API calls locally, then create a PR to add these changes to the repository
+  - AladdinSDK will scan all installed python packages to find compatible plugins. All APIs in these plugins will be available via AladdinSDK without any additional setup steps.
+  - For more details, refer [aladdinsdk-plugin-builder](https://github.com/blackrock/aladdinsdk-plugin-builder) project.
 
 ## Usage
 
@@ -72,7 +74,7 @@ AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionali
 ### Run-time configurations
 
 AladdinSDK is highly customizable. This allows the code to be clean, readable, and reusable across environments. 
-E.g. 
+E.g.
 - Citizen developers may share code-snippets or projects and be able to run with their credentials. 
 - Developer may be able to test applications with different system account credentials by simply changing configuration.
 
@@ -210,6 +212,8 @@ For AladdinSDK to be able to fetch secrets via keyring -
 
 AladdinSDK provides an API client `AladdinAPI` which wraps over OpenAPI generated python client code based on Aladdin Graph API's swagger specifications.
 
+APIs are made available via plugins that can be installed as any other python package using `pip`. For more details on how these are built, refer [aladdinsdk-plugin-builder](https://github.com/blackrock/aladdinsdk-plugin-builder) project.
+
 The API client provides the following capabilities:
 - Authentication: Using Basic Auth or OAuth
 - Input parameter validation using pydantic
@@ -230,6 +234,17 @@ req_body_json = {
     }
 }
 response = api_instance_train_journey.post("/trainJourneys:filter", req_body_json)
+```
+
+To make an OrderAPI call, install a plugin which contains this API:
+```sh
+pip install asdk_plugin_trading
+```
+
+```py
+from aladdinsdk.api.client import AladdinAPI
+
+api_instance_order = AladdinAPI("OrderAPI")
 ```
 
 _Additional examples under [`resources/sample_code_snippets/sample_api_calls.md`](resources/sample_code_snippets/sample_api_calls.md)_
@@ -356,7 +371,8 @@ Example [code for registering error handlers](resources/sample_code_snippets/sam
 
 ## DomainSDK Development
 
-Teams interested in building their business specific SDKs can build on top of AladdinSDK.
+Teams interested in building their business specific SDKs can build on top of AladdinSDK. Typically, the business logic in these SDKs pertain to specific set of APIs, therefore the SDK developers can simply include the necessary plugin libraries in their `requirements.txt`. This allows their end users to install just one DomainSDK packages, which will include necessary APIs.
+
 Core AladdinSDK provides generic solutions for SDK development, so DomainSDK developers can focus on specific business IP. DomainSDK users have access to all the aforementioned configurations, utilities and mechanisms.
 
 ### Configurations

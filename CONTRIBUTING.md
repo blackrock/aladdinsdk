@@ -83,7 +83,6 @@ The following section outlines the SDK project folder structure:
             ├── exports: file write/append utilities
             ├── retry: ADC and API retry mechanism
         ├── config: configuration management module 
-    ├── devutils: Codegen utils to onboard APIs
     ├── test: Test files for code coverage
 
 ## Authentication
