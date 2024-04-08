@@ -1,10 +1,14 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools", "setuptools-git-versioning"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools-git-versioning]
+enabled = true
+dev_template = "{tag}.post{ccount}"
+dirty_template = "{tag}.post{ccount}"
 
 [project]
 name = "aladdinsdk"
-version = "0.0.1a2"
 authors = [
   { name="Vedant Naik", email="naik.vedant@gmail.com" },
 ]
@@ -16,7 +20,7 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
-dynamic = ["dependencies"]
+dynamic = ["dependencies", "version"]
 
 [project.scripts]
 aladdinsdk-cli = "aladdinsdk.config.utils.user_settings_file_util:create_user_config_file_template"
