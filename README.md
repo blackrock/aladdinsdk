@@ -74,7 +74,7 @@ AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionali
 ### Run-time configurations
 
 AladdinSDK is highly customizable. This allows the code to be clean, readable, and reusable across environments. 
-E.g. 
+E.g.
 - Citizen developers may share code-snippets or projects and be able to run with their credentials. 
 - Developer may be able to test applications with different system account credentials by simply changing configuration.
 
@@ -212,6 +212,8 @@ For AladdinSDK to be able to fetch secrets via keyring -
 
 AladdinSDK provides an API client `AladdinAPI` which wraps over OpenAPI generated python client code based on Aladdin Graph API's swagger specifications.
 
+APIs are made available via plugins that can be installed as any other python package using `pip`. For more details on how these are built, refer [aladdinsdk-plugin-builder](https://github.com/blackrock/aladdinsdk-plugin-builder) project.
+
 The API client provides the following capabilities:
 - Authentication: Using Basic Auth or OAuth
 - Input parameter validation using pydantic
@@ -232,6 +234,17 @@ req_body_json = {
     }
 }
 response = api_instance_train_journey.post("/trainJourneys:filter", req_body_json)
+```
+
+To make an OrderAPI call, install a plugin which contains this API:
+```sh
+pip install asdk_plugin_trading
+```
+
+```py
+from aladdinsdk.api.client import AladdinAPI
+
+api_instance_order = AladdinAPI("OrderAPI")
 ```
 
 _Additional examples under [`resources/sample_code_snippets/sample_api_calls.md`](resources/sample_code_snippets/sample_api_calls.md)_
@@ -358,7 +371,8 @@ Example [code for registering error handlers](resources/sample_code_snippets/sam
 
 ## DomainSDK Development
 
-Teams interested in building their business specific SDKs can build on top of AladdinSDK.
+Teams interested in building their business specific SDKs can build on top of AladdinSDK. Typically, the business logic in these SDKs pertain to specific set of APIs, therefore the SDK developers can simply include the necessary plugin libraries in their `requirements.txt`. This allows their end users to install just one DomainSDK packages, which will include necessary APIs.
+
 Core AladdinSDK provides generic solutions for SDK development, so DomainSDK developers can focus on specific business IP. DomainSDK users have access to all the aforementioned configurations, utilities and mechanisms.
 
 ### Configurations
