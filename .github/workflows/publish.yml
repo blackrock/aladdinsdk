@@ -50,7 +50,7 @@ jobs:
         name: aladdinsdk-build
         path: dist/*
       if: ${{ always() }}
-    # - name: Publish package
-    #   uses: pypa/gh-action-pypi-publish@release/v1
-    #   with:
-    #     password: ${{ secrets.SIMPYL_TOKEN_PYPI }}
+    - name: Publish package
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.TEST_VNAIK_PYPI }}
