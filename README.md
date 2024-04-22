@@ -410,17 +410,18 @@ The license for the project:
 
 ## Credits
 
-Code contributions:
+Initial code contributions:
+- Vedant Naik
+- Harshita Das
+- David Woodhead
+- Infant Vasanth
+- Eli Kalish
+- Mike Bowen
 - Anilkumar Mabagapu
 - David Li
-- David Woodhead
-- Eli Kalish
 - Ginsiu Cheng
-- Harshita Das
-- Infant Vasanth
-- Mike Bowen
 - Oleg Zakrevskiy
-- Vedant Naik
+
 
 Resources:
 - Aladdin Graph APIs
