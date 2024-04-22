@@ -398,27 +398,18 @@ The license for the project:
 
 ## Credits
 
-Core Contributors:
-- Vedant Naik
-- Harshita Das
-- Eli Kalish
-- Infant Vasanth
-
-Special Thanks:
-- Mike Bowen
-- Ginsiu Cheng
-- Oleg Zakrevskiy
-- David Li
+Code contributions:
 - Anilkumar Mabagapu
-
-Libraries:
-- [Dynaconf](https://www.dynaconf.com/)
-- [Tencity](https://tenacity.readthedocs.io/en/latest/)
+- David Li
+- David Woodhead
+- Eli Kalish
+- Ginsiu Cheng
+- Harshita Das
+- Infant Vasanth
+- Mike Bowen
+- Oleg Zakrevskiy
+- Vedant Naik
 
 Resources:
 - Aladdin Graph APIs
 - Aladdin Data Cloud
-
-## Contact
-
-Contact information for questions or feedback.
