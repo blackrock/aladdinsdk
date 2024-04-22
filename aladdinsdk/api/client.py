@@ -15,6 +15,7 @@ limitations under the License.
 """
 
 import os
+import re
 import asyncio
 import json
 import inspect
@@ -35,10 +36,25 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+_ASDK_USER_AGENT_PATTERN = 'AladdinSDK-{}/1.0.0/python'
+_DEFAULT_SDK_USER_AGENT_SUFFIX = 'Core'
+
 _HttpEndpointDescription = namedtuple("EndpointDescription", ["http_endpoint", "http_method"])
 
 # Switch to enable/disable scopes to be picked from AGraph specs
 _api_oauth_scopes_enabled = os.environ.get("AGRAPH_SCOPES_ENABLED", "False").lower() in ('true', '1', 't')
+
+
+def update_domain_sdk_user_agent_suffix(domain_sdk_suffix):
+    """
+    Helper method to append domain specific user agent suffix
+    """
+    global _DEFAULT_SDK_USER_AGENT_SUFFIX
+    regex = r"^[a-zA-Z0-9\.\/]+$"
+    if re.match(regex, domain_sdk_suffix) is not None and len(domain_sdk_suffix) > 0 and len(domain_sdk_suffix) <= 15:
+        _DEFAULT_SDK_USER_AGENT_SUFFIX = domain_sdk_suffix
+    else:
+        _logger.warning(f"Invalid domain SDK user agent suffix provided: {domain_sdk_suffix}. Provide an alphanumeric string of max length 15.")
 
 
 class AladdinAPI():
@@ -119,6 +135,9 @@ class AladdinAPI():
         """
         # Enter a context with an instance of the API client
         api_client = self._details.api_client(configuration)
+
+        # Update user agent for client
+        api_client.user_agent = _ASDK_USER_AGENT_PATTERN.format(_DEFAULT_SDK_USER_AGENT_SUFFIX)
 
         # Create an instance of the API class
         api_instance = self._details.api_default_class(api_client)
