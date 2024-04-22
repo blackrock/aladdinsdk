@@ -29,8 +29,6 @@ from aladdinsdk.config.asdkconf import dynamic_asdk_config_reload
 _logger = logging.getLogger(__name__)
 _HEADER_KEY_REQUEST_ID = "VND.com.blackrock.Request-ID"
 _HEADER_KEY_ORIGIN_TIMESTAMP = "VND.com.blackrock.Origin-Timestamp"
-_HEADER_KEY_REQUEST_CHANNEL = "VND.com.blackrock.Request-Channel"
-_REQUEST_CHANNEL_SDK = "asdk"
 _AUTHORIZATION_HEADER = "Authorization"
 _BEARER_TOKEN_VALUE = "Bearer {}"
 _GET_API_OAUTH_CONFIG_VALUE_FROM_USER_SETTINGS = 'user_settings.get_api_oauth_{}()'
@@ -325,7 +323,6 @@ def build_request_headers():
     unique_request_origin_id = str(uuid.uuid1())
     curr_timestamp = datetime.datetime.utcnow().replace(microsecond=0).replace(tzinfo=datetime.timezone.utc).isoformat()
     api_request_headers = {
-        _HEADER_KEY_REQUEST_CHANNEL: _REQUEST_CHANNEL_SDK,
         _HEADER_KEY_REQUEST_ID: unique_request_origin_id,
         _HEADER_KEY_ORIGIN_TIMESTAMP: curr_timestamp,
     }
