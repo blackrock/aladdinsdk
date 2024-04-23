@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import re
 import snowflake.connector
 from snowflake.snowpark import Session
 from snowflake.connector.pandas_tools import write_pandas
@@ -28,6 +29,22 @@ import pandas as pd
 import logging
 
 _logger = logging.getLogger(__name__)
+
+_ASDK_QUERY_TAG_PATTERN = 'QueryViaSDK-AladdinSDK-{}'
+_DEFAULT_SDK_QUERY_TAG_SUFFIX = 'Core'
+
+
+def update_domain_sdk_query_tag_suffix(domain_sdk_suffix):
+    """
+    Helper method to append domain specific query tag suffix
+    """
+    global _DEFAULT_SDK_QUERY_TAG_SUFFIX
+    regex = r"^[a-zA-Z0-9\.\/]+$"
+    if re.match(regex, domain_sdk_suffix) is not None and len(domain_sdk_suffix) > 0 and len(domain_sdk_suffix) <= 15:
+        _DEFAULT_SDK_QUERY_TAG_SUFFIX = domain_sdk_suffix
+        _logger.debug(f"Updating SDK query tag to {_ASDK_QUERY_TAG_PATTERN.format(_DEFAULT_SDK_QUERY_TAG_SUFFIX)}")
+    else:
+        raise AsdkAdcException("QUERY_TAG suffix should be alphanumeric string of max length 15.")
 
 
 class ADCClient():
@@ -130,6 +147,7 @@ class ADCClient():
         self._warehouse = warehouse
         self._database = database
         self._schema = schema
+        self._session_query_tag = _ASDK_QUERY_TAG_PATTERN.format(_DEFAULT_SDK_QUERY_TAG_SUFFIX)
         self._connection = self._generate_adc_connection()
 
     @asdk_exception_handler

@@ -53,8 +53,9 @@ def update_domain_sdk_user_agent_suffix(domain_sdk_suffix):
     regex = r"^[a-zA-Z0-9\.\/]+$"
     if re.match(regex, domain_sdk_suffix) is not None and len(domain_sdk_suffix) > 0 and len(domain_sdk_suffix) <= 15:
         _DEFAULT_SDK_USER_AGENT_SUFFIX = domain_sdk_suffix
+        _logger.debug(f"Updating SDK user agent to {_ASDK_USER_AGENT_PATTERN.format(_DEFAULT_SDK_USER_AGENT_SUFFIX)}")
     else:
-        _logger.warning(f"Invalid domain SDK user agent suffix provided: {domain_sdk_suffix}. Provide an alphanumeric string of max length 15.")
+        raise AsdkApiException("User Agent suffix should be alphanumeric string of max length 15.")
 
 
 class AladdinAPI():

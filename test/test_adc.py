@@ -62,7 +62,7 @@ class TestAdcClientInit(TestCase):
             warehouse='SPECTRE',
             database='MI_6_EMPS',
             schema='AGENTS',
-            session_parameters={'QUERY_TAG': 'QueryViaSDK'}
+            session_parameters={'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'}
             )
         sfc_mock.assert_called_once()
 
@@ -108,7 +108,7 @@ class TestAdcClientInit(TestCase):
                 warehouse='SPECTRE',
                 database='MI_6_EMPS',
                 schema='AGENTS',
-                session_parameters={'QUERY_TAG': 'QueryViaSDK'}
+                session_parameters={'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'}
                 )
             sfc_mock.assert_called_once()
 
@@ -153,7 +153,7 @@ class TestAdcClientInit(TestCase):
             warehouse='SPECTRE',
             database='MI_6_EMPS',
             schema='AGENTS',
-            session_parameters={'QUERY_TAG': 'QueryViaSDK'})
+            session_parameters={'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'})
         sfc_mock.assert_called_once()
 
         self.assertIsNotNone(test_subject.get_connection())
@@ -262,7 +262,7 @@ class TestAdcClientInit(TestCase):
             warehouse='SPECTRE',
             database='MI_6_EMPS',
             schema='AGENTS',
-            session_parameters={'QUERY_TAG': 'QueryViaSDK'})
+            session_parameters={'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'})
         sfc_mock.assert_called_once()
 
         self.assertIsNotNone(test_subject.get_connection())
@@ -315,7 +315,7 @@ class TestAdcClientInit(TestCase):
             warehouse='SPECTRE',
             database='MI_6_EMPS',
             schema='AGENTS',
-            session_parameters={'QUERY_TAG': 'QueryViaSDK'})
+            session_parameters={'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'})
         sfc_mock.assert_called_once()
 
         mock_sf_conn = test_subject.get_connection()
@@ -391,7 +391,7 @@ class TestAdcClientWithBasicAuthArgsAndKwargsInit(TestCase):
             warehouse='SPECTRE',
             database='MI_6_EMPS',
             schema='AGENTS',
-            session_parameters={'QUERY_TAG': 'QueryViaSDK'}
+            session_parameters={'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'}
             )
         sfc_mock.assert_called_once()
 

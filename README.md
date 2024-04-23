@@ -383,18 +383,18 @@ Core AladdinSDK provides generic solutions for SDK development, so DomainSDK dev
 - Where applicable, DomainSDK developers can add bespoke Error Codes by raising a PR to this repository
 - Error handler registration can be done as mentioned above.
 
-### API metrics capture
+### Metrics
 
-AladdinSDK API metrics are internally tracked using `user_agent` header that is set to "AladdinSDK-Core/1.0.0/python" by default. In the event domain SDK developers want to track their usage, they are given the option to add a domain specific suffix here to update user_agent to "AladdinSDK-DomainSDK/1.0.0/python".
+AladdinSDK API metrics are tracked with value "AladdinSDK-Core/1.0.0/python", and ADC metrics are tracked using "QueryViaSDK-AladdinSDK-Core" by default.
+In the event domain SDK developers want to track usage from their artifacts only, they are given the option to add a domain specific suffix enabling creation of bespoke metrics dashboards for internal monitoring. e.g. Setting suffix to "DomainSDK" would tag API calls with "AladdinSDK-DomainSDK/1.0.0/python" and ADC query tag to "QueryViaSDK-AladdinSDK-DomainSDK"
 
 To utilize this capability:
 - Add this code snippet at during initialization, so the suffix value is updated at the time of domain sdk package imports:
     ```py
-    from aladdinsdk.api import update_domain_sdk_user_agent_suffix
-    update_domain_sdk_user_agent_suffix("<Domain SDK suffix>")
+    from aladdinsdk.common.metrics import update_domain_sdk_metrics_suffix
+    update_domain_sdk_metrics_suffix("<DomainSDK>")  # Replace DomainSDK with relevant value
     ```
-- Note: Suffix value should be alphanumeric with no spaces (may include `.` or `/`), of max length 15
-
+- **Note:** Suffix value should be alphanumeric with no spaces (may include `.` or `/`), of max length 15
 
 ## Contributing
 
