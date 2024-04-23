@@ -73,7 +73,7 @@ class AdcAuthUtil():
             'database': adc_client._database,
             'schema': adc_client._schema,
             'session_parameters': {
-                'QUERY_TAG': 'QueryViaSDK',
+                'QUERY_TAG': adc_client._session_query_tag,
             }
         }
 
