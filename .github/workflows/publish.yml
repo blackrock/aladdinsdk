@@ -53,4 +53,4 @@ jobs:
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        password: ${{ secrets.TEST_VNAIK_PYPI }}
+        password: ${{ secrets.BLK_PYPI_ALADDINSDK }}
