@@ -236,7 +236,26 @@ req_body_json = {
 response = api_instance_train_journey.post("/trainJourneys:filter", req_body_json)
 ```
 
-To make an OrderAPI call, install a plugin which contains this API:
+#### AladdinAPI Plugins
+
+AladdinSDK's functional capabilities can be extended as needed using API bundles or 'plugins' that can be installed separately.
+
+List of official AladdinSDK API plugins (refer documentation on PyPI for up-to-date list of APIs packaged in each plugin):
+- [asdk_plugin_accounting](https://pypi.org/project/asdk_plugin_accounting)
+- [asdk_plugin_analytics](https://pypi.org/project/asdk_plugin_analytics)
+- [asdk_plugin_clients](https://pypi.org/project/asdk_plugin_clients)
+- [asdk_plugin_compliance](https://pypi.org/project/asdk_plugin_compliance)
+- [asdk_plugin_data](https://pypi.org/project/asdk_plugin_data)
+- [asdk_plugin_investment_operations](https://pypi.org/project/asdk_plugin_investment_operations)
+- [asdk_plugin_investment_research](https://pypi.org/project/asdk_plugin_investment_research)
+- [asdk_plugin_platform](https://pypi.org/project/asdk_plugin_platform)
+- [asdk_plugin_portfolio](https://pypi.org/project/asdk_plugin_portfolio)
+- [asdk_plugin_portfolio_management](https://pypi.org/project/asdk_plugin_portfolio_management)
+- [asdk_plugin_trading](https://pypi.org/project/asdk_plugin_trading)
+
+Install plugins using pip: `pip install asdk_plugin_<bundle_name>`
+
+For example, to make an OrderAPI call, install the trading plugin which contains this API:
 ```sh
 pip install asdk_plugin_trading
 ```
@@ -410,27 +429,19 @@ The license for the project:
 
 ## Credits
 
-Core Contributors:
+Initial code contributions:
 - Vedant Naik
 - Harshita Das
-- Eli Kalish
+- David Woodhead
 - Infant Vasanth
-
-Special Thanks:
+- Eli Kalish
 - Mike Bowen
+- Anilkumar Mabagapu
+- David Li
 - Ginsiu Cheng
 - Oleg Zakrevskiy
-- David Li
-- Anilkumar Mabagapu
 
-Libraries:
-- [Dynaconf](https://www.dynaconf.com/)
-- [Tencity](https://tenacity.readthedocs.io/en/latest/)
 
 Resources:
 - Aladdin Graph APIs
 - Aladdin Data Cloud
-
-## Contact
-
-Contact information for questions or feedback.
