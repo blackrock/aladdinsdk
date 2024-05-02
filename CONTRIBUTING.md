@@ -6,6 +6,23 @@ Thank you for your interest in contributing to AladdinSDK! We welcome all contri
 
 The Developer Certificate of Origin (DCO) is a lightweight way for contributors to certify that they wrote or otherwise have the right to submit the code they are contributing to the project. It is a simple statement that must be included in every Git commit message, indicating that the contributor accepts the DCO.
 
+## Setting up this repository for developing AladdinSDK
+
+- Clone the project locally:
+  ```sh
+  gh repo clone blackrock/aladdinsdk
+  ```
+- Create python venv. Ensure python virtual environment version is 3.9.
+  ```
+  python -m venv venv
+  source venv/bin/activate
+  ```
+- Install dependencies
+  ```sh
+  pip install -r requirements.txt
+  ```
+- Set BlackRock's `defaultWebServer`
+
 ## How to Sign Off on Your Work
 
 To sign off on your work, simply add the following line to the end of your Git commit message:
