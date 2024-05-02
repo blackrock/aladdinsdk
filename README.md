@@ -4,108 +4,78 @@ AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionali
 
 ## Table of Contents
 
-- [AladdinSDK](#aladdinsdk)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Core Features](#core-features)
-  - [DomainSDK Development](#domainsdk-development)
-  - [Contributing](#contributing)
-  - [License](#license)
-  - [Credits](#credits)
-  - [Contact](#contact)
+- [Installation](#installation)
+- [Usage/Configurations](#usageconfigurations)
+- [AladdinAPI](#aladdinapi)
+- [ADC Client](#adc-client)
+- [Common Utilities](#common-utilities)
+- [DomainSDK Development](#domainsdk-development)
+- [Contributing](#contributing)
+- [License](#license)
+- [Credits](#credits)
+- [Contact](#contact)
 
 ## Installation
 
-### Using AladdinSDK in your environment
-
-- Compatible python version: 3.9
-- Install using pip
-    ```sh
-    pip install aladdinsdk
-    ```
-    _For local development, installing `keyring` is recommended for easier credential management_
-    ```sh
-    pip install keyring
-    ```
-- Set BlackRock's `defaultWebServer` environment variable
-- Optionally, create a local user configuration file or set essential environment variables. Refer [run-time configurations section](#run-time-configurations) for details.
-
-### Setting up this repository for developing AladdinSDK
-
-- Clone the project locally:
+- Use new/existing python version 3.9 virtual environment
+- Install core AladdinSDK package using pip
   ```sh
-  gh repo clone blackrock/aladdinsdk
-  ```
-- Create python venv. Ensure python virtual environment version is 3.9.
-  ```
-  python -m venv venv
-  source venv/bin/activate
-  ```
-- Install dependencies
-  ```sh
-  pip install -r requirements.txt
-  ```
-- Set BlackRock's `defaultWebServer`
+  pip install aladdinsdk
+  ```    
+  - Optionally, SDK's API capabilities can be extended by installing additional plugin packages. Refer [AladdinSDK Plugins section](#AladdinAPI-Plugins) for details.
+    </br>
+    Example:
 
-#### Managing APIs
+      ```sh
+      pip install asdk_plugin_trading
+      pip install asdk_plugin_investment_research
+      ```
+  - For local development, installing `keyring` is recommended for easier credential management:
 
-- AladdinSDK comes with a couple of pre-packaged APIs:
-  - TokenAPI: For Aladdin Data Cloud's OAuth connectivity
-  - TrainJourneyAPI: for reference/testing.
-- Additional APIs can be added separately using AladdinSDK's API Plugins.:
-  - These plugins are separate packages that can be installed as follows:
-    ```py
-    pip install asdk_plugin_investment_research
-    ```
-  - AladdinSDK will scan all installed python packages to find compatible plugins. All APIs in these plugins will be available via AladdinSDK without any additional setup steps.
-  - For more details, refer [aladdinsdk-plugin-builder](https://github.com/blackrock/aladdinsdk-plugin-builder) project.
+      ```sh
+      pip install keyring
+      ```
 
-## Usage
-
-### Environment Variables
+## Usage/Configurations
 
 | Environment Variable Name | Description                                                              | Mandatory | Default | Permitted Values |
 |:--------------------------|:-------------------------------------------------------------------------|:---------:|:-------:|:----------------:|
 | defaultWebServer          | BlackRock client environment's default web server                        |    Yes    |    -    |         -        |
-| ASDK_USER_CONFIG_FILE     | Path to AladdinSDK configuration to be used                              |    No     |    -    |         -        |
+| ASDK_USER_CONFIG_FILE     | Path to AladdinSDK configuration to be used. </br>Refer [run-time configurations section](#run-time-configurations) for details.                              |    No     |    -    |         -        |
 | AGRAPH_SCOPES_ENABLED     | If enabled, adds scopes from swagger specs to oauth access token request |    No     |  False  |    True/False    |
 
 ### Run-time configurations
 
-AladdinSDK is highly customizable. This allows the code to be clean, readable, and reusable across environments. 
-E.g.
-- Citizen developers may share code-snippets or projects and be able to run with their credentials. 
-- Developer may be able to test applications with different system account credentials by simply changing configuration.
+AladdinSDK is highly customizable, allowing users to write clean, readable, and reusable code across different environments. </br>
+Configurations enable citizen developers to share code-snippets or projects more easily. Or test applications with different system account credentials by simply changing configurations.
 
-In order of **increasing** priority, configurations can be provided via:
+#### Pointing to a configuration file
+
+- Users can set (or override the default) configurations by providing their own config file and setting the environment variable `ASDK_USER_CONFIG_FILE`
+  - The SDK contains a command line utility to get started with building a configuration file. In the terminal where the package is installed run and follow the prompts:
+    ```sh
+    aladdinsdk-cli
+    ```
+- Set the environment variable `DEFAULT_ASDK_CONFIG_FILE` to point to a default configuration file. This is intended for curated python environments and domain SDK developers to dictate the default user experience.
+
+**IMPORTANT**
+
+- Ensure the environment variable `ASDK_USER_CONFIG_FILE` is set _before_ importing `aladdinsdk` module in code.
+- To see configurations currently picked by the SDK, invoke this utility:
+
+  ```py
+  aladdinsdk.config.print_current_user_config()
+  ```
+
+- In 'Aladdin Developer' or similar python development environments, for any config file updates, a kernel restart is always recommended.
+
+In order of **increasing** priority, configuration values can be provided via:
 - Default configuration yaml/json file
 - User configuration yaml/json file
 - Override `ASDK_` environment variables
 - Inline parameters passed in ASDK method invocations or object declarations
 
 Under the hood, configuration management is performed using Dynaconf. Custom environment variable prefix is `ASDK_`. This entails: Any of the configurations may be overridden via environment variables (prefixed by "ASDK_" followed by dunder (double underscore) names for nested elements - This is detailed [here](#environment-variable-overrides). )
-
-#### Pointing to a configuration file
-
-- The SDK offers the ability to set a default configuration file to be preloaded at initialization. Set the environment variable `DEFAULT_ASDK_CONFIG_FILE` to point to the configuration file path. This is intended for curated notebook owners and domain SDK developers to dictate the default SDK experience.
-- End users can set (or override the default) configurations by providing their own config file and setting the environment variable `ASDK_USER_CONFIG_FILE`
-  - The SDK provides a utility to get started with building this configuration file. Installing `aladdinsdk` installs a `aladdinsdk-cli` CLI. Running this in your terminal will walk you through the steps to get started.
-    ```sh
-    pip install aladdinsdk
-    aladdinsdk-cli
-    ```
-
-
-To see configurations currently picked by the SDK, invoke this utility:
-
-```py
-aladdinsdk.config.print_current_user_config()
-```
-
-**IMPORTANT**
-  - Ensure the environment variable `ASDK_USER_CONFIG_FILE` is set before importing `aladdinsdk` module in code.
-  - In Aladdin Developer or similar python development environments, for any config file updates, a kernel restart is always recommended.
 
 #### All Supported Configurations
 
@@ -159,11 +129,12 @@ aladdinsdk.config.print_current_user_config()
 | ERROR_HANDLING: <br/>&nbsp;&nbsp; EMAIL_NOTIFICATIONS: <br/>&nbsp;&nbsp;&nbsp;&nbsp; TO:                                              | List of recipients the user wants to send an error email notifications to in the sdk.  <br /> Value checked when error occurs in the SDK  <br /> (ASDK_NOTIFICATIONS__ERROR_HANDLING__EMAIL_NOTIFICATIONS__TO)                                                                                             |                    -                | List of recipients |
 | ERROR_HANDLING: <br/>&nbsp;&nbsp; EMAIL_NOTIFICATIONS: <br/>&nbsp;&nbsp;&nbsp;&nbsp; ON_EXCEPTION_TYPES:                              | List of exceptions for which to send email notifications to users related to the sdk.  <br /> Value checked when error occurs in the SDK  <br /> (ASDK_NOTIFICATIONS__ERROR_HANDLING - <br /> __EMAIL_NOTIFICATIONS__ON_EXCEPTION_TYPES)                                                                             |                    -                | List of exceptions |
 
+
 **Note:**
 - Any of the configurations can be overridden by setting environment variables prefixed with "ASDK_" (e.g. to override `mode`, set an environment variable `ASDK_MODE`)
 - For nested keys, use dunder, i.e. double underscore, to denote access to nested elements (e.g. to override `api.token`, set an environment variable `ASDK_API__TOKEN`)
 
-### Sample files
+#### Sample configuration file
 
 - Sample YAML configuration for API (OAuth) and ADC (RSA) connectivity:
   ```yaml
@@ -206,9 +177,7 @@ For AladdinSDK to be able to fetch secrets via keyring -
 - Make an API call using AladdinSDK - in case of missing configuration and keyring entry, AladdinSDK will prompt the user for their password in command line, and store the password in the OS specific credential manager (e.g. MacOS - Keychain Access)
 
 
-## Core Features
-
-### AladdinAPI
+## AladdinAPI
 
 AladdinSDK provides an API client `AladdinAPI` which wraps over OpenAPI generated python client code based on Aladdin Graph API's swagger specifications.
 
@@ -236,7 +205,12 @@ req_body_json = {
 response = api_instance_train_journey.post("/trainJourneys:filter", req_body_json)
 ```
 
-#### AladdinAPI Plugins
+_Additional examples under [`resources/sample_code_snippets/sample_api_calls.md`](resources/sample_code_snippets/sample_api_calls.md)_
+
+### AladdinAPI Plugins
+
+The core SDK contains pre-packaged APIs used for connectivity and reference/testing. However, additional APIs can be added by simply installing plugin packages as needed.
+AladdinSDK will scan installed python packages to find compatible plugins. All APIs in these plugins will be available via AladdinSDK without any additional setup steps.
 
 AladdinSDK's functional capabilities can be extended as needed using API bundles or 'plugins' that can be installed separately.
 
@@ -255,7 +229,7 @@ List of official AladdinSDK API plugins (refer documentation on PyPI for up-to-d
 
 Install plugins using pip: `pip install asdk_plugin_<bundle_name>`
 
-For example, to make an OrderAPI call, install the trading plugin which contains this API:
+For example, to make an 'OrderAPI' call, install the 'trading' plugin which contains this API:
 ```sh
 pip install asdk_plugin_trading
 ```
@@ -266,9 +240,10 @@ from aladdinsdk.api.client import AladdinAPI
 api_instance_order = AladdinAPI("OrderAPI")
 ```
 
-_Additional examples under [`resources/sample_code_snippets/sample_api_calls.md`](resources/sample_code_snippets/sample_api_calls.md)_
+_For more details about plugins, refer [aladdinsdk-plugin-builder](https://github.com/blackrock/aladdinsdk-plugin-builder) project._
 
-### ADC Client
+
+## ADC Client
 
 ADC (Snowflake) access is provided via the ADCClient. This is a wrapper around snowflake-connector-python or snowflake-snowpark-python (connection type is configurable).
 
@@ -292,16 +267,16 @@ is_success, chunks_count, ingested_row_count = adc_client.write_frame(df=df, tab
 ```
 _Additional examples under [`resources/sample_code_snippets/sample_adc_calls.md`](resources/sample_code_snippets/sample_adc_calls.md)_
 
-#### ADC Connection Authentication Types
+### ADC Connection Authentication Types
 
-##### OAuth
+#### OAuth
 
 In the above simple example, ADCClient will attempt to fetch an OAuth AccessToken from Aladdin's TokenAPI.
 Here, the assumptions are:
 - User has provided API connection details as part of the configuration or ADCClient initialization.
 - User has authenticated with the ADC OAuth client application by logging into Aladdin Studio UI.
 
-##### RSA Keys
+#### RSA Keys
 
 In this type, the user is required to follow steps to generate keys in PEM format.
 
@@ -330,9 +305,9 @@ In this type, the user is required to follow steps to generate keys in PEM forma
     - Path to file containing private key file - ADC.CONN.RSA.PRIVATE_KEY_FILEPATH
 
 
-### Utilities
+## Common Utilities
 
-#### Data Transformations
+### Data Transformations
 
 Data transformation is a common action performed on API responses. This utility aims to provide generic transformation capabilities via simple interface.
 
@@ -342,7 +317,7 @@ Currently supported transformations:
 
 Example [code snippet for data transformations](resources/sample_code_snippets/sample_data_transformations.py)
 
-#### Data Exports
+### Data Exports
 
 Exporting data to persistent storage helps store intermediate steps or final results to a file system.
 Generic file formats exports currently supported:
@@ -354,23 +329,7 @@ Generic file formats exports currently supported:
 
 Example [code snippet for data exports](resources/sample_code_snippets/sample_export_data_calls.md)
 
-#### Notifications - Email
-
-E-mail notification utility can be used to programmatically send emails
- 
-- User can enable email notifications by adding their email username, email password, email host and email sender values in the user config file under the `NOTIFICATIONS.EMAIL` section in user settings file
-- As part of the email, the user can provide list of recipients, list of cc email ids, email subject, email body and attachments
-
-Example [code snippet for email notifications](resources/sample_code_snippets/sample_send_email_notification.md)
-
-#### Error Notifications - Email
-
-The e-mail utility is additionally integrated with the error handling mechanism. This enables users to receive emails for any exceptions that may occur while executing their scripts / scheduled jobs.
- 
-- User can enable email notifications on errors by setting `NOTIFICATIONS.EMAIL` and `ERROR_HANDLING.EMAIL_NOTIFICATIONS` sections in user settings file
-- For more details refer to the supported configuration table above
-
-#### Error handler registration
+### Error handler registration
 AladdinSDK simplifies error handling internally by using a decorator (`asdk_exception_handler`) that intercepts raised exceptions and maps them to specific handlers.
 This is decorator and handler framework is made available to AladdinSDK users and DomainSDK developers.
 
@@ -387,10 +346,26 @@ To utilize this capability:
 
 Example [code for registering error handlers](resources/sample_code_snippets/sample_error_handler_registration.md)
 
+### Notifications - Email
+
+E-mail notification utility can be used to programmatically send emails
+ 
+- User can enable email notifications by adding their email username, email password, email host and email sender values in the user config file under the `NOTIFICATIONS.EMAIL` section in user settings file
+- As part of the email, the user can provide list of recipients, list of cc email ids, email subject, email body and attachments
+
+Example [code snippet for email notifications](resources/sample_code_snippets/sample_send_email_notification.md)
+
+### Error Notifications - Email
+
+The e-mail utility is additionally integrated with the error handling mechanism. This enables users to receive emails for any exceptions that may occur while executing their scripts / scheduled jobs.
+ 
+- User can enable email notifications on errors by setting `NOTIFICATIONS.EMAIL` and `ERROR_HANDLING.EMAIL_NOTIFICATIONS` sections in user settings file
+- For more details refer to the supported configuration table above
+
 
 ## DomainSDK Development
 
-Teams interested in building their business specific SDKs can build on top of AladdinSDK. Typically, the business logic in these SDKs pertain to specific set of APIs, therefore the SDK developers can simply include the necessary plugin libraries in their `requirements.txt`. This allows their end users to install just one DomainSDK packages, which will include necessary APIs.
+Teams interested in building their business specific SDKs can build on top of AladdinSDK. Typically, the business logic in these SDKs pertain to specific set of APIs, therefore the SDK developers can simply include the necessary plugin libraries in their `requirements.txt`. This allows their end users to install just one DomainSDK packages, which will include all necessary APIs.
 
 Core AladdinSDK provides generic solutions for SDK development, so DomainSDK developers can focus on specific business IP. DomainSDK users have access to all the aforementioned configurations, utilities and mechanisms.
 
@@ -399,16 +374,17 @@ Core AladdinSDK provides generic solutions for SDK development, so DomainSDK dev
 - (TBD) DomainSDK developers can add additional configurable options
 
 ### Error Handlers
-- Where applicable, DomainSDK developers can add bespoke Error Codes by raising a PR to this repository
+- Where applicable, DomainSDK developers may add bespoke Error Codes by raising a PR to this repository
 - Error handler registration can be done as mentioned above.
 
 ### Metrics
 
-AladdinSDK API metrics are tracked with value "AladdinSDK-Core/1.0.0/python", and ADC metrics are tracked using "QueryViaSDK-AladdinSDK-Core" by default.
-In the event domain SDK developers want to track usage from their artifacts only, they are given the option to add a domain specific suffix enabling creation of bespoke metrics dashboards for internal monitoring. e.g. Setting suffix to "DomainSDK" would tag API calls with "AladdinSDK-DomainSDK/1.0.0/python" and ADC query tag to "QueryViaSDK-AladdinSDK-DomainSDK"
+AladdinSDK API and ADC metrics are by default tracked with "AladdinSDK-Core/1.0.0/python" and "QueryViaSDK-AladdinSDK-Core" tags respectively.
+In the event domain SDK developers want to track usage from their artifacts only, they are given the option to add a domain specific suffix enabling creation of bespoke metrics dashboards for internal monitoring. </br>
+e.g. Setting suffix to "DomainSDK" would tag API calls with "AladdinSDK-DomainSDK/1.0.0/python" and ADC queries with "QueryViaSDK-AladdinSDK-DomainSDK"
 
 To utilize this capability:
-- Add this code snippet at during initialization, so the suffix value is updated at the time of domain sdk package imports:
+- Add this code snippet during initialization, so the suffix value is updated at the time of domain sdk package imports:
     ```py
     from aladdinsdk.common.metrics import update_domain_sdk_metrics_suffix
     update_domain_sdk_metrics_suffix("<DomainSDK>")  # Replace DomainSDK with relevant value
@@ -420,7 +396,6 @@ To utilize this capability:
 Guidelines for contributing to the project:
   - [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
   - [CONTRIBUTING.md](./CONTRIBUTING.md)
-  - [Adding an Aladdin Graph API](./docs/API_ONBOARDING.md)
 
 ## License
 
