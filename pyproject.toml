@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools-git-versioning]
 enabled = true
-dev_template = "{tag}.post{ccount}"
-dirty_template = "{tag}.post{ccount}"
+dev_template = "{tag}"
+dirty_template = "{tag}"
 
 [project]
 name = "aladdinsdk"
