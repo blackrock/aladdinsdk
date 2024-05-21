@@ -325,8 +325,8 @@ class AladdinAPI():
 
         request_headers = self._api_auth_util.add_auth_details_to_header_and_config(_oauth_scopes)
 
-        endpoint_to_call = getattr(self.instance, api_endpoint_name) if _deserialize_to_object else getattr(self.instance,
-                                                                                                            f"{api_endpoint_name}_with_http_info")
+        endpoint_to_call = getattr(self.instance, f"{api_endpoint_name}_with_http_info")
+
         sig = self.get_api_endpoint_signature(api_endpoint_name)
 
         if 'body' in sig.parameters.keys():
@@ -335,6 +335,7 @@ class AladdinAPI():
                 vnd_com_blackrock_origin_timestamp=request_headers[_HEADER_KEY_ORIGIN_TIMESTAMP],
                 body=request_body,
                 _headers=request_headers,
+                _preload_content=_deserialize_to_object,
                 **params
             )
         else:
@@ -342,11 +343,15 @@ class AladdinAPI():
                 vnd_com_blackrock_request_id=request_headers[_HEADER_KEY_REQUEST_ID],
                 vnd_com_blackrock_origin_timestamp=request_headers[_HEADER_KEY_ORIGIN_TIMESTAMP],
                 _headers=request_headers,
+                _preload_content=_deserialize_to_object,
                 **params
             )
 
-        if not _deserialize_to_object:
-            # disabled deserialization and response validation - for inaccurate aladdin-graph API protos and/or API server implementations
+        if _deserialize_to_object:
+            if hasattr(api_response, "data"):
+                api_response = api_response.data
+        else:
+            # disabled deserialization and response validation - for to obtain raw response
             if hasattr(api_response, "raw_data"):
                 api_response = json.loads(api_response.raw_data)
 
