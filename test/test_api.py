@@ -262,7 +262,7 @@ class TestApiClient(TestCase):
 
         signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
 
-        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys') as mock_filter_call:
+        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
             with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
                 mock_filter_call.return_value = "TEST_RESPONSE"
                 mock_signature_helper.return_value = signature_bkp
@@ -273,6 +273,7 @@ class TestApiClient(TestCase):
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
+                    _preload_content=True,
                     body={"payload_key": "payload value"})
             self.assertEqual(resp, 'TEST_RESPONSE')
 
@@ -294,6 +295,7 @@ class TestApiClient(TestCase):
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
+                    _preload_content=False,
                     body={"payload_key": "payload value"})
             self.assertEqual(resp, {"resp_key": "resp_val"})
 
@@ -304,7 +306,7 @@ class TestApiClient(TestCase):
 
         signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
 
-        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys') as mock_filter_call:
+        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
             with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
                 class MockApiResp:
                     def json(self):
@@ -343,6 +345,7 @@ class TestApiClient(TestCase):
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
+                    _preload_content=True,
                     body={"payload_key": "payload value"})
             expected_data = {'batters.batter.id': ['1001', '1002', '1003', '1004'],
                              'batters.batter.type': ['Regular', 'Chocolate', 'Blueberry', "Devil's Food"],
@@ -355,7 +358,7 @@ class TestApiClient(TestCase):
 
         test_subject = AladdinAPI('TrainJourneyAPI')
 
-        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys') as mock_filter_call:
+        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
             mock_filter_call.return_value = "TEST_RESPONSE"
 
             resp = test_subject.call_api('train_journey_api_filter_train_journeys', param_key_1="param value 1")
@@ -363,6 +366,8 @@ class TestApiClient(TestCase):
                 vnd_com_blackrock_request_id=mock.ANY,
                 vnd_com_blackrock_origin_timestamp=mock.ANY,
                 _headers=mock.ANY,
+                body=None,
+                _preload_content=True,
                 param_key_1="param value 1")
             self.assertEqual(resp, 'TEST_RESPONSE')
 
@@ -811,7 +816,7 @@ class TestApiOauthRunLocal(TestCase):
     def test_api_client_get_oauth_token_success(self, oauth_token, secret):
         from aladdinsdk.api.client import AladdinAPI
         test_subject = AladdinAPI('TrainJourneyAPI', client_id='id', client_secret='secret', refresh_token='refresh_token')
-        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys') as mock_filter_call:
+        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
             mock_filter_call.return_value = "TEST_RESPONSE"
             test_subject.call_api("train_journey_api_filter_train_journeys", {"test": "body"})
             self.assertIsNotNone(test_subject)
