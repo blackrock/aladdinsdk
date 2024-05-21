@@ -277,6 +277,60 @@ class TestApiClient(TestCase):
                     body={"payload_key": "payload value"})
             self.assertEqual(resp, 'TEST_RESPONSE')
 
+    def test_call_api_with_request_body_success_read_data(self):
+        from aladdinsdk.api.client import AladdinAPI
+
+        class MockApiResp:
+            def __init__(self, data):
+                self.data = data
+
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
+
+        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.return_value = MockApiResp(data="TEST_RESPONSE")
+                mock_signature_helper.return_value = signature_bkp
+
+                resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                             request_body={"payload_key": "payload value"})
+                mock_filter_call.assert_called_once_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=True,
+                    body={"payload_key": "payload value"})
+            self.assertEqual(resp, 'TEST_RESPONSE')
+
+    def test_call_api_with_request_body_success_read_raw_data(self):
+        from aladdinsdk.api.client import AladdinAPI
+
+        class MockApiResp:
+            def __init__(self, data):
+                self.data = None
+                self.raw_data = data
+
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
+
+        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.return_value = MockApiResp(data='"TEST_RESPONSE"')
+                mock_signature_helper.return_value = signature_bkp
+
+                resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                             _deserialize_to_object=False,
+                                             request_body={"payload_key": "payload value"})
+                mock_filter_call.assert_called_once_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=False,
+                    body={"payload_key": "payload value"})
+            self.assertEqual(resp, 'TEST_RESPONSE')
+
     def test_call_api_with_request_body_success_disable_deserialization(self):
         from aladdinsdk.api.client import AladdinAPI
 
