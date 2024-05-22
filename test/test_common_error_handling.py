@@ -163,13 +163,13 @@ class TestCommonErrorHandlerApiHandler(TestCase):
 
         test_subject = AladdinAPI('TrainJourneyAPI')
 
-        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys') as mock_filter_call:
+        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
             mock_filter_call.side_effect = UnauthorizedException("Mock UnauthorizedException")
             with self.assertRaises(UnauthorizedException) as context:
                 test_subject.call_api('train_journey_api_filter_train_journeys', {"payload_key": "payload value"})
                 self.assertIn("Mock UnauthorizedException", context.exception.message)
 
-        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys') as mock_filter_call:
+        with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
             from pydantic import BaseModel, Field
 
             class A(BaseModel):
