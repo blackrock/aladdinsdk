@@ -119,6 +119,9 @@ Under the hood, configuration management is performed using Dynaconf. Custom env
 | USER_CREDENTIALS: <br/>&nbsp;&nbsp; PASSWORD_FILEPATH:                                                                                | Filepath pointing to file storing user's password in plain text (NOT RECOMMENDED).  <br /> Not mandatory if password provided in plain text in  <br /> USER_CREDENTIALS.PASSWORD setting (NOT RECOMMENDED), or if running in local mode. <br /> (ASDK_USER_CREDENTIALS__PASSWORD_FILEPATH)                 |                    -                | - |
 | USER_CREDENTIALS: <br/>&nbsp;&nbsp; ENCRYPTED_PASSWORD_FILEPATH:                                                                      | Filepath pointing to file storing user's password in encrypted format.  <br /> If encryption_filepath not provided, then default encryption key will be used.  <br /> (ASDK_USER_CREDENTIALS__ENCRYPTED_PASSWORD_FILEPATH)                                                                                 |                    -                | - |
 | USER_CREDENTIALS: <br/>&nbsp;&nbsp; ENCRYPTION_FILEPATH:                                                                              | Filepath pointing to file storing encryption key used for password encryption/decryption.  <br /> Not mandatory. If provided, will be used in conjunction with  <br /> USER_CREDENTIALS.PASSWORD_FILEPATH to get user password for API connections. <br /> (ASDK_USER_CREDENTIALS__ENCRYPTION_FILEPATH)    |                    -                | - |
+| BATCH: <br/>&nbsp;&nbsp; BUFFER: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_SIZE:                                                              | For batch processing, in SDKActionBuffer set the maximum number of actions that can be added to buffer.  <br /> Adding any additional actions will result in a ValueError.                                                                                                                                 |                    -                | - |
+| BATCH: <br/>&nbsp;&nbsp; SEQUENTIAL: <br/>&nbsp;&nbsp;&nbsp;&nbsp; INTERVAL:                                                          | For batch processing, when running sequentially, actions may be configured to run at specific intervals                                                                                                                                                                                                    |                    -                | - |
+| BATCH: <br/>&nbsp;&nbsp; PARALLEL: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_WORKERS:                                                         | For batch processing, when running in parallel, the SDKActionBuffer uses ThreadPoolExecutor. This configuration <br /> allows users to set the max worker count, to ensure resources are utilized efficiently.                                                                                             |                    -                | - |
 | EXPORT: <br/>&nbsp;&nbsp; OVERWRITE_DATA:                                                                                             | Config value to be used when exporting to a file that already has data.  <br /> Value picked when user uses export utility to export data to file  <br /> (ASDK_EXPORT__OVERWRITE_DATA)                                                                                                                    |                  False              | True / False   |
 | NOTIFICATIONS: <br/>&nbsp;&nbsp; EMAIL: <br/>&nbsp;&nbsp;&nbsp;&nbsp; EMAIL_HOST:                                                     | Config value to be used for setting the email host.  <br /> Value picked when user uses email notification utility to send emails  <br /> (ASDK_NOTIFICATIONS__EMAIL__EMAIL_HOST)                                                                                                                          |                    -                | Valid email host |
 | NOTIFICATIONS: <br/>&nbsp;&nbsp; EMAIL: <br/>&nbsp;&nbsp;&nbsp;&nbsp; EMAIL_USERNAME:                                                 | Config value to be used for setting the email login username.  <br /> Value picked when user uses email notification utility to send emails  <br /> (ASDK_NOTIFICATIONS__EMAIL__EMAIL_USERNAME)                                                                                                            |                    -                | User email username |
@@ -307,6 +310,85 @@ In this type, the user is required to follow steps to generate keys in PEM forma
 
 ## Common Utilities
 
+### Batch Processing
+
+- AladdinSDK enables users to perform actions in batches. An `SDKAction` is a callable method with its args & kwargs.
+- Actions can be performed Sequentially or in Parallel.
+- Setting up a batch process:
+    - Initialize buffer:
+        ```py
+        from aladdinsdk.common.batch.action import SDKActionBuffer, SDKAction
+
+        action_buffer = SDKActionBuffer()
+        ```
+        - Optionally initialize with a max size as follows: `action_buffer = SDKActionBuffer(max_size=5)`
+        - Max size can also be configured with `BATCH.BUFFER.MAX_SIZE` configuration
+    - Defining SDKActions:
+        - First parameter is a callable method
+        - Following args/kwargs are used to call the method with during execution of the action
+        - example snippet:
+            ```py
+            from aladdinsdk.common.batch.action import SDKActionBuffer, SDKAction
+            from aladdinsdk.api.client import AladdinAPI
+            api_instance_train_journey = AladdinAPI("TrainJourneyAPI")
+            req_body_json = { "query": { "departingStationId": "TS_1441" } }
+
+            api_post_action = SDKAction(api_instance_train_journey.post, "/trainJourneys:filter", req_body_json)
+            
+            api_get_action = SDKAction(api_instance_train_journey.get, '/trainJourneys/{id}', id='TJ_4')
+            ```
+    - Add actions to buffer
+        ```py
+        action_buffer.append_action(api_post_action)
+        action_buffer.append_action(api_get_action)
+        ```
+- Run actions sequentially:
+    ```py
+    action_buffer.run_sequential()
+    ```
+    - Optionally, run sequentially but at regular intervals: `action_buffer.run_sequential(interval=5)`
+    - Interval can be configured using `BATCH.SEQUENTIAL.INTERVAL`
+- Run actions in parallel:
+    ```py
+    action_buffer.run_parallel()
+    ```
+    - Optionally, run in parallel but with fixed worker thread count: `action_buffer.run_parallel(max_workers=5)`
+    - Max workers can be configured using `BATCH.PARALLEL.MAX_WORKERS`
+- Once the batch processing is done, the responses (results / errors) are available via `get_response_map` where the response is mapped to actions' unique identifier:
+    ```py
+    response_map = action_buffer.get_response_map()
+    for action_uid in response_map:
+        res = response_map[action_uid]
+        print(f"result for action {action_uid}: {res}")
+    ```
+- To clear the action buffer:
+    ```py
+    action_buffer.clear_actions()
+    ```
+
+### Retry Mechanisms
+
+AladdinSDK allows a retry mechanism for failed API or ADC calls. This can be setup quite simply using the `wait_fixed` / `stop_after_attempt` / `stop_after_delay` configurations in the config file or environment variables
+
+- To enable API retries, set the `RETRY` section under `API`:
+    ```yaml
+    API:
+        AUTH_TYPE: Basic Auth
+        RETRY:
+            wait_fixed: 2
+            stop_after_attempt: 3
+            stop_after_delay: 7
+    ```
+
+- To enable ADC retries, set the `RETRY` section under `ADC`:
+    ```yaml
+    ADC:
+        RETRY:
+            wait_fixed: 2
+            stop_after_attempt: 3
+            stop_after_delay: 7
+    ```
+
 ### Data Transformations
 
 Data transformation is a common action performed on API responses. This utility aims to provide generic transformation capabilities via simple interface.
@@ -370,8 +452,28 @@ Teams interested in building their business specific SDKs can build on top of Al
 Core AladdinSDK provides generic solutions for SDK development, so DomainSDK developers can focus on specific business IP. DomainSDK users have access to all the aforementioned configurations, utilities and mechanisms.
 
 ### Configurations
-- DomainSDK developers can fix/lock out certain configurations as needed
-- (TBD) DomainSDK developers can add additional configurable options
+- DomainSDK users have access to all the above configurations.
+- However, DomainSDK developers can fix/lock out certain configurations as needed
+- DomainSDK Configurations: SDK Developers can add additional configurable options under a separate section of the configuration file.
+    - To avoid clashing with other DomainSDK's being installed, it is recommended the section is named the same as the SDK name:
+        </br>
+        e.g. For a DomainSDK named `TrainJourneySDK`:</br>
+        ```yaml
+        RUN_MODE: local
+        API:
+            AUTH_TYPE: Basic Auth
+        TrainJourneySDK:
+            T_ID: XYZ
+        ```
+    - To read the configured value, use the `asdk_conf_get` utility:
+        ```py
+        from aladdinsdk.config import asdk_conf_get
+        asdk_conf_get('TrainJourneySDK.T_ID')  # returns XYZ
+        ```
+        If no configuration is set, you can provide a default value as follows:
+        ```py
+        asdk_conf_get('TrainJourneySDK.T_ID', 'PQR')  # returns PQR if not configured via config file or environment variable
+        ```
 
 ### Error Handlers
 - Where applicable, DomainSDK developers may add bespoke Error Codes by raising a PR to this repository
