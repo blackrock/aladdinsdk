@@ -118,6 +118,11 @@ _conf_error_handling_email_notifications_enabled = "error_handling.email_notific
 _conf_error_handling_email_notifications_to = "error_handling.email_notifications.to"
 _conf_error_handling_email_notifications_exception_types = "error_handling.email_notifications.on_exception_types"
 
+# Batch Actions
+_conf_batch_buffer_max_size = "batch.buffer.max_size"
+_conf_batch_parallel_max_workers = "batch.parallel.max_workers"
+_conf_batch_sequential_interval = "batch.sequential.interval"
+
 # User settings validations
 AsdkConf.validators.register(
     Validator(_conf_key_run_mode,
@@ -155,260 +160,231 @@ AsdkConf.validators.register(
 AsdkConf.validators.validate_all()
 
 
-# Primary getters for SDK
 @dynamic_asdk_config_reload
+def asdk_conf_get(*args, **kwargs):
+    return AsdkConf.get(*args, **kwargs)
+
+
+# Primary getters for SDK
 def get_run_mode():
-    return AsdkConf.get(_conf_key_run_mode, CONF_RUN_MODE_ALADDIN_COMPUTE)
+    return asdk_conf_get(_conf_key_run_mode, CONF_RUN_MODE_ALADDIN_COMPUTE)
 
 
 # API
-@dynamic_asdk_config_reload
 def get_api_auth_type():
-    return AsdkConf.get(_conf_key_api_auth_type, CONF_API_AUTH_TYPE_OAUTH)
+    return asdk_conf_get(_conf_key_api_auth_type, CONF_API_AUTH_TYPE_OAUTH)
 
 
-@dynamic_asdk_config_reload
 def get_api_auth_flow_type():
-    return AsdkConf.get(_conf_key_api_auth_flow_type)
+    return asdk_conf_get(_conf_key_api_auth_flow_type)
 
 
 # API credentials - oauth
-@dynamic_asdk_config_reload
 def get_api_oauth_client_id():
-    return AsdkConf.get(_conf_key_api_oauth_client_id)
+    return asdk_conf_get(_conf_key_api_oauth_client_id)
 
 
-@dynamic_asdk_config_reload
 def get_api_oauth_client_secret():
-    return AsdkConf.get(_conf_key_api_oauth_client_secret)
+    return asdk_conf_get(_conf_key_api_oauth_client_secret)
 
 
-@dynamic_asdk_config_reload
 def get_api_oauth_refresh_token():
-    return AsdkConf.get(_conf_key_api_oauth_refresh_token)
+    return asdk_conf_get(_conf_key_api_oauth_refresh_token)
 
 
-@dynamic_asdk_config_reload
 def get_api_oauth_access_token():
-    return AsdkConf.get(_conf_key_api_oauth_access_token)
+    return asdk_conf_get(_conf_key_api_oauth_access_token)
 
 
-@dynamic_asdk_config_reload
 def get_api_oauth_client_details_filepath():
-    if AsdkConf.get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE:
-        return AsdkConf.get(_conf_key_api_oauth_client_details_filepath, ALADDIN_COMPUTE_CLIENT_DETAILS_PATH)
+    if asdk_conf_get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE:
+        return asdk_conf_get(_conf_key_api_oauth_client_details_filepath, ALADDIN_COMPUTE_CLIENT_DETAILS_PATH)
     else:
-        return AsdkConf.get(_conf_key_api_oauth_client_details_filepath)
+        return asdk_conf_get(_conf_key_api_oauth_client_details_filepath)
 
 
-@dynamic_asdk_config_reload
 def get_api_oauth_refresh_token_filepath():
-    if AsdkConf.get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE:
-        return AsdkConf.get(_conf_key_api_oauth_refresh_token_filepath, ALADDIN_COMPUTE_CLIENT_REFRESH_TOKEN_PATH)
+    if asdk_conf_get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE:
+        return asdk_conf_get(_conf_key_api_oauth_refresh_token_filepath, ALADDIN_COMPUTE_CLIENT_REFRESH_TOKEN_PATH)
     else:
-        return AsdkConf.get(_conf_key_api_oauth_refresh_token_filepath)
+        return asdk_conf_get(_conf_key_api_oauth_refresh_token_filepath)
 
 
-@dynamic_asdk_config_reload
 def get_api_oauth_access_token_filepath():
-    if AsdkConf.get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE:
-        return AsdkConf.get(_conf_key_api_oauth_access_token_filepath, ALADDIN_COMPUTE_CLIENT_API_ACCESS_TOKEN_PATH)
+    if asdk_conf_get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE:
+        return asdk_conf_get(_conf_key_api_oauth_access_token_filepath, ALADDIN_COMPUTE_CLIENT_API_ACCESS_TOKEN_PATH)
     else:
-        return AsdkConf.get(_conf_key_api_oauth_access_token_filepath)
+        return asdk_conf_get(_conf_key_api_oauth_access_token_filepath)
 
 
-@dynamic_asdk_config_reload
 def get_api_oauth_auth_server_proxy():
-    return AsdkConf.get(_conf_key_api_oauth_auth_server_proxy)
+    return asdk_conf_get(_conf_key_api_oauth_auth_server_proxy)
 
 
-@dynamic_asdk_config_reload
 def get_api_oauth_auth_server_url():
-    return AsdkConf.get(_conf_key_api_oauth_auth_server_url)
+    return asdk_conf_get(_conf_key_api_oauth_auth_server_url)
 
 
-@dynamic_asdk_config_reload
 def get_api_token():
-    return AsdkConf.get(_conf_key_api_token)
+    return asdk_conf_get(_conf_key_api_token)
 
 
-@dynamic_asdk_config_reload
 def get_api_lro_status_check_interval():
-    return AsdkConf.get(_conf_key_api_lro_status_check_interval, 10)
+    return asdk_conf_get(_conf_key_api_lro_status_check_interval, 10)
 
 
-@dynamic_asdk_config_reload
 def get_api_lro_status_check_timeout():
-    return AsdkConf.get(_conf_key_api_lro_status_check_timeout, 300)
+    return asdk_conf_get(_conf_key_api_lro_status_check_timeout, 300)
 
 
 # ADC
-@dynamic_asdk_config_reload
 def get_adc_connection_type():
-    return AsdkConf.get(_conf_key_adc_connection_type, CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON)
+    return asdk_conf_get(_conf_key_adc_connection_type, CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_authenticator():
-    return AsdkConf.get(_conf_key_adc_conn_authenticator, CONF_ADC_CONN_AUTHENTICATOR_OAUTH)
+    return asdk_conf_get(_conf_key_adc_conn_authenticator, CONF_ADC_CONN_AUTHENTICATOR_OAUTH)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_oauth_access_token():
-    return AsdkConf.get(_conf_key_adc_conn_oauth_access_token)
+    return asdk_conf_get(_conf_key_adc_conn_oauth_access_token)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_rsa_private_key_passphrase():
-    return AsdkConf.get(_conf_key_adc_conn_rsa_private_key_passphrase)
+    return asdk_conf_get(_conf_key_adc_conn_rsa_private_key_passphrase)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_rsa_private_key_filepath():
-    return AsdkConf.get(_conf_key_adc_conn_rsa_private_key_filepath)
+    return asdk_conf_get(_conf_key_adc_conn_rsa_private_key_filepath)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_rsa_private_key():
-    return AsdkConf.get(_conf_key_adc_conn_rsa_private_key)
+    return asdk_conf_get(_conf_key_adc_conn_rsa_private_key)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_account():
-    return AsdkConf.get(_conf_key_adc_conn_account, blkutils.get_adc_account_private_link())
+    return asdk_conf_get(_conf_key_adc_conn_account, blkutils.get_adc_account_private_link())
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_role():
-    return AsdkConf.get(_conf_key_adc_conn_role)
+    return asdk_conf_get(_conf_key_adc_conn_role)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_warehouse():
-    return AsdkConf.get(_conf_key_adc_conn_warehouse)
+    return asdk_conf_get(_conf_key_adc_conn_warehouse)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_database():
-    return AsdkConf.get(_conf_key_adc_conn_database)
+    return asdk_conf_get(_conf_key_adc_conn_database)
 
 
-@dynamic_asdk_config_reload
 def get_adc_conn_schema():
-    return AsdkConf.get(_conf_key_adc_conn_schema)
+    return asdk_conf_get(_conf_key_adc_conn_schema)
 
 
 # User credentials
-@dynamic_asdk_config_reload
 def get_username():
-    return AsdkConf.get(_conf_key_user_credentials_username)
+    return asdk_conf_get(_conf_key_user_credentials_username)
 
 
-@dynamic_asdk_config_reload
 def get_encryption_filepath():
-    return AsdkConf.get(_conf_key_user_credentials_encryption_filepath)
+    return asdk_conf_get(_conf_key_user_credentials_encryption_filepath)
 
 
-@dynamic_asdk_config_reload
 def get_password_filepath():
-    if AsdkConf.get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE and os.path.exists(ALADDIN_COMPUTE_SECRETS_KEYENC_PATH):
-        return AsdkConf.get(_conf_key_user_credentials_password_filepath, ALADDIN_COMPUTE_SECRETS_KEYENC_PATH)
+    if asdk_conf_get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE and os.path.exists(ALADDIN_COMPUTE_SECRETS_KEYENC_PATH):
+        return asdk_conf_get(_conf_key_user_credentials_password_filepath, ALADDIN_COMPUTE_SECRETS_KEYENC_PATH)
     else:
-        return AsdkConf.get(_conf_key_user_credentials_password_filepath)
+        return asdk_conf_get(_conf_key_user_credentials_password_filepath)
 
 
-@dynamic_asdk_config_reload
 def get_encrypted_password_filepath():
-    return AsdkConf.get(_conf_key_user_credentials_encrypted_password_filepath)
+    return asdk_conf_get(_conf_key_user_credentials_encrypted_password_filepath)
 
 
-@dynamic_asdk_config_reload
 def get_user_password():
-    return AsdkConf.get(_conf_key_user_credentials_password)
+    return asdk_conf_get(_conf_key_user_credentials_password)
 
 
 # SDK Functionality
-@dynamic_asdk_config_reload
 def get_error_handler_active():
-    return AsdkConf.get(_conf_key_error_handler_active, CONF_ERROR_HANDLER_ACTIVE_TRUE)
+    return asdk_conf_get(_conf_key_error_handler_active, CONF_ERROR_HANDLER_ACTIVE_TRUE)
 
 
 # Retry configurations
-@dynamic_asdk_config_reload
 def get_api_retry_stop_after_attempt():
-    return AsdkConf.get(_conf_API_retry_stop_after_attempt)
+    return asdk_conf_get(_conf_API_retry_stop_after_attempt)
 
 
-@dynamic_asdk_config_reload
 def get_api_retry_wait_fixed():
-    return AsdkConf.get(_conf_API_retry_wait_fixed)
+    return asdk_conf_get(_conf_API_retry_wait_fixed)
 
 
-@dynamic_asdk_config_reload
 def get_api_retry_stop_after_delay():
-    return AsdkConf.get(_conf_API_retry_stop_after_delay)
+    return asdk_conf_get(_conf_API_retry_stop_after_delay)
 
 
-@dynamic_asdk_config_reload
 def get_adc_retry_stop_after_attempt():
-    return AsdkConf.get(_conf_ADC_retry_stop_after_attempt)
+    return asdk_conf_get(_conf_ADC_retry_stop_after_attempt)
 
 
-@dynamic_asdk_config_reload
 def get_adc_retry_wait_fixed():
-    return AsdkConf.get(_conf_ADC_retry_wait_fixed)
+    return asdk_conf_get(_conf_ADC_retry_wait_fixed)
 
 
-@dynamic_asdk_config_reload
 def get_adc_retry_stop_after_delay():
-    return AsdkConf.get(_conf_ADC_retry_stop_after_delay)
+    return asdk_conf_get(_conf_ADC_retry_stop_after_delay)
 
 
-@dynamic_asdk_config_reload
 def get_overwrite_data_flag():
-    return AsdkConf.get(_conf_export_overwrite_data)
+    return asdk_conf_get(_conf_export_overwrite_data)
 
 
-@dynamic_asdk_config_reload
 def get_notifications_email_host():
-    return AsdkConf.get(_conf_notifications_email_host)
+    return asdk_conf_get(_conf_notifications_email_host)
 
 
-@dynamic_asdk_config_reload
 def get_notifications_email_sender():
-    return AsdkConf.get(_conf_notifications_email_sender)
+    return asdk_conf_get(_conf_notifications_email_sender)
 
 
-@dynamic_asdk_config_reload
 def get_notifications_email_to():
-    return AsdkConf.get(_conf_notifications_email_to)
+    return asdk_conf_get(_conf_notifications_email_to)
 
 
-@dynamic_asdk_config_reload
 def get_notifications_email_username():
-    return AsdkConf.get(_conf_notifications_email_username)
+    return asdk_conf_get(_conf_notifications_email_username)
 
 
-@dynamic_asdk_config_reload
 def get_notifications_email_password():
-    return AsdkConf.get(_conf_notifications_email_password)
+    return asdk_conf_get(_conf_notifications_email_password)
 
 
-@dynamic_asdk_config_reload
 def get_error_handling_email_notifications_enabled():
-    return AsdkConf.get(_conf_error_handling_email_notifications_enabled, False)
+    return asdk_conf_get(_conf_error_handling_email_notifications_enabled, False)
 
 
-@dynamic_asdk_config_reload
 def get_error_handling_email_notifications_to():
-    return AsdkConf.get(_conf_error_handling_email_notifications_to)
+    return asdk_conf_get(_conf_error_handling_email_notifications_to)
 
 
-@dynamic_asdk_config_reload
 def get_error_handling_email_notifications_exception_types():
-    return AsdkConf.get(_conf_error_handling_email_notifications_exception_types)
+    return asdk_conf_get(_conf_error_handling_email_notifications_exception_types)
 
 
 # get log_level
 def get_log_level():
-    return AsdkConf.get(_conf_key_logging_keys, CONF_LOG_LEVEL_INFO)
+    return asdk_conf_get(_conf_key_logging_keys, CONF_LOG_LEVEL_INFO)
+
+
+# batch actions
+def get_batch_buffer_max_size():
+    return asdk_conf_get(_conf_batch_buffer_max_size)
+
+
+def get_batch_parallel_max_workers():
+    return asdk_conf_get(_conf_batch_parallel_max_workers)
+
+
+def get_batch_sequential_interval():
+    return asdk_conf_get(_conf_batch_sequential_interval)
