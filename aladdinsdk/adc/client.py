@@ -62,6 +62,7 @@ class ADCClient():
                  warehouse: str = user_settings.get_adc_conn_warehouse(),
                  database: str = user_settings.get_adc_conn_database(),
                  schema: str = user_settings.get_adc_conn_schema(),
+                 session_parameters: dict = None,
                  connection_type: str = None,
                  **kwargs):
         """
@@ -84,6 +85,7 @@ class ADCClient():
                 "ASDK_ADC__CONN__DATABASE", or "adc.conn.database" in settings yaml, None if not configured.
             schema (string, optional): Snowflake schema to be used. Defaults to value set as
                 "ASDK_ADC__CONN__SCHEMA", or "adc.conn.schema" in settings yaml, None if not configured.
+            session_parameters (dict, optional): Session parameters to be used for snowflake connection.
             adc_conn_authenticator (string, optional): Authenticator type for snowflake connection.
                 Should be one of ["snowflake_jwt", "oauth"]. Defaults to "oauth".
             adc_conn_rsa_private_key_passphrase (string, optional): Passphrase for RSA key authentication used for snowflake_jwt
@@ -147,8 +149,28 @@ class ADCClient():
         self._warehouse = warehouse
         self._database = database
         self._schema = schema
-        self._session_query_tag = _ASDK_QUERY_TAG_PATTERN.format(_DEFAULT_SDK_QUERY_TAG_SUFFIX)
+
+        self._session_parameters = {}
+        if session_parameters is not None:
+            # user provided session parameters
+            self._session_parameters = session_parameters
+        self._add_sdk_query_tag()
+
         self._connection = self._generate_adc_connection()
+
+    def _add_sdk_query_tag(self):
+        """
+        Helper to add SDK query tag to session parameters.
+        If user provided session parameters contain a query tag, append the SDK query tag to it.
+        """
+        _sdk_query_tag = _ASDK_QUERY_TAG_PATTERN.format(_DEFAULT_SDK_QUERY_TAG_SUFFIX)
+        if self._session_parameters.get('QUERY_TAG') is not None:
+            # user has also provided some query tag values, append it to sdk query tag
+            query_tag = ','.join([_sdk_query_tag, self._session_parameters.get('QUERY_TAG')])
+            self._session_parameters['QUERY_TAG'] = query_tag
+        else:
+            # user has not provided any query tag values, use default sdk query tag
+            self._session_parameters['QUERY_TAG'] = _sdk_query_tag
 
     @asdk_exception_handler
     @adc_retry
