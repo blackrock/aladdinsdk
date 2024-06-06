@@ -255,6 +255,8 @@ The ADC Client provides the following capabilities:
 - Session management:
     - connection establish, close, re-connect
     - update role, database, schema, warehouse
+    - set [session_parameters](https://docs.snowflake.com/en/developer-guide/python-connector/python-connector-connect#setting-session-parameters) level attributes
+        - Note: An SDK query tag is prepended to any user provided query tags
 
 A simple example of an ADC client is:
 ```py

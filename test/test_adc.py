@@ -23,6 +23,34 @@ class TestAdcClientInit(TestCase):
         super().tearDownClass()
         self.env_patcher.stop()
 
+    @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
+    def test_session_parameter_and_query_tag_behavior(self, generate_conn_mock):
+        from aladdinsdk.adc.client import ADCClient
+        # Default behavior
+        test_subject = ADCClient()
+        self.assertEqual(test_subject._session_parameters, {'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'})
+        # Setting custom query tag
+        test_subject = ADCClient(session_parameters={'QUERY_TAG': 'FOOBAR'})
+        self.assertEqual(test_subject._session_parameters, {'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core,FOOBAR'})
+        # Setting custom session params without query tag
+        test_subject = ADCClient(session_parameters={'SAMPLE_ATTR': 'FOOBAR'})
+        self.assertEqual(test_subject._session_parameters, {'SAMPLE_ATTR': 'FOOBAR', 'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'})
+        # Setting custom session params without query tag
+        from aladdinsdk.common.metrics import update_domain_sdk_metrics_suffix
+        update_domain_sdk_metrics_suffix("TEST")
+        # Setting custom session params without query tag but updated domain sdk query tag
+        test_subject = ADCClient(session_parameters={'SAMPLE_ATTR': 'FOOBAR'})
+        self.assertEqual(test_subject._session_parameters, {'SAMPLE_ATTR': 'FOOBAR', 'QUERY_TAG': 'QueryViaSDK-AladdinSDK-TEST'})
+
+    def test_query_tag_behavior(self):
+        # test for invalid domain prefix
+        from aladdinsdk.common.error.asdkerrors import AsdkAdcException
+        with self.assertRaises(AsdkAdcException) as context:
+            from aladdinsdk.adc.client import update_domain_sdk_query_tag_suffix
+            test_suffix = "#&I^"
+            update_domain_sdk_query_tag_suffix(test_suffix)
+            self.assertIn(context, 'QUERY_TAG suffix should be alphanumeric string of max length 15.')
+
     @mock.patch('snowflake.connector.connect')
     @mock.patch('aladdinsdk.common.authentication.adc.AladdinAPI')
     @mock.patch('requests.get', side_effect=extmocks.mocked_successful_requests_get)

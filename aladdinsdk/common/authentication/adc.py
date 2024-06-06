@@ -72,9 +72,7 @@ class AdcAuthUtil():
             'warehouse': adc_client._warehouse,
             'database': adc_client._database,
             'schema': adc_client._schema,
-            'session_parameters': {
-                'QUERY_TAG': adc_client._session_query_tag,
-            }
+            'session_parameters': adc_client._session_parameters
         }
 
         if self.adc_conn_authenticator == user_settings.CONF_ADC_CONN_AUTHENTICATOR_OAUTH:
