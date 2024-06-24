@@ -16,6 +16,7 @@ limitations under the License.
 
 import logging
 import os
+import datetime
 from aladdinsdk.config import user_settings
 from aladdinsdk.config.asdkconf import ENV_VAR_ASDK_USER_CONFIG_FILE
 
@@ -29,36 +30,36 @@ except ImportError:
     __version__ = 'Unknown'
 
 
-def set_stream_logger(name='aladdinsdk', level=logging.DEBUG, format_string=None):
+def set_stream_logger(level):
     """
     Add a stream handler for the given name and level to the logging module.
-    By default, this logs all aladdinsdk messages to ``stdout``.
-        >>> import aladdinsdk
-        >>> aladdinsdk.set_stream_logger('aladdinsdk', logging.INFO)
-    For debugging purposes a good choice is to set the stream logger to ``''``
-    which is equivalent to saying "log everything".
-    .. WARNING::
+    WARNING::
        Be aware that when logging trace will appear in your logs.
        If your payload contain sensitive data this should not
        be used in production.
-    :type name: string
-    :param name: Log name
-    :type level: int
-    :param level: Logging level, e.g. ``logging.INFO``
-    :type format_string: str
-    :param format_string: Log message format
     """
-    if format_string is None:
-        format_string = "%(asctime)s %(name)s [%(levelname)s] %(message)s"
+    name = 'aladdinsdk'
 
-    logger = logging.getLogger(name)
-    logger.setLevel(level)
+    format_string = "%(asctime)s %(name)s [%(levelname)s] %(message)s"
+
+    _logger = logging.getLogger(name)
+    _logger.setLevel(level)
     handler = logging.StreamHandler()
     handler.setLevel(level)
     formatter = logging.Formatter(format_string)
     handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    return logger
+    _logger.addHandler(handler)
+
+    if user_settings.get_log_export_enabled():
+        export_directory = user_settings.get_log_export_location()
+        if not os.path.exists(export_directory):
+            os.makedirs(export_directory)
+        run_filename = f"run-{datetime.datetime.today().strftime('%Y%m%d%H%M%S')}.log"
+        logging.basicConfig(filename=os.path.join(export_directory, run_filename),
+                            filemode='a',
+                            format=format_string,
+                            level=level)
+    return _logger
 
 
 # Set up logging to ``/dev/null`` like a library is supposed to.

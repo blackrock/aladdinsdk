@@ -163,6 +163,7 @@ dist
 .pnp.*
 
 # IDEs
+.idea/
 .vscode
 
 # Python virtual environment
@@ -197,3 +198,5 @@ sdist/
 *.egg-info/
 *.egg
 resources/openapi-generator-cli.jar
+
+.asdk_logs/
