@@ -88,6 +88,9 @@ CONF_LOG_LEVEL_WARNING = 'WARNING'
 CONF_LOG_LEVEL_ERROR = 'ERROR'
 CONF_LOG_LEVEL_CRITICAL = 'CRITICAL'
 
+_conf_key_log_export_enabled = "log.export.enabled"
+_conf_key_log_export_location = "log.export.location"
+
 # Error Handling
 _conf_key_error_handler_active = "error_handler.active"
 CONF_ERROR_HANDLER_ACTIVE_TRUE = True
@@ -375,6 +378,14 @@ def get_error_handling_email_notifications_exception_types():
 # get log_level
 def get_log_level():
     return asdk_conf_get(_conf_key_logging_keys, CONF_LOG_LEVEL_INFO)
+
+
+def get_log_export_enabled():
+    return asdk_conf_get(_conf_key_log_export_enabled, False)
+
+
+def get_log_export_location():
+    return asdk_conf_get(_conf_key_log_export_location, './.asdk_logs')
 
 
 # batch actions
