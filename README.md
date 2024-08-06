@@ -42,7 +42,7 @@ AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionali
 |:--------------------------|:-------------------------------------------------------------------------|:---------:|:-------:|:----------------:|
 | defaultWebServer          | BlackRock client environment's default web server                        |    Yes    |    -    |         -        |
 | ASDK_USER_CONFIG_FILE     | Path to AladdinSDK configuration to be used. </br>Refer [run-time configurations section](#run-time-configurations) for details.                              |    No     |    -    |         -        |
-| AGRAPH_SCOPES_ENABLED     | If enabled, adds scopes from swagger specs to oauth access token request |    No     |  False  |    True/False    |
+| AGRAPH_SCOPES_ENABLED     | If enabled, adds scopes from swagger specs to oauth access token request |    No     |  True   |    True/False    |
 
 ### Run-time configurations
 
@@ -180,6 +180,34 @@ For AladdinSDK to be able to fetch secrets via keyring -
 - Ensure `RUN_MODE` in configuration file is `local`
 - DO NOT set corresponding configuration file entry or environment variable for the secret to be stored
 - Make an API call using AladdinSDK - in case of missing configuration and keyring entry, AladdinSDK will prompt the user for their password in command line, and store the password in the OS specific credential manager (e.g. MacOS - Keychain Access)
+
+
+### Aladdin SDK CLI
+
+To help get started with a configuration file, the SDK comes with a command line interface (aladdinsdk-cli). On a terminal, navigate to a location where AladdinSDK is installed and simply run the command:
+```sh
+aladdinsdk-cli
+```
+
+#### Generating OAuth Refresh Token via aladdinsdk-cli
+
+As mentioned earlier, SDK allows for OAuth API calls with either `client_credentials` or `refresh_token` flow.
+
+For Refresh Token flow, user needs to provide `client_id`, `client_secret` and `refresh_token`.
+**Client ID** and **Secret** can be sourced from Studio UI by creating a OAuth application under a Project.
+
+When working locally, AladdinSDK CLI provides an option to generate a **Refresh Token**. To use this option:
+- Create/Modify OAuth Application under a Project in Studio to include a localhost callback URI - `http://localhost:<PORT>`
+    - Where the PORT is any freely available PORT on your computer.
+- Open a terminal on your computer (where you have browser access) and start `aladdinsdk-cli`
+    - Then select `OAuth` authentication type, and `Refresh Token Flow - Generate Refresh token given Client ID, Secret - (local auth code flow)`
+      options for API auth
+    - Provide the following values: client ID, secret, localhost callback URI port (from previous step)
+    - Select endpoints from the scope list (Note: Selected list must be a subset of scopes setup for the app in Studio UI)
+    - The SDK will then open a browser tab for you to authenticate to the environment if you haven't already done so.
+    - A successful authentication flow will take you to the next CLI question.
+      (An unsuccessful attempt will timeout in 30 seconds, or can be interrupted with Ctrl+C)
+    - Follow through the remaining prompts and the SDK will show the refresh token as part of the built configuration (which may be written to a file for future reference)
 
 
 ## AladdinAPI
