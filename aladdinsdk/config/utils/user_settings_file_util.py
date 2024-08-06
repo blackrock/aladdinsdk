@@ -19,9 +19,11 @@ import os
 import yaml
 from pick import pick
 from cryptography.fernet import Fernet
+from aladdinsdk.api import get_api_names, AladdinAPI
 from aladdinsdk.common.secrets import fsutil
 from aladdinsdk.common.blkutils.blkutils import SDK_HELP_MESSAGE_SUFFIX
 from aladdinsdk.config.asdkconf import AsdkConf
+from aladdinsdk.config.utils.oauth_config_util import get_refresh_token_from_oauth_server
 from aladdinsdk.config.user_settings import CONF_API_AUTH_TYPE_OAUTH, CONF_API_AUTH_TYPE_BASIC_AUTH, CONF_RUN_MODE_LOCAL
 from aladdinsdk.config.user_settings import CONF_RUN_MODE_ALADDIN_COMPUTE
 from aladdinsdk.config.user_settings import CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON, CONF_ADC_CONN_TYPE_SNOWFLAKE_SNOWPARK_PYTHON
@@ -64,15 +66,19 @@ _CONF_KEY_SCHEMA = "SCHEMA"
 
 
 class _OAuthSecretsMechanism(Enum):
-    ProvideAccessToken = "Provide Access Token"
-    ProvideAccessTokenFilepath = "Provide filepath to file containing Access Token in plain text"
-    ProvideDetailsToFetchAccessToken = "Provide details to add in config file to have SDK fetch access token"
-    ProvideDetailsFilepathToFetchAccessToken = "Provide filepath to files containing details SDK can use to fetch access token"
+    ProvideAccessToken = "Access Token - Add to config file"
+    ProvideAccessTokenFilepath = "Access Token - point to file containing token"
+    ClientCredentialsFlow = "Client Credentials Flow - Add Client ID and Secret to config file"
+    ClientCredentialsFlowFilepath = "Client Credentials Flow - point to file containing Client ID and Secret"
+    RefreshTokenFlow = "Refresh Token Flow - Add Client ID, Secret and Refresh token to config file"
+    RefreshTokenFlowFilepath = "Refresh Token Flow - point to file containing Client ID, Secret and Refresh token"
+    RefreshTokenFlowGenerate = "Refresh Token Flow - Generate Refresh token given Client ID, Secret - (local auth code flow)"
 
 
 class _PasswordMechanism(Enum):
     EncryptedFile = "Encrypt and store in files"
     PlainText = "Plain text in Config file"
+    NotInConfig = "Skip adding password to config file (for local mode when using OS credential manager)"
 
 
 class _RsaKeyMechanism(Enum):
@@ -123,6 +129,8 @@ def create_user_config_file_template(print_only=False):
 
         cls()
         _print_config_file(settings_data, print_only)
+    except KeyboardInterrupt:
+        print("\nAbandoned configuration file template creation.")
     except Exception as e:
         print(f"Failed to create configuration file template. Error: {e}")
 
@@ -170,7 +178,7 @@ def _set_basic_auth_config_details(settings_data):
                                     "Password can be provided as plain text (not recommended), or by pointing to files containing the "
                                     "encrypted password and encryption key.\n"
                                     "Select preferred mechanism",
-                                    options=[_PasswordMechanism.EncryptedFile.value, _PasswordMechanism.PlainText.value])
+                                    options=[x.value for x in _PasswordMechanism])
 
     if resp == _PasswordMechanism.PlainText.value:
         _user_password = _read_input_or_none(f"Enter {_CONF_KEY_USER_CREDENTIALS}.{_CONF_KEY_PASSWORD} config value. "
@@ -182,6 +190,9 @@ def _set_basic_auth_config_details(settings_data):
 
     if resp == _PasswordMechanism.EncryptedFile.value:
         _set_basic_auth_config_details_encrypt_password(settings_data)
+
+    if resp == _PasswordMechanism.NotInConfig.value:
+        print("Skip adding password to configuration file...")
 
     cls()
     api_token = _read_input_or_none(f"Enter API key from Studio to be added to {_CONF_KEY_API}.{_CONF_KEY_API_TOKEN} config value.")
@@ -218,6 +229,9 @@ def _set_basic_auth_config_details_encrypt_password(settings_data):
 
 
 def _set_oauth_auth_config_details(settings_data):
+    if _CONF_KEY_OAUTH not in settings_data[_CONF_KEY_API]:
+        settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH] = {}
+
     selected_oauth_secret_mechanism = _read_input_from_options("OAuth requires a valid OAuth access token to make API calls.\n"
                                                                "If not available, AladdinSDK will attempt to fetch one for you provided following "
                                                                "details are configured:\n"
@@ -233,15 +247,18 @@ def _set_oauth_auth_config_details(settings_data):
                                            _OAuthSecretsMechanism.ProvideAccessTokenFilepath.value]:
         _set_oauth_auth_config_details_access_token(settings_data, selected_oauth_secret_mechanism)
 
-    if selected_oauth_secret_mechanism in [_OAuthSecretsMechanism.ProvideDetailsToFetchAccessToken.value,
-                                           _OAuthSecretsMechanism.ProvideDetailsFilepathToFetchAccessToken.value]:
+    if selected_oauth_secret_mechanism in [_OAuthSecretsMechanism.ClientCredentialsFlow.value,
+                                           _OAuthSecretsMechanism.ClientCredentialsFlowFilepath.value,
+                                           _OAuthSecretsMechanism.RefreshTokenFlow.value,
+                                           _OAuthSecretsMechanism.RefreshTokenFlowFilepath.value]:
         _set_oauth_auth_config_details_oauth_details(settings_data, selected_oauth_secret_mechanism)
+
+    if selected_oauth_secret_mechanism == _OAuthSecretsMechanism.RefreshTokenFlowGenerate.value:
+        settings_data[_CONF_KEY_API][_CONF_KEY_AUTH_FLOW_TYPE] = CONF_API_AUTH_FLOW_TYPE_REFRESH_TOKEN
+        _set_oauth_auth_config_details_oauth_details_generate_refresh_token(settings_data)
 
 
 def _set_oauth_auth_config_details_access_token(settings_data, selected_oauth_secret_mechanism):
-    if _CONF_KEY_OAUTH not in settings_data[_CONF_KEY_API]:
-        settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH] = {}
-
     if selected_oauth_secret_mechanism == _OAuthSecretsMechanism.ProvideAccessToken.value:
         access_token = _read_input_or_none("Enter valid API OAuth Access Token.")
         if access_token is not None:
@@ -254,29 +271,27 @@ def _set_oauth_auth_config_details_access_token(settings_data, selected_oauth_se
 
 
 def _set_oauth_auth_config_details_oauth_details(settings_data, selected_oauth_secret_mechanism):
-    auth_flow_type = _read_input_from_options("Select OAuth flow type",
-                                              options=[CONF_API_AUTH_FLOW_TYPE_REFRESH_TOKEN, CONF_API_AUTH_FLOW_TYPE_CLIENT_CREDENTIALS])
-    if auth_flow_type is not None:
-        settings_data[_CONF_KEY_API][_CONF_KEY_AUTH_FLOW_TYPE] = auth_flow_type
+    auth_flow_type = None
+    if selected_oauth_secret_mechanism in [_OAuthSecretsMechanism.ClientCredentialsFlow.value,
+                                           _OAuthSecretsMechanism.ClientCredentialsFlowFilepath.value]:
+        auth_flow_type = CONF_API_AUTH_FLOW_TYPE_CLIENT_CREDENTIALS
+    elif selected_oauth_secret_mechanism in [_OAuthSecretsMechanism.RefreshTokenFlow.value,
+                                             _OAuthSecretsMechanism.RefreshTokenFlowFilepath.value]:
+        auth_flow_type = CONF_API_AUTH_FLOW_TYPE_REFRESH_TOKEN
 
-    if _CONF_KEY_OAUTH not in settings_data[_CONF_KEY_API]:
-        settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH] = {}
+    settings_data[_CONF_KEY_API][_CONF_KEY_AUTH_FLOW_TYPE] = auth_flow_type
 
-    if selected_oauth_secret_mechanism == _OAuthSecretsMechanism.ProvideDetailsToFetchAccessToken.value:
+    if selected_oauth_secret_mechanism in [_OAuthSecretsMechanism.ClientCredentialsFlow.value,
+                                           _OAuthSecretsMechanism.RefreshTokenFlow.value]:
         _set_oauth_auth_config_details_oauth_details_in_config_file(settings_data, auth_flow_type)
 
-    if selected_oauth_secret_mechanism == _OAuthSecretsMechanism.ProvideDetailsFilepathToFetchAccessToken.value:
+    if selected_oauth_secret_mechanism in [_OAuthSecretsMechanism.ClientCredentialsFlowFilepath.value,
+                                           _OAuthSecretsMechanism.RefreshTokenFlowFilepath.value]:
         _set_oauth_auth_config_details_oauth_details_filepath(settings_data, auth_flow_type)
 
 
 def _set_oauth_auth_config_details_oauth_details_in_config_file(settings_data, auth_flow_type):
-    client_id = _read_input_or_none(f"Enter {_CONF_KEY_API}.{_CONF_KEY_OAUTH}.{_CONF_KEY_CLIENT_ID} config value.")
-    if client_id is not None:
-        settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH][_CONF_KEY_CLIENT_ID] = client_id
-
-    client_secret = _read_input_or_none(f"Enter {_CONF_KEY_API}.{_CONF_KEY_OAUTH}.{_CONF_KEY_CLIENT_SECRET} config value.")
-    if client_secret is not None:
-        settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH][_CONF_KEY_CLIENT_SECRET] = client_secret
+    _set_client_id_client_secret(settings_data)
 
     if auth_flow_type == CONF_API_AUTH_FLOW_TYPE_REFRESH_TOKEN:
         refresh_token = _read_input_or_none(f"Enter {_CONF_KEY_API}.{_CONF_KEY_OAUTH}.{_CONF_KEY_REFRESH_TOKEN} config value.")
@@ -298,6 +313,65 @@ def _set_oauth_auth_config_details_oauth_details_filepath(settings_data, auth_fl
                                                      "\t - token (value is user's refresh_token)\n")
         if refresh_token_filepath is not None:
             settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH][_CONF_KEY_REFRESH_TOKEN_FILEPATH] = refresh_token_filepath
+
+
+def _set_oauth_auth_config_details_oauth_details_generate_refresh_token(settings_data):
+    client_id, client_secret = _set_client_id_client_secret(settings_data)
+
+    # Localhost callback URL port
+    localhost_callback_uri_port_str = _read_input_or_default_str(f"Enter localhost callback URI port:", '3000')
+    localhost_callback_uri_port = int(localhost_callback_uri_port_str)
+
+    # Authorization server URL
+    env_var_default_web_server = os.environ.get("defaultWebServer", "https://dev.blackrock.com/")
+    def_authorization_url = '/'.join(s.strip('/') for s in [env_var_default_web_server, '/api/oauth2/default/v1/authorize'])
+    authorization_url = _read_input_or_default_str(f"OAuth authorization URL:", def_authorization_url)
+
+    # Token URL
+    def_token_url = '/'.join(s.strip('/') for s in [env_var_default_web_server, '/api/oauth2/default/v1/token'])
+    token_url = _read_input_or_default_str(f"OAuth token URL:", def_token_url)
+
+    # Scopes
+    currently_available_scopes = _list_currently_available_scopes()
+    scopes = _read_input_from_options("Select all endpoints you intend to call in this application",
+                                      options=currently_available_scopes,
+                                      default_index=0,
+                                      multiselect=True)
+
+    # Generate and set Refresh Token
+    print("Generating refresh token...")
+    refresh_token = get_refresh_token_from_oauth_server(client_id, client_secret, scopes,
+                                                        localhost_callback_uri_port,
+                                                        authorization_url,
+                                                        token_url)
+    if refresh_token is not None:
+        settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH][_CONF_KEY_REFRESH_TOKEN] = refresh_token
+    else:
+        get_input("\nATTN: Unable to fetch Refresh Token with given details. Will not set this value. Press enter to continue.")
+
+
+def _set_client_id_client_secret(settings_data):
+    client_id = _read_input_or_none(f"Enter {_CONF_KEY_API}.{_CONF_KEY_OAUTH}.{_CONF_KEY_CLIENT_ID} config value.")
+    if client_id is not None:
+        settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH][_CONF_KEY_CLIENT_ID] = client_id
+
+    client_secret = _read_input_or_none(f"Enter {_CONF_KEY_API}.{_CONF_KEY_OAUTH}.{_CONF_KEY_CLIENT_SECRET} config value.")
+    if client_secret is not None:
+        settings_data[_CONF_KEY_API][_CONF_KEY_OAUTH][_CONF_KEY_CLIENT_SECRET] = client_secret
+
+    return client_id, client_secret
+
+
+def _list_currently_available_scopes():
+    scope_set = set()
+    for ep_scope_mapping in [AladdinAPI(api_name)._endpoint_to_scope_mappings for api_name in get_api_names()]:
+        for scope_list in [ep_scope_mapping[method] for method in ep_scope_mapping]:
+            for scope in scope_list:
+                scope_set.add(scope)
+    scope_list = list(scope_set)
+    scope_list.sort()
+    scope_list = ["offline_access"] + scope_list
+    return scope_list
 
 
 # ADC attributes
@@ -386,8 +460,8 @@ def print_current_user_config():
     conf_copy.pop('LOAD_DOTENV')
     # Hide user password
     if 'USER_CREDENTIALS' in conf_copy.keys() \
-       and 'PASSWORD' in conf_copy['USER_CREDENTIALS'].keys() \
-       and conf_copy['USER_CREDENTIALS']['PASSWORD'] is not None:
+            and 'PASSWORD' in conf_copy['USER_CREDENTIALS'].keys() \
+            and conf_copy['USER_CREDENTIALS']['PASSWORD'] is not None:
         conf_copy['USER_CREDENTIALS']['PASSWORD'] = "".join(['*' for _ in range(len(conf_copy['USER_CREDENTIALS']['PASSWORD']))])
     _print_user_conf_helper(conf_copy)
 
@@ -432,9 +506,16 @@ def _read_input_or_default_str(input_prompt: str, default_value: str):
     return value_read
 
 
-def _read_input_from_options(input_prompt: str, options: list, default_index: int = 0):
+def _read_input_from_options(input_prompt: str, options: list, default_index: int = 0,
+                             multiselect: bool = False):
     try:
-        value_read, _ = pick(options, f"{input_prompt}: ", indicator='=>', default_index=default_index)
+        if multiselect:
+            input_prompt = f"{input_prompt} (Select/De-select with right arrow key)"
+            values_read_list = pick(options, f"{input_prompt}: ", indicator='=>', default_index=default_index,
+                                    multiselect=multiselect)
+            return [value for value, _ in values_read_list]
+        else:
+            value_read, _ = pick(options, f"{input_prompt}: ", indicator='=>', default_index=default_index)
         return value_read
     except Exception:
         # potentially running in a notebook environment where curses based 'pick' library is not supported

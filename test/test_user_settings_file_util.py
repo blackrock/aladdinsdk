@@ -78,7 +78,7 @@ class TestUserSettingsUtilApiAuthMethods(TestCase):
         mock_pick.side_effect = [
             (user_settings_file_util.CONF_API_AUTH_TYPE_BASIC_AUTH, 0),
             (user_settings_file_util._PasswordMechanism.PlainText.value, 0)
-            ]
+        ]
         mock_get_input.side_effect = ["MockPass", "MockApiKey"]
         user_settings_file_util._set_api_auth_config_details(settings_data)
         self.assertEqual(settings_data['USER_CREDENTIALS']['PASSWORD'], 'MockPass')
@@ -95,7 +95,7 @@ class TestUserSettingsUtilApiAuthMethods(TestCase):
         mock_pick.side_effect = [
             (user_settings_file_util.CONF_API_AUTH_TYPE_OAUTH, 0),
             (user_settings_file_util._OAuthSecretsMechanism.ProvideAccessToken.value, 0)
-            ]
+        ]
         mock_get_input.side_effect = ["MockAccessToken"]
         user_settings_file_util._set_api_auth_config_details(settings_data)
         self.assertEqual(settings_data['API']['OAUTH']['ACCESS_TOKEN'], 'MockAccessToken')
@@ -217,9 +217,8 @@ class TestUserSettingsUtilApiOAuthMethods(TestCase):
             'API': {}
         }
         mock_pick.side_effect = [
-            (user_settings_file_util._OAuthSecretsMechanism.ProvideDetailsToFetchAccessToken.value, 0),
-            (user_settings_file_util.CONF_API_AUTH_FLOW_TYPE_REFRESH_TOKEN, 0)
-            ]
+            (user_settings_file_util._OAuthSecretsMechanism.RefreshTokenFlow.value, 0)
+        ]
         mock_get_input.side_effect = ["MockClientId", "MockClientSecret", "MockRefreshToken"]
         user_settings_file_util._set_oauth_auth_config_details(settings_data)
         self.assertEqual(settings_data['API']['OAUTH']['CLIENT_ID'], 'MockClientId')
@@ -230,7 +229,9 @@ class TestUserSettingsUtilApiOAuthMethods(TestCase):
     def test_add_api_oauth_config_details_access_token(self, mock_get_input):
         from aladdinsdk.config.utils import user_settings_file_util
         settings_data = {
-            'API': {}
+            'API': {
+                'OAUTH': {}
+            }
         }
         mock_get_input.side_effect = ["MockAccessToken"]
         user_settings_file_util._set_oauth_auth_config_details_access_token(settings_data,
@@ -241,7 +242,9 @@ class TestUserSettingsUtilApiOAuthMethods(TestCase):
     def test_add_api_oauth_config_details_access_token_filepath(self, mock_get_input):
         from aladdinsdk.config.utils import user_settings_file_util
         settings_data = {
-            'API': {}
+            'API': {
+                'OAUTH': {}
+            }
         }
         mock_get_input.side_effect = ["MockAccessTokenFilepath"]
         user_settings_file_util._set_oauth_auth_config_details_access_token(settings_data,
@@ -254,12 +257,14 @@ class TestUserSettingsUtilApiOAuthMethods(TestCase):
     def test_add_api_oauth_config_details(self, mock_get_input, mock_pick):
         from aladdinsdk.config.utils import user_settings_file_util
         settings_data = {
-            'API': {}
+            'API': {
+                'OAUTH': {}
+            }
         }
         mock_pick.side_effect = [("refresh_token", 0)]
         mock_get_input.side_effect = ["MockClientId", "MockClientSecret", "MockRefreshToken"]
         user_settings_file_util._set_oauth_auth_config_details_oauth_details(settings_data,
-                                                                             "Provide details to add in config file to have SDK fetch access token")
+                                                                             user_settings_file_util._OAuthSecretsMechanism.RefreshTokenFlow.value)
         self.assertEqual(settings_data['API']['OAUTH']['CLIENT_ID'], 'MockClientId')
         self.assertEqual(settings_data['API']['OAUTH']['CLIENT_SECRET'], 'MockClientSecret')
         self.assertEqual(settings_data['API']['OAUTH']['REFRESH_TOKEN'], 'MockRefreshToken')
@@ -269,13 +274,14 @@ class TestUserSettingsUtilApiOAuthMethods(TestCase):
     def test_add_api_oauth_config_details_filepaths(self, mock_get_input, mock_pick):
         from aladdinsdk.config.utils import user_settings_file_util
         settings_data = {
-            'API': {}
+            'API': {
+                'OAUTH': {}
+            }
         }
         mock_pick.side_effect = [("refresh_token", 0)]
         mock_get_input.side_effect = ["MockClientDetailsFilepath", "MockRefreshTokenFilepath"]
         user_settings_file_util._set_oauth_auth_config_details_oauth_details(settings_data,
-                                                                             "Provide filepath to files containing details SDK "
-                                                                             "can use to fetch access token")
+                                                                             user_settings_file_util._OAuthSecretsMechanism.RefreshTokenFlowFilepath.value)
         self.assertEqual(settings_data['API']['OAUTH']['CLIENT_DETAILS_FILEPATH'], 'MockClientDetailsFilepath')
         self.assertEqual(settings_data['API']['OAUTH']['REFRESH_TOKEN_FILEPATH'], 'MockRefreshTokenFilepath')
 
@@ -476,6 +482,35 @@ class TestUserSettingsUtilHelperMethods(TestCase):
         from aladdinsdk.config.utils import user_settings_file_util
         resp = user_settings_file_util._read_input_from_options("Sample input prompt.", options=["OPTION_0", "OPTION_1", "OPTION_2"])
         self.assertEqual(resp, "OPTION_2")
+
+    @mock.patch('aladdinsdk.config.utils.user_settings_file_util.pick', return_value=[("OPTION_1", 1), ("OPTION_2", 2)])
+    def test_get_read_input_from_options_multi_select(self, mock_pick):
+        from aladdinsdk.config.utils import user_settings_file_util
+        resp = user_settings_file_util._read_input_from_options("Sample input prompt.",
+                                                                options=["OPTION_0", "OPTION_1", "OPTION_2"],
+                                                                multiselect=True)
+        self.assertEqual(resp, ["OPTION_1", "OPTION_2"])
+
+
+    def test_list_currently_available_scopes(self):
+        from aladdinsdk.config.utils import user_settings_file_util
+        scopes = user_settings_file_util._list_currently_available_scopes()
+        self.assertIn('offline_access', scopes)
+
+    @mock.patch('aladdinsdk.config.utils.user_settings_file_util._set_client_id_client_secret', return_value=('M_CLIENT_ID', 'M_CLIENT_SECRET'))
+    @mock.patch('aladdinsdk.config.utils.user_settings_file_util._read_input_or_default_str', side_effect=[3001, 'm_auth_url', 'm_token_url'])
+    @mock.patch('aladdinsdk.config.utils.user_settings_file_util._read_input_from_options', return_value=['offline_access', 'm_scope_1'])
+    @mock.patch('aladdinsdk.config.utils.user_settings_file_util.get_refresh_token_from_oauth_server', return_value='m_refresh_token')
+    def test_set_oauth_auth_config_details_oauth_details_generate_refresh_token(self, mock_refresh_token, mock_scope, mock_inputs, mock_client_details_set):
+        from aladdinsdk.config.utils.user_settings_file_util import _set_oauth_auth_config_details_oauth_details_generate_refresh_token
+        settings_data = {
+            'API': {
+                'OAUTH': {}
+            }
+        }
+        _set_oauth_auth_config_details_oauth_details_generate_refresh_token(settings_data)
+        self.assertEqual(settings_data['API']['OAUTH']['REFRESH_TOKEN'], "m_refresh_token")
+
 
     @mock.patch('aladdinsdk.config.utils.user_settings_file_util.get_input', return_value='')
     @mock.patch('builtins.print')
