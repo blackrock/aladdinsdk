@@ -42,7 +42,7 @@ _DEFAULT_SDK_USER_AGENT_SUFFIX = 'Core'
 _HttpEndpointDescription = namedtuple("EndpointDescription", ["http_endpoint", "http_method"])
 
 # Switch to enable/disable scopes to be picked from AGraph specs
-_api_oauth_scopes_enabled = os.environ.get("AGRAPH_SCOPES_ENABLED", "False").lower() in ('true', '1', 't')
+_api_oauth_scopes_enabled = os.environ.get("AGRAPH_SCOPES_ENABLED", "True").lower() in ('true', '1', 't')
 
 
 def update_domain_sdk_user_agent_suffix(domain_sdk_suffix):
