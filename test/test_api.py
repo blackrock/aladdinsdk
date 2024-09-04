@@ -434,6 +434,211 @@ class TestApiClient(TestCase):
             test_subject.call_api('FAKE_ENDPOINT', {})
             self.assertTrue('Incorrect endpoint path/method passed' in context.exception)
 
+    def test_call_api_with_request_body_success_paginated_get(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_list_train_journeys')
+
+        with mock.patch.object(test_subject.instance, "train_journey_api_list_train_journeys_with_http_info") as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.side_effect = [Response('TEST_RESPONSE1', "123"), Response('TEST_RESPONSE2', "456"),
+                                                Response('TEST_RESPONSE3', "789")]
+                mock_signature_helper.return_value = signature_bkp
+                responses = test_subject.call_api(api_endpoint_name='train_journey_api_list_train_journeys',
+                                                  request_body={"payload_key": "payload value"},
+                                                  _asdk_pagination_options={'page_size': 4, 'number_of_pages': 3, 'timeout': 500})
+
+                mock_filter_call.assert_called_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=True,
+                    page_size=mock.ANY,
+                    page_token=mock.ANY
+                )
+                self.assertEqual(mock_filter_call.call_count, 3)
+                self.assertEqual(responses.__len__(), 3)
+
+    def test_call_api_with_request_body_success_paginated_get_raw_data(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_list_train_journeys')
+
+        with mock.patch.object(test_subject.instance, "train_journey_api_list_train_journeys_with_http_info") as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.side_effect = [{"data": "TEST_RESPONSE1", "nextPageToken": "123"},
+                                                {"data": "TEST_RESPONSE2", "nextPageToken": "456"},
+                                                {"data": "TEST_RESPONSE3", "nextPageToken": "789"}]
+                mock_signature_helper.return_value = signature_bkp
+                responses = test_subject.call_api(api_endpoint_name='train_journey_api_list_train_journeys',
+                                                  request_body={"payload_key": "payload value"},
+                                                  _deserialize_to_object=False,
+                                                  _asdk_pagination_options={'page_size': 4, 'number_of_pages': 3, 'timeout': 500})
+
+                mock_filter_call.assert_called_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=False,
+                    page_size=mock.ANY,
+                    page_token=mock.ANY
+                )
+                self.assertEqual(mock_filter_call.call_count, 3)
+                self.assertEqual(responses.__len__(), 3)
+
+    def test_call_api_with_request_body_success_paginated_post(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
+
+        with mock.patch.object(test_subject.instance, "train_journey_api_filter_train_journeys_with_http_info") as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.side_effect = [Response('TEST_RESPONSE1', "123"), Response('TEST_RESPONSE2', "456"),
+                                                Response('TEST_RESPONSE3', "789")]
+                mock_signature_helper.return_value = signature_bkp
+                responses = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                                  request_body={"payload_key": "payload value"},
+                                                  _asdk_pagination_options={'page_size': 4, 'number_of_pages': 3, 'timeout': 500})
+
+                mock_filter_call.assert_called_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=True,
+                    body={'payload_key': 'payload value', 'page_size': mock.ANY, 'page_token': mock.ANY}
+                )
+                self.assertEqual(mock_filter_call.call_count, 3)
+                self.assertEqual(responses.__len__(), 3)
+
+    def test_call_api_with_request_body_success_paginated_less_pages_get(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_list_train_journeys')
+
+        with mock.patch.object(test_subject.instance, "train_journey_api_list_train_journeys_with_http_info") as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.side_effect = [Response('TEST_RESPONSE1', "123"), Response('TEST_RESPONSE2', "456"), Response('TEST_RESPONSE3', "")]
+                mock_signature_helper.return_value = signature_bkp
+                responses = test_subject.call_api(api_endpoint_name='train_journey_api_list_train_journeys',
+                                                  request_body={"payload_key": "payload value"},
+                                                  _asdk_pagination_options={'page_size': 1, 'number_of_pages': 2, 'timeout': 500})
+
+                mock_filter_call.assert_called_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=True,
+                    page_size=mock.ANY,
+                    page_token=mock.ANY
+                )
+                self.assertEqual(mock_filter_call.call_count, 2)
+                self.assertEqual(responses.__len__(), 2)
+
+    def test_call_api_with_request_body_success_paginated_timed_out(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
+
+        with mock.patch.object(test_subject.instance, "train_journey_api_filter_train_journeys_with_http_info") as mock_filter_call_timeout:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call_timeout.return_value = Response('TEST_RESPONSE1', "123")
+                mock_signature_helper.return_value = signature_bkp
+                responses = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                                  request_body={"payload_key": "payload value"},
+                                                  _asdk_pagination_options={'page_size': 0, 'number_of_pages': 2, 'timeout': 0, 'interval': 2})
+
+                mock_filter_call_timeout.assert_called_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=True,
+                    body={'payload_key': 'payload value', 'page_size': mock.ANY, 'page_token': mock.ANY}
+                )
+                self.assertEqual(mock_filter_call_timeout.call_count, 2)
+                self.assertEqual(responses.__len__(), 2)
+
+    def test_call_api_with_request_body_success_paginated_params_zero(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
+
+        with mock.patch.object(test_subject.instance, "train_journey_api_filter_train_journeys_with_http_info") as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.side_effect = [Response('TEST_RESPONSE1', "123")]
+                mock_signature_helper.return_value = signature_bkp
+                responses = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                                  request_body={"payload_key": "payload value"},
+                                                  _asdk_pagination_options={'page_size': 0, 'number_of_pages': 0, 'timeout': 0, 'interval': 0,
+                                                                            'page_token': ''})
+
+                mock_filter_call.assert_called_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=True,
+                    body={'payload_key': 'payload value', 'page_size': mock.ANY, 'page_token': mock.ANY}
+                )
+                self.assertEqual(mock_filter_call.call_count, 1)
+                self.assertEqual(responses.__len__(), 1)
+
+    def test_call_api_with_request_body_success_paginated_invalid_params_page_token(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
+
+        with mock.patch.object(test_subject.instance, "train_journey_api_filter_train_journeys_with_http_info") as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.side_effect = [Response('TEST_RESPONSE1', "123"), Response('TEST_RESPONSE2', "456"),
+                                                Response('TEST_RESPONSE3', "789")]
+                mock_signature_helper.return_value = signature_bkp
+                response = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                                 request_body={"payload_key": "payload value"},
+                                                 _asdk_pagination_options={'page_size': 1, 'number_of_pages': 0, 'timeout': 2, 'interval': 0,
+                                                                           'page_token': 0})
+
+                mock_filter_call.assert_called_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=True,
+                    body={'payload_key': 'payload value'}
+                )
+                self.assertEqual(mock_filter_call.call_count, 1)
+                self.assertEqual(response.data_set, 'TEST_RESPONSE1')
+
+    def test_call_api_with_request_body_success_paginated_invalid_params_page_size(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+
+        signature_bkp = test_subject.get_api_endpoint_signature('train_journey_api_filter_train_journeys')
+
+        with mock.patch.object(test_subject.instance, "train_journey_api_filter_train_journeys_with_http_info") as mock_filter_call:
+            with mock.patch.object(test_subject, 'get_api_endpoint_signature') as mock_signature_helper:
+                mock_filter_call.side_effect = [Response('TEST_RESPONSE1', "123"), Response('TEST_RESPONSE2', "456"),
+                                                Response('TEST_RESPONSE3', "789")]
+                mock_signature_helper.return_value = signature_bkp
+                response = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
+                                                 request_body={"payload_key": "payload value"},
+                                                 _asdk_pagination_options={'page_size': "1", 'number_of_pages': 0, 'timeout': 2, 'interval': 0,
+                                                                           'page_token': ""})
+
+                mock_filter_call.assert_called_with(
+                    vnd_com_blackrock_request_id=mock.ANY,
+                    vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    _headers=mock.ANY,
+                    _preload_content=True,
+                    body={'payload_key': 'payload value'}
+                )
+                self.assertEqual(mock_filter_call.call_count, 1)
+                self.assertEqual(response.data_set, 'TEST_RESPONSE1')
+
 
 class TestApiClientLroCalls(TestCase):
     @classmethod
@@ -943,3 +1148,9 @@ class TestGetOauthTokenMissingSecret(TestCase):
         with self.assertRaises(AsdkApiException) as context:
             basicauthutil.fetch_password_from_user_settings()
             self.assertTrue("Insufficient API initialization information" in context.exception)
+
+
+class Response:
+    def __init__(self, data_set, next_page_token):
+        self.next_page_token = next_page_token
+        self.data_set = data_set

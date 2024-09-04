@@ -52,6 +52,12 @@ _conf_key_api_token = "api.token"
 _conf_key_api_lro_status_check_interval = "api.lro.status_check_interval"
 _conf_key_api_lro_status_check_timeout = "api.lro.status_check_timeout"
 
+# Pagination Settings
+_conf_key_api_pagination_max_page_size = "api.pagination.max_page_size"
+_conf_key_api_pagination_max_pages = "api.pagination.max_pages"
+_conf_key_api_pagination_timeout = "api.pagination.timeout"
+_conf_key_api_pagination_interval = "api.pagination.interval"
+
 # ADC Keys
 _conf_key_adc_connection_type = "adc.connection_type"
 CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON = "snowflake-connector-python"
@@ -159,6 +165,14 @@ AsdkConf.validators.register(
                      CONF_LOG_LEVEL_ERROR,
                      CONF_LOG_LEVEL_CRITICAL])
     )
+
+# Pagination Level Config Validations
+AsdkConf.validators.register(
+    Validator(_conf_key_api_pagination_max_page_size, is_type_of=int),
+    Validator(_conf_key_api_pagination_max_pages, is_type_of=int),
+    Validator(_conf_key_api_pagination_timeout, is_type_of=int),
+    Validator(_conf_key_api_pagination_interval, is_type_of=int)
+)
 
 AsdkConf.validators.validate_all()
 
@@ -399,3 +413,18 @@ def get_batch_parallel_max_workers():
 
 def get_batch_sequential_interval():
     return asdk_conf_get(_conf_batch_sequential_interval)
+
+
+def get_pagination_max_page_size():
+    return asdk_conf_get(_conf_key_api_pagination_max_page_size, 10)
+
+
+def get_pagination_max_pages():
+    return asdk_conf_get(_conf_key_api_pagination_max_pages, 5)
+
+
+def get_pagination_timeout():
+    return asdk_conf_get(_conf_key_api_pagination_timeout, 300)
+
+def get_pagination_interval():
+    return asdk_conf_get(_conf_key_api_pagination_interval, 2)

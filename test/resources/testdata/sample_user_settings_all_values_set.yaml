@@ -5,6 +5,9 @@ defaultWebServer: http://dummy.dws.com
 API:
   AUTH_TYPE: Basic Auth
   TOKEN: "hippopotomonstrosesquippedaliophobia"
+  PAGINATION:
+    MAX_PAGE_SIZE: 5
+    TIMEOUT: 700
 
 user_credentials:
   password: am_db9
@@ -34,8 +37,8 @@ EXPORT:
   OVERWRITE_DATA: True
 
 NOTIFICATIONS:
-    EMAIL:
-        EMAIL_PASSWORD: test_pwd
-        EMAIL_USERNAME: jbond
-        SENDER: jbond@blackrock.com
-        EMAIL_HOST: smtp.blackrock.com
+  EMAIL:
+    EMAIL_PASSWORD: test_pwd
+    EMAIL_USERNAME: jbond
+    SENDER: jbond@blackrock.com
+    EMAIL_HOST: smtp.blackrock.com
