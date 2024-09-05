@@ -45,7 +45,7 @@ class TestAsdkConfInComputeWorkloadWithConfigEnvVar(TestCase):
             "ASDK_TEST__ENV": "TEST_VAL",
             "NB_USER": "TEST_USER",
             "defaultWebServer": "http://dummy.dws.com",
-            })
+        })
         self.env_patcher.start()
         # del sys.modules['aladdinsdk.config.asdkconf'] # re-import to lose context created by other suites
         utils.reload_modules()
@@ -75,7 +75,7 @@ class TestAsdkConfInComputeWorkloadWithConfigEnvVarAndDefault(TestCase):
             "ASDK_TEST__ENV": "TEST_VAL",
             "NB_USER": "TEST_USER",
             "defaultWebServer": "http://dummy.dws.com",
-            })
+        })
         self.env_patcher.start()
         # del sys.modules['aladdinsdk.config.asdkconf'] # re-import to lose context created by other suites
         utils.reload_modules()
@@ -156,6 +156,18 @@ class TestUserSettings(TestCase):
 
     def test_get_password_filepath(self):
         self.assertEqual(self.test_subject.get_password_filepath(), "test/resources/testdata/sample_encrypted_password.txt")
+
+    def test_get_pagination_max_page_size(self):
+        self.assertEqual(self.test_subject.get_pagination_max_page_size(), 5)
+
+    def test_get_pagination_max_pages(self):
+        self.assertEqual(self.test_subject.get_pagination_max_pages(), 5)
+
+    def test_get_pagination_timeout(self):
+        self.assertEqual(self.test_subject.get_pagination_timeout(), 700)
+
+    def test_get_pagination_interval(self):
+        self.assertEqual(self.test_subject.get_pagination_interval(), 2)
 
     @mock.patch('builtins.print')
     def test_get_input(self, mock_print):

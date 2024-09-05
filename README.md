@@ -102,6 +102,10 @@ Under the hood, configuration management is performed using Dynaconf. Custom env
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; STOP_AFTER_ATTEMPT:                                                   | Retry up to certain amount of attempts for API retry logic. <br /> (ASDK_API__RETRY__STOP_AFTER_ATTEMPT)                                                                                                                                                                                                   |                      -                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; WAIT_FIXED:                                                           | Wait time in seconds before retry for API retry logic. <br /> (ASDK_API__RETRY__WAIT_FIXED)                                                                                                                                                                                                                |                      -                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; STOP_AFTER_DELAY:                                                     | Retry up to certain amount of delay for API retry logic. <br /> (ASDK_API__RETRY__STOP_AFTER_DELAY)                                                                                                                                                                                                        |                      -                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_PAGES                                                        | Config value used to determine the maximum number of subsequent api calls made for pagination                                                                                                                                                                                                              |                      5                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_PAGE_SIZE                                                    | Config value used to determine the maximum number of retrieved from each api call                                                                                                                                                                                                                          |                     10                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; TIMEOUT                                                          | Config value used to determine the maximum timeout value. This will terminate the api call request and retrieve the response obtain thus far.                                                                                                                                                              |                    300s                     |                             -                              |
+| API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; INTERVAL                                                         | Config value used to determine the maximum interval value. This will set the interval time between each api call.                                                                                                                                                                                          |                     2s                      |                             -                              |
 | ADC: <br/>&nbsp;&nbsp; CONNECTION_TYPE:                                                                                           | Type of connector to use for Snowflake connection. Defaults to Snowflake's <br />  python connector, but users can choose to use Snowpark connection object as well. <br /> (ASDK_ADC__CONNECTION_TYPE)                                                                                                    |        `snowflake-connector-python`         | `snowflake-connector-python` / `snowflake-snowpark-python` |
 | ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; AUTHENTICATOR:                                                         | Snowflake connection authenticator type  <br /> (ASDK_ADC__CONN__AUTHENTICATOR)                                                                                                                                                                                                                            |                   `oauth`                   |                 `oauth` / `snowflake_jwt`                  |
 | ADC: <br/>&nbsp;&nbsp; CONN: <br/>&nbsp;&nbsp;&nbsp;&nbsp; OAUTH: <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ACCESS_TOKEN:         | If using oauth authenticator, and not relying on TokenAPI, users can provide <br />  the oauth access token for ADC connections here. <br /> (ASDK_ADC__CONN__OAUTH__ACCESS_TOKEN)                                                                                                                         |                      -                      |                             -                              |
@@ -484,6 +488,55 @@ The e-mail utility is additionally integrated with the error handling mechanism.
 - User can enable email notifications on errors by setting `NOTIFICATIONS.EMAIL` and `ERROR_HANDLING.EMAIL_NOTIFICATIONS` sections in user settings file
 - For more details refer to the supported configuration table above
 
+### Pagination
+AladdinSDK provides a generic pagination utility that can be used to paginate through API responses. This utility can be used to fetch n pages of data from an API endpoint that supports pagination.
+
+To utilize this capability:
+- Pass in _asdk_pagination_options to the API call method
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+    api_instance_train_journey = AladdinAPI("TrainJourneyAPI")
+    req_body_json = {
+        "query": {
+            "departingStationId": "TS_1441"
+        }
+    }
+    _asdk_pagination_options = {
+        "page_size": 5,
+        "number_of_pages": 10
+    }
+    response = api_instance_train_journey.post("/trainJourneys:filter", req_body_json, _asdk_pagination_options=_asdk_pagination_options)
+    ```
+- _asdk_pagination_options takes the following fields:
+    - page_size: Number of records to fetch per api call
+    - number_of_pages: Number of pages to fetch (subsequent api calls made)
+    - timeout: Maximum time to wait for the entire api method call to complete
+    - interval: Time to wait between subsequent api calls
+    - page_token: Token to start fetching data from a specific page
+
+- Maximum values for page_size, number_of_pages and timeout can be configured using the following configuration keys in the config file:
+    ```yaml
+    API:
+      PAGINATION:
+        MAX_PAGE_SIZE: 10
+        MAX_PAGES: 5
+        TIMEOUT: 300
+        INTERVAL: 2
+    ```
+- The paginated response will be a list of responses from each page
+ ```py
+  from aladdinsdk.api.client import AladdinAPI
+  api_instance = AladdinAPI("TrainJourneyAPI")
+
+  responses = api_instance.get("/trainJourneys", _asdk_pagination_options={'page_size': 2, 'page_token': ''})
+
+  print("\nTrain Journey API Response:")
+  for response in responses:
+    for tj in response.train_journeys:
+      print(
+        f"From: {tj.departing_train_station_id}, To: {tj.destination_train_station_id}, Stops: {len(tj.pass_through_station_ids)}, Date: {tj.journey_date}, Duration: {tj.journey_duration}")
+```
+Example [code snippet for api pagination](resources/sample_code_snippets/sample_api_pagination_calls.md)
 
 ## DomainSDK Development
 

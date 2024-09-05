@@ -14,25 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import asyncio
+import inspect
+import json
+import logging
 import os
 import re
-import asyncio
-import json
-import inspect
-import jsonpath_ng
-from urllib.parse import urljoin
+import time
 from collections import namedtuple
+from urllib.parse import urljoin
+
+import jsonpath_ng
+
 from aladdinsdk.api.registry import get_api_details
-from aladdinsdk.common.authentication.api import _HEADER_KEY_ORIGIN_TIMESTAMP, _HEADER_KEY_REQUEST_ID, ApiAuthUtil
-from aladdinsdk.common.blkutils.blkutils import DEFAULT_WEB_SERVER
+from aladdinsdk.common.authentication.api import ApiAuthUtil, _HEADER_KEY_REQUEST_ID, _HEADER_KEY_ORIGIN_TIMESTAMP
 from aladdinsdk.common.authentication.api import inflate_api_kwargs
-from aladdinsdk.common.error.handler import asdk_exception_handler
+from aladdinsdk.common.blkutils.blkutils import DEFAULT_WEB_SERVER
+from aladdinsdk.common.datatransformation import json_to_pandas
 from aladdinsdk.common.error.asdkerrors import AsdkApiException
+from aladdinsdk.common.error.handler import asdk_exception_handler
+from aladdinsdk.common.retry.api_retry import api_retry
 from aladdinsdk.config import user_settings
 from aladdinsdk.config.asdkconf import dynamic_asdk_config_reload
-from aladdinsdk.common.datatransformation import json_to_pandas
-from aladdinsdk.common.retry.api_retry import api_retry
-import logging
 
 _logger = logging.getLogger(__name__)
 
@@ -144,26 +147,6 @@ class AladdinAPI():
         api_instance = self._details.api_default_class(api_client)
 
         return api_instance
-
-    def _is_valid_transformation_option(self, asdk_transformation_option):
-        """
-        Validate transformation options
-        """
-        is_valid = False
-        if asdk_transformation_option is not None and ('type' and 'flatten' in asdk_transformation_option):
-            if asdk_transformation_option['type'] in ('json', 'dataframe'):
-                is_valid = True
-        return is_valid
-
-    def _response_transformation(self, api_response, asdk_transformation_option):
-        """
-        Handle the mappings to the accurate transformation utilities and perform the transformation
-        """
-        if asdk_transformation_option['type'] == 'dataframe':
-            if not isinstance(api_response, str) and hasattr(api_response, 'json'):
-                api_response = api_response.json()
-            api_response = json_to_pandas.convert(api_response, asdk_transformation_option['flatten'])
-        return api_response
 
     def _generate_swagger_mappings(self):
         """
@@ -298,7 +281,8 @@ class AladdinAPI():
     @api_retry
     @dynamic_asdk_config_reload
     def call_api(self, api_endpoint_name, request_body=None, _oauth_scopes=None, _deserialize_to_object=True,
-                 asdk_transformation_option={'type': "json", 'flatten': None}, **params):
+                 asdk_transformation_option={'type': "json", 'flatten': None},
+                 _asdk_pagination_options=None, **params):
         """
         Wrapper method for making an API call using generated client code from Aladdin Graph swagger specification
 
@@ -309,6 +293,7 @@ class AladdinAPI():
             _deserialize_to_object (bool, optional): Deserialize response to python Codegen API response object. Defaults to True.
             asdk_transformation_option (dict, optional): Transformation options to dictate response transformation (EXPERIMENTAL).
                 Defaults to {'type': "json", 'flatten': None}.
+            _asdk_pagination_options (dict, optional): Pagination options for API call (EXPERIMENTAL). Defaults to None.
 
         Raises:
             AsdkApiException: _description_
@@ -329,36 +314,30 @@ class AladdinAPI():
 
         sig = self.get_api_endpoint_signature(api_endpoint_name)
 
-        if 'body' in sig.parameters.keys():
-            api_response = endpoint_to_call(
-                vnd_com_blackrock_request_id=request_headers[_HEADER_KEY_REQUEST_ID],
-                vnd_com_blackrock_origin_timestamp=request_headers[_HEADER_KEY_ORIGIN_TIMESTAMP],
-                body=request_body,
-                _headers=request_headers,
-                _preload_content=_deserialize_to_object,
-                **params
-            )
-        else:
-            api_response = endpoint_to_call(
-                vnd_com_blackrock_request_id=request_headers[_HEADER_KEY_REQUEST_ID],
-                vnd_com_blackrock_origin_timestamp=request_headers[_HEADER_KEY_ORIGIN_TIMESTAMP],
-                _headers=request_headers,
-                _preload_content=_deserialize_to_object,
-                **params
-            )
+        valid_pagination_option = self._is_valid_pagination_options(_asdk_pagination_options)
 
-        if _deserialize_to_object:
-            if hasattr(api_response, "data"):
-                api_response = api_response.data
-        else:
-            # disabled deserialization and response validation - for to obtain raw response
-            if hasattr(api_response, "raw_data"):
-                api_response = json.loads(api_response.raw_data)
+        if valid_pagination_option:
+            _asdk_pagination_options = self._update_pagination_options(_asdk_pagination_options)
+            _asdk_pagination_options['start_time'] = time.time()
+
+        api_response = self._call_endpoint_helper(endpoint_to_call, request_headers, sig, request_body, params, valid_pagination_option,
+                                                  _asdk_pagination_options, _deserialize_to_object)
+
+        api_response = self.optional_deserialize_response(api_response, _deserialize_to_object)
 
         if self._is_valid_transformation_option(asdk_transformation_option):
             api_response = self._response_transformation(api_response, asdk_transformation_option)
 
-        return api_response
+        if not valid_pagination_option:
+            return api_response
+
+        if valid_pagination_option:
+            if time.time() - _asdk_pagination_options['start_time'] >= _asdk_pagination_options['timeout']:
+                logging.info("First call took longer than timeout. Skipping pagination.")
+                return [api_response]
+
+        return self._handle_pagination_helper(api_response, request_body, params, _asdk_pagination_options, _deserialize_to_object,
+                                              endpoint_to_call, request_headers, sig, valid_pagination_option, 1)
 
     async def _poll_lro_status(self, check_lro_status_endpoint, lro_id, _deserialize_to_object=True, status_check_interval=None):
         """
@@ -492,3 +471,180 @@ class AladdinAPI():
             _logger.warning(f"Multiple methods map to path {user_input_endpoint}. Input may need to be more "
                             f"specific - provide a tuple with (path, method) where method is one of {_matched_http_methods}")
         return _matched_endpoint_method
+
+    def _call_endpoint_helper(self, endpoint_to_call, request_headers, sig, _request_body, _params, valid_pagination_option, _asdk_pagination_options,
+                              _deserialize_to_object):
+        """
+        Call the API endpoint with the provided parameters.
+
+        Args:
+            endpoint_to_call (function): The API endpoint function to call.
+            request_headers (dict): The request headers.
+            sig (Signature): The signature of the endpoint method.
+            _request_body (dict): The request body.
+            _params (dict): The request parameters.
+            valid_pagination_option (bool): Flag indicating if pagination options are valid.
+            _asdk_pagination_options (dict): The pagination options.
+            _deserialize_to_object (bool): Flag indicating if the response should be deserialized to an object.
+
+        Returns:
+            Response: The API response.
+        """
+        if 'body' in sig.parameters.keys():
+            return endpoint_to_call(
+                vnd_com_blackrock_request_id=request_headers[_HEADER_KEY_REQUEST_ID],
+                vnd_com_blackrock_origin_timestamp=request_headers[_HEADER_KEY_ORIGIN_TIMESTAMP],
+                body=self._paginate_parameters_helper(_asdk_pagination_options, _request_body) if valid_pagination_option else _request_body,
+                _headers=request_headers,
+                _preload_content=_deserialize_to_object,
+                **_params
+            )
+        else:
+            return endpoint_to_call(
+                vnd_com_blackrock_request_id=request_headers[_HEADER_KEY_REQUEST_ID],
+                vnd_com_blackrock_origin_timestamp=request_headers[_HEADER_KEY_ORIGIN_TIMESTAMP],
+                _headers=request_headers,
+                _preload_content=_deserialize_to_object,
+                **_params if not valid_pagination_option else self._paginate_parameters_helper(_asdk_pagination_options, _params)
+            )
+
+    def _paginate_parameters_helper(self, _asdk_pagination_options, data):
+        """`
+        Helper method to paginate params or request body
+
+        Args:
+            _asdk_pagination_options (_type_): Pagination options for API call
+            data (_type_): API call parameters or request body
+
+        Returns:
+            _type_: Paginated parameters
+        """
+        data['page_size'] = _asdk_pagination_options['page_size']
+        data['page_token'] = _asdk_pagination_options['page_token'] if 'page_token' in _asdk_pagination_options else ''
+        return data
+
+    def _handle_pagination_helper(self, api_response, request_body, params, _asdk_pagination_options, _deserialize_to_object, endpoint_to_call,
+                                  request_headers, sig, valid_pagination_option, page_count=0, api_responses_paginated=None):
+        """
+            Handle pagination for API responses.
+
+            Args:
+                api_response: The initial API response.
+                request_body: The request body for the API call.
+                params: The parameters for the API call.
+                _asdk_pagination_options: The pagination options.
+                _deserialize_to_object: Boolean indicating if the response should be deserialized to an object.
+                page_count: The current pagination count.
+                api_responses_paginated: The list of paginated API responses.
+
+            Returns:
+                A list of paginated API responses.
+            """
+        if api_responses_paginated is None:
+            api_responses_paginated = [api_response]
+
+        _next_page_token = api_response.next_page_token if _deserialize_to_object else api_response['nextPageToken']
+        if page_count >= _asdk_pagination_options['number_of_pages'] or \
+            _next_page_token is None or \
+            ('page_token' in _asdk_pagination_options and _asdk_pagination_options['page_token'] == _next_page_token) or \
+            time.time() - _asdk_pagination_options['start_time'] >= _asdk_pagination_options['timeout']:
+            return api_responses_paginated
+
+        _asdk_pagination_options['page_token'] = _next_page_token
+        try:
+            time.sleep(_asdk_pagination_options['interval'])
+            api_response = self._call_endpoint_helper(endpoint_to_call, request_headers, sig, request_body, params, valid_pagination_option,
+                                                      _asdk_pagination_options,
+                                                      _deserialize_to_object)
+            api_response = self.optional_deserialize_response(api_response, _deserialize_to_object)
+            api_responses_paginated.append(api_response)
+            return self._handle_pagination_helper(api_response, request_body, params, _asdk_pagination_options, _deserialize_to_object,
+                                                  endpoint_to_call, request_headers, sig, valid_pagination_option,
+                                                  page_count + 1, api_responses_paginated)
+
+        except Exception as e:
+            _logger.error(f"Pagination failed with error: {e}")
+            return api_responses_paginated
+
+    def optional_deserialize_response(self, api_response, _deserialize_to_object):
+        if _deserialize_to_object:
+            if hasattr(api_response, "data"):
+                api_response = api_response.data
+        else:
+            # disabled deserialization and response validation - for to obtain raw response
+            if hasattr(api_response, "raw_data"):
+                api_response = json.loads(api_response.raw_data)
+
+        return api_response
+
+    def _is_valid_transformation_option(self, asdk_transformation_option):
+        """
+        Validate transformation options
+        """
+        is_valid = False
+        if asdk_transformation_option is not None and ('type' and 'flatten' in asdk_transformation_option):
+            if asdk_transformation_option['type'] in ('json', 'dataframe'):
+                is_valid = True
+        return is_valid
+
+    def _is_valid_pagination_options(self, _asdk_pagination_options):
+        """
+        Validate asdk pagination options set by user.
+
+        Args:
+            _asdk_pagination_options (dict): The pagination options provided by the user.
+
+        Returns:
+            boolean: indicates the validity of the options.
+        """
+        if _asdk_pagination_options is None:
+            _logger.info("No pagination options provided. Pagination will not be applied to request.")
+            return False
+
+        for key, value in _asdk_pagination_options.items():
+            if key == 'page_token':
+                if not isinstance(value, str):
+                    _logger.warning(
+                        f"Invalid pagination option provided: {key}. {key} should be of type str. Pagination will not be applied to request.")
+                    return False
+            else:
+                if not isinstance(value, int):
+                    _logger.warning(
+                        f"Invalid pagination option provided: {key}. {key} should be of type int. Pagination will not be applied to request.")
+                    return False
+        return True
+
+    def _response_transformation(self, api_response, asdk_transformation_option):
+        """
+        Handle the mappings to the accurate transformation utilities and perform the transformation
+        """
+        if asdk_transformation_option['type'] == 'dataframe':
+            if not isinstance(api_response, str) and hasattr(api_response, 'json'):
+                api_response = api_response.json()
+            api_response = json_to_pandas.convert(api_response, asdk_transformation_option['flatten'])
+        return api_response
+
+    def _update_pagination_options(self, _asdk_pagination_options):
+        """
+        This is where the pagination options waterfall takes place
+        User passed in options will override the default values and config values and take priority
+        Config values will take priority over the default values
+        If user has not passed in any options or config values, the default values will be used
+        """
+
+        default = {
+            'page_size': user_settings.get_pagination_max_page_size(),
+            'interval': user_settings.get_pagination_interval(),
+            'timeout': user_settings.get_pagination_timeout(),
+            'number_of_pages': user_settings.get_pagination_max_pages()
+        }
+
+        for key, user_settings_value in default.items():
+            lower_interval = 0 if key == 'interval' else 1
+            if key not in _asdk_pagination_options:
+                _asdk_pagination_options[key] = max(user_settings_value, lower_interval)
+            else:
+                _asdk_pagination_options[key] = max(_asdk_pagination_options[key], lower_interval)
+
+        _logger.debug(f"Updated pagination options: {_asdk_pagination_options}")
+        return _asdk_pagination_options
