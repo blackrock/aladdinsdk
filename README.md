@@ -310,14 +310,35 @@ _Additional examples under [`resources/sample_code_snippets/sample_adc_calls.md`
 
 #### OAuth
 
-In the above simple example, ADCClient will attempt to fetch an OAuth AccessToken from Aladdin's TokenAPI.
+For OAuth connectivity, provide the following details in the user configuration file:
+
+```yaml
+ADC:
+   CONN:
+     AUTHENTICATOR: oauth
+     OAUTH:
+       ACCESS_TOKEN: <valid oauth access token>
+```
+
+Note: This configuration is optional for client environments where ADC OAuth is configured via Studio application, SDK's ADCClient will attempt to fetch an OAuth AccessToken from Aladdin's TokenAPI.
 Here, the assumptions are:
 - User has provided API connection details as part of the configuration or ADCClient initialization.
 - User has authenticated with the ADC OAuth client application by logging into Aladdin Studio UI.
 
 #### RSA Keys
 
-In this type, the user is required to follow steps to generate keys in PEM format.
+For RSA Keys (snowflake_jwt) authentication, follow the below steps to generate RSA key pairs and then provide the following details in the user configuration file:
+
+```yaml
+ADC:
+   CONN:
+     AUTHENTICATOR: snowflake_jwt
+     RSA:
+       PRIVATE_KEY_FILEPATH: <file path to private key>
+       PRIVATE_KEY_PASSPHRASE: <private key passphrase>
+```
+
+Follow these steps to generate keys in PEM format first.
 
 1. Generate a private-public key pair under 'Keys' directory. Note: Remember the `passphrase` entered during these steps:
 
