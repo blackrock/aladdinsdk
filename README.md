@@ -49,7 +49,7 @@ AladdinSDK allows developers to easily integrate BlackRock's Aladdin functionali
 AladdinSDK is highly customizable, allowing users to write clean, readable, and reusable code across different environments. </br>
 Configurations enable citizen developers to share code-snippets or projects more easily. Or test applications with different system account credentials by simply changing configurations.
 
-#### Pointing to a configuration file
+#### Pointing to a configuration file on my
 
 - Users can set (or override the default) configurations by providing their own config file and setting the environment variable `ASDK_USER_CONFIG_FILE`
   - The SDK contains a command line utility to get started with building a configuration file. In the terminal where the package is installed run and follow the prompts:
