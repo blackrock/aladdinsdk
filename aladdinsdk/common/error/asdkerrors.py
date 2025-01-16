@@ -104,3 +104,16 @@ class AsdkOAuthException(Exception):
     def __init__(self, message="OAuth Token exception", *args: object) -> None:
         self.message = message
         super().__init__(self.message, *args)
+
+
+class AsdkStorageException(Exception):
+    """
+    Raised for any failed response from Storage module
+
+    Args:
+        Exception (_type_): _description_
+    """
+
+    def __init__(self, message="Storage exception", *args: object) -> None:
+        self.message = message
+        super().__init__(self.message, *args)

@@ -15,9 +15,11 @@ limitations under the License.
 """
 
 import os
+
 from dynaconf import Validator
-from aladdinsdk.config.asdkconf import AsdkConf, dynamic_asdk_config_reload
+
 from aladdinsdk.common.blkutils import blkutils
+from aladdinsdk.config.asdkconf import AsdkConf, dynamic_asdk_config_reload
 
 # Path to configuration in user config file, and permitted values
 _conf_key_run_mode = "run_mode"
@@ -29,6 +31,8 @@ ALADDIN_COMPUTE_SECRETS_KEYENC_PATH = "/secrets/key.enc"
 ALADDIN_COMPUTE_CLIENT_DETAILS_PATH = "/secrets/api-oauth-app-client-details.yaml"
 ALADDIN_COMPUTE_CLIENT_REFRESH_TOKEN_PATH = "/secrets/api-oauth-app-user-refresh-token.yaml"
 ALADDIN_COMPUTE_CLIENT_API_ACCESS_TOKEN_PATH = "/secrets/api-oauth-app-access-token.yaml"
+ALADDIN_COMPUTE_STORAGE_S3_CREDENTIALS_FILE = "/secrets/s3integration-creds-key.yaml"
+
 # API Keys
 _conf_key_api_auth_type = "api.auth_type"
 CONF_API_AUTH_TYPE_BASIC_AUTH = "Basic Auth"
@@ -132,6 +136,14 @@ _conf_batch_buffer_max_size = "batch.buffer.max_size"
 _conf_batch_parallel_max_workers = "batch.parallel.max_workers"
 _conf_batch_sequential_interval = "batch.sequential.interval"
 
+# Storage
+# S3 Client
+_conf_storage_s3_endpoint_url = "storage.s3.endpoint_url"
+_conf_storage_s3_access_key_id = "storage.s3.access_key_id"
+_conf_storage_s3_secret_access_key = "storage.s3.secret_access_key"
+_conf_storage_s3_bucket_name = "storage.s3.bucket_name"
+_conf_storage_s3_credentials_file = "storage.s3.credentials_file"
+
 # User settings validations
 AsdkConf.validators.register(
     Validator(_conf_key_run_mode,
@@ -154,7 +166,7 @@ AsdkConf.validators.register(
               is_type_of=int),
     Validator(_conf_ADC_retry_stop_after_delay,
               is_type_of=int),
-    )
+)
 
 # Log Level Config Validations
 AsdkConf.validators.register(
@@ -164,7 +176,7 @@ AsdkConf.validators.register(
                      CONF_LOG_LEVEL_WARNING,
                      CONF_LOG_LEVEL_ERROR,
                      CONF_LOG_LEVEL_CRITICAL])
-    )
+)
 
 # Pagination Level Config Validations
 AsdkConf.validators.register(
@@ -426,5 +438,31 @@ def get_pagination_max_pages():
 def get_pagination_timeout():
     return asdk_conf_get(_conf_key_api_pagination_timeout, 300)
 
+
 def get_pagination_interval():
     return asdk_conf_get(_conf_key_api_pagination_interval, 2)
+
+
+# Storage
+# S3
+def get_storage_s3_endpoint_url():
+    return asdk_conf_get(_conf_storage_s3_endpoint_url, 'https://sgs3api.blackrock.com:8082')
+
+
+def get_storage_s3_access_key_id():
+    return asdk_conf_get(_conf_storage_s3_access_key_id)
+
+
+def get_storage_s3_secret_access_key():
+    return asdk_conf_get(_conf_storage_s3_secret_access_key)
+
+
+def get_storage_s3_bucket_name():
+    return asdk_conf_get(_conf_storage_s3_bucket_name)
+
+
+def get_storage_s3_credentials_file():
+    if asdk_conf_get(_conf_key_run_mode) == CONF_RUN_MODE_ALADDIN_COMPUTE and os.path.exists(ALADDIN_COMPUTE_STORAGE_S3_CREDENTIALS_FILE):
+        return asdk_conf_get(_conf_storage_s3_credentials_file, ALADDIN_COMPUTE_STORAGE_S3_CREDENTIALS_FILE)
+    else:
+        return asdk_conf_get(_conf_storage_s3_credentials_file)

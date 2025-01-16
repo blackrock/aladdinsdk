@@ -11,7 +11,7 @@ class TestCommonErrorAbstractUtil(TestCase):
     def setUpClass(self):
         self.env_patcher = mock.patch.dict(os.environ, {
             "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_all_values_set.yaml",
-            })
+        })
         self.env_patcher.start()
         super().setUpClass()
 
@@ -38,7 +38,7 @@ class TestCommonErrorHandlingDisabled(TestCase):
     def setUpClass(self):
         self.env_patcher = mock.patch.dict(os.environ, {
             "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_error_handling_disabled.yaml",
-            })
+        })
         self.env_patcher.start()
         utils.reload_modules()
         super().setUpClass()
@@ -64,7 +64,7 @@ class TestCommonErrorHandlerUtils(TestCase):
     def setUpClass(self):
         self.env_patcher = mock.patch.dict(os.environ, {
             "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_all_values_set.yaml",
-            })
+        })
         self.env_patcher.start()
         super().setUpClass()
 
@@ -97,10 +97,9 @@ class TestCommonErrorHandlerUtils(TestCase):
         from aladdinsdk.common.error.asdkerrors import AsdkApiException
         from pydantic.error_wrappers import ValidationError
 
-        from aladdinsdk.common.error.handlers.internal import AsdkInternalExceptionHandler
         from aladdinsdk.common.error.handlers.api import APIExceptionHandler
 
-        self.assertEqual(type(_map_exception_to_handler(AsdkApiException("TEST"))), AsdkInternalExceptionHandler)
+        self.assertEqual(type(_map_exception_to_handler(AsdkApiException("TEST"))), APIExceptionHandler)
         self.assertEqual(type(_map_exception_to_handler(ValidationError(None, "TEST"))), APIExceptionHandler)
 
     def test_register_handler_class_success(self):
@@ -146,7 +145,7 @@ class TestCommonErrorHandlerApiHandler(TestCase):
     def setUpClass(self):
         self.env_patcher = mock.patch.dict(os.environ, {
             "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_all_values_set.yaml",
-            })
+        })
         self.env_patcher.start()
         utils.reload_modules()
         super().setUpClass()
@@ -186,7 +185,7 @@ class TestCommonErrorHandlerExportDataHandler(TestCase):
     def setUpClass(self):
         self.env_patcher = mock.patch.dict(os.environ, {
             "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_all_values_set.yaml",
-            })
+        })
         self.env_patcher.start()
         utils.reload_modules()
         super().setUpClass()
@@ -212,7 +211,7 @@ class TestCommonErrorHandlerEmailNotifications(TestCase):
     def setUpClass(self):
         self.env_patcher = mock.patch.dict(os.environ, {
             "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_error_email_notifications_set.yaml",
-            })
+        })
         self.env_patcher.start()
         utils.reload_modules()
         super().setUpClass()
