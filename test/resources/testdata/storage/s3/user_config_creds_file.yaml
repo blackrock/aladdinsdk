@@ -1,0 +1,4 @@
+RUN_MODE: aladdin-compute
+STORAGE:
+  S3:
+    CREDENTIALS_FILE: test/resources/testdata/storage/s3/credentials_file.yaml

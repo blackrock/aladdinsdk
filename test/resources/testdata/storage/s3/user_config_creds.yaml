@@ -1,0 +1,7 @@
+RUN_MODE: aladdin-compute
+STORAGE:
+  S3:
+    ENDPOINT_URL: http://localhost:9000
+    ACCESS_KEY_ID: dummy-key-id
+    SECRET_ACCESS_KEY: dummy-secret-key
+    BUCKET_NAME: dummy-bucket
