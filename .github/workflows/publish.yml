@@ -35,7 +35,7 @@ jobs:
         pip install pytest pytest-cov coverage
         pytest test/ --cov=aladdinsdk --cov-report= --junitxml=junit/test-results.xml && coverage report -m
     - name: Upload pytest test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: pytest-results
         path: junit/test-results.xml
@@ -45,7 +45,7 @@ jobs:
         python -m pip install build setuptools
         python -m build
     - name: (TEMP) Upload build results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: aladdinsdk-build
         path: dist/*
