@@ -52,9 +52,9 @@ class TestApiRegistry(TestCase):
         expected = AladdinAPICodegenDetails(
             'TokenAPI',
             'v1',
-            'aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI',
+            'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
             '/api/platform/infrastructure/token/v1/',
-            'aladdinsdk/api/codegen/platform/infrastructure/token/v1/TokenAPI/swagger.json'
+            'aladdinsdk/api/codegen/platform/infrastructure/token/v1/token/swagger.json'
         )
 
         test_case = TestCase()
@@ -76,24 +76,24 @@ class TestApiRegistry(TestCase):
     def test_get_api_details_multiple_versions(self, mock_internal_settings):
         # Currently v2 does not exist, so mock the imports here
         import sys
-        from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1 import TrainJourneyAPI
-        sys.modules['aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.TrainJourneyAPI'] = TrainJourneyAPI
+        from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1 import train_journey
+        sys.modules['aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey'] = train_journey
 
         mock_internal_settings.get_api_allow_list.return_value = [
             {
-                'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI',
+                'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
                 'api_name': 'TokenAPI',
                 'api_version': 'v1',
                 'host_url_path': '/api/platform/infrastructure/token/v1/'
             },
             {
-                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.TrainJourneyAPI',
+                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey',
                 'api_name': 'TrainJourneyAPI',
                 'api_version': 'v2',
                 'host_url_path': '/api/reference-architecture/demo/train-journey/v2/'
             },
             {
-                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.TrainJourneyAPI',
+                'api_module_path': 'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey',
                 'api_name': 'TrainJourneyAPI',
                 'api_version': 'v1',
                 'host_url_path': '/api/reference-architecture/demo/train-journey/v1/'
@@ -110,7 +110,7 @@ class TestApiRegistry(TestCase):
         expected_latest = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v2',
-            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.TrainJourneyAPI',
+            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey',
             '/api/reference-architecture/demo/train-journey/v2/',
             'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v2/train_journey/swagger.json'
         )
@@ -118,25 +118,25 @@ class TestApiRegistry(TestCase):
         expected_v1 = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v1',
-            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.TrainJourneyAPI',
+            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey',
             '/api/reference-architecture/demo/train-journey/v1/',
-            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v1/TrainJourneyAPI/swagger.json'
+            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v1/train_journey/swagger.json'
         )
 
         expected_v2 = AladdinAPICodegenDetails(
             'TrainJourneyAPI',
             'v2',
-            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.TrainJourneyAPI',
+            'aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v2.train_journey',
             '/api/reference-architecture/demo/train-journey/v2/',
-            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v2/TrainJourneyAPI/swagger.json'
+            'aladdinsdk/api/codegen/reference_architecture/demo/train_journey/v2/train_journey/swagger.json'
         )
 
         expected_token_v1 = AladdinAPICodegenDetails(
             'TokenAPI',
             'v1',
-            'aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI',
+            'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
             '/api/platform/infrastructure/token/v1/',
-            'aladdinsdk/api/codegen/platform/infrastructure/token/v1/TokenAPI/swagger.json',
+            'aladdinsdk/api/codegen/platform/infrastructure/token/v1/token/swagger.json',
         )
 
         test_case = TestCase()
@@ -172,7 +172,7 @@ class TestApiRegistry(TestCase):
 
         mock_internal_settings.get_api_allow_list.return_value = [
             {
-                'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.TokenAPI',
+                'api_module_path': 'aladdinsdk.api.codegen.platform.infrastructure.token.v1.token',
                 'api_version': 'v1',
                 'host_url_path': '/api/platform/infrastructure/token/v1/'
             }
