@@ -119,6 +119,13 @@ _conf_ADC_retry_stop_after_delay = "adc.retry.stop_after_delay"
 # Export Data Settings
 _conf_export_overwrite_data = "export.overwrite_data"
 
+# Studio Notification Settings
+_conf_notifications_studio_action = "notifications.studio.action"
+_conf_notifications_studio_event_name = "notifications.studio.event_name"
+_conf_notifications_studio_event_type = "notifications.studio.event_type"
+_conf_notifications_studio_entity_name = "notifications.studio.entity_name"
+_conf_notifications_studio_entity_type = "notifications.studio.entity_type"
+
 # Email Notification Settings
 _conf_notifications_email_host = "notifications.email.email_host"
 _conf_notifications_email_sender = "notifications.email.sender"
@@ -131,7 +138,7 @@ _conf_error_handling_email_notifications_enabled = "error_handling.email_notific
 _conf_error_handling_email_notifications_to = "error_handling.email_notifications.to"
 _conf_error_handling_email_notifications_exception_types = "error_handling.email_notifications.on_exception_types"
 
-# Batch Actions
+# Batch Actions 
 _conf_batch_buffer_max_size = "batch.buffer.max_size"
 _conf_batch_parallel_max_workers = "batch.parallel.max_workers"
 _conf_batch_sequential_interval = "batch.sequential.interval"
@@ -166,7 +173,7 @@ AsdkConf.validators.register(
               is_type_of=int),
     Validator(_conf_ADC_retry_stop_after_delay,
               is_type_of=int),
-)
+    )
 
 # Log Level Config Validations
 AsdkConf.validators.register(
@@ -176,7 +183,7 @@ AsdkConf.validators.register(
                      CONF_LOG_LEVEL_WARNING,
                      CONF_LOG_LEVEL_ERROR,
                      CONF_LOG_LEVEL_CRITICAL])
-)
+    )
 
 # Pagination Level Config Validations
 AsdkConf.validators.register(
@@ -367,6 +374,26 @@ def get_adc_retry_stop_after_delay():
 
 def get_overwrite_data_flag():
     return asdk_conf_get(_conf_export_overwrite_data)
+
+
+def get_notifications_studio_action():
+    return asdk_conf_get(_conf_notifications_studio_action)
+
+
+def get_notifications_studio_event_name():
+    return asdk_conf_get(_conf_notifications_studio_event_name)
+
+
+def get_notifications_studio_event_type():
+    return asdk_conf_get(_conf_notifications_studio_event_type)
+
+
+def get_notifications_studio_entity_name():
+    return asdk_conf_get(_conf_notifications_studio_entity_name)
+
+
+def get_notifications_studio_entity_type():
+    return asdk_conf_get(_conf_notifications_studio_entity_type)
 
 
 def get_notifications_email_host():

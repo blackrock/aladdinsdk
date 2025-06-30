@@ -5,6 +5,14 @@
 ######################################################.
 CODEGEN_API_SETTINGS:
   ALLOW_LIST:
+  - api_module_path: aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_notification
+    api_name: StudioNotificationAPI
+    api_version: v1
+    host_url_path: /api/platform/studio/studio-notification/v1/
+  - api_module_path: aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_subscription
+    api_name: StudioSubscriptionAPI
+    api_version: v1
+    host_url_path: /api/platform/studio/studio-notification/v1/
   - api_module_path: aladdinsdk.api.codegen.platform.infrastructure.token.v1.token
     api_name: TokenAPI
     api_version: v1
