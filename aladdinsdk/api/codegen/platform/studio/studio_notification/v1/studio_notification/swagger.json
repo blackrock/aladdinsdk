@@ -1,0 +1,1287 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "For creating and managing Aladdin Studio notifications.",
+        "title": "Studio Notification",
+        "version": "1.0.0",
+        "x-aladdin-api-id": "agraph.platform.studio.studio_notification.StudioNotificationAPI",
+        "x-aladdin-api-stability": "alpha",
+        "x-aladdin-spec-id": "agraph.platform.studio.studio_notification.v1.StudioNotificationAPI"
+    },
+    "basePath": "/api/platform/studio/studio-notification/v1/",
+    "paths": {
+        "/studioNotifications": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "platform.studio.studio_notification.v1.StudioNotification"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "platform.studio.studio_notification.v1.StudioNotification"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Creates a Studio notification to be sent to subscribers",
+                "summary": "CreateStudioNotification creates a studio notification",
+                "operationId": "StudioNotificationAPI_CreateStudioNotification",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Studio notification to create.",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1StudioNotification"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1StudioNotification"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 1000
+            }
+        },
+        "/studioNotifications/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "platform.studio.studio_notification.v1.StudioNotification"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "platform.studio.studio_notification.v1.StudioNotification"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Retrieve a Studio notification by id",
+                "summary": "GetStudioNotification gets a studio notification",
+                "operationId": "StudioNotificationAPI_GetStudioNotification",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name of the studio notification",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1StudioNotification"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 1000
+            }
+        },
+        "/studioNotifications:batchCreate": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "platform.studio.studio_notification.v1.StudioNotification"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "platform.studio.studio_notification.v1.StudioNotification"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Creates a batch of Studio notifications to be sent to subscribers",
+                "summary": "BatchCreateStudioNotifications creates a batch of studio notifications",
+                "operationId": "StudioNotificationAPI_BatchCreateStudioNotifications",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchCreateStudioNotificationsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1BatchCreateStudioNotificationsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 1000
+            }
+        },
+        "/studioNotifications:filter": {
+            "post": {
+                "security": [
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2AccessCode": [
+                            "platform.studio.studio_notification.v1.StudioNotification"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "OAuth2ClientCredentials": [
+                            "platform.studio.studio_notification.v1.StudioNotification"
+                        ]
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "ClientKeyHeader": []
+                    },
+                    {
+                        "APIKeyHeader": [],
+                        "basicAuth": []
+                    }
+                ],
+                "description": "Filters studio notifications by target entity, specific event, recipient, and time sent",
+                "summary": "FilterStudioNotifications filters studio notifications by event details",
+                "operationId": "StudioNotificationAPI_FilterStudioNotifications",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "UUID",
+                        "description": "A unique identifier for this request.",
+                        "name": "VND.com.blackrock.Request-ID",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Timestamp assigned to this request at origin, in \"HTTP-date\" format as defined by RFC 7231.",
+                        "name": "VND.com.blackrock.Origin-Timestamp",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterStudioNotificationsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/v1FilterStudioNotificationsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Aladdin® will not process the request due to an apparent client error.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Aladdin® will not process the request as the necessary credentials were not provided or were invalid.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Aladdin® understood the request but is refusing to authorize it.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Aladdin® did not find the resource requested or is unwilling to disclose if it exists. Could indicate a defect in the client program or data which is no longer accessible.",
+                        "schema": {
+                            "description": "Defines an error that occurred.",
+                            "type": "object",
+                            "required": [
+                                "code",
+                                "message"
+                            ],
+                            "properties": {
+                                "code": {
+                                    "description": "A short mnemonic reference code for the error.",
+                                    "type": "string",
+                                    "maxLength": 40
+                                },
+                                "message": {
+                                    "description": "A human readable description of the error.",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "headers": {
+                            "VND.com.blackrock.Request-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "The unique identifier assigned by the client to the request that originated this response."
+                            },
+                            "VND.com.blackrock.Response-ID": {
+                                "type": "string",
+                                "format": "UUID",
+                                "description": "A Unique Identifier for this response."
+                            },
+                            "VND.com.blackrock.Response-Timestamp": {
+                                "type": "string",
+                                "format": "date-time",
+                                "description": "Timestamp assigned to this response, in \"HTTP-date\" format as defined by RFC 7231."
+                            }
+                        }
+                    }
+                },
+                "x-quota-limit": 1000
+            }
+        }
+    },
+    "definitions": {
+        "Any": {
+            "description": "`Any` contains an arbitrary serialized message along with a\nURL that describes the type of the serialized message",
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "A URL/resource name that uniquely identifies the type of the serialized message.",
+                    "type": "string"
+                }
+            }
+        },
+        "protobufNullValue": {
+            "description": "`NullValue` is a singleton enumeration to represent the null value for the\n`Value` type union.\n\n The JSON representation for `NullValue` is JSON `null`.\n\n - NULL_VALUE: Null value.",
+            "type": "string",
+            "default": "NULL_VALUE",
+            "enum": [
+                "NULL_VALUE"
+            ]
+        },
+        "rpcStatus": {
+            "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].",
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\n[google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "A list of messages that carry the error details.  There is a common set of\nmessage types for APIs to use.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Any"
+                    }
+                }
+            }
+        },
+        "v1BatchCreateStudioNotificationsRequest": {
+            "description": "The request message for StudioNotificationAPI.BatchCreateStudioNotification.",
+            "type": "object",
+            "required": [
+                "requests"
+            ],
+            "properties": {
+                "requests": {
+                    "type": "array",
+                    "title": "A maximum of 100 Notification can be created at the same time",
+                    "required": [
+                        "requests"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1CreateStudioNotificationRequest"
+                    }
+                }
+            }
+        },
+        "v1BatchCreateStudioNotificationsResponse": {
+            "type": "object",
+            "title": "Response message for BatchCreateStudioNotifications",
+            "properties": {
+                "results": {
+                    "description": "The list of results of the operation in case of success.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/v1CreateStudioNotificationResult"
+                    }
+                }
+            }
+        },
+        "v1CreateStudioNotificationRequest": {
+            "description": "The request message for StudioNotificationAPI.CreateStudioNotification.",
+            "type": "object",
+            "properties": {
+                "studioNotification": {
+                    "description": "Studio notification to create.",
+                    "$ref": "#/definitions/v1StudioNotification"
+                }
+            }
+        },
+        "v1CreateStudioNotificationResult": {
+            "type": "object",
+            "title": "Response message for CreateStudioNotificationResult",
+            "properties": {
+                "error": {
+                    "description": "The error result of the operation in case of failure or cancellation.",
+                    "$ref": "#/definitions/rpcStatus"
+                },
+                "output": {
+                    "description": "The normal response of the operation in case of success.",
+                    "$ref": "#/definitions/v1StudioNotification"
+                }
+            }
+        },
+        "v1FilterStudioNotificationsRequest": {
+            "description": "The request body of the filter studio notifications call.",
+            "type": "object",
+            "properties": {
+                "query": {
+                    "title": "The query used to filter against studio notifications, such as event type and scope",
+                    "$ref": "#/definitions/v1StudioNotificationQuery"
+                },
+                "pageToken": {
+                    "description": "The starting point of a query result.",
+                    "type": "string"
+                },
+                "pageSize": {
+                    "description": "The maximum number of studio notifications to be returned per page of results. The maximum allowed page size is 1000.\n\nDefault is 100 if empty or a number \u003c 1 is specified.",
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "v1FilterStudioNotificationsResponse": {
+            "type": "object",
+            "title": "The response for filter studio notifications method.\n(-- api-linter: aladdin::9016::response-message=disabled\n    aip.dev/not-precedent: We need to do this because it raises a false negative. --)",
+            "required": [
+                "studioNotifications"
+            ],
+            "properties": {
+                "studioNotifications": {
+                    "description": "The studio notification entities that match the specified respective filter request.",
+                    "type": "array",
+                    "required": [
+                        "studio_notifications"
+                    ],
+                    "items": {
+                        "$ref": "#/definitions/v1StudioNotification"
+                    }
+                },
+                "nextPageToken": {
+                    "description": "A token to retrieve the next page of results.",
+                    "type": "string"
+                }
+            }
+        },
+        "v1RangeFilter": {
+            "type": "object",
+            "title": "Range Filter for filter requests across apis",
+            "properties": {
+                "startDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Start range"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "End range"
+                }
+            }
+        },
+        "v1StudioEntityType": {
+            "description": "- STUDIO_ENTITY_TYPE_UNSPECIFIED: Unspecified\n - STUDIO_ENTITY_TYPE_USER: User\n - STUDIO_ENTITY_TYPE_PROJECT: Project\n - STUDIO_ENTITY_TYPE_SPACE: Space",
+            "type": "string",
+            "title": "StudioEntityType is the entity type of the notification receiver",
+            "default": "STUDIO_ENTITY_TYPE_UNSPECIFIED",
+            "enum": [
+                "STUDIO_ENTITY_TYPE_UNSPECIFIED",
+                "STUDIO_ENTITY_TYPE_USER",
+                "STUDIO_ENTITY_TYPE_PROJECT",
+                "STUDIO_ENTITY_TYPE_SPACE"
+            ]
+        },
+        "v1StudioNotification": {
+            "type": "object",
+            "title": "StudioNotification describes a notification from Studio services",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "title": "id is the unique identifier for a notification"
+                },
+                "studioNotificationEvent": {
+                    "title": "studio_notification_event is the type of event that triggered the notification",
+                    "$ref": "#/definitions/v1StudioNotificationEvent"
+                },
+                "studioNotificationScope": {
+                    "title": "studio_notification_scope is the scope of who this notification will be sent to matched by the subscription",
+                    "$ref": "#/definitions/v1StudioNotificationScope"
+                },
+                "sender": {
+                    "type": "string",
+                    "title": "sender is the source of the notification"
+                },
+                "notificationSubject": {
+                    "type": "string",
+                    "title": "notification_subject is the title of the notification"
+                },
+                "notificationMessage": {
+                    "type": "string",
+                    "title": "notification_message contains the body of the notification"
+                },
+                "creationDateTime": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "creation_date_time is the time the notification was created"
+                },
+                "notificationMetadata": {
+                    "type": "object",
+                    "title": "notification_metadata is a free-form payload that can contain any information about the specific notification to be displayed"
+                },
+                "studioRecipientScopes": {
+                    "type": "array",
+                    "title": "array of all recipients of all types",
+                    "items": {
+                        "$ref": "#/definitions/v1StudioRecipientScope"
+                    }
+                }
+            }
+        },
+        "v1StudioNotificationEvent": {
+            "type": "object",
+            "title": "StudioNotificationEvent contains the information about the event that triggers a Studio notification",
+            "properties": {
+                "studioNotificationEventType": {
+                    "title": "studio_notification_event_type is the type of event that triggered the notification e.g. NOTIFICATION_TYPE_PROJECT",
+                    "$ref": "#/definitions/v1StudioNotificationEventType"
+                },
+                "eventName": {
+                    "type": "string",
+                    "title": "name is the name of the event specific to the type of notification e.g. project_user_added"
+                }
+            }
+        },
+        "v1StudioNotificationEventType": {
+            "description": "- STUDIO_NOTIFICATION_EVENT_TYPE_UNSPECIFIED: Unspecified\n - STUDIO_NOTIFICATION_EVENT_TYPE_ACM: Aladdin Credit Management\n - STUDIO_NOTIFICATION_EVENT_TYPE_COMPUTE: Studio Compute\n - STUDIO_NOTIFICATION_EVENT_TYPE_API: API Applications\n - STUDIO_NOTIFICATION_EVENT_TYPE_SPACE: Studio Space\n - STUDIO_NOTIFICATION_EVENT_TYPE_PROJECT: Studio Project",
+            "type": "string",
+            "title": "StudioNotificationEventType is the type of Studio notification",
+            "default": "STUDIO_NOTIFICATION_EVENT_TYPE_UNSPECIFIED",
+            "enum": [
+                "STUDIO_NOTIFICATION_EVENT_TYPE_UNSPECIFIED",
+                "STUDIO_NOTIFICATION_EVENT_TYPE_ACM",
+                "STUDIO_NOTIFICATION_EVENT_TYPE_COMPUTE",
+                "STUDIO_NOTIFICATION_EVENT_TYPE_API",
+                "STUDIO_NOTIFICATION_EVENT_TYPE_SPACE",
+                "STUDIO_NOTIFICATION_EVENT_TYPE_PROJECT"
+            ]
+        },
+        "v1StudioNotificationQuery": {
+            "description": "The query required to perform a filter studio notifications call.",
+            "type": "object",
+            "properties": {
+                "studioEntityType": {
+                    "title": "Type of entity we are filtering notifications on",
+                    "$ref": "#/definitions/v1StudioEntityType"
+                },
+                "studioEntityName": {
+                    "type": "string",
+                    "title": "Name of entity we are filtering notifications on"
+                },
+                "studioNotificationEventType": {
+                    "title": "Type of event we are filtering notifications on",
+                    "$ref": "#/definitions/v1StudioNotificationEventType"
+                },
+                "studioNotificationEventName": {
+                    "type": "string",
+                    "title": "Name of the event we are filtering notifications on"
+                },
+                "userId": {
+                    "type": "string",
+                    "title": "user id of the studio subscription"
+                },
+                "dateRangeFilter": {
+                    "title": "date range filter",
+                    "$ref": "#/definitions/v1RangeFilter"
+                }
+            }
+        },
+        "v1StudioNotificationScope": {
+            "type": "object",
+            "title": "StudioNotificationScope describes the notification receiver",
+            "properties": {
+                "studioEntityType": {
+                    "title": "studio_entity_type is the entity type of the notification receiver",
+                    "$ref": "#/definitions/v1StudioEntityType"
+                },
+                "studioEntityName": {
+                    "type": "string",
+                    "title": "studio_entity_name is the name of the targeted notification receiver"
+                }
+            }
+        },
+        "v1StudioRecipientScope": {
+            "type": "object",
+            "title": "studioRecipientScope describes the notification recipient",
+            "properties": {
+                "studioRecipientId": {
+                    "type": "string",
+                    "title": "studio_recipient_id is the id of the targeted notification receiver.\n(-- api-linter: core::0124::required-reference=disabled\n    aip.dev/not-precedent: We need to do this because it is an opaque identifier. --)"
+                },
+                "studioRecipientType": {
+                    "title": "studio_recipient_type is the type of the notification receiver",
+                    "$ref": "#/definitions/v1StudioRecipientType"
+                },
+                "studioRecipientAccessType": {
+                    "type": "string",
+                    "title": "studio_recipient_access_type is the access type of the notification receiver. Usually refers to group level notifications(member,owner,or a decode for perm level)"
+                }
+            }
+        },
+        "v1StudioRecipientType": {
+            "description": "- STUDIO_RECIPIENT_TYPE_UNSPECIFIED: Unspecified\n - STUDIO_RECIPIENT_TYPE_USER: User\n - STUDIO_RECIPIENT_TYPE_EMAIL: Email\n - STUDIO_RECIPIENT_TYPE_PROJECT: Project\n - STUDIO_RECIPIENT_TYPE_SPACE: Space\n - STUDIO_RECIPIENT_TYPE_PERM: PERMS",
+            "type": "string",
+            "title": "StudioRecipientType is the type of the notification receiver",
+            "default": "STUDIO_RECIPIENT_TYPE_UNSPECIFIED",
+            "enum": [
+                "STUDIO_RECIPIENT_TYPE_UNSPECIFIED",
+                "STUDIO_RECIPIENT_TYPE_USER",
+                "STUDIO_RECIPIENT_TYPE_EMAIL",
+                "STUDIO_RECIPIENT_TYPE_PROJECT",
+                "STUDIO_RECIPIENT_TYPE_SPACE",
+                "STUDIO_RECIPIENT_TYPE_PERM"
+            ]
+        }
+    },
+    "securityDefinitions": {
+        "APIKeyHeader": {
+            "type": "apiKey",
+            "name": "VND.com.blackrock.API-Key",
+            "in": "header"
+        },
+        "ClientKeyHeader": {
+            "type": "apiKey",
+            "name": "X-API-Key",
+            "in": "header"
+        },
+        "OAuth2AccessCode": {
+            "description": "This API uses OAuth 2.0 with the access code flow.",
+            "type": "oauth2",
+            "flow": "accessCode",
+            "authorizationUrl": "https://client.blackrock.com/api/oauth2/default/v1/authorize",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "offline_access": "This keeps you signed in to the app, even when you are not using it.",
+                "platform.studio.studio_notification.v1.StudioNotification": "This grants access to all endpoints in the platform.studio.studio_notification.v1.StudioNotification API"
+            }
+        },
+        "OAuth2ClientCredentials": {
+            "description": "This API uses OAuth 2.0 with the client credentials flow.",
+            "type": "oauth2",
+            "flow": "application",
+            "tokenUrl": "https://client.blackrock.com/api/oauth2/default/v1/token",
+            "scopes": {
+                "offline_access": "This keeps you signed in to the app, even when you are not using it.",
+                "platform.studio.studio_notification.v1.StudioNotification": "This grants access to all endpoints in the platform.studio.studio_notification.v1.StudioNotification API"
+            }
+        },
+        "basicAuth": {
+            "type": "basic"
+        }
+    },
+    "security": [
+        {
+            "APIKeyHeader": [],
+            "OAuth2AccessCode": [
+                "offline_access",
+                "platform.studio.studio_notification.v1.StudioNotification"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "OAuth2ClientCredentials": [
+                "offline_access",
+                "platform.studio.studio_notification.v1.StudioNotification"
+            ]
+        },
+        {
+            "APIKeyHeader": [],
+            "ClientKeyHeader": []
+        },
+        {
+            "APIKeyHeader": [],
+            "basicAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Access.Internal"
+        }
+    ],
+    "x-access-level": "Internal"
+}

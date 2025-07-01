@@ -173,6 +173,11 @@ Set API.AUTH_TYPE as `OAuth`
 | LOG: <br/>&nbsp;&nbsp; EXPORT <br/>&nbsp;&nbsp;&nbsp;&nbsp; ENABLED:                                                              | Write log output to a separate file for each run. File name format is 'run-(timestamp).log'                                                                                                                                                                                                                |                    False                    |                        True / False                        |
 | LOG: <br/>&nbsp;&nbsp; EXPORT <br/>&nbsp;&nbsp;&nbsp;&nbsp; LOCATION:                                                             | Folder location for log files to be written for each run.                                                                                                                                                                                                                                                  | `./.asdk_logs` (under current working dir.) |       (location where user has permission to write)        |
 | EXPORT: <br/>&nbsp;&nbsp; OVERWRITE_DATA:                                                                                         | Config value to be used when exporting to a file that already has data.  <br /> Value picked when user uses export utility to export data to file  <br /> (ASDK_EXPORT__OVERWRITE_DATA)                                                                                                                    |                    False                    |                        True / False                        |
+| NOTIFICATIONS: <br/>&nbsp;&nbsp; STUDIO: <br/>&nbsp;&nbsp;&nbsp;&nbsp; ACTION:                                                    | Describes the method in which the user will receive the notification <br /> Defaults to 'STUDIO_NOTIFICATION_ACTION_UNSPECIFIED'                                                                                                                                                                           |                      -                      | 'STUDIO_NOTIFICATION_ACTION_UNSPECIFIED' /  <br /> 'STUDIO_NOTIFICATION_ACTION_SMTP' / <br /> 'STUDIO_NOTIFICATION_ACTION_PUSH' |
+| NOTIFICATIONS: <br/>&nbsp;&nbsp; STUDIO: <br/>&nbsp;&nbsp;&nbsp;&nbsp; EVENT_NAME:                                                | This is the name of the event specific to the type of notification                                                                                                                                                                                                                                         |                      -                      |                           -                                |
+| NOTIFICATIONS: <br/>&nbsp;&nbsp; STUDIO: <br/>&nbsp;&nbsp;&nbsp;&nbsp; EVENT_TYPE:                                                | This  is the type of Studio notification. <br /> Defaults to 'STUDIO_NOTIFICATION_EVENT_TYPE_UNSPECIFIED'                                                                                                                                                                                                  |                      -                      | 'STUDIO_NOTIFICATION_EVENT_TYPE_UNSPECIFIED' / <br /> 'STUDIO_NOTIFICATION_EVENT_TYPE_ACM' / <br /> 'STUDIO_NOTIFICATION_EVENT_TYPE_COMPUTE' / <br /> 'STUDIO_NOTIFICATION_EVENT_TYPE_API' / <br /> 'STUDIO_NOTIFICATION_EVENT_TYPE_SPACE' / <br /> 'STUDIO_NOTIFICATION_EVENT_TYPE_PROJECT' |
+| NOTIFICATIONS: <br/>&nbsp;&nbsp; STUDIO: <br/>&nbsp;&nbsp;&nbsp;&nbsp; ENTITY_NAME:                                               | The name of the targeted notification receiver                                                                                                                                                                                                                                                             |                      -                      |                           -                                |
+| NOTIFICATIONS: <br/>&nbsp;&nbsp; STUDIO: <br/>&nbsp;&nbsp;&nbsp;&nbsp; ENTITY_TYPE:                                               | The entity type of the notification receiver. Defaults to "STUDIO_ENTITY_TYPE_UNSPECIFIED"                                                                                                                                                                                                                 |                      -                      | 'STUDIO_ENTITY_TYPE_UNSPECIFIED' / <br /> 'STUDIO_ENTITY_TYPE_USER' / <br /> 'STUDIO_ENTITY_TYPE_PROJECT' / <br /> 'STUDIO_ENTITY_TYPE_SPACE' |
 | ERROR_HANDLING: <br/>&nbsp;&nbsp; EMAIL_NOTIFICATIONS: <br/>&nbsp;&nbsp;&nbsp;&nbsp; ENABLED:                                     | Config value used to enable error email notifications in the sdk.  <br /> Value checked when error occurs in the SDK  <br /> (ASDK_NOTIFICATIONS__ERROR_HANDLING__EMAIL_NOTIFICATIONS__ENABLED)                                                                                                            |                      -                      |                        True / False                        |
 | ERROR_HANDLING: <br/>&nbsp;&nbsp; EMAIL_NOTIFICATIONS: <br/>&nbsp;&nbsp;&nbsp;&nbsp; TO:                                          | List of recipients the user wants to send an error email notifications to in the sdk.  <br /> Value checked when error occurs in the SDK  <br /> (ASDK_NOTIFICATIONS__ERROR_HANDLING__EMAIL_NOTIFICATIONS__TO)                                                                                             |                      -                      |                     List of recipients                     |
 | ERROR_HANDLING: <br/>&nbsp;&nbsp; EMAIL_NOTIFICATIONS: <br/>&nbsp;&nbsp;&nbsp;&nbsp; ON_EXCEPTION_TYPES:                          | List of exceptions for which to send email notifications to users related to the sdk.  <br /> Value checked when error occurs in the SDK  <br /> (ASDK_NOTIFICATIONS__ERROR_HANDLING - <br /> __EMAIL_NOTIFICATIONS__ON_EXCEPTION_TYPES)                                                                   |                      -                      |                     List of exceptions                     |
@@ -567,6 +572,36 @@ To utilize this capability:
 - The decorator `asdk_exception_handler` will now map any matching exceptions to the registered handlers and invoke the `handle_error` method.
 
 Example [code for registering error handlers](resources/sample_code_snippets/sample_error_handler_registration.md)
+
+### Notifications - StudioNotification
+
+AladdinSDK provides a Studio Notifications utility that can be used to programmatically send SMPT/Push notifications using the Studio Subscription and Notification APIs
+ 
+- From a configurtation standpoint, users simply need to setup their API credentials (Basic Auth or OAuth)
+- Note - if using OAuth, ensure the right set of scopes are selected
+- Users can either configure additional Notifications attributes in the config file, or provide it inline during Studio Notifcation object creation.
+- Steps to create a subscription:
+    1. Create a StudioNotification object
+        ```py
+        notification = StudioNotification(notification_action, notification_event_name, notification_event_type,
+                                        studio_entity_type, studio_entity_name)
+        ```
+    2. Create subscription by providing set of recipients:
+        ```py
+        notification.create_subscription(recipients)
+        ```
+    3. Notify subscribers. Provide Subject, Message and any Metadata to be included in the notification:
+        ```py
+        notification.send_notification(subject, message, metadata)
+        ```
+- A wrapper around this utility `send_studio_smtp_notification` is created to provide a simpler "email" feature. Users can provide recipients, subject, message and metadata for an email to be sent. 
+    ```py
+    from aladdinsdk.common.notifications.studio_notifications import send_studio_smtp_notification
+    send_studio_smtp_notification(
+        recipients=["<recipient>@blackrock.com"],
+        subject="Test Notification via AladdinSDK",
+        message="Sample email message")
+    ```
 
 ### Notifications - Email
 
