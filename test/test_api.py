@@ -1149,6 +1149,68 @@ class TestGetOauthTokenMissingSecret(TestCase):
             basicauthutil.fetch_password_from_user_settings()
             self.assertTrue("Insufficient API initialization information" in context.exception)
 
+class TestApiUrlRewrite(TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.env_patcher = mock.patch.dict(os.environ, {
+            "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_url_rewrite.yaml",
+            "ASDK_DEFAULTWEBSERVER": "http://dummy.dws.com"
+            })
+        self.env_patcher.start()
+        utils.reload_modules()
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(self):
+        super().tearDownClass()
+        self.env_patcher.stop()
+
+    def test_apply_url_rewrite_from_request(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI', default_web_server="http://dummy.dws.com/")
+
+        test_subject._apply_url_rewrite({
+            "find": "^http://dummy\.dws\.com/api/",
+            "replace": "https://rewritten.url.1.com/aladdin/api/"
+        })
+        self.assertEqual(test_subject.instance.api_client.configuration.host, "https://rewritten.url.1.com/aladdin/api/reference-architecture/demo/train-journey/v1")
+
+    def test_apply_url_rewrite_from_init(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI', default_web_server="http://dummy.dws.com/", api_url_rewrite_options={
+            "find": "^http://dummy\.dws\.com/api/",
+            "replace": "https://rewritten.url.2.com/aladdin/api/"
+        })
+        test_subject._apply_url_rewrite(None)
+        self.assertEqual(test_subject.instance.api_client.configuration.host, "https://rewritten.url.2.com/aladdin/api/reference-architecture/demo/train-journey/v1")
+
+    @mock.patch.dict(os.environ, {
+        "ASDK_API__URL_REWRITE__FIND": "^http://dummy\.dws\.com/api/",
+        "ASDK_API__URL_REWRITE__REPLACE": "https://rewritten.url.3.com/aladdin/api/"
+        })
+    def test_apply_url_rewrite_from_env_var(self):
+        utils.reload_modules()
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI', default_web_server="http://dummy.dws.com/")
+        test_subject._apply_url_rewrite(None)
+        self.assertEqual(test_subject.instance.api_client.configuration.host, "https://rewritten.url.3.com/aladdin/api/reference-architecture/demo/train-journey/v1")
+
+    def test_apply_url_rewrite_from_config(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI', default_web_server="http://dummy.dws.com/")
+        test_subject._apply_url_rewrite(None)
+        self.assertEqual(test_subject.instance.api_client.configuration.host, "https://rewritten.url.4.com/aladdin/api/reference-architecture/demo/train-journey/v1")
+
+    def test_restore_default_url(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI', default_web_server="http://dummy.dws.com/")
+        test_subject._apply_url_rewrite({
+            "find": "^http://dummy\.dws\.com/api/",
+            "replace": "https://rewritten.url.5.com/aladdin/api/"
+        })
+        self.assertEqual(test_subject.instance.api_client.configuration.host, "https://rewritten.url.5.com/aladdin/api/reference-architecture/demo/train-journey/v1")
+        test_subject._restore_default_url()
+        self.assertEqual(test_subject.instance.api_client.configuration.host, "http://dummy.dws.com/api/reference-architecture/demo/train-journey/v1")
 
 class Response:
     def __init__(self, data_set, next_page_token):

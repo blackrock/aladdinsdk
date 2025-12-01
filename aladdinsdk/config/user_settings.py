@@ -56,6 +56,10 @@ _conf_key_api_token = "api.token"
 _conf_key_api_lro_status_check_interval = "api.lro.status_check_interval"
 _conf_key_api_lro_status_check_timeout = "api.lro.status_check_timeout"
 
+# URL rewriting
+_conf_key_api_url_rewrite_find = "api.url_rewrite.find"
+_conf_key_api_url_rewrite_replace = "api.url_rewrite.replace"
+
 # Pagination Settings
 _conf_key_api_pagination_max_page_size = "api.pagination.max_page_size"
 _conf_key_api_pagination_max_pages = "api.pagination.max_pages"
@@ -454,6 +458,16 @@ def get_batch_sequential_interval():
     return asdk_conf_get(_conf_batch_sequential_interval)
 
 
+# url rewriting
+def get_api_url_rewrite_find():
+    return asdk_conf_get(_conf_key_api_url_rewrite_find)
+
+
+def get_api_url_rewrite_replace():
+    return asdk_conf_get(_conf_key_api_url_rewrite_replace)
+
+
+# pagination
 def get_pagination_max_page_size():
     return asdk_conf_get(_conf_key_api_pagination_max_page_size, 10)
 

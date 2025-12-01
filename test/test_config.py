@@ -157,6 +157,12 @@ class TestUserSettings(TestCase):
     def test_get_password_filepath(self):
         self.assertEqual(self.test_subject.get_password_filepath(), "test/resources/testdata/sample_encrypted_password.txt")
 
+    def test_get_api_url_rewrite_find(self):
+        self.assertEqual(self.test_subject.get_api_url_rewrite_find(), "^http://dummy\\.dws\\.com/api/")
+
+    def test_get_api_url_rewrite_replace(self):
+        self.assertEqual(self.test_subject.get_api_url_rewrite_replace(), "https://new.api.com/aladdin/")
+
     def test_get_pagination_max_page_size(self):
         self.assertEqual(self.test_subject.get_pagination_max_page_size(), 5)
 
