@@ -8,6 +8,9 @@ API:
   PAGINATION:
     MAX_PAGE_SIZE: 5
     TIMEOUT: 700
+  ADDITIONAL_HTTP_HEADERS:
+    X-Custom-Header1: UserSettingsValue1
+    X-Custom-Header2: UserSettingsValue2
 
 user_credentials:
   password: am_db9
