@@ -702,7 +702,7 @@ Additional HTTP headers can be specified for the AladdinAPI. This is done via co
     ```
 
 - Argument on each operation: <br/>
-  The argument `_asdk_url_rewrite_options` can be passed each time a request if made:
+  The argument `_asdk_additional_request_headers` can be passed each time a request if made:
   
     ```py
     from aladdinsdk.api.client import AladdinAPI
