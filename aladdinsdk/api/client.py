@@ -656,11 +656,10 @@ class AladdinAPI():
         _logger.debug(f"Updated pagination options: {_asdk_pagination_options}")
         return _asdk_pagination_options
 
-
     def _add_additional_http_headers(self, request_headers, additional_headers=None):
         """
         Method for adding additional headers to the existing request headers.
-        Headers specified in user settings and additional headers passed into class initialiser and method call as params are both considered.        
+        Headers specified in user settings and additional headers passed into class initialiser and method call as params are both considered.
         The passed in existing request headers always take precedence over both user settings and additional headers passed in as params.
 
         Args:
@@ -669,7 +668,7 @@ class AladdinAPI():
 
         Returns:
             Map: updated request headers with additional headers added
-        """        
+        """
         all_additional_headers = {}
         additional_headers_from_config = user_settings.get_additional_http_headers()
         if additional_headers_from_config:

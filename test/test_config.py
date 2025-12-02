@@ -197,7 +197,6 @@ class TestUserSettingsAdditionalHttpHeadersJsonDecorator(TestCase):
         super().tearDownClass()
         self.env_patcher.stop()
 
-
     def test_get_additional_http_headers(self):
         self.assertEqual(self.test_subject.get_additional_http_headers(), DynaBox({
             "X-Custom-Header1": "EnvValue1",
@@ -225,7 +224,6 @@ class TestUserSettingsAdditionalHttpHeadersJsonString(TestCase):
     def tearDownClass(self):
         super().tearDownClass()
         self.env_patcher.stop()
-
 
     def test_get_additional_http_headers(self):
         with self.assertRaises(ValueError) as context:
