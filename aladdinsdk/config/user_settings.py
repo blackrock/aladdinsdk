@@ -473,7 +473,7 @@ def get_pagination_interval():
 # Storage
 # S3
 def get_storage_s3_endpoint_url():
-    return asdk_conf_get(_conf_storage_s3_endpoint_url, 'https://sgs3api.blackrock.com:8082')
+    return asdk_conf_get(_conf_storage_s3_endpoint_url, blkutils.get_files_dat_token_value('ALE_S3_ENDPOINT'))
 
 
 def get_storage_s3_access_key_id():
