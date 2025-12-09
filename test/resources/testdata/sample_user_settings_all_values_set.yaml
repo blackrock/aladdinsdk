@@ -8,6 +8,12 @@ API:
   PAGINATION:
     MAX_PAGE_SIZE: 5
     TIMEOUT: 700
+  URL_REWRITE:
+    FIND: "^http://dummy\\.dws\\.com/api/"
+    REPLACE: "https://new.api.com/aladdin/"
+  ADDITIONAL_HTTP_HEADERS:
+    X-Custom-Header1: UserSettingsValue1
+    X-Custom-Header2: UserSettingsValue2
 
 user_credentials:
   password: am_db9

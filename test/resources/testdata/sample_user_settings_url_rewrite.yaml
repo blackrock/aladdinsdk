@@ -1,0 +1,8 @@
+RUN_MODE: test
+
+defaultWebServer: http://dummy.dws.com
+
+API:
+  URL_REWRITE:
+    FIND: "^http://dummy\\.dws\\.com/api/"
+    REPLACE: "https://rewritten.url.4.com/aladdin/api/"

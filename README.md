@@ -120,10 +120,13 @@ Set API.AUTH_TYPE as `OAuth`
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; STOP_AFTER_ATTEMPT:                                                   | Retry up to certain amount of attempts for API retry logic. <br /> (ASDK_API__RETRY__STOP_AFTER_ATTEMPT)                                                                                                                                                                                                   |                      -                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; WAIT_FIXED:                                                           | Wait time in seconds before retry for API retry logic. <br /> (ASDK_API__RETRY__WAIT_FIXED)                                                                                                                                                                                                                |                      -                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; STOP_AFTER_DELAY:                                                     | Retry up to certain amount of delay for API retry logic. <br /> (ASDK_API__RETRY__STOP_AFTER_DELAY)                                                                                                                                                                                                        |                      -                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; URL_REWRITE: <br/>&nbsp;&nbsp;&nbsp;&nbsp; FIND:                                                           | Specifies the regular expression string to find in the full URL for each request made to an Aladdin API. <br /> (ASDK_API__URL_REWRITE__FIND)                                                                                                                                                              |                      -                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; URL_REWRITE: <br/>&nbsp;&nbsp;&nbsp;&nbsp; REPLACE:                                                        | Specifies the string with which to replace the match above. <br /> (ASDK_API__URL_REWRITE__REPLACE)                                                                                                                                                                                                        |                      -                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_PAGES                                                        | Config value used to determine the maximum number of subsequent api calls made for pagination                                                                                                                                                                                                              |                      5                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_PAGE_SIZE                                                    | Config value used to determine the maximum number of retrieved from each api call                                                                                                                                                                                                                          |                     10                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; TIMEOUT                                                          | Config value used to determine the maximum timeout value. This will terminate the api call request and retrieve the response obtain thus far.                                                                                                                                                              |                    300s                     |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; INTERVAL                                                         | Config value used to determine the maximum interval value. This will set the interval time between each api call.                                                                                                                                                                                          |                     2s                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; ADDITIONAL_HTTP_HEADERS:                                                                                   | Additional HTTP headers that will be sent with each request. <br/> The value can be overridden using `_additional_http_headers`. <br/> For environment variable use JSON format with `@json ` prefix, for example `@json {"header-name":"custom-value"}`. <br/> (ASDK_API__ADDITIONAL_HTTP_HEADERS)        |                     -                       |                        JSON object                         |
 
 ##### ADC
 
@@ -619,6 +622,58 @@ The e-mail utility is additionally integrated with the error handling mechanism.
 - User can enable email notifications on errors by setting `NOTIFICATIONS.EMAIL` and `ERROR_HANDLING.EMAIL_NOTIFICATIONS` sections in user settings file
 - For more details refer to the supported configuration table above
 
+### URL Rewriting
+
+When consuming the Aladdin APIs via an enterprise API management platform such as Azure API Management, the relative URL of the Aladdin APIs are likely to be different (in addition to the host name).
+To cater for these scenarios, the URL can be changed / rewritten.
+
+The URL rewriting is done by specifying a regular expression that is used to identify / find the fragment of the URL to change and a string that should replace the identified
+fragment.
+
+The configuration can be specified in a number of ways:
+
+- Configuration: <br/>
+  The configuration settings `API.URL_REWRITE.FIND` and `API.URL_REWRITE.REPLACE` can be specified either in the user config file (or via the associated environment variables).
+
+    ```yaml
+    API:
+    URL_REWRITE:
+        FIND: "^https://\w+\\.blackrock\\.com/api/"
+        REPLACE: "https://api.acmecorp.com/aladdin/"
+    ```
+
+- Argument on class initialisation: <br/>
+  The argument `api_url_rewrite_options` can be passed when instantiating the AladdinAPI client:
+  
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+
+    api_url_rewrite_options = {
+        "find": "^https://\w+\\.blackrock\\.com/api/",
+        "replace": "https://api.acmecorp.com/aladdin/"
+    }
+
+    api_instance = AladdinAPI("TrainJourneyAPI", api_url_rewrite_options=api_url_rewrite_options)
+    ```
+
+- Argument on each operation: <br/>
+  The argument `_asdk_url_rewrite_options` can be passed each time a request if made:
+
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+    api_instance = AladdinAPI("TrainJourneyAPI")
+    req_body_json = {
+        "query": {
+            "departingStationId": "TS_1441"
+        }
+    }
+    api_url_rewrite_options = {
+        "find": "^https://\w+\\.blackrock\\.com/api/",
+        "replace": "https://api.acmecorp.com/aladdin/"
+    }
+    response = api_instance.post("/trainJourneys:filter", req_body_json, _asdk_url_rewrite_options=api_url_rewrite_options)
+    ```
+
 ### Pagination
 AladdinSDK provides a generic pagination utility that can be used to paginate through API responses. This utility can be used to fetch n pages of data from an API endpoint that supports pagination.
 
@@ -668,6 +723,55 @@ To utilize this capability:
         f"From: {tj.departing_train_station_id}, To: {tj.destination_train_station_id}, Stops: {len(tj.pass_through_station_ids)}, Date: {tj.journey_date}, Duration: {tj.journey_duration}")
 ```
 Example [code snippet for api pagination](resources/sample_code_snippets/sample_api_pagination_calls.md)
+
+### Additional HTTP Headers
+
+Additional HTTP headers can be specified for the AladdinAPI. This is done via config or at runtime as additional parameters to instantiation or individual API requests.
+
+- Configuration: <br/>
+  Configuration setting `API.ADDITIONAL_HTTP_HEADERS` can be used to define custom headers.
+
+    ```yaml
+    API:
+        ADDITIONAL_HTTP_HEADERS:
+            X-Subscription-Key: xxxxxxxxxxx-xxxxxx-xxxxxxx
+            X-Correlation-Token: yyyyyyyyyyyy-yyyyyy-yyyyyy
+    ```
+
+- Environment variable:
+  Use environment variable `ASDK_API__ADDITIONAL_HTTP_HEADERS` to override the headers in the config in JSON format with the prefix `@json `.
+
+    `@json {"X-Subscription-Key":"xxxxxxxxxxx-xxxxxx-xxxxxxx","X-Correlation-Token":"yyyyyyyyyyyy-yyyyyy-yyyyyy"}`
+
+- Argument on class initialisation: <br/>
+  The argument `api_additional_http_headers` can be passed when instantiating the AladdinAPI client:
+  
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+    api_additional_http_headers = {
+        "X-Subscription-Key": "xxxxxxxxxxx-xxxxxx-xxxxxxx",
+        "X-Correlation-Token": "yyyyyyyyyyyy-yyyyyy-yyyyyy"
+    }
+    api_instance = AladdinAPI("TrainJourneyAPI", api_additional_http_headers=api_additional_http_headers)
+    ```
+
+- Argument on each operation: <br/>
+  The argument `_asdk_additional_request_headers` can be passed each time a request if made:
+  
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+    api_instance = AladdinAPI("TrainJourneyAPI")
+    req_body_json = {
+        "query": {
+            "departingStationId": "TS_1441"
+        }
+    }
+    api_additional_http_headers = {
+        "X-Subscription-Key": "xxxxxxxxxxx-xxxxxx-xxxxxxx",
+        "X-Correlation-Token": "yyyyyyyyyyyy-yyyyyy-yyyyyy"
+    }
+    response = api_instance.post("/trainJourneys:filter", req_body_json, _asdk_additional_request_headers=api_additional_http_headers)
+    ```
 
 ## DomainSDK Development
 

@@ -4,6 +4,7 @@ import yaml
 from unittest import TestCase, mock
 from aladdinsdk.config.asdkconf import _CODEGEN_ALLOW_LIST_INTERNAL_CONFIG_FILE
 from test.resources.testutils import utils
+from dynaconf.utils.boxing import DynaBox
 
 
 class TestAsdkConf(TestCase):
@@ -108,7 +109,7 @@ class TestUserSettings(TestCase):
         self.env_patcher = mock.patch.dict(os.environ, {
             "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_all_values_set.yaml",
             "ASDK_TEST__ENV": "TEST_VAL",
-            "defaultWebServer": "http://dummy.dws.com",
+            "defaultWebServer": "http://dummy.dws.com"
             })
         self.env_patcher.start()
         utils.reload_modules()
@@ -157,6 +158,12 @@ class TestUserSettings(TestCase):
     def test_get_password_filepath(self):
         self.assertEqual(self.test_subject.get_password_filepath(), "test/resources/testdata/sample_encrypted_password.txt")
 
+    def test_get_api_url_rewrite_find(self):
+        self.assertEqual(self.test_subject.get_api_url_rewrite_find(), "^http://dummy\\.dws\\.com/api/")
+
+    def test_get_api_url_rewrite_replace(self):
+        self.assertEqual(self.test_subject.get_api_url_rewrite_replace(), "https://new.api.com/aladdin/")
+
     def test_get_pagination_max_page_size(self):
         self.assertEqual(self.test_subject.get_pagination_max_page_size(), 5)
 
@@ -174,6 +181,61 @@ class TestUserSettings(TestCase):
         from aladdinsdk.config.utils import user_settings_file_util
         user_settings_file_util.print_current_user_config()
         mock_print.assert_called()
+
+
+class TestUserSettingsAdditionalHttpHeadersJsonDecorator(TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.env_patcher = mock.patch.dict(os.environ, {
+            "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_all_values_set.yaml",
+            "ASDK_TEST__ENV": "TEST_VAL",
+            "defaultWebServer": "http://dummy.dws.com",
+            "ASDK_API__ADDITIONAL_HTTP_HEADERS": '@json {"X-Custom-Header1":"EnvValue1","X-Custom-Header3":"EnvValue3"}'
+            })
+        self.env_patcher.start()
+        utils.reload_modules()
+        import aladdinsdk.config.user_settings as user_settings
+        self.test_subject = user_settings
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(self):
+        super().tearDownClass()
+        self.env_patcher.stop()
+
+    def test_get_additional_http_headers(self):
+        self.assertEqual(self.test_subject.get_additional_http_headers(), DynaBox({
+            "X-Custom-Header1": "EnvValue1",
+            "X-Custom-Header2": "UserSettingsValue2",
+            "X-Custom-Header3": "EnvValue3"
+        }))
+
+
+class TestUserSettingsAdditionalHttpHeadersJsonString(TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.env_patcher = mock.patch.dict(os.environ, {
+            "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_all_values_set.yaml",
+            "ASDK_TEST__ENV": "TEST_VAL",
+            "defaultWebServer": "http://dummy.dws.com",
+            "ASDK_API__ADDITIONAL_HTTP_HEADERS": '{"X-Custom-Header1":"EnvValue1","X-Custom-Header3":"EnvValue3"}'
+            })
+        self.env_patcher.start()
+        utils.reload_modules()
+        import aladdinsdk.config.user_settings as user_settings
+        self.test_subject = user_settings
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(self):
+        super().tearDownClass()
+        self.env_patcher.stop()
+
+    def test_get_additional_http_headers(self):
+        with self.assertRaises(ValueError) as context:
+            self.test_subject.get_additional_http_headers()
+
+        self.assertTrue('The additional HTTP headers configuration was not in expected format' in context.exception.args[0])
 
 
 class TestInternalSettings(TestCase):
