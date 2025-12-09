@@ -26,7 +26,7 @@ class TestStorageS3WithoutConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client(s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
         s3client._s3_client = None
         a = s3client.get_s3_client()
         self.assertEqual(a, mock_s3)
@@ -37,7 +37,7 @@ class TestStorageS3WithoutConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client(s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
         s3client.upload_file('test/resources/testdata/storage/s3/sample.txt', 'test.txt')
         mock_s3.upload_file.assert_called_once_with(Filename='test/resources/testdata/storage/s3/sample.txt', Bucket='test', Key='test.txt')
 
@@ -47,7 +47,7 @@ class TestStorageS3WithoutConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client(s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
         s3client.upload_fileobj('test/resources/testdata/storage/s3/sample.txt', 'test.txt')
         mock_s3.upload_fileobj.assert_called_once_with(Fileobj='test/resources/testdata/storage/s3/sample.txt', Bucket='test', Key='test.txt')
 
@@ -57,7 +57,7 @@ class TestStorageS3WithoutConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client(s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
         s3client.download_file('test.txt', 'test/resources/testdata/storage/s3/sample_download.txt')
         mock_s3.download_file.assert_called_once_with(Bucket='test', Key='test.txt', Filename='test/resources/testdata/storage/s3/sample_download.txt')
 
@@ -67,7 +67,7 @@ class TestStorageS3WithoutConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client(s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
         s3client.download_fileobj('test.txt', 'test/resources/testdata/storage/s3/sample_download.txt')
         mock_s3.download_fileobj.assert_called_once_with(Bucket='test', Key='test.txt', Fileobj='test/resources/testdata/storage/s3/sample_download.txt')
 
@@ -77,7 +77,7 @@ class TestStorageS3WithoutConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client(s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", s3_credentials_file="test/resources/testdata/storage/s3/credentials_file.yaml", bucket_name="test")
         s3client.delete_object('test.txt')
         mock_s3.delete_object.assert_called_once_with(Bucket='test', Key='test.txt')
 
@@ -87,7 +87,7 @@ class TestStorageS3WithoutConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client(s3_credentials_file="test/resources/testdata/storage/s3/credentials_file_legacy.yaml", bucket_name="test")
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", s3_credentials_file="test/resources/testdata/storage/s3/credentials_file_legacy.yaml", bucket_name="test")
         s3client.list_objects_in_bucket()
         mock_s3.list_objects_v2.assert_called_once_with(Bucket='test')
 
@@ -115,7 +115,7 @@ class TestStorageS3WithConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
         s3client._s3_client = None
         a = s3client.get_s3_client()
         self.assertEqual(a, mock_s3)
@@ -126,7 +126,7 @@ class TestStorageS3WithConfiguration(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client(bucket_name="test")
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", bucket_name="test")
         s3client.upload_file('test/resources/testdata/storage/s3/sample.txt', 'test.txt')
         mock_s3.upload_file.assert_called_once_with(Filename='test/resources/testdata/storage/s3/sample.txt', Bucket='test', Key='test.txt')
 
@@ -166,7 +166,7 @@ class TestStorageS3WithConfigurationDetails(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
         s3client.upload_file('test/resources/testdata/storage/s3/sample.txt', 'test.txt')
         mock_s3.upload_file.assert_called_once_with(Filename='test/resources/testdata/storage/s3/sample.txt', Bucket='dummy-bucket', Key='test.txt')
 
@@ -221,7 +221,7 @@ class TestStorageS3ErrorScenarios(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
         s3client._s3_client = None
         s3client._endpoint_url = None
         with self.assertRaises(AsdkStorageException) as context:
@@ -235,7 +235,7 @@ class TestStorageS3ErrorScenarios(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
 
         with self.assertRaises(AsdkStorageException) as context:
             s3client.upload_file('test/resources/testdata/storage/s3/sample.txt', 'test.txt')
@@ -248,7 +248,7 @@ class TestStorageS3ErrorScenarios(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
 
         with self.assertRaises(AsdkStorageException) as context:
             s3client.upload_fileobj('test/resources/testdata/storage/s3/sample.txt', 'test.txt')
@@ -261,7 +261,7 @@ class TestStorageS3ErrorScenarios(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
 
         with self.assertRaises(AsdkStorageException) as context:
             s3client.download_file('test.txt', 'test/resources/testdata/storage/s3/sample.txt')
@@ -274,7 +274,7 @@ class TestStorageS3ErrorScenarios(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
 
         with self.assertRaises(AsdkStorageException) as context:
             s3client.download_fileobj('test.txt', 'test/resources/testdata/storage/s3/sample.txt')
@@ -287,7 +287,7 @@ class TestStorageS3ErrorScenarios(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
 
         with self.assertRaises(AsdkStorageException) as context:
             s3client.delete_object('test.txt')
@@ -300,7 +300,7 @@ class TestStorageS3ErrorScenarios(TestCase):
         mock_boto3_client.return_value = mock_s3
 
         from aladdinsdk.storage.s3 import S3Client
-        s3client = S3Client()
+        s3client = S3Client(endpoint_url="http://dummy.storage.url/", )
 
         with self.assertRaises(AsdkStorageException) as context:
             s3client.list_objects_in_bucket()
