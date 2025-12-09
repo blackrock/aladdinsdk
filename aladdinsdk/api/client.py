@@ -287,8 +287,8 @@ class AladdinAPI():
     @dynamic_asdk_config_reload
     def call_api(self, api_endpoint_name, request_body=None, _oauth_scopes=None, _deserialize_to_object=True,
                  asdk_transformation_option={'type': "json", 'flatten': None},
-                 _asdk_pagination_options=None, 
-                 _asdk_url_rewrite_options=None, 
+                 _asdk_pagination_options=None,
+                 _asdk_url_rewrite_options=None,
                  _asdk_additional_request_headers=None,
                  **params):
         """
@@ -332,7 +332,7 @@ class AladdinAPI():
             _asdk_pagination_options['start_time'] = time.time()
 
         self._apply_url_rewrite(_asdk_url_rewrite_options)
- 
+
         try:
             api_response = self._call_endpoint_helper(endpoint_to_call, request_headers, sig, request_body, params, valid_pagination_option,
                                                       _asdk_pagination_options, _deserialize_to_object)
@@ -707,7 +707,7 @@ class AladdinAPI():
         if self.instance.api_client.configuration.host == self.last_original_host:
             _logger.warning("URL rewrite 'find' string did not match any part of the original URL.")
         else:
-            _logger.debug(f"Updated host URL: {self.instance.api_client.configuration.host}")        
+            _logger.debug(f"Updated host URL: {self.instance.api_client.configuration.host}")
 
     def _restore_default_url(self):
         """
@@ -715,7 +715,7 @@ class AladdinAPI():
         """
         if self.last_original_host is not None:
             self.instance.api_client.configuration.host = self.last_original_host
-            _logger.debug(f"Restored host URL: {self.instance.api_client.configuration.host}")        
+            _logger.debug(f"Restored host URL: {self.instance.api_client.configuration.host}")
             self.last_original_host = None
 
     def _add_additional_http_headers(self, request_headers, additional_headers=None):

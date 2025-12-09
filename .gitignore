@@ -200,3 +200,6 @@ sdist/
 resources/openapi-generator-cli.jar
 
 .asdk_logs/
+
+# JUnit results
+junit/

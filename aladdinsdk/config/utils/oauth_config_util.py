@@ -100,4 +100,3 @@ def get_refresh_token_from_oauth_server(client_id=None,
     except (KeyboardInterrupt, Exception):
         countdown_thread.stop()
         return None
-

@@ -145,7 +145,7 @@ _conf_error_handling_email_notifications_enabled = "error_handling.email_notific
 _conf_error_handling_email_notifications_to = "error_handling.email_notifications.to"
 _conf_error_handling_email_notifications_exception_types = "error_handling.email_notifications.on_exception_types"
 
-# Batch Actions 
+# Batch Actions
 _conf_batch_buffer_max_size = "batch.buffer.max_size"
 _conf_batch_parallel_max_workers = "batch.parallel.max_workers"
 _conf_batch_sequential_interval = "batch.sequential.interval"
