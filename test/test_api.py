@@ -1212,6 +1212,94 @@ class TestApiUrlRewrite(TestCase):
         test_subject._restore_default_url()
         self.assertEqual(test_subject.instance.api_client.configuration.host, "http://dummy.dws.com/api/reference-architecture/demo/train-journey/v1")
 
+class TestAdditionalHttpHeadersInConfig(TestCase):
+    @classmethod
+    def setUpClass(self):
+        self.env_patcher = mock.patch.dict(os.environ, {
+            "ASDK_USER_CONFIG_FILE": "test/resources/testdata/sample_user_settings_all_values_set.yaml",
+            "ASDK_DEFAULTWEBSERVER": "http://dummy.dws.com",
+            })
+        self.env_patcher.start()
+        utils.reload_modules()
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(self):
+        super().tearDownClass()
+
+    def test_additional_http_headers_from_config(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+        _request_headers = {
+            "Authorization": "Bearer ACCESS_TOKEN"
+        }
+        all_headers = test_subject._add_additional_http_headers(_request_headers)
+        self.assertEqual(all_headers, {
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "X-Custom-Header1": "UserSettingsValue1",
+            "X-Custom-Header2": "UserSettingsValue2"
+        })
+
+    @mock.patch.dict(os.environ, {
+        "ASDK_API__ADDITIONAL_HTTP_HEADERS": '@json {"Authorization":"Bearer ENV_TOKEN","X-Custom-Header2":"EnvValue2","X-Custom-Header4":"EnvValue4"}'
+    })
+    def test_additional_http_headers_from_env_var(self):
+        utils.reload_modules()
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+        _request_headers = {
+            "Authorization": "Bearer ACCESS_TOKEN"
+        }
+        all_headers = test_subject._add_additional_http_headers(_request_headers, {})
+        self.assertEqual(all_headers, {
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "X-Custom-Header4": "EnvValue4",
+            "X-Custom-Header2": "EnvValue2",
+            "X-Custom-Header1": "UserSettingsValue1"
+        })
+
+    def test_additional_http_headers_from_arg(self):
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+        _request_headers = {
+            "Authorization": "Bearer ACCESS_TOKEN"
+        }
+        _additional_request_headers = {
+            "Authorization": "Bearer ARG_TOKEN",  # Should be ignored
+            "X-Custom-Header2": "ArgValue2",
+            "X-Custom-Header3": "ArgValue3"
+        }
+        all_headers = test_subject._add_additional_http_headers(_request_headers, _additional_request_headers)
+        self.assertEqual(all_headers, {
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "X-Custom-Header1": "UserSettingsValue1",
+            "X-Custom-Header2": "ArgValue2",
+            "X-Custom-Header3": "ArgValue3"
+        })
+
+    @mock.patch.dict(os.environ, {"ASDK_API__ADDITIONAL_HTTP_HEADERS": '@json {"X-Custom-Header2":"EnvValue2","X-Custom-Header4":"EnvValue4"}'})
+    def test_additional_http_headers_from_env_var_args(self):
+        utils.reload_modules()
+        from aladdinsdk.api.client import AladdinAPI
+        test_subject = AladdinAPI('TrainJourneyAPI')
+        _request_headers = {
+            "Authorization": "Bearer ACCESS_TOKEN"
+        }
+        _additional_request_headers = {
+            "Authorization": "Bearer ARG_TOKEN",  # Should be ignored
+            "X-Custom-Header2": "ArgValue2",
+            "X-Custom-Header3": "ArgValue3"
+        }
+        all_headers = test_subject._add_additional_http_headers(_request_headers, _additional_request_headers)
+        self.assertEqual(all_headers, {
+            "Authorization": "Bearer ACCESS_TOKEN",
+            "X-Custom-Header1": "UserSettingsValue1",
+            "X-Custom-Header2": "ArgValue2",
+            "X-Custom-Header3": "ArgValue3",
+            "X-Custom-Header4": "EnvValue4"
+        })
+
+
 class Response:
     def __init__(self, data_set, next_page_token):
         self.next_page_token = next_page_token

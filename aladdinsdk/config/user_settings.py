@@ -66,6 +66,9 @@ _conf_key_api_pagination_max_pages = "api.pagination.max_pages"
 _conf_key_api_pagination_timeout = "api.pagination.timeout"
 _conf_key_api_pagination_interval = "api.pagination.interval"
 
+# Additional HTTP headers
+_conf_key_api_additional_http_headers = "api.additional_http_headers"
+
 # ADC Keys
 _conf_key_adc_connection_type = "adc.connection_type"
 CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON = "snowflake-connector-python"
@@ -482,6 +485,15 @@ def get_pagination_timeout():
 
 def get_pagination_interval():
     return asdk_conf_get(_conf_key_api_pagination_interval, 2)
+
+
+def get_additional_http_headers():
+    box_or_str = asdk_conf_get(_conf_key_api_additional_http_headers, {})
+    if isinstance(box_or_str, str):
+        raise ValueError("The additional HTTP headers configuration was not in expected format. " +
+                         "If using environment variable, ensure using prefix '@json '.")
+    else:
+        return box_or_str
 
 
 # Storage
