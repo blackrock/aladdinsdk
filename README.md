@@ -124,6 +124,7 @@ Set API.AUTH_TYPE as `OAuth`
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_PAGE_SIZE                                                    | Config value used to determine the maximum number of retrieved from each api call                                                                                                                                                                                                                          |                     10                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; TIMEOUT                                                          | Config value used to determine the maximum timeout value. This will terminate the api call request and retrieve the response obtain thus far.                                                                                                                                                              |                    300s                     |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; INTERVAL                                                         | Config value used to determine the maximum interval value. This will set the interval time between each api call.                                                                                                                                                                                          |                     2s                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; ADDITIONAL_HTTP_HEADERS:                                                                                   | Additional HTTP headers that will be sent with each request. <br/> The value can be overridden using `_additional_http_headers`. <br/> For environment variable use JSON format with `@json ` prefix, for example `@json {"header-name":"custom-value"}`. <br/> (ASDK_API__ADDITIONAL_HTTP_HEADERS)        |                     -                       |                        JSON object                         |
 
 ##### ADC
 
@@ -668,6 +669,55 @@ To utilize this capability:
         f"From: {tj.departing_train_station_id}, To: {tj.destination_train_station_id}, Stops: {len(tj.pass_through_station_ids)}, Date: {tj.journey_date}, Duration: {tj.journey_duration}")
 ```
 Example [code snippet for api pagination](resources/sample_code_snippets/sample_api_pagination_calls.md)
+
+### Additional HTTP Headers
+
+Additional HTTP headers can be specified for the AladdinAPI. This is done via config or at runtime as additional parameters to instantiation or individual API requests.
+
+- Configuration: <br/>
+  Configuration setting `API.ADDITIONAL_HTTP_HEADERS` can be used to define custom headers.
+
+    ```yaml
+    API:
+        ADDITIONAL_HTTP_HEADERS:
+            X-Subscription-Key: xxxxxxxxxxx-xxxxxx-xxxxxxx
+            X-Correlation-Token: yyyyyyyyyyyy-yyyyyy-yyyyyy
+    ```
+
+- Environment variable:
+  Use environment variable `ASDK_API__ADDITIONAL_HTTP_HEADERS` to override the headers in the config in JSON format with the prefix `@json `.
+
+    `@json {"X-Subscription-Key":"xxxxxxxxxxx-xxxxxx-xxxxxxx","X-Correlation-Token":"yyyyyyyyyyyy-yyyyyy-yyyyyy"}`
+
+- Argument on class initialisation: <br/>
+  The argument `api_additional_http_headers` can be passed when instantiating the AladdinAPI client:
+  
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+    api_additional_http_headers = {
+        "X-Subscription-Key": "xxxxxxxxxxx-xxxxxx-xxxxxxx",
+        "X-Correlation-Token": "yyyyyyyyyyyy-yyyyyy-yyyyyy"
+    }
+    api_instance = AladdinAPI("TrainJourneyAPI", api_additional_http_headers=api_additional_http_headers)
+    ```
+
+- Argument on each operation: <br/>
+  The argument `_asdk_additional_request_headers` can be passed each time a request if made:
+  
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+    api_instance = AladdinAPI("TrainJourneyAPI")
+    req_body_json = {
+        "query": {
+            "departingStationId": "TS_1441"
+        }
+    }
+    api_additional_http_headers = {
+        "X-Subscription-Key": "xxxxxxxxxxx-xxxxxx-xxxxxxx",
+        "X-Correlation-Token": "yyyyyyyyyyyy-yyyyyy-yyyyyy"
+    }
+    response = api_instance.post("/trainJourneys:filter", req_body_json, _asdk_additional_request_headers=api_additional_http_headers)
+    ```
 
 ## DomainSDK Development
 

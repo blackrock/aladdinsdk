@@ -111,9 +111,12 @@ class AladdinAPI():
                 settings yaml, None if not configured.
             encryption_filepath (string, optional): Encryption filepath. Defaults to value set as "ASDK_USER_CREDENTIALS__ENCRYPTED_FILEPATH"
                 environment variable, or "user_credentials.encryption_filepath" in settings yaml, None if not configured.
+            api_additional_http_headers (dict, optional): Additional HTTP headers to be added to API call. Defaults to None.
         """
         # Fetch details from registry
         self._details = get_api_details(api_name=api_name)
+
+        self.default_additional_http_headers = kwargs.get("api_additional_http_headers", None)
 
         # Build API instance from openapi codegen
         configuration = self._details.api_configuration(
@@ -282,7 +285,9 @@ class AladdinAPI():
     @dynamic_asdk_config_reload
     def call_api(self, api_endpoint_name, request_body=None, _oauth_scopes=None, _deserialize_to_object=True,
                  asdk_transformation_option={'type': "json", 'flatten': None},
-                 _asdk_pagination_options=None, **params):
+                 _asdk_pagination_options=None,
+                 _asdk_additional_request_headers=None,
+                 **params):
         """
         Wrapper method for making an API call using generated client code from Aladdin Graph swagger specification
 
@@ -294,6 +299,7 @@ class AladdinAPI():
             asdk_transformation_option (dict, optional): Transformation options to dictate response transformation (EXPERIMENTAL).
                 Defaults to {'type': "json", 'flatten': None}.
             _asdk_pagination_options (dict, optional): Pagination options for API call (EXPERIMENTAL). Defaults to None.
+            _asdk_additional_request_headers (dict, optional): Additional headers for API call (EXPERIMENTAL). Defaults to None.
 
         Raises:
             AsdkApiException: _description_
@@ -309,6 +315,7 @@ class AladdinAPI():
             _oauth_scopes = self._endpoint_to_scope_mappings.get(api_endpoint_name, None)
 
         request_headers = self._api_auth_util.add_auth_details_to_header_and_config(_oauth_scopes)
+        request_headers = self._add_additional_http_headers(request_headers, _asdk_additional_request_headers)
 
         endpoint_to_call = getattr(self.instance, f"{api_endpoint_name}_with_http_info")
 
@@ -648,3 +655,31 @@ class AladdinAPI():
 
         _logger.debug(f"Updated pagination options: {_asdk_pagination_options}")
         return _asdk_pagination_options
+
+    def _add_additional_http_headers(self, request_headers, additional_headers=None):
+        """
+        Method for adding additional headers to the existing request headers.
+        Headers specified in user settings and additional headers passed into class initialiser and method call as params are both considered.
+        The passed in existing request headers always take precedence over both user settings and additional headers passed in as params.
+
+        Args:
+            request_headers (Map): existing request headers for the api call
+            additional_headers (Map): additional headers to be added to the request headers
+
+        Returns:
+            Map: updated request headers with additional headers added
+        """
+        all_additional_headers = {}
+        additional_headers_from_config = user_settings.get_additional_http_headers()
+        if additional_headers_from_config:
+            all_additional_headers = additional_headers_from_config.copy()
+        if self.default_additional_http_headers:
+            all_additional_headers.update(self.default_additional_http_headers)
+        if additional_headers:
+            all_additional_headers.update(additional_headers)
+        if all_additional_headers:
+            for k, v in all_additional_headers.items():
+                if k not in request_headers:
+                    request_headers[k] = v
+        _logger.debug(f"Headers after adding additional headers: {request_headers}")
+        return request_headers
