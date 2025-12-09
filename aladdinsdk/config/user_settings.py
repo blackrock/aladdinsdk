@@ -56,6 +56,10 @@ _conf_key_api_token = "api.token"
 _conf_key_api_lro_status_check_interval = "api.lro.status_check_interval"
 _conf_key_api_lro_status_check_timeout = "api.lro.status_check_timeout"
 
+# URL rewriting
+_conf_key_api_url_rewrite_find = "api.url_rewrite.find"
+_conf_key_api_url_rewrite_replace = "api.url_rewrite.replace"
+
 # Pagination Settings
 _conf_key_api_pagination_max_page_size = "api.pagination.max_page_size"
 _conf_key_api_pagination_max_pages = "api.pagination.max_pages"
@@ -141,7 +145,7 @@ _conf_error_handling_email_notifications_enabled = "error_handling.email_notific
 _conf_error_handling_email_notifications_to = "error_handling.email_notifications.to"
 _conf_error_handling_email_notifications_exception_types = "error_handling.email_notifications.on_exception_types"
 
-# Batch Actions 
+# Batch Actions
 _conf_batch_buffer_max_size = "batch.buffer.max_size"
 _conf_batch_parallel_max_workers = "batch.parallel.max_workers"
 _conf_batch_sequential_interval = "batch.sequential.interval"
@@ -457,6 +461,16 @@ def get_batch_sequential_interval():
     return asdk_conf_get(_conf_batch_sequential_interval)
 
 
+# url rewriting
+def get_api_url_rewrite_find():
+    return asdk_conf_get(_conf_key_api_url_rewrite_find)
+
+
+def get_api_url_rewrite_replace():
+    return asdk_conf_get(_conf_key_api_url_rewrite_replace)
+
+
+# pagination
 def get_pagination_max_page_size():
     return asdk_conf_get(_conf_key_api_pagination_max_page_size, 10)
 

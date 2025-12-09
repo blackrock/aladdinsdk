@@ -31,7 +31,7 @@ from aladdinsdk.common.authentication.api import ApiAuthUtil, _HEADER_KEY_REQUES
 from aladdinsdk.common.authentication.api import inflate_api_kwargs
 from aladdinsdk.common.blkutils.blkutils import DEFAULT_WEB_SERVER
 from aladdinsdk.common.datatransformation import json_to_pandas
-from aladdinsdk.common.error.asdkerrors import AsdkApiException
+from aladdinsdk.common.error.asdkerrors import AsdkApiException, AsdkSetupException
 from aladdinsdk.common.error.handler import asdk_exception_handler
 from aladdinsdk.common.retry.api_retry import api_retry
 from aladdinsdk.config import user_settings
@@ -111,11 +111,13 @@ class AladdinAPI():
                 settings yaml, None if not configured.
             encryption_filepath (string, optional): Encryption filepath. Defaults to value set as "ASDK_USER_CREDENTIALS__ENCRYPTED_FILEPATH"
                 environment variable, or "user_credentials.encryption_filepath" in settings yaml, None if not configured.
+            api_url_rewrite_options (dict, optional): API URL rewrite options for API call. Defaults to None.
             api_additional_http_headers (dict, optional): Additional HTTP headers to be added to API call. Defaults to None.
         """
         # Fetch details from registry
         self._details = get_api_details(api_name=api_name)
 
+        self.default_api_url_rewrite_options = kwargs.get("api_url_rewrite_options", None)
         self.default_additional_http_headers = kwargs.get("api_additional_http_headers", None)
 
         # Build API instance from openapi codegen
@@ -286,6 +288,7 @@ class AladdinAPI():
     def call_api(self, api_endpoint_name, request_body=None, _oauth_scopes=None, _deserialize_to_object=True,
                  asdk_transformation_option={'type': "json", 'flatten': None},
                  _asdk_pagination_options=None,
+                 _asdk_url_rewrite_options=None,
                  _asdk_additional_request_headers=None,
                  **params):
         """
@@ -299,6 +302,7 @@ class AladdinAPI():
             asdk_transformation_option (dict, optional): Transformation options to dictate response transformation (EXPERIMENTAL).
                 Defaults to {'type': "json", 'flatten': None}.
             _asdk_pagination_options (dict, optional): Pagination options for API call (EXPERIMENTAL). Defaults to None.
+            _asdk_url_rewrite_options (dict, optional): URL rewrite options for API call. Defaults to None.
             _asdk_additional_request_headers (dict, optional): Additional headers for API call (EXPERIMENTAL). Defaults to None.
 
         Raises:
@@ -327,8 +331,13 @@ class AladdinAPI():
             _asdk_pagination_options = self._update_pagination_options(_asdk_pagination_options)
             _asdk_pagination_options['start_time'] = time.time()
 
-        api_response = self._call_endpoint_helper(endpoint_to_call, request_headers, sig, request_body, params, valid_pagination_option,
-                                                  _asdk_pagination_options, _deserialize_to_object)
+        self._apply_url_rewrite(_asdk_url_rewrite_options)
+
+        try:
+            api_response = self._call_endpoint_helper(endpoint_to_call, request_headers, sig, request_body, params, valid_pagination_option,
+                                                      _asdk_pagination_options, _deserialize_to_object)
+        finally:
+            self._restore_default_url()
 
         api_response = self.optional_deserialize_response(api_response, _deserialize_to_object)
 
@@ -655,6 +664,59 @@ class AladdinAPI():
 
         _logger.debug(f"Updated pagination options: {_asdk_pagination_options}")
         return _asdk_pagination_options
+
+    def _apply_url_rewrite(self, request_url_rewrite_options=None):
+        """
+        Applies the URL rewrite options to the API client configuration.
+        The original host is stored in self.last_original_host for restoration later.
+        The rewrite rules can be passed at multiple levels and is evaluated in the following order of priority:
+        1. request_url_rewrite_options passed to this method
+        2. self.default_api_url_rewrite_options set during APIClientWrapper initialization
+        3. environment variables
+        4. user settings from configuration file
+
+        Args:
+            request_url_rewrite_options (dict, optional): URL rewrite options for the API call. Defaults to None.
+        """
+        url_rewrite_options = None
+        if request_url_rewrite_options is not None:
+            url_rewrite_options = request_url_rewrite_options
+        elif self.default_api_url_rewrite_options is not None:
+            url_rewrite_options = self.default_api_url_rewrite_options
+        else:
+            find_str = user_settings.get_api_url_rewrite_find()
+            replace_str = user_settings.get_api_url_rewrite_replace()
+            if find_str is not None and replace_str is not None:
+                url_rewrite_options = {
+                    "find": find_str,
+                    "replace": replace_str
+                }
+        self.last_original_host = None
+        if url_rewrite_options is None:
+            return
+        find_str = url_rewrite_options.get('find', None)
+        replace_str = url_rewrite_options.get('replace', None)
+        if find_str is None and replace_str is None:
+            return
+        if find_str is None or replace_str is None:
+            raise AsdkSetupException("Both 'find' and 'replace' must be provided for URL rewriting.")
+        self.last_original_host = self.instance.api_client.configuration.host
+        self.instance.api_client.configuration.host = re.sub(find_str,
+                                                                replace_str,
+                                                                self.last_original_host)
+        if self.instance.api_client.configuration.host == self.last_original_host:
+            _logger.warning("URL rewrite 'find' string did not match any part of the original URL.")
+        else:
+            _logger.debug(f"Updated host URL: {self.instance.api_client.configuration.host}")
+
+    def _restore_default_url(self):
+        """
+        Restores the original host in the API client configuration if it was modified by URL rewriting.
+        """
+        if self.last_original_host is not None:
+            self.instance.api_client.configuration.host = self.last_original_host
+            _logger.debug(f"Restored host URL: {self.instance.api_client.configuration.host}")
+            self.last_original_host = None
 
     def _add_additional_http_headers(self, request_headers, additional_headers=None):
         """

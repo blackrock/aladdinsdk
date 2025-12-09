@@ -120,6 +120,8 @@ Set API.AUTH_TYPE as `OAuth`
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; STOP_AFTER_ATTEMPT:                                                   | Retry up to certain amount of attempts for API retry logic. <br /> (ASDK_API__RETRY__STOP_AFTER_ATTEMPT)                                                                                                                                                                                                   |                      -                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; WAIT_FIXED:                                                           | Wait time in seconds before retry for API retry logic. <br /> (ASDK_API__RETRY__WAIT_FIXED)                                                                                                                                                                                                                |                      -                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; RETRY: <br/>&nbsp;&nbsp;&nbsp;&nbsp; STOP_AFTER_DELAY:                                                     | Retry up to certain amount of delay for API retry logic. <br /> (ASDK_API__RETRY__STOP_AFTER_DELAY)                                                                                                                                                                                                        |                      -                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; URL_REWRITE: <br/>&nbsp;&nbsp;&nbsp;&nbsp; FIND:                                                           | Specifies the regular expression string to find in the full URL for each request made to an Aladdin API. <br /> (ASDK_API__URL_REWRITE__FIND)                                                                                                                                                              |                      -                      |                             -                              |
+| API: <br/>&nbsp;&nbsp; URL_REWRITE: <br/>&nbsp;&nbsp;&nbsp;&nbsp; REPLACE:                                                        | Specifies the string with which to replace the match above. <br /> (ASDK_API__URL_REWRITE__REPLACE)                                                                                                                                                                                                        |                      -                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_PAGES                                                        | Config value used to determine the maximum number of subsequent api calls made for pagination                                                                                                                                                                                                              |                      5                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; MAX_PAGE_SIZE                                                    | Config value used to determine the maximum number of retrieved from each api call                                                                                                                                                                                                                          |                     10                      |                             -                              |
 | API: <br/>&nbsp;&nbsp; PAGINATION: <br/>&nbsp;&nbsp;&nbsp;&nbsp; TIMEOUT                                                          | Config value used to determine the maximum timeout value. This will terminate the api call request and retrieve the response obtain thus far.                                                                                                                                                              |                    300s                     |                             -                              |
@@ -619,6 +621,58 @@ The e-mail utility is additionally integrated with the error handling mechanism.
  
 - User can enable email notifications on errors by setting `NOTIFICATIONS.EMAIL` and `ERROR_HANDLING.EMAIL_NOTIFICATIONS` sections in user settings file
 - For more details refer to the supported configuration table above
+
+### URL Rewriting
+
+When consuming the Aladdin APIs via an enterprise API management platform such as Azure API Management, the relative URL of the Aladdin APIs are likely to be different (in addition to the host name).
+To cater for these scenarios, the URL can be changed / rewritten.
+
+The URL rewriting is done by specifying a regular expression that is used to identify / find the fragment of the URL to change and a string that should replace the identified
+fragment.
+
+The configuration can be specified in a number of ways:
+
+- Configuration: <br/>
+  The configuration settings `API.URL_REWRITE.FIND` and `API.URL_REWRITE.REPLACE` can be specified either in the user config file (or via the associated environment variables).
+
+    ```yaml
+    API:
+    URL_REWRITE:
+        FIND: "^https://\w+\\.blackrock\\.com/api/"
+        REPLACE: "https://api.acmecorp.com/aladdin/"
+    ```
+
+- Argument on class initialisation: <br/>
+  The argument `api_url_rewrite_options` can be passed when instantiating the AladdinAPI client:
+  
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+
+    api_url_rewrite_options = {
+        "find": "^https://\w+\\.blackrock\\.com/api/",
+        "replace": "https://api.acmecorp.com/aladdin/"
+    }
+
+    api_instance = AladdinAPI("TrainJourneyAPI", api_url_rewrite_options=api_url_rewrite_options)
+    ```
+
+- Argument on each operation: <br/>
+  The argument `_asdk_url_rewrite_options` can be passed each time a request if made:
+
+    ```py
+    from aladdinsdk.api.client import AladdinAPI
+    api_instance = AladdinAPI("TrainJourneyAPI")
+    req_body_json = {
+        "query": {
+            "departingStationId": "TS_1441"
+        }
+    }
+    api_url_rewrite_options = {
+        "find": "^https://\w+\\.blackrock\\.com/api/",
+        "replace": "https://api.acmecorp.com/aladdin/"
+    }
+    response = api_instance.post("/trainJourneys:filter", req_body_json, _asdk_url_rewrite_options=api_url_rewrite_options)
+    ```
 
 ### Pagination
 AladdinSDK provides a generic pagination utility that can be used to paginate through API responses. This utility can be used to fetch n pages of data from an API endpoint that supports pagination.
