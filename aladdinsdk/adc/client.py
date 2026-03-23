@@ -16,6 +16,7 @@ limitations under the License.
 
 import re
 import snowflake.connector
+from sqlalchemy import create_engine
 from snowflake.snowpark import Session
 from snowflake.connector.pandas_tools import write_pandas
 from typing import Literal
@@ -32,6 +33,7 @@ _logger = logging.getLogger(__name__)
 
 _ASDK_QUERY_TAG_PATTERN = 'QueryViaSDK-AladdinSDK-{}'
 _DEFAULT_SDK_QUERY_TAG_SUFFIX = 'Core'
+_SNOWFLAKE_IDENTIFIER_RE = re.compile(r'^[A-Za-z_][A-Za-z0-9_$]*$')
 
 
 def update_domain_sdk_query_tag_suffix(domain_sdk_suffix):
@@ -45,6 +47,11 @@ def update_domain_sdk_query_tag_suffix(domain_sdk_suffix):
         _logger.debug(f"Updating SDK query tag to {_ASDK_QUERY_TAG_PATTERN.format(_DEFAULT_SDK_QUERY_TAG_SUFFIX)}")
     else:
         raise AsdkAdcException("QUERY_TAG suffix should be alphanumeric string of max length 15.")
+
+
+def _validate_identifier(value: str, label: str):
+    if not _SNOWFLAKE_IDENTIFIER_RE.match(value):
+        raise AsdkAdcException(f"Invalid {label}: {value!r}. Must be a valid Snowflake identifier (alphanumeric, underscores, dollar signs).")
 
 
 class ADCClient():
@@ -221,9 +228,9 @@ class ADCClient():
             read_resp_df = conn.sql(sql).toPandas()
             return read_resp_df
         elif self._connection_type == user_settings.CONF_ADC_CONN_TYPE_SNOWFLAKE_CONNECTOR_PYTHON:
-            conn = self.get_connection()
+            engine = self._get_sqlalchemy_engine()
             read_resp_df = pd.read_sql(sql=sql,
-                                       con=conn,
+                                       con=engine,
                                        index_col=index_col,
                                        coerce_float=coerce_float,
                                        params=params,
@@ -355,6 +362,7 @@ class ADCClient():
             warehouse (string): Snowflake warehouse to use for this session
         """
         if warehouse is not None:
+            _validate_identifier(warehouse, "warehouse")
             self._execute_with_cursor(f"USE WAREHOUSE {warehouse}")
             self._warehouse = warehouse
 
@@ -367,6 +375,7 @@ class ADCClient():
             role (str): Snowflake role to use for this session
         """
         if role is not None:
+            _validate_identifier(role, "role")
             self._execute_with_cursor(f"USE ROLE {role}")
             self._role = role
 
@@ -379,6 +388,7 @@ class ADCClient():
             database (str): Snowflake database to use for this session
         """
         if database is not None:
+            _validate_identifier(database, "database")
             self._execute_with_cursor(f"USE DATABASE {database}")
             self._database = database
 
@@ -391,8 +401,19 @@ class ADCClient():
             schema (str): Snowflake schema to use for this session
         """
         if schema is not None:
+            _validate_identifier(schema, "schema")
             self._execute_with_cursor(f"USE SCHEMA {schema}")
             self._schema = schema
+
+    def _get_sqlalchemy_engine(self):
+        """
+        Create a SQLAlchemy engine that wraps the existing Snowflake connector connection.
+        Uses the 'creator' parameter so the engine reuses the connection managed by get_connection().
+
+        :returns: A SQLAlchemy engine backed by the Snowflake connector
+        :rtype: sqlalchemy.engine.Engine
+        """
+        return create_engine('snowflake://', creator=lambda: self.get_connection())
 
     def _generate_adc_connection(self):
         """

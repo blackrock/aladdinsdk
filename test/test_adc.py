@@ -244,6 +244,44 @@ class TestAdcClientInit(TestCase):
         test_subject.use_schema("GADGETS")
         mock_cursor.execute.assert_called_with("USE SCHEMA GADGETS")
 
+    @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
+    def test_use_warehouse_rejects_invalid_identifier(self, generate_conn_mock):
+        from aladdinsdk.adc.client import ADCClient
+        from aladdinsdk.common.error.asdkerrors import AsdkAdcException
+        test_subject = ADCClient()
+        with self.assertRaises(AsdkAdcException):
+            test_subject.use_warehouse("VALID; DROP TABLE users--")
+
+    @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
+    def test_use_role_rejects_invalid_identifier(self, generate_conn_mock):
+        from aladdinsdk.adc.client import ADCClient
+        from aladdinsdk.common.error.asdkerrors import AsdkAdcException
+        test_subject = ADCClient()
+        with self.assertRaises(AsdkAdcException):
+            test_subject.use_role("ROLE; SELECT * FROM secrets--")
+
+    @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
+    def test_use_database_rejects_invalid_identifier(self, generate_conn_mock):
+        from aladdinsdk.adc.client import ADCClient
+        from aladdinsdk.common.error.asdkerrors import AsdkAdcException
+        test_subject = ADCClient()
+        with self.assertRaises(AsdkAdcException):
+            test_subject.use_database("DB; DROP DATABASE production--")
+
+    @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
+    def test_use_schema_rejects_invalid_identifier(self, generate_conn_mock):
+        from aladdinsdk.adc.client import ADCClient
+        from aladdinsdk.common.error.asdkerrors import AsdkAdcException
+        test_subject = ADCClient()
+        with self.assertRaises(AsdkAdcException):
+            test_subject.use_schema("PUBLIC; SHOW USERS--")
+
+    @mock.patch("aladdinsdk.adc.client.ADCClient._generate_adc_connection", return_value=None)
+    def test_valid_identifiers_accepted(self, generate_conn_mock):
+        from aladdinsdk.adc.client import _validate_identifier
+        for valid in ["MY_WAREHOUSE", "role_1", "_private", "DB$1"]:
+            _validate_identifier(valid, "test")
+
     @mock.patch('requests.get', side_effect=extmocks.mocked_successful_requests_get)
     @mock.patch('aladdinsdk.common.authentication.adc.AladdinAPI')
     @mock.patch('snowflake.connector.connect')
@@ -273,30 +311,34 @@ class TestAdcClientInit(TestCase):
         importlib.reload(aladdinsdk.adc.client)
         from aladdinsdk.adc.client import ADCClient
 
-        test_subject = ADCClient()
+        # Mock create_engine after reload so the patch targets the reloaded module's reference
+        mock_engine = MagicMock()
+        with mock.patch.object(aladdinsdk.adc.client, 'create_engine', return_value=mock_engine) as create_engine_mock:
+            test_subject = ADCClient()
 
-        api_patch.assert_called_with(
-            'TokenAPI', password='am_db9', password_filepath='test/resources/testdata/sample_encrypted_password.txt',
-            encryption_filepath='test/resources/testdata/sample_encryption_key.txt', api_key='hippopotomonstrosesquippedaliophobia',
-            auth_type='Basic Auth', username='jbond'
-        )
-        api_patch.assert_called_once()
-        sfc_mock.assert_called_with(
-            account='mi6-uke2sf.privatelink',
-            authenticator='oauth',
-            user='jbond',
-            token='goldeneyegoldkey',
-            role='SPY',
-            warehouse='SPECTRE',
-            database='MI_6_EMPS',
-            schema='AGENTS',
-            session_parameters={'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'})
-        sfc_mock.assert_called_once()
+            api_patch.assert_called_with(
+                'TokenAPI', password='am_db9', password_filepath='test/resources/testdata/sample_encrypted_password.txt',
+                encryption_filepath='test/resources/testdata/sample_encryption_key.txt', api_key='hippopotomonstrosesquippedaliophobia',
+                auth_type='Basic Auth', username='jbond'
+            )
+            api_patch.assert_called_once()
+            sfc_mock.assert_called_with(
+                account='mi6-uke2sf.privatelink',
+                authenticator='oauth',
+                user='jbond',
+                token='goldeneyegoldkey',
+                role='SPY',
+                warehouse='SPECTRE',
+                database='MI_6_EMPS',
+                schema='AGENTS',
+                session_parameters={'QUERY_TAG': 'QueryViaSDK-AladdinSDK-Core'})
+            sfc_mock.assert_called_once()
 
-        self.assertIsNotNone(test_subject.get_connection())
+            self.assertIsNotNone(test_subject.get_connection())
 
-        df = test_subject.query_sql('SELECT * FROM MISSIONDB.IMPOSSIBLE.CROSSOVER')
-        pandastesting.assert_frame_equal(df, mock_df)
+            df = test_subject.query_sql('SELECT * FROM MISSIONDB.IMPOSSIBLE.CROSSOVER')
+            pandastesting.assert_frame_equal(df, mock_df)
+            create_engine_mock.assert_called_once()
 
     @mock.patch('requests.get', side_effect=extmocks.mocked_successful_requests_get)
     @mock.patch('aladdinsdk.common.authentication.adc.AladdinAPI')

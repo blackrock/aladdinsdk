@@ -20,6 +20,9 @@ import datetime
 from aladdinsdk.config import user_settings
 from aladdinsdk.config.asdkconf import ENV_VAR_ASDK_USER_CONFIG_FILE
 
+import warnings
+warnings.filterwarnings("ignore", message=".*Boto3 will no longer support Python 3\\.9.*")
+
 # Import these attributes into other files as needed to
 # identify the project version at runtime.
 try:
