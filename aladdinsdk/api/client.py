@@ -33,6 +33,7 @@ from aladdinsdk.common.blkutils.blkutils import DEFAULT_WEB_SERVER
 from aladdinsdk.common.datatransformation import json_to_pandas
 from aladdinsdk.common.error.asdkerrors import AsdkApiException, AsdkSetupException
 from aladdinsdk.common.error.handler import asdk_exception_handler
+from aladdinsdk.common.ratelimiting.rate_limit_helper import build_rate_limit_configs, wait_for_rate_limit
 from aladdinsdk.common.retry.api_retry import api_retry
 from aladdinsdk.config import user_settings
 from aladdinsdk.config.asdkconf import dynamic_asdk_config_reload
@@ -131,6 +132,12 @@ class AladdinAPI():
         _endpoint_method_mappings = self._generate_swagger_mappings()
         self._endpoint_path_to_method_mappings = _endpoint_method_mappings[0]
         self._endpoint_to_scope_mappings = _endpoint_method_mappings[1]
+
+        # Build rate limit configurations from user settings
+        self._rate_limit_configs = build_rate_limit_configs(
+            api_name=api_name,
+            endpoint_methods=self._details.api_class_methods
+        )
 
     def _build_api_client_instance(self, configuration):
         """
@@ -333,7 +340,13 @@ class AladdinAPI():
 
         self._apply_url_rewrite(_asdk_url_rewrite_options)
 
+        # Rate limiting: if configured for this endpoint, wrap the call through rate limiter
+        _rate_limit_config = self._rate_limit_configs.get(api_endpoint_name, None)
+
         try:
+            if _rate_limit_config is not None:
+                wait_for_rate_limit(self._details.api_name, api_endpoint_name, _rate_limit_config)
+
             api_response = self._call_endpoint_helper(endpoint_to_call, request_headers, sig, request_body, params, valid_pagination_option,
                                                       _asdk_pagination_options, _deserialize_to_object)
         finally:
@@ -410,7 +423,9 @@ class AladdinAPI():
         return lro_completion_response
 
     async def call_lro_api(self, start_lro_endpoint, check_lro_status_endpoint, status_check_interval=None, callback_func=None,
-                           request_body=None, _deserialize_to_object=True, timeout: int = None, **params):
+                           request_body=None, _deserialize_to_object=True, timeout: int = None,
+                           _max_retries: int = None, _initial_backoff: int = None,
+                           _retryable_status_codes: list = None, **params):
         """
         API Wrapper for Long Running Operation calls.
 
@@ -422,6 +437,14 @@ class AladdinAPI():
                 Defaults to None - returns LRO response as is.
             request_body (_type_, optional): Request payload for start_lro_endpoint. Defaults to None.
             timeout (int, optional): Timeout in seconds for LRO operation. Defaults to 300 (based on user configuration).
+            _max_retries (int, optional): Maximum number of retry attempts for LRO creation on retryable errors.
+                Defaults to user configuration value (api.lro.retry.max_attempts), or 1 if not configured.
+            _initial_backoff (int, optional): Initial backoff time in seconds for LRO creation retries. Wait time increases
+                linearly by this value per attempt (e.g. 10s, 20s, 30s). Defaults to user configuration value
+                (api.lro.retry.initial_backoff), or 10 if not configured.
+            _retryable_status_codes (list, optional): List of HTTP status codes that should trigger a retry for LRO creation.
+                Defaults to user configuration value (api.lro.retry.retryable_status_codes), or [429, 500, 502, 503, 504]
+                if not configured.
 
         Raises:
             AsdkApiException: If LRO response is empty, then operation ID and status are not available for LRO utility to perform status checks
@@ -430,16 +453,22 @@ class AladdinAPI():
             If callback function is not provided, returns LRO endpoint response as is
             else, invokes callback function with LRO response and returns result of callback function
         """
-        # Commence LRO
-        start_lro_response = self.call_api(start_lro_endpoint, request_body, _deserialize_to_object=_deserialize_to_object, **params)
+        # Resolve LRO retry parameters from method args or user settings
+        _max_retries = _max_retries if _max_retries is not None else user_settings.get_api_lro_retry_max_attempts()
+        _initial_backoff = _initial_backoff if _initial_backoff is not None else user_settings.get_api_lro_retry_initial_backoff()
+        _retryable_status_codes = _retryable_status_codes if _retryable_status_codes is not None else user_settings.get_api_lro_retry_retryable_status_codes()
+
+        # Commence LRO with retry logic for retryable HTTP errors
+        start_lro_response = await self._start_lro_with_retry(
+            start_lro_endpoint, request_body, _deserialize_to_object,
+            _max_retries, _initial_backoff, _retryable_status_codes, **params)
+
         if start_lro_response is None:
             raise AsdkApiException("Long running operation response is empty, unable to get operation ID or status.")
 
         # Check if operation is done in first attempt, else begin polling with status check endpoint
-        lro_completion_response = None
-        if start_lro_response.done if _deserialize_to_object else start_lro_response['done']:
-            lro_completion_response = start_lro_response
-        else:
+        lro_completion_response = self._get_lro_completion_response(start_lro_response, _deserialize_to_object)
+        if lro_completion_response is None:
             lro_id = start_lro_response.id if _deserialize_to_object else start_lro_response['id']
             lro_completion_response = await self.call_lro_status_api(check_lro_status_endpoint, lro_id,
                                                                      _deserialize_to_object=_deserialize_to_object,
@@ -449,6 +478,30 @@ class AladdinAPI():
         if callback_func is not None:
             return callback_func(lro_completion_response)
         return lro_completion_response
+
+    async def _start_lro_with_retry(self, start_lro_endpoint, request_body, _deserialize_to_object,
+                                    max_retries, initial_backoff, retryable_status_codes, **params):
+        """Attempt to start an LRO with retry logic for retryable HTTP errors."""
+        for attempt in range(1, max_retries + 1):
+            try:
+                return self.call_api(start_lro_endpoint, request_body,
+                                     _deserialize_to_object=_deserialize_to_object, **params)
+            except Exception as e:
+                status = getattr(e, 'status', None)
+                if status in retryable_status_codes and attempt < max_retries:
+                    wait_time = initial_backoff * attempt
+                    _logger.warning(f"LRO creation failed (HTTP {status}), retrying in {wait_time}s "
+                                    f"(attempt {attempt}/{max_retries})")
+                    await asyncio.sleep(wait_time)
+                else:
+                    raise
+        return None
+
+    @staticmethod
+    def _get_lro_completion_response(start_lro_response, _deserialize_to_object):
+        """Return the start response if the LRO is already done, otherwise None."""
+        is_done = start_lro_response.done if _deserialize_to_object else start_lro_response['done']
+        return start_lro_response if is_done else None
 
     def _endpoint_path_mapping_helper(self, user_input_endpoint):
         """
@@ -614,7 +667,7 @@ class AladdinAPI():
             boolean: indicates the validity of the options.
         """
         if _asdk_pagination_options is None:
-            _logger.info("No pagination options provided. Pagination will not be applied to request.")
+            _logger.debug("No pagination options provided. Pagination will not be applied to request.")
             return False
 
         for key, value in _asdk_pagination_options.items():

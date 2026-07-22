@@ -1,0 +1,6 @@
+RUN_MODE: aladdin-compute
+USER_CREDENTIALS:
+  USERNAME: msdhoni
+API:
+  AUTH_TYPE: OAuth
+  TOKEN: dummy_token
