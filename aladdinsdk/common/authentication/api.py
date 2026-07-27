@@ -18,7 +18,7 @@ import datetime
 import logging
 import uuid
 from aladdinsdk.common.authentication.basicauth import basicauthutil
-from aladdinsdk.common.authentication.oauth import oauth_token_cred_client, okta_sidecar_client
+from aladdinsdk.common.authentication.oauth import oauth_token_cred_client, local_token_server_client
 from aladdinsdk.common.blkutils.blkutils import DEFAULT_WEB_SERVER
 from aladdinsdk.common.error.asdkerrors import AsdkOAuthException
 from aladdinsdk.common.error.handler import asdk_exception_handler
@@ -178,7 +178,7 @@ class ApiAuthUtil():
         """
         Method for fetching oauth access token to be used for making api calls
         In case access token is provided by the user: proceed with that token and return its value
-        In case access token is not provided by the user: request oauth access token from oauth server or okta-sidecar (if running in compute mode)
+        In case access token is not provided by the user: request oauth access token from oauth server or local token server (if running in compute mode)
 
         Args:
             scopes (_type_, optional): list of scopes for the api endpoint being called
@@ -233,7 +233,7 @@ class ApiAuthUtil():
     def _request_oauth_access_token_tuple(self, scopes):
         """
         Method for fetching oauth params required that are used to get an api access token from the oauth server
-        In case any of following are none: (client_id, client_secret, refresh_token) then attempt requesting access token from okta-sidecar
+        In case any of following are none: (client_id, client_secret, refresh_token) then attempt requesting access token from local token server
         If access token is not available via either mechanism, raise appropriate AsdkOAuthException
 
         Args:
@@ -257,13 +257,13 @@ class ApiAuthUtil():
             _logger.debug("Access token retrieved from OAuth server")
             return access_token_ttl_tuple_from_auth_server
 
-        _logger.debug("Unable to fetch access token from oauth server. Attempting to fetch access token from okta-sidecar server.")
-        access_token_ttl_tuple_from_okta_sidecar = okta_sidecar_client.get_access_token_ttl_from_okta_sidecar(scopes)
-        if access_token_ttl_tuple_from_okta_sidecar != (None, None):
-            _logger.debug("Access token retrieved from okta-sidecar")
-            return access_token_ttl_tuple_from_okta_sidecar
+        _logger.debug("Unable to fetch access token from oauth server. Attempting to fetch access token from local token server.")
+        access_token_ttl_tuple_from_local_token_server = local_token_server_client.get_access_token_ttl_from_local_token_server(scopes)
+        if access_token_ttl_tuple_from_local_token_server != (None, None):
+            _logger.debug("Access token retrieved from local token server")
+            return access_token_ttl_tuple_from_local_token_server
 
-        _logger.debug("Unable to fetch access token from either oauth server or okta-sidecar server. Refer to debug logs for more information.")
+        _logger.debug("Unable to fetch access token from either oauth server or local token server. Refer to debug logs for more information.")
         return None, None
 
     @dynamic_asdk_config_reload

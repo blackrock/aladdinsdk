@@ -381,9 +381,9 @@ class TestFetchOauthTokenFromParams(TestCase):
 
     @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server',
                 return_value=(None, None))
-    @mock.patch('aladdinsdk.common.authentication.api.okta_sidecar_client.get_access_token_ttl_from_okta_sidecar',
+    @mock.patch('aladdinsdk.common.authentication.api.local_token_server_client.get_access_token_ttl_from_local_token_server',
                 return_value=(None, None))
-    def test_oauth_request_headers_missing_access_token_error(self, mock_oauth_resp, mock_okta_sidecar_resp):
+    def test_oauth_request_headers_missing_access_token_error(self, mock_oauth_resp, mock_local_token_server_resp):
 
         from aladdinsdk.common.authentication.api import ApiAuthUtil
         api_auth_util = ApiAuthUtil(auth_type="OAuth", configuration=self.test_configuration, username='test', client_id='id',
@@ -395,9 +395,9 @@ class TestFetchOauthTokenFromParams(TestCase):
 
     @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server',
                 return_value=(None, None))
-    @mock.patch('aladdinsdk.common.authentication.api.okta_sidecar_client.get_access_token_ttl_from_okta_sidecar',
+    @mock.patch('aladdinsdk.common.authentication.api.local_token_server_client.get_access_token_ttl_from_local_token_server',
                 return_value=("ACCESS_GRANTED", datetime.datetime(2021, 1, 1, 0, 0, 0, 0)))
-    def test_oauth_request_headers_access_token_ttl_datetime(self, mock_oauth_resp, mock_okta_sidecar_resp):
+    def test_oauth_request_headers_access_token_ttl_datetime(self, mock_oauth_resp, mock_local_token_server_resp):
 
         from aladdinsdk.common.authentication.api import ApiAuthUtil
         api_auth_util = ApiAuthUtil(auth_type="OAuth", configuration=self.test_configuration, username='test', client_id='id',
@@ -408,9 +408,9 @@ class TestFetchOauthTokenFromParams(TestCase):
 
     @mock.patch('aladdinsdk.common.authentication.api.oauth_token_cred_client.get_access_token_and_ttl_from_oauth_server',
                 return_value=(None, None))
-    @mock.patch('aladdinsdk.common.authentication.api.okta_sidecar_client.get_access_token_ttl_from_okta_sidecar',
+    @mock.patch('aladdinsdk.common.authentication.api.local_token_server_client.get_access_token_ttl_from_local_token_server',
                 return_value=("ACCESS_GRANTED", None))
-    def test_oauth_request_headers_access_token_ttl_only_none(self, mock_oauth_resp, mock_okta_sidecar_resp):
+    def test_oauth_request_headers_access_token_ttl_only_none(self, mock_oauth_resp, mock_local_token_server_resp):
 
         from aladdinsdk.common.authentication.api import ApiAuthUtil
         api_auth_util = ApiAuthUtil(auth_type="OAuth", configuration=self.test_configuration, username='test', client_id='id',

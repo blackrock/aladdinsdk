@@ -1,6 +1,9 @@
 
-def _get_websocket_headers():
-    return {
+class _MockContext:
+    headers = {
         "RANDOM_KEY": "RANDOM_VALUE",
-        "Developer-Uid": "RANDOM_DEVELOPER_UID"
+        "X-Session-Id": "RANDOM_SESSION_ID"
     }
+
+
+context = _MockContext()

@@ -56,6 +56,11 @@ _conf_key_api_token = "api.token"
 _conf_key_api_lro_status_check_interval = "api.lro.status_check_interval"
 _conf_key_api_lro_status_check_timeout = "api.lro.status_check_timeout"
 
+# LRO Retry Settings
+_conf_key_api_lro_retry_max_attempts = "api.lro.retry.max_attempts"
+_conf_key_api_lro_retry_initial_backoff = "api.lro.retry.initial_backoff"
+_conf_key_api_lro_retry_retryable_status_codes = "api.lro.retry.retryable_status_codes"
+
 # URL rewriting
 _conf_key_api_url_rewrite_find = "api.url_rewrite.find"
 _conf_key_api_url_rewrite_replace = "api.url_rewrite.replace"
@@ -150,6 +155,10 @@ _conf_batch_buffer_max_size = "batch.buffer.max_size"
 _conf_batch_parallel_max_workers = "batch.parallel.max_workers"
 _conf_batch_sequential_interval = "batch.sequential.interval"
 
+# Rate Limiting Settings
+_conf_key_api_rate_limiting_enabled = "api.rate_limiting.enabled"
+_conf_key_api_rate_limiting_overrides = "api.rate_limiting.overrides"
+
 # Storage
 # S3 Client
 _conf_storage_s3_endpoint_url = "storage.s3.endpoint_url"
@@ -180,6 +189,12 @@ AsdkConf.validators.register(
               is_type_of=int),
     Validator(_conf_ADC_retry_stop_after_delay,
               is_type_of=int),
+    Validator(_conf_key_api_lro_retry_max_attempts,
+              is_type_of=int),
+    Validator(_conf_key_api_lro_retry_initial_backoff,
+              is_type_of=int),
+    Validator(_conf_key_api_lro_retry_retryable_status_codes,
+              is_type_of=list),
     )
 
 # Log Level Config Validations
@@ -198,6 +213,11 @@ AsdkConf.validators.register(
     Validator(_conf_key_api_pagination_max_pages, is_type_of=int),
     Validator(_conf_key_api_pagination_timeout, is_type_of=int),
     Validator(_conf_key_api_pagination_interval, is_type_of=int)
+)
+
+# Rate Limiting Config Validations
+AsdkConf.validators.register(
+    Validator(_conf_key_api_rate_limiting_enabled, is_type_of=bool)
 )
 
 AsdkConf.validators.validate_all()
@@ -278,6 +298,18 @@ def get_api_lro_status_check_interval():
 
 def get_api_lro_status_check_timeout():
     return asdk_conf_get(_conf_key_api_lro_status_check_timeout, 300)
+
+
+def get_api_lro_retry_max_attempts():
+    return asdk_conf_get(_conf_key_api_lro_retry_max_attempts, 1)
+
+
+def get_api_lro_retry_initial_backoff():
+    return asdk_conf_get(_conf_key_api_lro_retry_initial_backoff, 10)
+
+
+def get_api_lro_retry_retryable_status_codes():
+    return asdk_conf_get(_conf_key_api_lro_retry_retryable_status_codes, [429, 500, 502, 503, 504])
 
 
 # ADC
@@ -446,6 +478,15 @@ def get_log_export_enabled():
 
 def get_log_export_location():
     return asdk_conf_get(_conf_key_log_export_location, './.asdk_logs')
+
+
+# rate limiting
+def get_api_rate_limiting_enabled():
+    return asdk_conf_get(_conf_key_api_rate_limiting_enabled, True)
+
+
+def get_api_rate_limiting_overrides():
+    return asdk_conf_get(_conf_key_api_rate_limiting_overrides, {})
 
 
 # batch actions

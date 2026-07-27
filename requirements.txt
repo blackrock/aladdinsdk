@@ -17,3 +17,5 @@ requests-oauthlib~=2.0.0
 tenacity~=8.2.3
 urllib3>=1.26.16
 boto3~=1.35.83
+numpy>=1.23.5
+lazy-imports >= 1, < 2

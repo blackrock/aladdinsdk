@@ -32,8 +32,6 @@ injected by Vault init container.
 Note: Read from yaml currently supports reading values at first level
 """
 
-_default_key_for_enc = b'T10Zcv_jbwBI2KANbEoytpeK6zVbP_F5owJajX-sSGA='
-
 
 def read_base64_enc_file(path):
     """
@@ -105,7 +103,7 @@ def _read_yaml_file(path):
             raise e
 
 
-def store_encrypted_content_in_file(plain_text_secret, filepath_to_encrypted_secret, encryption_key=_default_key_for_enc,
+def store_encrypted_content_in_file(plain_text_secret, filepath_to_encrypted_secret, encryption_key=None,
                                     filepath_to_encryption_key=None):
     """
     This method takes plain text secret (e.g. password), path to where encrypted secret needs to be stored, optionally an encryption key or
@@ -121,13 +119,19 @@ def store_encrypted_content_in_file(plain_text_secret, filepath_to_encrypted_sec
     if filepath_to_encryption_key and os.path.isfile(filepath_to_encryption_key):
         encryption_key = open(filepath_to_encryption_key, 'rb').read()
 
+    if encryption_key is None:
+        raise ValueError(
+            "No encryption key provided. Supply an encryption_key or filepath_to_encryption_key. "
+            "Generate a key with cryptography.fernet.Fernet.generate_key()."
+        )
+
     cipher_suite = Fernet(encryption_key)
     encrypted_password = cipher_suite.encrypt(bytes(plain_text_secret, 'utf-8'))
     with open(filepath_to_encrypted_secret, "wb") as encrypted_password_file:
         encrypted_password_file.write(encrypted_password)
 
 
-def decrypt_file_content(filepath_to_encrypted_secret, encryption_key=_default_key_for_enc, filepath_to_encryption_key=None):
+def decrypt_file_content(filepath_to_encrypted_secret, encryption_key=None, filepath_to_encryption_key=None):
     """
     Decrypts password and passes back to caller
 
@@ -138,6 +142,11 @@ def decrypt_file_content(filepath_to_encrypted_secret, encryption_key=_default_k
     """
     if filepath_to_encryption_key and os.path.isfile(filepath_to_encryption_key):
         encryption_key = open(filepath_to_encryption_key, 'rb').read()
+
+    if encryption_key is None:
+        raise ValueError(
+            "No encryption key provided. Supply an encryption_key or filepath_to_encryption_key."
+        )
 
     password = None
     cipher_suite = Fernet(encryption_key)

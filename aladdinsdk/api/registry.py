@@ -15,8 +15,9 @@ limitations under the License.
 """
 
 import os
+import re
 import importlib
-import pkgutil
+import importlib.metadata
 import pathlib
 import aladdinsdk.config.internal_settings as internal_settings
 from aladdinsdk.common.error.asdkerrors import AsdkApiException
@@ -24,8 +25,25 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-_DOMAIN_SDK_PACKAGE_NAME_PREFIX = 'asdk_plugin'
+_DOMAIN_SDK_PACKAGE_NAME_REGEX = r'^asdk_plugin'
 _DOMAIN_SDK_API_REGISTRY_MODULE = 'api_registry'
+
+_TRUSTED_PLUGIN_ALLOWLIST = frozenset([
+    'asdk_plugin_accounting',
+    'asdk_plugin_ai_platform',
+    'asdk_plugin_alphagen',
+    'asdk_plugin_analytics',
+    'asdk_plugin_clients',
+    'asdk_plugin_compliance',
+    'asdk_plugin_data',
+    'asdk_plugin_investment_operations',
+    'asdk_plugin_investment_research',
+    'asdk_plugin_platform',
+    'asdk_plugin_portfolio',
+    'asdk_plugin_portfolio_management',
+    'asdk_plugin_trading',
+    'asdk_plugin_legacy',
+])
 
 
 class AladdinAPICodegenDetails:
@@ -54,7 +72,7 @@ def get_api_names():
 
 
 def get_api_details(api_name, api_version=None) -> AladdinAPICodegenDetails:
-    if api_name not in list(AladdinAPIRegistry.keys()):
+    if api_name not in AladdinAPIRegistry:
         raise AsdkApiException("API not supported for SDK calls at the moment.")
 
     if api_version is not None:
@@ -101,8 +119,23 @@ for internal_api_detail in _internal_apis:
             _logger.debug(f"Unable to add swagger file path for API entry: {internal_api_detail}")
     _sdk_supported_apis.append(internal_api_detail)
 
-# Domain SDK registry - find any modules with prefix asdk, then invoke fetch_api_details_for_asdk
-for asdk_module in [x.name for x in list(pkgutil.iter_modules()) if x.name.startswith(_DOMAIN_SDK_PACKAGE_NAME_PREFIX)]:
+# Domain SDK registry - discover plugins from installed package distributions only.
+def _discover_installed_domain_sdk_plugins():
+    plugin_modules = set()
+    for dist in importlib.metadata.distributions():
+        dist_name = dist.metadata.get('Name', '')
+        if not dist_name:
+            continue
+        module_name = dist_name.replace('-', '_')
+        if re.search(_DOMAIN_SDK_PACKAGE_NAME_REGEX, module_name):
+            if module_name not in _TRUSTED_PLUGIN_ALLOWLIST:
+                _logger.warning(f"Skipping plugin '{module_name}': not in trusted plugin allowlist.")
+                continue
+            plugin_modules.add(module_name)
+    return plugin_modules
+
+
+for asdk_module in _discover_installed_domain_sdk_plugins():
     try:
         _api_reg_module = importlib.import_module(f"{asdk_module}.{_DOMAIN_SDK_API_REGISTRY_MODULE}")
         # Prioritize APIs already onboarded via internal settings
