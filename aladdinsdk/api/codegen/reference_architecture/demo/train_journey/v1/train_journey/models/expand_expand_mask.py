@@ -19,7 +19,7 @@ import json
 
 
 from typing import List, Optional
-from pydantic import BaseModel, StrictStr, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, StrictStr, conlist
 
 class ExpandExpandMask(BaseModel):
     """

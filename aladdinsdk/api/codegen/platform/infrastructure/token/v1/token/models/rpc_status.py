@@ -19,7 +19,7 @@ import json
 
 
 from typing import List, Optional
-from pydantic import BaseModel, StrictInt, StrictStr, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, StrictInt, StrictStr, conlist
 from aladdinsdk.api.codegen.platform.infrastructure.token.v1.token.models.any import Any
 
 class RpcStatus(BaseModel):

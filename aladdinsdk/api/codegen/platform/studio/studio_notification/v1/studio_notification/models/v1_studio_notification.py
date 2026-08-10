@@ -19,7 +19,7 @@ import json
 
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field, StrictStr, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr, conlist
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_notification.models.v1_studio_notification_event import V1StudioNotificationEvent
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_notification.models.v1_studio_notification_scope import V1StudioNotificationScope
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_notification.models.v1_studio_recipient_scope import V1StudioRecipientScope

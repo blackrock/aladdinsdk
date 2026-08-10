@@ -19,7 +19,7 @@ import json
 
 
 from typing import List, Optional
-from pydantic import BaseModel, Field, StrictStr, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr, conlist
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_subscription.models.v1_studio_subscription import V1StudioSubscription
 
 class V1FilterStudioSubscriptionsResponse(BaseModel):

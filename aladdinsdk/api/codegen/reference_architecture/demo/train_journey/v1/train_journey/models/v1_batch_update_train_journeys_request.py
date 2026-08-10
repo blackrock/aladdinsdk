@@ -19,7 +19,7 @@ import json
 
 
 from typing import List
-from pydantic import BaseModel, Field, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, conlist
 from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey.models.v1_update_train_journey_request import V1UpdateTrainJourneyRequest
 
 class V1BatchUpdateTrainJourneysRequest(BaseModel):

@@ -19,7 +19,7 @@ import json
 
 from datetime import date
 from typing import Optional
-from pydantic import BaseModel, Field
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field
 
 class V1RangeFilter(BaseModel):
     """

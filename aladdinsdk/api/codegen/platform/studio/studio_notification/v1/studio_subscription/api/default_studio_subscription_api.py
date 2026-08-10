@@ -16,12 +16,12 @@ import re  # noqa: F401
 import io
 import warnings
 
-from pydantic import validate_arguments, ValidationError
+from aladdinsdk.common.utils.pydantic_adapter import validate_arguments, ValidationError
 from typing_extensions import Annotated
 
 from datetime import datetime
 
-from pydantic import Field, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import Field, StrictStr
 
 from typing import Any, Dict, Optional
 

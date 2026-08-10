@@ -16,12 +16,12 @@ import re  # noqa: F401
 import io
 import warnings
 
-from pydantic import validate_arguments, ValidationError
+from aladdinsdk.common.utils.pydantic_adapter import validate_arguments, ValidationError
 from typing_extensions import Annotated
 
 from datetime import datetime
 
-from pydantic import Field, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import Field, StrictStr
 
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_notification.models.v1_batch_create_studio_notifications_request import V1BatchCreateStudioNotificationsRequest
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_notification.models.v1_batch_create_studio_notifications_response import V1BatchCreateStudioNotificationsResponse

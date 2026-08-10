@@ -21,11 +21,12 @@ import importlib.metadata
 import pathlib
 import aladdinsdk.config.internal_settings as internal_settings
 from aladdinsdk.common.error.asdkerrors import AsdkApiException
+from aladdinsdk.common.utils.pydantic_adapter import PYDANTIC_SDK_PACKAGE_NAME_REGEX, PYDANTIC_LIB_VERSION
 import logging
 
 _logger = logging.getLogger(__name__)
 
-_DOMAIN_SDK_PACKAGE_NAME_REGEX = r'^asdk_plugin'
+_DOMAIN_SDK_PACKAGE_NAME_REGEX = PYDANTIC_SDK_PACKAGE_NAME_REGEX
 _DOMAIN_SDK_API_REGISTRY_MODULE = 'api_registry'
 
 _TRUSTED_PLUGIN_ALLOWLIST = frozenset([
@@ -43,6 +44,20 @@ _TRUSTED_PLUGIN_ALLOWLIST = frozenset([
     'asdk_plugin_portfolio_management',
     'asdk_plugin_trading',
     'asdk_plugin_legacy',
+    'asdk_plugin_pydv2_accounting',
+    'asdk_plugin_pydv2_ai_platform',
+    'asdk_plugin_pydv2_alphagen',
+    'asdk_plugin_pydv2_analytics',
+    'asdk_plugin_pydv2_clients',
+    'asdk_plugin_pydv2_compliance',
+    'asdk_plugin_pydv2_data',
+    'asdk_plugin_pydv2_investment_operations',
+    'asdk_plugin_pydv2_investment_research',
+    'asdk_plugin_pydv2_platform',
+    'asdk_plugin_pydv2_portfolio',
+    'asdk_plugin_pydv2_portfolio_management',
+    'asdk_plugin_pydv2_trading',
+    'asdk_plugin_pydv2_legacy',
 ])
 
 
@@ -73,7 +88,9 @@ def get_api_names():
 
 def get_api_details(api_name, api_version=None) -> AladdinAPICodegenDetails:
     if api_name not in AladdinAPIRegistry:
-        raise AsdkApiException("API not supported for SDK calls at the moment.")
+        pydantic_compatiblity_error_message = "Use 'asdk_plugin_' libraries" if PYDANTIC_LIB_VERSION == 'v1' else "Use 'asdk_plugin_pydv2_' libraries"
+        raise AsdkApiException(f"API not supported for SDK calls at the moment. \n\
+            [Note: SDK running in pydantic {PYDANTIC_LIB_VERSION} compatible mode. {pydantic_compatiblity_error_message}.]")
 
     if api_version is not None:
         return AladdinAPIRegistry[api_name][api_version]

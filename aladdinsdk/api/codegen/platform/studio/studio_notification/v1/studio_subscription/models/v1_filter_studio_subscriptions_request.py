@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictInt, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictInt, StrictStr
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_subscription.models.v1_studio_subscriptions_query import V1StudioSubscriptionsQuery
 
 class V1FilterStudioSubscriptionsRequest(BaseModel):

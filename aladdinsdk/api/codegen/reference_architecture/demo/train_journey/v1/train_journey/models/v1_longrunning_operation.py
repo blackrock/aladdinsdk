@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictBool, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictBool, StrictStr
 from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey.models.any import Any
 from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey.models.rpc_status import RpcStatus
 

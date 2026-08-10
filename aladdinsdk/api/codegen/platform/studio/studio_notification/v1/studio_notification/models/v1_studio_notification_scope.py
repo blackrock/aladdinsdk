@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_notification.models.v1_studio_entity_type import V1StudioEntityType
 
 class V1StudioNotificationScope(BaseModel):

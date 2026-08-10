@@ -78,7 +78,7 @@ class APIExceptionHandler(AbstractAsdkExceptionHandler):  # e001
 
     def _handle_oauth_exception(self):
         _logger.warning("ASDK OAuth Exception: For oauth related errors: \n\
-                         Confirm OAuth client and refresh token secrets are valid. \n\
+                         Confirm OAuth client and/or refresh token secrets are valid. \n\
                          Check AladdinSDK documentation around how to pass in OAuth authentication details. \n\
                          Ensure OAuth configuration file or environment variables are set appropriately.")
         _logger.warning("SDK cannot automatically remedy this exception. Raising exception for caller to handle.")

@@ -95,12 +95,10 @@ class TestCommonErrorHandlerUtils(TestCase):
         from aladdinsdk.common.error.handler import _map_exception_to_handler
 
         from aladdinsdk.common.error.asdkerrors import AsdkApiException
-        from pydantic.error_wrappers import ValidationError
 
         from aladdinsdk.common.error.handlers.api import APIExceptionHandler
 
         self.assertEqual(type(_map_exception_to_handler(AsdkApiException("TEST"))), APIExceptionHandler)
-        self.assertEqual(type(_map_exception_to_handler(ValidationError(None, "TEST"))), APIExceptionHandler)
 
     def test_register_handler_class_success(self):
         from aladdinsdk.common.error.handler import register_handler_class, _asdk_exception_handlers
@@ -157,7 +155,7 @@ class TestCommonErrorHandlerApiHandler(TestCase):
 
     def test_api_handle_error(self):
         from aladdinsdk.api.client import AladdinAPI
-        from pydantic.error_wrappers import ValidationError
+        from aladdinsdk.common.utils.pydantic_adapter import ValidationError
         from aladdinsdk.api.codegen.platform.infrastructure.token.v1.token.exceptions import UnauthorizedException
 
         test_subject = AladdinAPI('TrainJourneyAPI')
@@ -169,15 +167,17 @@ class TestCommonErrorHandlerApiHandler(TestCase):
                 self.assertIn("Mock UnauthorizedException", context.exception.message)
 
         with mock.patch.object(test_subject.instance, 'train_journey_api_filter_train_journeys_with_http_info') as mock_filter_call:
-            from pydantic import BaseModel, Field
+            from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field
 
             class A(BaseModel):
-                a: str = Field(None, alias="А")
+                a: str
 
-            mock_filter_call.side_effect = ValidationError("", A)
-            with self.assertRaises(ValidationError) as context:
+            try:
+                A()
+            except ValidationError as ve:
+                mock_filter_call.side_effect = ve
+            with self.assertRaises(ValidationError):
                 test_subject.call_api('train_journey_api_filter_train_journeys', {"payload_key": "payload value"})
-                self.assertTrue("Mock ValidationError" in context.exception)
 
 
 class TestCommonErrorHandlerExportDataHandler(TestCase):

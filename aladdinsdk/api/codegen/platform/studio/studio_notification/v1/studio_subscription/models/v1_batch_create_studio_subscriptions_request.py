@@ -19,7 +19,7 @@ import json
 
 
 from typing import List
-from pydantic import BaseModel, Field, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, conlist
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_subscription.models.v1_create_studio_subscription_request import V1CreateStudioSubscriptionRequest
 
 class V1BatchCreateStudioSubscriptionsRequest(BaseModel):

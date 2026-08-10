@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictBool, StrictInt, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictBool, StrictInt, StrictStr
 
 class TrainStationTrainStationFacilitiesSlice(BaseModel):
     """

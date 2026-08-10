@@ -19,7 +19,7 @@ import json
 
 
 from typing import List, Optional
-from pydantic import BaseModel, Field, StrictInt, StrictStr, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictInt, StrictStr, conlist
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_notification.models.any import Any
 
 class RpcStatus(BaseModel):
