@@ -19,7 +19,7 @@ import json
 
 
 from typing import List
-from pydantic import BaseModel, Field, StrictStr, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr, conlist
 
 class V1BatchDeleteTrainJourneysRequest(BaseModel):
     """

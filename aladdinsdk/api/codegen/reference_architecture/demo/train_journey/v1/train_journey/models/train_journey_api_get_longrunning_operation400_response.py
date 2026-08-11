@@ -19,7 +19,7 @@ import json
 
 
 
-from pydantic import BaseModel, Field, StrictStr, constr
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr, constr
 
 class TrainJourneyAPIGetLongrunningOperation400Response(BaseModel):
     """

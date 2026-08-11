@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictBool
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictBool
 
 class V1CheckTokenExistsResponse(BaseModel):
     """

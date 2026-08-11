@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr
 
 class V1FollowTrainJourneyResponse(BaseModel):
     """

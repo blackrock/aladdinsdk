@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictInt, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictInt, StrictStr
 from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey.models.v1_train_journey_query import V1TrainJourneyQuery
 
 class V1FilterTrainJourneysRequest(BaseModel):

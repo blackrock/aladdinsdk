@@ -19,7 +19,7 @@ import json
 
 
 from typing import Optional
-from pydantic import BaseModel, Field, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_subscription.models.v1_range_filter import V1RangeFilter
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_subscription.models.v1_studio_entity_type import V1StudioEntityType
 from aladdinsdk.api.codegen.platform.studio.studio_notification.v1.studio_subscription.models.v1_studio_notification_event_type import V1StudioNotificationEventType

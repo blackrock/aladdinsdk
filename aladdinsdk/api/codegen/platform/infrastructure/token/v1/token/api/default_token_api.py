@@ -16,12 +16,12 @@ import re  # noqa: F401
 import io
 import warnings
 
-from pydantic import validate_arguments, ValidationError
+from aladdinsdk.common.utils.pydantic_adapter import validate_arguments, ValidationError
 from typing_extensions import Annotated
 
 from datetime import datetime
 
-from pydantic import Field, StrictStr
+from aladdinsdk.common.utils.pydantic_adapter import Field, StrictStr
 
 from aladdinsdk.api.codegen.platform.infrastructure.token.v1.token.models.v1_authorization_url import V1AuthorizationUrl
 from aladdinsdk.api.codegen.platform.infrastructure.token.v1.token.models.v1_check_token_exists_response import V1CheckTokenExistsResponse

@@ -19,7 +19,7 @@ import json
 
 
 from typing import List, Optional
-from pydantic import BaseModel, Field, StrictStr, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr, conlist
 from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey.models.enums_train_type import EnumsTrainType
 
 class V1TrainJourneyQuery(BaseModel):

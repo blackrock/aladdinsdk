@@ -37,6 +37,11 @@ from aladdinsdk.common.ratelimiting.rate_limit_helper import build_rate_limit_co
 from aladdinsdk.common.retry.api_retry import api_retry
 from aladdinsdk.config import user_settings
 from aladdinsdk.config.asdkconf import dynamic_asdk_config_reload
+from aladdinsdk.common.utils.pydantic_adapter import (
+    call_endpoint_helper_argument_pydantic_adapter,
+    api_client_rest_adapter,
+    get_endpoint_to_call,
+)
 
 _logger = logging.getLogger(__name__)
 
@@ -88,7 +93,7 @@ class AladdinAPI():
             auth_flow_type (string, optional): Auth Flow type for oauth token generation. Defaults to user_settings.get_auth_flow_type().
             api_key (string, optional): API Key. Defaults to value set as "ASDK_API__TOKEN" environment variable, or "api.token" in settings yaml,
                 None if not configured.
-            auth_type (string, optional): API Authentication Type. Must be in [BASIC_AUTH, OAUTH]
+            auth_type (string, optional): API Authentication Type. Must be in ["Basic Auth", "OAuth"]
             username (string, optional): Username. Defaults to value set as "ASDK_USER_CREDENTIALS__USERNAME" environment variable,
                 or "user_credentials.username" in settings yaml, None if not configured.
             password (string, optional): Password. Defaults to value set as "ASDK_USER_CREDENTIALS__PASSWORD" environment variable,
@@ -151,6 +156,8 @@ class AladdinAPI():
         """
         # Enter a context with an instance of the API client
         api_client = self._details.api_client(configuration)
+
+        api_client_rest_adapter(api_client, configuration)
 
         # Update user agent for client
         api_client.user_agent = _ASDK_USER_AGENT_PATTERN.format(_DEFAULT_SDK_USER_AGENT_SUFFIX)
@@ -328,7 +335,7 @@ class AladdinAPI():
         request_headers = self._api_auth_util.add_auth_details_to_header_and_config(_oauth_scopes)
         request_headers = self._add_additional_http_headers(request_headers, _asdk_additional_request_headers)
 
-        endpoint_to_call = getattr(self.instance, f"{api_endpoint_name}_with_http_info")
+        endpoint_to_call = get_endpoint_to_call(self.instance, api_endpoint_name, _deserialize_to_object)
 
         sig = self.get_api_endpoint_signature(api_endpoint_name)
 
@@ -560,7 +567,7 @@ class AladdinAPI():
             Response: The API response.
         """
         if 'body' in sig.parameters.keys():
-            return endpoint_to_call(
+            args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                 vnd_com_blackrock_request_id=request_headers[_HEADER_KEY_REQUEST_ID],
                 vnd_com_blackrock_origin_timestamp=request_headers[_HEADER_KEY_ORIGIN_TIMESTAMP],
                 body=self._paginate_parameters_helper(_asdk_pagination_options, _request_body) if valid_pagination_option else _request_body,
@@ -568,14 +575,16 @@ class AladdinAPI():
                 _preload_content=_deserialize_to_object,
                 **_params
             )
+            return endpoint_to_call(*args, **kwargs)
         else:
-            return endpoint_to_call(
+            args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                 vnd_com_blackrock_request_id=request_headers[_HEADER_KEY_REQUEST_ID],
                 vnd_com_blackrock_origin_timestamp=request_headers[_HEADER_KEY_ORIGIN_TIMESTAMP],
                 _headers=request_headers,
                 _preload_content=_deserialize_to_object,
                 **_params if not valid_pagination_option else self._paginate_parameters_helper(_asdk_pagination_options, _params)
             )
+            return endpoint_to_call(*args, **kwargs)
 
     def _paginate_parameters_helper(self, _asdk_pagination_options, data):
         """`

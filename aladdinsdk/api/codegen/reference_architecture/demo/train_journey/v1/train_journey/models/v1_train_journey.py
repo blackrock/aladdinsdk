@@ -19,7 +19,7 @@ import json
 
 from datetime import date, datetime
 from typing import List, Optional
-from pydantic import BaseModel, Field, StrictStr, conlist
+from aladdinsdk.common.utils.pydantic_adapter import BaseModel, Field, StrictStr, conlist
 from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey.models.train_station_train_station_facilities_slice import TrainStationTrainStationFacilitiesSlice
 from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey.models.train_station_train_station_summary_slice import TrainStationTrainStationSummarySlice
 from aladdinsdk.api.codegen.reference_architecture.demo.train_journey.v1.train_journey.models.train_train_summary_slice import TrainTrainSummarySlice

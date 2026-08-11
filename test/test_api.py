@@ -5,6 +5,7 @@ import asyncio
 
 import pandas as pd
 
+from aladdinsdk.common.utils.pydantic_adapter import call_endpoint_helper_argument_pydantic_adapter, PYDANTIC_LIB_VERSION
 from test.resources.testutils import utils
 
 
@@ -269,12 +270,14 @@ class TestApiClient(TestCase):
 
                 resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
                                              request_body={"payload_key": "payload value"})
-                mock_filter_call.assert_called_once_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
                     _preload_content=True,
-                    body={"payload_key": "payload value"})
+                    body={"payload_key": "payload value"}
+                )
+                mock_filter_call.assert_called_once_with(*args, **kwargs)
             self.assertEqual(resp, 'TEST_RESPONSE')
 
     def test_call_api_with_request_body_success_read_data(self):
@@ -295,12 +298,14 @@ class TestApiClient(TestCase):
 
                 resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
                                              request_body={"payload_key": "payload value"})
-                mock_filter_call.assert_called_once_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
                     _preload_content=True,
-                    body={"payload_key": "payload value"})
+                    body={"payload_key": "payload value"}
+                )
+                mock_filter_call.assert_called_once_with(*args, **kwargs)
             self.assertEqual(resp, 'TEST_RESPONSE')
 
     def test_call_api_with_request_body_success_read_raw_data(self):
@@ -323,12 +328,14 @@ class TestApiClient(TestCase):
                 resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
                                              _deserialize_to_object=False,
                                              request_body={"payload_key": "payload value"})
-                mock_filter_call.assert_called_once_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    body={"payload_key": "payload value"},
                     _headers=mock.ANY,
-                    _preload_content=False,
-                    body={"payload_key": "payload value"})
+                    _preload_content=False if PYDANTIC_LIB_VERSION == 'v1' else True,
+                )
+                mock_filter_call.assert_called_once_with(*args, **kwargs)
             self.assertEqual(resp, 'TEST_RESPONSE')
 
     def test_call_api_with_request_body_success_disable_deserialization(self):
@@ -345,12 +352,14 @@ class TestApiClient(TestCase):
 
                 resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
                                              request_body={"payload_key": "payload value"}, _deserialize_to_object=False)
-                mock_filter_call.assert_called_once_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
                     _preload_content=False,
-                    body={"payload_key": "payload value"})
+                    body={"payload_key": "payload value"}
+                )
+                mock_filter_call.assert_called_once_with(*args, **kwargs)
             self.assertEqual(resp, {"resp_key": "resp_val"})
 
     def test_call_api_with_request_body_success_dataframe(self):
@@ -395,12 +404,14 @@ class TestApiClient(TestCase):
                 resp = test_subject.call_api(api_endpoint_name='train_journey_api_filter_train_journeys',
                                              request_body={"payload_key": "payload value"},
                                              asdk_transformation_option={'type': "dataframe", 'flatten': "batters.batter.[*]"})
-                mock_filter_call.assert_called_once_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
                     _preload_content=True,
-                    body={"payload_key": "payload value"})
+                    body={"payload_key": "payload value"}
+                )
+                mock_filter_call.assert_called_once_with(*args, **kwargs)
             expected_data = {'batters.batter.id': ['1001', '1002', '1003', '1004'],
                              'batters.batter.type': ['Regular', 'Chocolate', 'Blueberry', "Devil's Food"],
                              'id': ['0001'] * 4, 'type': ['donut'] * 4, 'name': ['Cake'] * 4, 'ppu': [0.55] * 4}
@@ -416,13 +427,15 @@ class TestApiClient(TestCase):
             mock_filter_call.return_value = "TEST_RESPONSE"
 
             resp = test_subject.call_api('train_journey_api_filter_train_journeys', param_key_1="param value 1")
-            mock_filter_call.assert_called_once_with(
+            args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                 vnd_com_blackrock_request_id=mock.ANY,
                 vnd_com_blackrock_origin_timestamp=mock.ANY,
                 _headers=mock.ANY,
                 body=None,
                 _preload_content=True,
-                param_key_1="param value 1")
+                param_key_1="param value 1"
+            )
+            mock_filter_call.assert_called_once_with(*args, **kwargs)
             self.assertEqual(resp, 'TEST_RESPONSE')
 
     def test_call_api_failure(self):
@@ -449,7 +462,7 @@ class TestApiClient(TestCase):
                                                   request_body={"payload_key": "payload value"},
                                                   _asdk_pagination_options={'page_size': 4, 'number_of_pages': 3, 'timeout': 500})
 
-                mock_filter_call.assert_called_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
@@ -457,6 +470,7 @@ class TestApiClient(TestCase):
                     page_size=mock.ANY,
                     page_token=mock.ANY
                 )
+                mock_filter_call.assert_called_with(*args, **kwargs)
                 self.assertEqual(mock_filter_call.call_count, 3)
                 self.assertEqual(responses.__len__(), 3)
 
@@ -477,7 +491,7 @@ class TestApiClient(TestCase):
                                                   _deserialize_to_object=False,
                                                   _asdk_pagination_options={'page_size': 4, 'number_of_pages': 3, 'timeout': 500})
 
-                mock_filter_call.assert_called_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
@@ -485,6 +499,7 @@ class TestApiClient(TestCase):
                     page_size=mock.ANY,
                     page_token=mock.ANY
                 )
+                mock_filter_call.assert_called_with(*args, **kwargs)
                 self.assertEqual(mock_filter_call.call_count, 3)
                 self.assertEqual(responses.__len__(), 3)
 
@@ -503,13 +518,14 @@ class TestApiClient(TestCase):
                                                   request_body={"payload_key": "payload value"},
                                                   _asdk_pagination_options={'page_size': 4, 'number_of_pages': 3, 'timeout': 500})
 
-                mock_filter_call.assert_called_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
                     _preload_content=True,
                     body={'payload_key': 'payload value', 'page_size': mock.ANY, 'page_token': mock.ANY}
                 )
+                mock_filter_call.assert_called_with(*args, **kwargs)
                 self.assertEqual(mock_filter_call.call_count, 3)
                 self.assertEqual(responses.__len__(), 3)
 
@@ -527,7 +543,7 @@ class TestApiClient(TestCase):
                                                   request_body={"payload_key": "payload value"},
                                                   _asdk_pagination_options={'page_size': 1, 'number_of_pages': 2, 'timeout': 500})
 
-                mock_filter_call.assert_called_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
@@ -535,6 +551,7 @@ class TestApiClient(TestCase):
                     page_size=mock.ANY,
                     page_token=mock.ANY
                 )
+                mock_filter_call.assert_called_with(*args, **kwargs)
                 self.assertEqual(mock_filter_call.call_count, 2)
                 self.assertEqual(responses.__len__(), 2)
 
@@ -552,13 +569,14 @@ class TestApiClient(TestCase):
                                                   request_body={"payload_key": "payload value"},
                                                   _asdk_pagination_options={'page_size': 0, 'number_of_pages': 2, 'timeout': 0, 'interval': 2})
 
-                mock_filter_call_timeout.assert_called_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
                     _preload_content=True,
                     body={'payload_key': 'payload value', 'page_size': mock.ANY, 'page_token': mock.ANY}
                 )
+                mock_filter_call_timeout.assert_called_with(*args, **kwargs)
                 self.assertEqual(mock_filter_call_timeout.call_count, 2)
                 self.assertEqual(responses.__len__(), 2)
 
@@ -577,13 +595,14 @@ class TestApiClient(TestCase):
                                                   _asdk_pagination_options={'page_size': 0, 'number_of_pages': 0, 'timeout': 0, 'interval': 0,
                                                                             'page_token': ''})
 
-                mock_filter_call.assert_called_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
+                    body={'payload_key': 'payload value', 'page_size': mock.ANY, 'page_token': mock.ANY},
                     _headers=mock.ANY,
                     _preload_content=True,
-                    body={'payload_key': 'payload value', 'page_size': mock.ANY, 'page_token': mock.ANY}
                 )
+                mock_filter_call.assert_called_with(*args, **kwargs)
                 self.assertEqual(mock_filter_call.call_count, 1)
                 self.assertEqual(responses.__len__(), 1)
 
@@ -603,13 +622,14 @@ class TestApiClient(TestCase):
                                                  _asdk_pagination_options={'page_size': 1, 'number_of_pages': 0, 'timeout': 2, 'interval': 0,
                                                                            'page_token': 0})
 
-                mock_filter_call.assert_called_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
                     _preload_content=True,
                     body={'payload_key': 'payload value'}
                 )
+                mock_filter_call.assert_called_with(*args, **kwargs)
                 self.assertEqual(mock_filter_call.call_count, 1)
                 self.assertEqual(response.data_set, 'TEST_RESPONSE1')
 
@@ -629,13 +649,14 @@ class TestApiClient(TestCase):
                                                  _asdk_pagination_options={'page_size': "1", 'number_of_pages': 0, 'timeout': 2, 'interval': 0,
                                                                            'page_token': ""})
 
-                mock_filter_call.assert_called_with(
+                args, kwargs = call_endpoint_helper_argument_pydantic_adapter(
                     vnd_com_blackrock_request_id=mock.ANY,
                     vnd_com_blackrock_origin_timestamp=mock.ANY,
                     _headers=mock.ANY,
                     _preload_content=True,
                     body={'payload_key': 'payload value'}
                 )
+                mock_filter_call.assert_called_with(*args, **kwargs)
                 self.assertEqual(mock_filter_call.call_count, 1)
                 self.assertEqual(response.data_set, 'TEST_RESPONSE1')
 
