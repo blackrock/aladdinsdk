@@ -31,8 +31,6 @@ _DOMAIN_SDK_API_REGISTRY_MODULE = 'api_registry'
 
 _TRUSTED_PLUGIN_ALLOWLIST = frozenset([
     'asdk_plugin_accounting',
-    'asdk_plugin_ai_platform',
-    'asdk_plugin_alphagen',
     'asdk_plugin_analytics',
     'asdk_plugin_clients',
     'asdk_plugin_compliance',
@@ -43,10 +41,7 @@ _TRUSTED_PLUGIN_ALLOWLIST = frozenset([
     'asdk_plugin_portfolio',
     'asdk_plugin_portfolio_management',
     'asdk_plugin_trading',
-    'asdk_plugin_legacy',
     'asdk_plugin_pydv2_accounting',
-    'asdk_plugin_pydv2_ai_platform',
-    'asdk_plugin_pydv2_alphagen',
     'asdk_plugin_pydv2_analytics',
     'asdk_plugin_pydv2_clients',
     'asdk_plugin_pydv2_compliance',
@@ -57,7 +52,6 @@ _TRUSTED_PLUGIN_ALLOWLIST = frozenset([
     'asdk_plugin_pydv2_portfolio',
     'asdk_plugin_pydv2_portfolio_management',
     'asdk_plugin_pydv2_trading',
-    'asdk_plugin_pydv2_legacy',
 ])
 
 
