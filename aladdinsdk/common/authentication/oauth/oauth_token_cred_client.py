@@ -16,7 +16,7 @@ limitations under the License.
 
 import requests
 import logging
-from aladdinsdk.common.blkutils.blkutils import DEFAULT_WEB_SERVER, SDK_HELP_MESSAGE_SUFFIX
+from aladdinsdk.common.blkutils.blkutils import DEFAULT_WEB_SERVER, DEFAULT_HTTP_TIMEOUT_SECONDS, SDK_HELP_MESSAGE_SUFFIX
 from aladdinsdk.common.error.asdkerrors import AsdkOAuthException
 from aladdinsdk.config import user_settings
 
@@ -92,7 +92,8 @@ def _retrieve_token_details(client_id, client_secret, refresh_token, auth_flow_t
     _proxies = _get_proxy_for_auth_server(auth_server_proxy)
 
     try:
-        response = requests.post(url, headers=headers, params=data, verify=True, proxies=_proxies)
+        response = requests.post(url, headers=headers, params=data, verify=True, proxies=_proxies,
+                                 timeout=DEFAULT_HTTP_TIMEOUT_SECONDS)
         if response.status_code == 200:
             return _get_oauth_access_token_and_ttl_from_response(response.json())
         else:

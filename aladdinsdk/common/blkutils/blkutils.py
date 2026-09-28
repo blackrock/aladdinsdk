@@ -25,6 +25,8 @@ _aladdin_studio_kc_sources_file_dat_key = "ALADDIN_STUDIO_KC_SOURCES"
 STUDIO_KC_SOURCE_ALADDINSDK = "ALADDINSDK"
 KC_GUIDE_PATH = "{}/apps/studio/knowledge-center/get-started-with-aladdinsdk"
 DEFAULT_WEB_SERVER = os.environ.get('defaultWebServer')
+# Upper bound (seconds) for every outbound requests.* call made by the SDK, so a silent server can never hang the caller.
+DEFAULT_HTTP_TIMEOUT_SECONDS = 30
 
 
 def get_adc_account_private_link():
@@ -56,7 +58,7 @@ def get_files_dat_token_value(token_key, default=None):
         String: token value
     """
     try:
-        r = requests.get(DEFAULT_WEB_SERVER + '/std/files.dat')
+        r = requests.get(DEFAULT_WEB_SERVER + '/std/files.dat', timeout=DEFAULT_HTTP_TIMEOUT_SECONDS)
         val = [p.split('\t')[1].strip() for p in r.text.split('\n') if (len(p.split('\t')) > 1 and p.split('\t')[0].strip() == token_key)]
         return val[0] if len(val) > 0 else default
     except Exception:

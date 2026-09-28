@@ -188,3 +188,61 @@ class TestCommonBatchProcessing(TestCase):
         with self.assertRaises(ValueError) as context:
             buffer.append_action(SDKAction(lambda x: x, 3))
             context.assertEqual(str(context.exception), "SDKActionBuffer is full. Max size is configured to 2")
+
+    def test_batch_action_lock_released_after_failure(self):
+        from aladdinsdk.common.batch.action import SDKAction, SDKActionStatus
+
+        def failed_action(x):
+            raise ValueError(f"Test error {x}")
+
+        action = SDKAction(failed_action, 1)
+        action.perform()
+        self.assertEqual(action.run_status, SDKActionStatus.FAILED)
+        self.assertFalse(action.lock.locked(), "action lock must be released when the action raises")
+
+    def test_batch_action_perform_twice_after_failure(self):
+        import threading
+        from aladdinsdk.common.batch.action import SDKAction, SDKActionStatus
+        calls = []
+
+        def flaky_action(x):
+            calls.append(x)
+            if len(calls) == 1:
+                raise ValueError(f"Test error {x}")
+            return x
+
+        action = SDKAction(flaky_action, 1)
+        self.assertIsInstance(action.perform(), ValueError)
+        self.assertEqual(action.run_status, SDKActionStatus.FAILED)
+
+        # Retrying the same action must not block on its own lock.
+        retry = threading.Thread(target=action.perform, daemon=True)
+        retry.start()
+        retry.join(timeout=3)
+        self.assertFalse(retry.is_alive(), "second perform() blocked on the action lock after a failure")
+        self.assertEqual(action.run_status, SDKActionStatus.COMPLETE)
+        self.assertEqual(action.result, 1)
+
+    def test_batch_action_buffer_sequential_rerun_after_failed_action(self):
+        import threading
+        from aladdinsdk.common.batch.action import SDKActionBuffer, SDKAction, SDKActionStatus
+        buffer = SDKActionBuffer()
+
+        def failed_action(x):
+            raise ValueError(f"Test error {x}")
+
+        buffer.append_action(SDKAction(lambda x: x, 1))
+        buffer.append_action(SDKAction(failed_action, 2))
+        buffer.append_action(SDKAction(lambda x: x, 3))
+
+        buffer.run_sequential(interval=0)
+        self.assertEqual([a.run_status for a in buffer.actions],
+                         [SDKActionStatus.COMPLETE, SDKActionStatus.FAILED, SDKActionStatus.COMPLETE])
+
+        # Re-running the buffer (e.g. to retry) must not hang on the failed action.
+        rerun = threading.Thread(target=buffer.run_sequential, kwargs={"interval": 0}, daemon=True)
+        rerun.start()
+        rerun.join(timeout=3)
+        self.assertFalse(rerun.is_alive(), "run_sequential() blocked on the lock of the failed action")
+        self.assertEqual([a.run_status for a in buffer.actions],
+                         [SDKActionStatus.COMPLETE, SDKActionStatus.FAILED, SDKActionStatus.COMPLETE])

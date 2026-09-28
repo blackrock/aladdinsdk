@@ -46,9 +46,8 @@ class SDKAction:
         logger.debug(f"Action {self.uid} started")
         try:
             self.run_status = SDKActionStatus.RUNNING
-            self.lock.acquire()
-            self.result = self.method(*self.args, **self.kwargs)
-            self.lock.release()
+            with self.lock:
+                self.result = self.method(*self.args, **self.kwargs)
             self.run_status = SDKActionStatus.COMPLETE
             logger.debug(f"Action {self.uid} success")
             return self.result
