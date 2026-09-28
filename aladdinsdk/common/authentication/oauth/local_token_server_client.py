@@ -21,6 +21,8 @@ import os
 
 import requests
 
+from aladdinsdk.common.blkutils.blkutils import DEFAULT_HTTP_TIMEOUT_SECONDS
+
 _logger = logging.getLogger(__name__)
 
 STREAMLIT_MODULE_NAME = "streamlit"
@@ -127,7 +129,7 @@ def _is_local_token_server_running():
     :rtype: bool
     """
     try:
-        response = requests.get(LOCAL_TOKEN_SERVER_LIVENESS_ENDPOINT)
+        response = requests.get(LOCAL_TOKEN_SERVER_LIVENESS_ENDPOINT, timeout=DEFAULT_HTTP_TIMEOUT_SECONDS)
         if response.status_code == 200:
             return True
     except (requests.exceptions.RequestException) as e:
@@ -151,7 +153,8 @@ def _fetch_access_token_from_local_token_server(session_id, scopes=[]):
     if scopes:
         params["scopes"] = ",".join(scopes)
     try:
-        response = requests.get(LOCAL_TOKEN_SERVER_TOKEN_ENDPOINT, params=params, headers=headers)
+        response = requests.get(LOCAL_TOKEN_SERVER_TOKEN_ENDPOINT, params=params, headers=headers,
+                                timeout=DEFAULT_HTTP_TIMEOUT_SECONDS)
         if response.status_code != 200:
             _logger.debug(f'OAuth token retrieval failed. Response:{response.content}')
             return None, None

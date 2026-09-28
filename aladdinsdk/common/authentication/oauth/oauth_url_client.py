@@ -16,7 +16,7 @@ limitations under the License.
 
 import requests
 from typing_extensions import deprecated
-from aladdinsdk.common.blkutils.blkutils import get_files_dat_token_value
+from aladdinsdk.common.blkutils.blkutils import DEFAULT_HTTP_TIMEOUT_SECONDS, get_files_dat_token_value
 from aladdinsdk.common.error.asdkerrors import AsdkOAuthException
 
 
@@ -29,7 +29,7 @@ def retrieve_oauth_server_url():
             'content-type': 'application/x-www-form-urlencoded'
         }
         url = _get_url_for_auth()
-        response = requests.get(url, headers=headers, verify=True)
+        response = requests.get(url, headers=headers, verify=True, timeout=DEFAULT_HTTP_TIMEOUT_SECONDS)
         if response.status_code == 200:
             return _get_auth_server_url_from_response(response.json())
         else:
