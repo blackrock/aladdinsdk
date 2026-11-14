@@ -91,12 +91,8 @@ def get_api_details(api_name, api_version=None) -> AladdinAPICodegenDetails:
     else:
         # return latest version of API
         api_versions = [x for x in AladdinAPIRegistry[api_name].keys()]
-        api_versions.sort()  # Current versioning is only at major level.
-        # For semantic versioning use api_versions.sort(key=lambda s: list(map(int, s.replace("v", "").split('.'))))
-        if len(api_versions) > 1:
-            latest_version = api_versions[:-1][0]
-        else:
-            latest_version = api_versions[0]  # final entry in sorted list is latest version
+        # API versions use a 'v' prefix followed by the major version number.
+        latest_version = max(api_versions, key=lambda version: int(version.removeprefix('v')))
         return AladdinAPIRegistry[api_name][latest_version]
 
 
