@@ -105,6 +105,8 @@ class TestApiRegistry(TestCase):
         import importlib
         import aladdinsdk
         importlib.reload(aladdinsdk.api.registry)
+        # Restore the real registry after the mocked v2 entry leaves scope.
+        self.addCleanup(importlib.reload, aladdinsdk.api.registry)
 
         from aladdinsdk.api.registry import get_api_details, AladdinAPICodegenDetails
 
