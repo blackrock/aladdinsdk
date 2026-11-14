@@ -39,7 +39,7 @@ def validate_file_and_path(file_location, overwrite_data=None):
     """
     try:
         file_name = Path(file_location)
-        folder_path = os.path.dirname(file_location)
+        folder_path = os.path.dirname(file_location) or os.curdir
         if os.path.exists(folder_path) and os.access(folder_path, os.W_OK):
             if os.path.isfile(file_location):
                 if os.stat(file_name).st_size == 0:

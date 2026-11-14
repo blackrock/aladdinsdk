@@ -40,7 +40,9 @@ def export_data(input_data, file_location):
             if is_data_type_primitive(input_data) or isinstance(input_data, dict) or isinstance(input_data, list):
                 json_string = json.dumps(input_data, indent=4)
             elif hasattr(input_data, 'to_dict'):
-                json_string = json.dumps(input_data.__dict__, indent=4)
+                json_string = json.dumps(input_data.to_dict(), indent=4)
+            else:
+                raise AsdkExportDataException("Unsupported input data type for export")
             write_json(file_location, json_string)
 
     except (TypeError, AttributeError) as e:
